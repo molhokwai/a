@@ -1,0 +1,4 @@
+# coding: utf8
+
+def index():
+    return dict(message="hello from photos.py")

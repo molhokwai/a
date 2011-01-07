@@ -1,0 +1,7 @@
+# coding: utf8
+
+def index():
+    redirect(URL(r=request, f='a'))
+    
+def a():
+    return dict()

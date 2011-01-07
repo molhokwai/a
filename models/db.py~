@@ -1,0 +1,225 @@
+#########################################################################
+## This scaffolding model makes your app work on Google App Engine too
+#########################################################################
+
+if request.env.web2py_runtime_gae:            # if running on Google App Engine
+    db = DAL('gae')                           # connect to Google BigTable
+    session.connect(request, response, db=db) # and store sessions and tickets there
+    ### or use the following lines to store sessions in Memcache
+    # from gluon.contrib.memdb import MEMDB
+    # from google.appengine.api.memcache import Client
+    # session.connect(request, response, db=MEMDB(Client()))
+else:                                         # else use a normal relational database
+    db=SQLDB("sqlite://db.db")
+
+
+#########################################################################
+## Global convenience variables
+#########################################################################
+this_app=request.application
+
+
+#########################################################################
+## Authentication / Authorization
+#########################################################################
+from gluon.tools import *
+auth=Auth(globals(),db)              # authentication/authorization
+crud=Crud(globals(),db)              # for CRUD helpers using auth
+service=Service(globals())           # for json, xml, jsonrpc, xmlrpc, amfrpc
+
+# mail=Mail()                                   # mailer
+# mail.settings.server='smtp.gmail.com:587'     # your SMTP server
+# mail.settings.sender='herve.m@wedo-group.com' # your email
+# mail.settings.login='username:password'       # your credentials or None
+
+auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
+auth.settings.table_user = db.define_table('auth_user',    
+    Field('registration_id', length=512,
+          label=T('registration id'),
+          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
+          readable=False),
+    Field('display_name', length=512,
+          label=T('display name'),
+          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
+    Field('email', length=512,default='',
+          label=T('email'),
+          requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
+    Field('is_admin', 'boolean',default=False),
+    Field('is_anonymous', 'boolean',default=True),
+    Field('registration_key'),
+    Field('first_name'),
+    Field('last_name')
+)
+auth.define_tables()                 # creates all specified & needed tables
+
+# auth.settings.mailer=mail          # for user email verification
+# auth.settings.registration_requires_verification = True
+# auth.settings.registration_requires_approval = True
+# auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
+# auth.settings.reset_password_requires_verification = True
+# auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
+
+## OpenID, Facebook, MySpace, Twitter, Linkedin, etc. registration
+protocol='http'
+if request.get('env')['server_protocol'][:5]=='HTTPS':protocol='https'
+
+from gluon.contrib.login_methods.rpx_account import RPXAccount
+auth.settings.actions_disabled=['register','change_password','request_reset_password']
+auth.settings.login_form = RPXAccount(request, api_key='33becd821e0f24f16bdb8da14c1723987d6487a9',
+    domain='websites-molhokwai',
+    url = "%s://%s/%s/default/user/login" % (protocol,request.get('env')['http_host'],this_app))
+
+############
+## Language
+############
+T.current_languages=['en','fr']
+current_language='en'
+if request.vars._language:
+    session._language=request.vars._language
+if session._language:
+    T.force(session._language)
+else:
+    if T.http_accept_language:
+        if T.http_accept_language[:2]=='fr':
+            current_language=T.current_languages[1]
+        else:
+            current_language=T.current_languages[0]
+    else:
+        current_language=T.current_languages[0]
+        
+    current_language=({}.get(current_language,lambda x: x+'-'+x)
+            )(current_language)
+    T.force(current_language)
+
+    
+import datetime
+
+## Table posts
+## Fields:
+## ------
+##    post_text_TCode: To enter a translation code and fill in the translation texts in a way compliant with
+##        the built-in translation mechanism (T).
+##        ***Only one of the post_text_TCode and the post_text fields is necessary.***
+##        The system first checks the *post_text_TCode* field and if not filled in, falls back to the *post_text* field
+##    is_translated: if the translation (whether for the post_text, or the post_text_TCode) is done in all the languages 
+##        available in the application). To be manually set once the translation in all languages for the post/page is done.
+db.define_table('posts',
+    SQLField('post_title', required=True),
+    SQLField('post_text', 'text'),
+    SQLField('post_text_TCode', 'string',  writable=True),
+    SQLField('post_time', 'datetime', default=datetime.datetime.today()),
+    SQLField('post_type', required=True),
+    SQLField('post_category', required=True, default=-1),
+    SQLField('show_in_menu',  'boolean', required=True, default=False),
+    SQLField('is_translated', 'boolean', required=True, default=False))
+
+db.define_table('comments',
+    SQLField('post_id', db.posts, required=True),
+    SQLField('comment_author'),
+    SQLField('comment_author_email', required=True),
+    SQLField('comment_author_website'),
+    SQLField('comment_text', 'text', required=True),
+    SQLField('comment_time', 'datetime', required=True, default=datetime.datetime.today()))
+
+db.define_table('categories',
+    SQLField('category_name', required=True))
+
+##db.define_table('posts_categories',
+##    SQLField('category', db.categories, required=True),
+##    SQLField('post', db.posts, required=True))
+    
+db.define_table('links',
+    SQLField('link_title', required=True),
+    SQLField('link_url', required=True))
+
+db.posts.post_type.requires = IS_IN_SET(['post', 'page'])
+db.posts.post_category.requires = IS_IN_DB(db, 'categories.id', 'categories.category_name')
+
+
+db.define_table('files',
+    SQLField('file','upload', required=True),
+    SQLField('filename', required=True)
+)
+db.files.filename.requires = IS_NOT_IN_DB(db, 'files.filename')
+
+
+post_labels = {
+    'post_title':'Title',
+    'post_text':'Post',
+    'post_text_TCode':'Translation code (code & language texts must be set in the translation files)',
+    'post_time':'Post Date',
+    'post_type':'Type',
+    'post_category':'Category',
+    'show_in_menu':'Show in menu'
+}
+
+comment_labels = {
+    'comment_author':'Name',
+    'comment_author_email':'Email',
+    'comment_author_website':'Website',
+    'comment_text':'Comment',
+    'post_id':'Post ID'
+}
+
+link_labels = {
+    'link_title':'Name',
+    'link_url':'URL'
+}
+
+cat_labels = {
+    'category_name':'Name'
+}
+
+file_labels = {
+    'file':'File',
+    'filename':'Enter file name'
+}
+
+
+#########################################################################
+## APPLICATION DETAILS
+#########################################################################
+
+class AppDetails():
+    title = T("molhokwai.net - 'the' cms")
+    keywords = T("blog, weblog, journal, web, log, web2py, pypress, cms, simple, lightweight, straight-forward, powerful, direct, programming, programmer")
+    description = T("molhokwai.net - 'the' cms, lightweight, powerful, straight & direct")
+    install_page_html = '<!-- nake page -->'
+app_details=AppDetails()
+
+
+########################
+## Print, Log Wrapper
+########################
+
+def print_wrapped(_name, _value):
+    print '-------| %s : %s' % (repr(_name), repr(_value))
+
+def log_wrapped(_name, _value):
+    import logging
+    logging.info('-------| %s : %s' % (repr(_name), repr(_value)))
+
+
+#########################################################################
+## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting
+#########################################################################
+expressions={
+  'url_find' : [
+"([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}|(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+)(:[0-9]*)?/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\),\\\"]",
+"([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}|(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+)(:[0-9]*)?",
+"(~/|/|\\./)([-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]|\\\\)+",
+"'\\<((mailto:)|)[-A-Za-z0-9\\.]+@[-A-Za-z0-9\\.]+"
+  ],
+  'rel_url_and_end_tags_find' : ["[0-9]{0,1}/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\),\\\"]"]
+}
+
+import re
+url_finders = [
+re.compile(expressions['url_find'][0]),
+re.compile(expressions['url_find'][1]),
+re.compile(expressions['url_find'][2]),
+re.compile(expressions['url_find'][3]),
+]
+rel_url_and_end_tags_finders = [
+re.compile(expressions['rel_url_and_end_tags_find'][0]),
+]

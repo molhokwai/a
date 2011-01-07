@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+
+<!-- h1>{{=manage_title}}</h1 -->
+............................................................................................
+
+{{for _name,_active,_link in response.pages:}}
+    <a href="{{=_link}}">{{=_name}}</a>   
+{{pass}}

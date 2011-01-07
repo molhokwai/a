@@ -1,0 +1,10 @@
+Write something about this app.
+Developed with web2py.
+
+HISTORY:
+--------
+Tested:
+  - on w2p: rpxnow login operational but for these providers display name is 'anonymous@molhokwai.net': facebook, myspace (email, preferredUsername provided empty)
+  - on gae: 
+
+

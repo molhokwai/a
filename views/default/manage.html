@@ -1,0 +1,40 @@
+{{extend 'layout.html'}}
+<script type="text/javascript">
+  var confirmByIndex=function(index){
+      var texts=new Array(
+          {{T('Are you sure you want to delete this link?')}},
+          {{T('Are you sure you want to delete this category?')}},
+          {{T('Are you sure you want to delete this post?')}}
+      );
+      return confirm(texts[index]);
+  }
+</script>
+
+{{if edit_form != "":}}
+
+    <!-- h2>{{=manage_title}}</h2 -->
+    ............................................................................................<br/>
+    {{=edit_form}}
+    
+{{else:}}
+
+    {{for row in rows:}}
+
+        {{if area == 'link':}}
+            {{=row.link_title}}, {{=row.link_url}} 
+                (<a href="/{{=request.application}}/default/manage/link/edit/{{=row.id}}">{{=T("~")}}</a> | 
+                <a onclick="return confirmByIndex(1);" href="/{{=request.application}}/default/manage/link/delete/{{=row.id}}">{{=T("-")}}</a>)
+        {{else:}}{{if area == 'category':}}
+            {{=row.category_name}}
+                (<a href="/{{=request.application}}/default/manage/category/edit/{{=row.id}}">{{=T("~")}}</a> | 
+                <a onclick="return confirmByIndex(2);" href="/{{=request.application}}/default/manage/category/delete/{{=row.id}}">{{=T("-")}}</a>)
+        {{pass}}{{pass}}
+        
+    {{pass}}
+
+    {{if area == 'link':}}
+        <a href="/{{=request.application}}/default/manage/link/add" class='color-transparent'>{{=T("add")}}</a>
+    {{else:}}{{if area == 'category':}}
+        <a href="/{{=request.application}}/default/manage/category/add" class='color-transparent'>{{=T("add")}}</a>
+    {{pass}}{{pass}}
+{{pass}}

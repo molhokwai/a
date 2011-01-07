@@ -1,0 +1,17 @@
+{{if not nake:}}
+
+    {{extend 'layout.html'}}
+
+{{pass}}
+
+{{if post.is_translated:}}
+    {{include "utilities/language_choice_bar.html"}}
+{{pass}}
+<!--h2><em>{{=T("you are here")}}:</em> {{=post.post_title}}</h2 -->
+
+{{if post.is_translated:}}
+    {{=XML(T(post.post_text_TCode))}}
+{{else:}}
+    {{=XML(post.post_text)}}
+{{pass}}
+{{if session.authorized:}}<a href="/{{=request.application}}/default/edit/page/{{=post.id}}" class="color-transparent">{{=T("Edit this entry")}}.</a>{{pass}}

@@ -1,0 +1,4 @@
+<div class="text-alignr padr1pc">
+        <a href="{{=URL(r=request,f=request.path,args=request.args,vars=dict(_language='en-en'))}}" title="manual translation">English</a> 
+        | <a href="{{=URL(r=request,f=request.path,args=request.args,vars=dict(_language='fr-fr'))}}" title="traduction manuelle">Français</a>
+</div>

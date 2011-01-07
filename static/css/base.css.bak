@@ -1,0 +1,96 @@
+/* COMMOM (STRUCTURE, SIZES...) STYLES */
+
+/* BODY, BODY ELEMENTS */
+body {
+    font-size: 13px;
+    font-family: "Courier";
+    min-height: 200em;
+}
+
+#wrapper, wrapper {
+    display:block;
+    margin: auto;
+    margin-top: 2%;
+    max-width: 800px;
+}
+
+#content, content {
+    min-height:40em;
+}
+
+#footer, footer {
+    font-size: 0.8em;
+    text-align:center;
+}
+
+#footer a, footer a {
+    text-decoration: overline;
+}
+
+/* ELEMENTS */
+table {
+    width: 100%;
+}
+
+input, textarea, select, input.gsc-input {
+    border:none !important;
+    width:100%;
+    padding-left: 0.02em;
+}
+
+td.gsc-branding-text div.gsc-branding-text, img.gsc-branding-img, img.gsc-branding-img-noclear {
+    display:none !important;
+}
+
+content input, content textarea, content select,
+#content input, #content textarea, #content select {
+    padding: 0.07em 0.5em;
+}
+content textarea, #content textarea {
+    padding: 0.07em 1.5em;
+}
+
+
+input[type="text"] {
+    font-size:0.9em;
+}
+label, input[type="submit"] {
+    display:none;
+}
+user-menu {
+    float:right;
+}
+
+iframe {
+    margin:auto;
+    display:block;
+}
+
+a {
+    text-decoration:none;
+}
+a:hover, a:active {
+    font-style: italic;
+}
+
+
+/* WEB2PY ELEMENTS */
+.flash {
+    font-weight: bold;
+}
+
+/* GOOGLE ELEMENTS */
+.gsc-control {
+    width: 80% !important;
+    margin-bottom: 3%;
+}
+
+
+/* CUSTOM ELEMENTS */
+#cli_web #_cmd {
+    padding-left: 2px;
+}
+
+iframe[name='photo_frame'] {
+    overflow: hidden;
+}

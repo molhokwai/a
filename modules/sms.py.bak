@@ -1,0 +1,79 @@
+#!/usr/bin/env python 
+# coding: utf8 
+
+def sendSMS(sender,recipients,smsBody,provider_api_username='herve.m',provider_api_password='jamiroquai'):
+    """Calls SMS provider api to send message
+        Returns result output data
+
+        TODO: handle multiple recipients array.
+                  change to be reflected on process.notification.notifiers classes.
+
+        Returns:
+            boolean (success),
+            int (MessageId),
+            int (status),
+            float (cost),
+            string (status message)
+    """
+    def printOutput(sender,recipients,smsBody):
+        """dev, debugging utility method"""
+        message = ' sender : ' + sender
+        message += '\n to : ' + recipients[0]
+        message += '\n body : ' + smsBody
+        print ''
+        print ''
+        print '____________________________________________________________________'
+        print message
+        print '____________________________________________________________________'
+
+    def parseOutput(output):
+        """Returns parsed values from output with format:
+            SUCCESS MessageId: 357958; Cost: 0.80; 0: Accepted for delivery;
+
+            Returns:
+                boolean (success),
+                int (MessageId),
+                int (status),
+                float (cost),
+                string (status message)
+        """
+        vls=output.split(';')
+        if len(vls)>=3:
+             sm=vls[0].split(' ')
+             cs=vls[1].split(':')
+             st=vls[2].split(':')
+             return str(sm[0]).find('SUCCESS')>=0,int(sm[2]),int(st[0].lstrip()),float(cs[1].lstrip()),st[1].lstrip()
+        else:
+             return False,-1,-1,0,output
+
+    url='http://www.amdtelecom.net/api/sendsms.php'
+    parameters={
+                 'from' : sender,
+                 'to' : recipients[0],
+                 'username' : provider_api_username,
+                 'password' : provider_api_password,
+                 'text' : stringToAscii(smsBody)
+                 }
+    fetchRes=None
+    msg='util.sendSMS:logging.info'
+    try:
+         logging.info('util.sendSMS.fetchHttpRequestData')
+         msg='FETCHING SMS SEND FROM API'
+         fetchRes=fetchHttpRequestData(parameters,
+                                        url,
+                                        request_output='text',
+                                        request_method='GET')
+         if fetchRes is not None:
+              msg='PARSING SMS SEND FETCH API OUTPUT: '
+              bst,msgid,stid,cs,msg=parseOutput(fetchRes)
+              if not bst:logging.error('ERROR RETURNED FROM SMS SEND API:'+fetchRes+' - PARAMS'+str(parameters))
+              return fetchRes,bst,msgid,stid,float(cs),msg
+         else:
+              logging.error(msg+' - PARAMS'+str(parameters))
+              return (None,False,-1,-1,float(0),
+                      msg+' - PARAMS'+str(parameters))
+    except Exception, ex:
+         if fetchRes is None:fetchRes='None'
+         logging.error('ERROR '+msg+' - EXCEPTION:'+str(ex)+'- FETCH RES:'+fetchRes)
+         return (None,False,-1,-1,float(0),
+                 msg+' - PARAMS'+str(parameters)+' - FETCH RES:'+fetchRes)

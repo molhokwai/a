@@ -1,0 +1,65 @@
+{{extend 'layout.html'}}
+
+<style type="text/css">
+    table {
+        margin-top: 5px;
+    }
+    td {
+        font-family: Arial, Helvetica, sans-serif;
+        vertical-align: top;
+        color: #777;
+        font-size: 0.9em;
+        padding: 0px 5px 0px 0px;
+        text-align: left;
+    }
+    input {
+        margin-bottom: 5px;
+    }
+    textarea {
+        width: 390px;
+    }
+    #flash {
+        text-align:justify;
+    }
+</style>
+
+
+<div class="post">
+    {{if area=='auth_user':}}
+        <h1>{{=T("your user data")}}</h1>
+    
+        <div class="entry">
+            <div id="post_form">{{=form}}</div>
+        </div>
+    {{pass}}
+    {{if area=='user':}}
+        <h1>{{=form_title}}</h1>
+    
+        <div class="entry">
+            <div id="post_form">{{=form}}</div>
+        </div>
+        {{if auth.user:}} 
+            <br/>--and auth.user._is_admin:--
+            <br/>
+            <h1>{{=T("all users")}}</h1>
+        
+            <div class="entry">
+                <table width="100%" cellpadding="3" cellspacing="0">
+                        <tr>
+                          <td class="pages">
+                            <ul>
+                                {{for au in response.auth_users:}}
+                                    <li>
+                                        .<a href="/cms/default/app_admin/user/{{=au.id}}">{{=au.email}}</a>
+                                    </li>
+                                {{pass}}
+                            </ul>                       
+                            <div class="clear"></div>
+                          </td>   
+                        </tr>
+                </table>
+            </div>
+        {{pass}}
+        
+    {{pass}}
+</div>

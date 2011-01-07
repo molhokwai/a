@@ -1,0 +1,55 @@
+{{if not nake:}}
+    {{extend "layout.html"}}
+{{else:}}
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    <style type="text/css">
+        #footer, footer, #top-bar, top-bar {
+            display:none;
+        }
+    </style>
+{{pass}}
+
+{{if area in ['login', 'add', 'edit', 'delete', 'upload']:}}
+    {{=form}}
+
+{{pass}}
+
+{{if area=='albums':}}
+    {{=XML(form)}}
+
+{{elif area=='gallery':}}
+    {{=H2(T('recent'), _class='text-alignr')}}
+    {{for photo in recent:}}
+        {{=A(IMG( _src=photo.thumbnail_url), _id=photo.id, _href=photo.url, _title=photo.title, _target='photo_frame')}}
+    {{pass}}
+
+    {{=H2(T('albums'), _class='text-alignr margt5pc')}}
+    {{for photo in gallery:}}
+        {{=A(IMG( _src=photo.thumbnail_url), _id=photo.id, _href=URL(r=request, args=['album', photo.album_id]), _title=photo.title)}}
+    {{pass}}
+
+{{elif area=='album' or (area in ['edit', 'delete'] and item=='album'):}}
+    {{=BR(_class='margt5pc')}}
+    {{for photo in album:}}
+        {{=A(IMG( _src=photo.thumbnail_url), _id=photo.id, _href=photo.url, _title=photo.title, _target='photo_frame')}}
+        {{if area=='edit':}}
+            {{=A(T('e'), _id='u_%s'%photo.id, _href=URL(r=request, args=['edit', 'picture', photo.id, photo.album_id]), _title=T('edit %(title)s', dict(title=photo.title)))}}
+            {{=A(T('x'), _id='x_%s'%photo.id, _href=URL(r=request, args=['delete', 'picture', photo.id, photo.album_id]), _title=T('delete %(title)s', dict(title=photo.title)))}}
+        {{pass}}
+    {{pass}}
+    {{=A(T('slideshow'), _href=URL(r=request, args=['slideshow', album_id]), _title=T('slideshow'), _target='photo_frame', _class='display-block width100pc text-alignr')}}
+{{pass}}
+
+{{if area == 'slideshow':}}
+    {{=IFRAME( _name='photo_frame', _class='slideshow width100pc minh40em border-none', _src=photo.url, _title=photo.title)}}
+    
+{{elif area in ['edit', 'delete'] and item=='picture':}}
+    {{=IFRAME( _name='photo_frame', _class='marg-auto width60pc minh40em border-none', _src=photo.content.src)}}
+    
+{{elif not area in ['albums', 'add', 'edit', 'delete', 'upload', 'login'] :}}
+    {{=IFRAME( _name='photo_frame', _class='marg-auto width60pc minh40em border-none')}}
+
+{{pass}}

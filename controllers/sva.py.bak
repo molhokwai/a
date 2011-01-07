@@ -1,0 +1,17 @@
+# coding: utf8
+gradient_css="""
+  /* gradient */
+  background-image: -webkit-gradient(linear, left top, left bottom,
+   color-stop(0, #CD6600), color-stop(1, white));
+  background-image: -moz-linear-gradient(bottom, #CC6600, white);
+  filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType =3, startColorstr=#CC6600,
+   endColorstr=white);
+"""
+
+def index():
+    redirect(URL(r=request, f='dance'))
+    return dict()
+    
+def dance():
+    return dict(header_title=T("Kings & Queens"))

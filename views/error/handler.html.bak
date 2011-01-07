@@ -1,0 +1,34 @@
+{{extend 'layout.html'}}
+
+<DIV class="page_post page">    
+        <DIV class="text-alignr padr1pc"></DIV>
+            <H2><EM>vous êtes ici:</EM> erreur</H2><br/>
+            <H2><EM>vous êtes ici:</EM> erreur</H2>
+
+            <DIV class="entry">
+                
+                <STYLE type="text/css">   .statement img {     max-width: 150px;   }   .statement div {     max-width: 395px;   }   .statement .float-left .content-text {     margin-top: -7%;   }   .statement .float-left .content-text, .statement .text-alignr {     display:block;   }   blockquote.highlight {     border:1px dotted maroon;     width: 85%;     margin-top: 5%;      margin-bottom: 5%;   } </STYLE> 
+                <DIV class="entry statement">   
+                    <IMG alt=".........." src="./error_files/orbs.png">   
+                    <DIV class="float-left">       
+                        <SPAN class="content-text">         
+                            <H1>wooow...</H1>
+                            <BLOCKQUOTE>Une erreur s&#39;est produite...<BR/>
+                                Si c&#39;est grave, contactez l&#39;administrateur...
+                            </BLOCKQUOTE>         <BR>
+                            <BR>
+                            <BR>
+                            <H1>woooow...</H1>
+                            <BLOCKQUOTE>An error has occured...<BR/>
+                                If this is anything serious, contact the administrateur...
+                            </BLOCKQUOTE>
+                        </SPAN>
+                    </DIV>
+                </DIV> 
+                
+            </DIV>
+        
+           <DIV class="clear"></DIV>
+           <P class="metadata"></P>
+        </DIV>
+    </DIV>

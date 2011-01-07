@@ -1,0 +1,75 @@
+{{extend 'layout.html'}}
+
+{{
+def get_post_cats(post_id):
+  cat_id=db(db.posts.id == post_id).select()[0].post_category
+  cats=db(db.categories.id == cat_id).select()
+
+    items=[]
+    for cat in cats:
+        item="<a href='/%(app)s/default/category/%(cat)s'>%(name)s</a>" % {'app':request.application, 'cat':cat.category_name, 'name':cat.category_name}
+        items.append(item)
+    pass
+    cat_list=", ".join(items)
+    return XML(cat_list)
+}}
+
+<div class="post">
+    {{if post.is_translated:}}
+        {{include "utilities/language_choice_bar.html"}}
+    {{pass}}
+    <h2><a>{{=post.post_title}}</a></h2>
+
+    <div class="entry">
+        {{if post.is_translated:}}
+            {{=XML(T(post.post_text_TCode))}}
+        {{else:}}
+            {{=XML(post.post_text)}}
+        {{pass}}
+                        
+        <p class="metadata alt" style="text-align: justify;">
+            <small>
+                {{=XML(T("This entry was posted on %(post_time)s and is filed under %(post_cats)s. You can follow any responses to this entry by reading the comments. You can leave a response by posting a comment.",
+                  dict(post_time=post.post_time.strftime("%A, %B %d, %Y at %I:%M %p"), post_cats=get_post_cats(post.id))))}} {{if session.authorized:}}<a href="/{{=request.application}}/default/edit/post/{{=post.id}}">Edit this entry.</a> | <a onclick="return confirm('{{=T("Are you sure you want to delete this post?")}}')"  href="/{{=request.application}}/default/manage/post/delete/{{=post.id}}">{{=T("Delete this entry")}}.</a>{{pass}}
+            </small>
+        </p>
+    </div>
+</div>
+<br/>
+<br/>
+{{if comment_count > 0:}}
+    <h2 id="comments">{{if comment_count == 1:}}
+            {{=T("reply")}}
+        {{else:}}
+            {{=T("replies")}}
+        {{pass}}
+        <!-- to &#8220;{{=post.post_title}}&#8221; -->
+    ({{=comment_count}})
+    </h2>
+{{pass}}
+<br/>
+
+<ul id="commentlist">
+    {{count=0}}
+    {{for comment in comments:}}
+        <li {{if count % 2 == 0:}}class="alt"{{pass}}>
+            <cite>
+                {{if comment.comment_author_website:}}
+                    <a target="_blank" href='{{=comment.comment_author_website}}'>{{=comment.comment_author}}</a>
+                {{else:}}
+                    {{=comment.comment_author}}
+                {{pass}}
+            </cite> says (<small class="commentmetadata">{{=comment.comment_time.strftime("%B %d, %Y at %I:%M %p")}}</small>):
+            <p>{{=comment.comment_text}}</p>
+        </li>
+        {{count = count + 1}}
+    {{pass}}
+</ul>
+<br/>
+<br/>
+
+<h2 id="respond">{{=T("Leave a Reply")}}</h2>
+
+<div id="comment_form">
+  {{=comment_form}}
+</div>

@@ -1,0 +1,55 @@
+{{extend 'layout.html'}}
+
+{{
+def get_post_cats(post_id):
+  cat_id=db(db.posts.id == post_id).select()[0].post_category
+  cats=db(db.categories.id == cat_id).select()
+
+    items=[]
+    for cat in cats:
+        item="<a href='/%(app)s/default/category/%(cat)s'>%(name)s</a>" % {'app':request.application, 'cat':cat.category_name, 'name':T(cat.category_name)}
+        items.append(item)
+    pass
+    cat_list=", ".join(items)
+    return XML(cat_list)
+    
+def get_comment_count(post_id):
+    com_count=len(db(db.comments.post_id==post_id).select(db.comments.ALL))
+    if com_count == 0:
+        com_text=XML(T("No Comments &raquo;"))
+    elif com_count == 1:
+        com_text=XML(T("1 Comment &raquo;"))
+    else:
+        com_text=XML(T("%(com_count)s Comments &raquo;",dict(com_count=com_count)))
+    pass
+    com_link = "<a href='/%(app)s/default/post/%(id)s#comments'>%(text)s</a>" % {'app':request.application, 'id':post_id, 'text':com_text}
+    return XML(com_link)
+}}
+
+<span class="pagetitle">(These are the entries in the the <strong>&#8216;{{=request.args[0]}}&#8217;</strong> Category)</span>
+
+{{if posts:}}
+    {{for post in posts:}}
+    <div class="post">
+        {{if post.is_translated:}}
+            {{include "utilities/language_choice_bar.html"}}
+        {{pass}}
+        <h2><a href="/{{=request.application}}/default/post/{{=post.id}}">{{=T(post.post_title)}}</a></h2>
+        <span class="datetime">{{=post.post_time.strftime("%B %d, %Y")}}</span>
+        <div class="entry">
+            {{if post.is_translated:}}
+                {{=XML(T(post.post_text_TCode))}}
+            {{else:}}
+                {{=XML(post.post_text)}}
+            {{pass}}
+        </div>
+        <p class="metadata">
+            <span>{{=T("Posted in")}}<span> {{=get_post_cats(post.id)}} | {{if session.authorized:}}<a href="/{{=request.application}}/default/edit/post/{{=post.id}}">{{=T("Edit")}}</a> | 
+            {{pass}}{{=get_comment_count(post.id)}}
+        </p>
+    </div>
+    {{pass}}
+{{else:}}
+    <h2 class="center">{{=T("Not Found")}}</h2>
+    <p class="center">{{=T("Sorry, but you are looking for something that isn't here")}}.</p>
+{{pass}}

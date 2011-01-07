@@ -1,0 +1,28 @@
+<style type="text/css">
+  .statement img {
+    max-width: 150px;
+  }
+  .statement div {
+    max-width: 395px;
+  }
+  .statement .float-left .content-text {
+    margin-top: -7%;
+  }
+  .statement .float-left .content-text, .statement .text-alignr {
+    display:block;
+  }
+  blockquote.highlight {
+    border:1px dotted maroon;
+    width: 85%;
+    margin-top: 5%; 
+    margin-bottom: 5%;
+  }
+</style>
+<div class="entry statement">
+  <img alt=".........." src="/cms/static/images/orbs.png">
+  <div class="float-left">
+      <span class="content-text">
+      </span>
+  </div>
+</div>
+

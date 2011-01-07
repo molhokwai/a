@@ -1,0 +1,9 @@
+WORKAROUND FOR THE CMS PAGE INTERNATIONALIZATION ISSUE.
+-------------------------------------------------------
+Content is saved dynamically, and T requires static strings to update translation files.
+For now:
+ - page saved in app
+ - page translation code updated (page_id_xxxxxxxx) in app
+ - translations saved though translation files admin
+ - page is_translated boolean updated in app
+
