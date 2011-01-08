@@ -147,3 +147,15 @@ CREATE TABLE app_config(
     MAIL_SETTINGS_LOGIN CHAR(512)
 );
 success!
+timestamp: 2011-01-07T08:29:50.604346
+ALTER TABLE app_config ADD app_metas TEXT;
+timestamp: 2011-01-07T08:29:50.702595
+ALTER TABLE app_config ADD picasa_api TEXT;
+timestamp: 2011-01-07T08:29:50.780346
+ALTER TABLE app_config ADD rpx_api TEXT;
+timestamp: 2011-01-07T08:29:50.858143
+ALTER TABLE app_config ADD app_current_languages TEXT;
+timestamp: 2011-01-07T08:29:50.935854
+ALTER TABLE app_config ADD mail_settings TEXT;
+timestamp: 2011-01-07T11:37:43.745893
+ALTER TABLE app_config ADD app_details TEXT;

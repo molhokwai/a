@@ -108,7 +108,7 @@ def picasa():
     
                 elif area == 'delete':
                     album_id=request.args[2]
-                    album_feed=self.get_album_by_id(album_id)
+                    album_feed=picasa_manager.get_album_by_id(album_id)
                     album_photos=picasa_manager.get_album_photos(
                                       album_id, 
                                       username=session.gdata_user['email'].replace('@gmail.com', ''), 
@@ -161,6 +161,10 @@ def picasa():
                                     filetitle=request.post_vars[v]
 
                             if _file:
+                                if not filetitle:
+                                    if filename.find('\\')>0: f_n_s=filename.split('\\')
+                                    else: f_n_s=filename.split('/')
+                                    filetitle=f_n_s[len(f_n_s)-1]
                                 _file_tuples.append((_file, filename, filetitle))
 
                         for i in range(len(_file_tuples)):
