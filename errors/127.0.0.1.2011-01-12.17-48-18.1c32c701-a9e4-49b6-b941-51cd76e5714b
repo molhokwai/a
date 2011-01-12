@@ -1,0 +1,1098 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/media/social.html'
+p4
+sS'code'
+p5
+S'if not nake:\n    response.write(\'\\n    \', escape=False)\n    response.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="\', escape=False)\n    response.write(T.accepted_language or \'en\')\n    response.write(\'">\\n\\n  <head>\\n    <title>\', escape=False)\n    if response.title:\n        response.write(response.title)\n    else:\n        response.write(URL(r=request))\n        pass\n    response.write(\'</title>\\n\\n    <title>\', escape=False)\n    response.write(response.title or request.application)\n    response.write(\'</title>\\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\\n    <meta name="keywords" content="\', escape=False)\n    response.write(response.keywords)\n    response.write(\'" />\\n    <meta name="description" content="\', escape=False)\n    response.write(response.description)\n    response.write(\'" />\\n    <meta name="google-site-verification" content="r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8" />\\n    \', escape=False)\n    if response.refresh:\n        response.write(XML(response.refresh))\n        pass\n    response.write(\'\\n    \\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/themes/\', escape=False)\n    response.write(response.theme)\n    response.write(\'/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/markitup/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />\\n    <style type="text/css"></style>\\n    \\n    \', escape=False)\n    response.write(\'<script type="text/javascript">\\n<!--\\n/*\\nWritten by Massimo Di Pierro.\\n\\nThis is a minimalistic AJAX for web2py, for more sophisticated stuff\\nyou should use Scriptacolous or some other AJAX toolkit. Anyway...\\n\\nTo use web2py_ajax.html just make sure you include \\\'web2py_ajax.html\\\'\\nin your layout.html. This provides four functions:\\n\\npopup(url)\\ncollapse(id)\\nfade(id,value) // try value= +0.1 or -0.1\\najax(url,sources,taget) \\n// will send sources[i].value to url and dispaly result in target\\n*/\\n\\nfunction popup(url) {\\n  newwindow=window.open(url,\\\'name\\\',\\\'height=400,width=600\\\');\\n  if (window.focus) {newwindow.focus()}\\n  return false;\\n}\\n\\nfunction collapse(id) {\\n   if(this.document.getElementById(id).style.display=="none")\\n   (this.document.getElementById(id).style.display="block") ;\\n   else (this.document.getElementById(id).style.display="none") ;\\n}\\n\\nfunction fade(id,value) {\\n  var object=document.getElementById(id);\\n  if(value<0 && !object.style.opacity) {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity=1;\\n  }\\n  if(value>0 && object.style.opacity>=1) object.style.opacity=1;\\n  else if(value<0 && object.style.opacity<=0) {\\n     this.document.getElementById(id).style.display="none";\\n     object.style.opacity=0;\\n  }\\n  else {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity-=-value;\\n     setTimeout(function(){fade(id,value);},100);\\n     return false;\\n  }\\n  return true;\\n}\\n\\nfunction ajax(url,sources,target) {\\n  var req = null; \\n  var ctarget=document.getElementById(target);\\n  window.status="connecting...";\\n  if(window.XMLHttpRequest)\\n     req = new XMLHttpRequest(); \\n  else if (window.ActiveXObject)\\n     req  = new ActiveXObject("Microsoft.XMLHTTP");\\n  req.onreadystatechange = function() {\\n     window.status="waiting...";\\n     if(req.readyState == 4)\\n       if(req.status == 200) {\\n          window.status=\\\'Ajax Done!\\\'\\n          try { \\n             ctarget.innerHTML=req.responseText; \\n             try {ctarget.scrollTop=ctarget.scrollHeight-ctarget.clientHeight;}\\n             catch(err) {}\\n          } catch(err) { ctarget.value=req.responseText; }\\n       } else alert("AJAX Error: " + req.status);\\n  }\\n  var query=""\\n  for(i=0; i<sources.length; i++) {\\n     if(i>0) query=query+"&";\\n     query=query+encodeURIComponent(sources[i])+"="+encodeURIComponent(document.getElementById(sources[i]).value);\\n  }\\n  req.open("POST",url,true); \\n  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); \\n  req.send(query); \\n} \\n//-->\\n</script>\', escape=False)\n    response.write(\'\\n\\n    <script type="text/javascript">\\n      var server={\\n          request : {\\n              application : \\\'\', escape=False)\n    response.write(this_app)\n    response.write(\'\\\'\\n          },\\n          pages : []\\n      };\\n    </script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/molhokwai/namespace.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/jquery/jquery-1.4.2.min.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/markitup/jquery.markitup.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/custom/script.js"></script>\\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/google/search_init.js"></script>\\n    <script type="text/javascript">\\n      $(document).ready(function(){\\n          var browser_not=true;\\n          try { \\n              browser_not=!($.browser.mozilla || $.browser.webkit); \\n          }\\n          catch(e) {} \\n          if (browser_not){\\n              $(\\\'#content\\\').append(\\\'<div class="text-alignc margt5pc"><em>\', escape=False)\n    response.write(T("(Graphical design not tested (corrected) on this browser...)"))\n    response.write(\'</em></div>\\\');\\n          }\\n      });      \\n    </script>\\n\\n  </head>\\n\\n  <body>\\n\\n    <div id="wrapper" class="margt2pc  width60pc">\\n\\n      <div id="user-menu" class="right">\\n         \', escape=False)\n    if \'auth\' in globals():\n        response.write(\'\\n           \', escape=False)\n        if not auth.user:\n            response.write(\' \\n             \', escape=False)\n            response.write(A(T(\'login\'),_href=URL(r=request,c=\'default\',f=\'user/login\')))\n            response.write(\'\\n           \', escape=False)\n        else:\n            response.write(\'\\n             <!-- \', escape=False)\n            response.write(auth.user.display_name)\n            response.write(\' -->\\n             \', escape=False)\n            response.write(A(T(\'logout\'),_href=URL(r=request,c=\'default\',f=\'user/logout\')))\n            response.write(\' | \\n           \', escape=False)\n            pass\n        response.write(\'\\n         \', escape=False)\n        pass\n    response.write(\'\\n      </div>\\n      <!-- end #user-menu -->\\n\\n      <div id="cli_web" class="left margt2pc  width100pc">\\n        <form onsubmit="return false;">\\n            <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>\\n            <font id="_cmd_msg" class="flash small">\\n                \', escape=False)\n    if session.cli_web_flash:\n        response.write(session.cli_web_flash)\n        session.cli_web_flash=False\n        pass\n    response.write(\'\\n                \', escape=False)\n    flash = session.flash if session.flash else response.flash\n    response.write(\'\\n                \', escape=False)\n    if flash:\n        response.write(flash)\n        pass\n    response.write(\'\\n            </font>\\n            <input type="hidden" id="_cmd_history_cur" value="-1"/>\\n        </form>\\n      </div>\\n      <!-- end #cli_web -->\\n    \\n      <div id="content" class="padl3pc left margt5pc width100pc">\\n        <div id="searchcontrol"></div>\\n        \', escape=False)\n    response.write(\'\\n\\n\', escape=False)\nelse:\n    response.write(\'\\n    \', escape=False)\n    if response.refresh:\n        response.write(XML(response.refresh))\n        pass\n    response.write(\'\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/themes/\', escape=False)\n    response.write(response.theme)\n    response.write(\'/base.css" type="text/css" media="screen" />\\n    <style type="text/css">\\n        #footer, footer, #top-bar, top-bar {\\n            display:none;\\n        }\\n    </style>\\n\', escape=False)\n    pass\nresponse.write(\'\\n\\n\', escape=False)\nif area in [\'twitter\']:\n    response.write(\'\\n    \', escape=False)\n    if sub_area in [\'user\']:\n        response.write(\'\\n        \', escape=False)\n        for item in items:\n            response.write(\'\\n            \', escape=False)\n            response.write(XML(item.replace(\'\\\\n\', \'\')))\n            response.write(\'\\n        \', escape=False)\n            pass\n        response.write(\'\\n    \', escape=False)\n    else:\n        response.write(\'\\n        \', escape=False)\n        ##------- KEYS\n        ## iso_language_code, to_user_id_str, text, from_user_id_str, profile_image_url,\n        ## id, source, id_str, from_user, from_user_id, to_user_id, ge, created_at, metadata\n        ol =OL()\n        for item in items:\n            ol.append(DIV(\'%s %s via %s\' % (item[\'text\'], XML(A(item[\'created_at\'])), XML(A(item[\'source\'])))))\n            pass\n        response.write(\'\\n        \', escape=False)\n        response.write(XML(ol))\n        response.write(\'\\n    \', escape=False)\n        pass\n    response.write(\'\\n\', escape=False)\n    pass\nresponse.write(\'\\n\', escape=False)\nresponse.write(\'\\n      </div>\\n      <!-- end #content -->\\n\\n      <div id="utility" class="clear">&nbsp;</div>\\n\\n      <div id="footer">\', escape=False)\nresponse.write(A(T(\'acknowledgements\'), _href=URL( r=request, c=\'default\', f=\'page\', args=[\'acknowledgements\'])))\nresponse.write(\'</div>\\n        \\n    </div>\\n    <!-- end #wrapper -->\\n\\n    <div id="tracking">\\n        <script type="text/javascript" id="tracking_src">\\n            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\\n            document.write(unescape("%3Cscript src=\\\'" + gaJsHost + "google-analytics.com/ga.js\\\' type=\\\'text/javascript\\\'%3E%3C/script%3E"));\\n        </script>\\n        <script type="text/javascript" id="tracking_process">\\n            try {\\n                var pageTracker = _gat._getTracker("UA-5101967-1");\\n                pageTracker._initData();\\n                pageTracker._trackPageview();\\n            }\\n            catch(e) {\\n                if (console) try{console.log(e);}catch(e){}\\n            }\\n        </script>\\n    </div>    \\n    <!-- end #tracking -->\\n\\n    <div id="links">\\n             \', escape=False)\nresponse.write(A(T(\'add page/post\'),_href=URL(r=request,c=\'default\',f=\'add/page\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\n_post=None\ntry: _post=post\nexcept Exception, ex: pass\nresponse.write(\'\\n             \', escape=False)\nif _post:\n    response.write(\'\\n                 \', escape=False)\n    if _post.post_type==\'page\':\n        response.write(\'\\n                     \', escape=False)\n        response.write(A(T(\'edit page/post ?\'),_href=URL(r=request,c=\'default\',f=\'edit/page/%i\' % _post.id), _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n    else:\n        response.write(\'\\n                     \', escape=False)\n        response.write(A(T(\'edit page/post ?\'),_href=URL(r=request,c=\'default\',f=\'edit/post/%i\' % _post.id), _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \', escape=False)\nif response.home_page:\n    response.write(\'\\n                 \', escape=False)\n    response.write(A(T(\'root\'),_href=URL(r=request,c=\'default\',f=\'page/%i\' % response.home_page.id), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \', escape=False)\nif response.help_page:\n    response.write(\'\\n                 \', escape=False)\n    response.write(A(T(\'help\'),_href=URL(r=request,c=\'default\',f=\'page/%i\' % response.help_page.id), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \\n             \', escape=False)\nresponse.write(A(T(\'links\'),_href=URL(r=request,c=\'default\',f=\'manage/link\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\nif response.links:\n    response.write(\'\\n                 \', escape=False)\n    for _name,_link,_id in response.links:\n        response.write(\'\\n                         \', escape=False)\n        response.write(A(T(_name),_href=_link, _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \\n             \', escape=False)\nresponse.write(A(T(\'pages\'),_href=URL(r=request,c=\'default\',f=\'pages\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\nif response.pages:\n    response.write(\'\\n                 \', escape=False)\n    for _title,_false,_link in response.links:\n        response.write(\'\\n                         \', escape=False)\n        response.write(A(T(_title),_href=_link, _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n    </div>\\n    <!-- end #links -->\\n  \\n  </body>\\n</html>\\n\', escape=False)'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__getslice__'
+p11
+S"<method-wrapper '__getslice__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p12
+sS'encoding'
+p13
+S"'ascii'"
+p14
+sS'__str__'
+p15
+S"<method-wrapper '__str__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p16
+sS'__reduce__'
+p17
+S'<built-in method __reduce__ of exceptions.UnicodeDecodeError object at 0xac5f994>'
+p18
+sS'__dict__'
+p19
+S'{}'
+p20
+sS'__init__'
+p21
+S"<method-wrapper '__init__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p22
+sS'__setattr__'
+p23
+S"<method-wrapper '__setattr__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p24
+sS'__reduce_ex__'
+p25
+S'<built-in method __reduce_ex__ of exceptions.UnicodeDecodeError object at 0xac5f994>'
+p26
+sS'end'
+p27
+S'122'
+p28
+sS'__new__'
+p29
+S'<built-in method __new__ of type object at 0x823a280>'
+p30
+sS'__class__'
+p31
+S"<type 'exceptions.UnicodeDecodeError'>"
+p32
+sS'start'
+p33
+S'121'
+p34
+sS'__doc__'
+p35
+S"'Unicode decoding error.'"
+p36
+sS'object'
+p37
+S"'<a>&amp;lt;a href=&amp;quot;http://www.ubertwitt...p;quot;&amp;gt;\\xc3\\x9cberTwitter&amp;lt;/a&amp;gt;</a>'"
+p38
+sS'__getitem__'
+p39
+S"<method-wrapper '__getitem__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p40
+sS'__setstate__'
+p41
+S'<built-in method __setstate__ of exceptions.UnicodeDecodeError object at 0xac5f994>'
+p42
+sS'__getattribute__'
+p43
+S"<method-wrapper '__getattribute__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p44
+sS'args'
+p45
+S"('ascii', '<a>&amp;lt;a href=&amp;quot;http://www.ubertwitt...p;quot;&amp;gt;\\xc3\\x9cberTwitter&amp;lt;/a&amp;gt;</a>', 121, 122, 'ordinal not in range(128)')"
+p46
+sS'reason'
+p47
+S"'ordinal not in range(128)'"
+p48
+sS'__delattr__'
+p49
+S"<method-wrapper '__delattr__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p50
+sS'__repr__'
+p51
+S"<method-wrapper '__repr__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p52
+sS'__hash__'
+p53
+S"<method-wrapper '__hash__' of exceptions.UnicodeDecodeError object at 0xac5f994>"
+p54
+ssS'evalue'
+p55
+S"'ascii' codec can't decode byte 0xc3 in position 121: ordinal not in range(128)"
+p56
+sS'request'
+p57
+(dp58
+S'function'
+p59
+S"'social'"
+p60
+sS'body'
+p61
+S'<cStringIO.StringO object at 0xaae2460>'
+p62
+sS'wsgi'
+p63
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p64
+sS'extension'
+p65
+S"'html'"
+p66
+sS'vars'
+p67
+S'<Storage {}>'
+p68
+sS'cid'
+p69
+S'None'
+p70
+sS'url'
+p71
+S'<gluon.html.XML object at 0xaae25cc>'
+p72
+sS'raw_extension'
+p73
+S'None'
+p74
+sg45
+S"['twitter']"
+p75
+sS'controller'
+p76
+S"'media'"
+p77
+sS'cookies'
+p78
+S"<SimpleCookie: session_id_a='127.0.0.1-76250500-...c4fd76-048f-4688-8653-aa55bd9624a8' theme='blue'>"
+p79
+sS'application'
+p80
+S"'a'"
+p81
+sS'ajax'
+p82
+S'False'
+p83
+sS'client'
+p84
+S"'127.0.0.1'"
+p85
+sS'env'
+p86
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0xab3a7d4>}>"
+p87
+sS'raw_args'
+p88
+S"'twitter'"
+p89
+sS'get_vars'
+p90
+S'<Storage {}>'
+p91
+sS'folder'
+p92
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p93
+sS'now'
+p94
+S'datetime.datetime(2011, 1, 12, 17, 48, 16, 979133)'
+p95
+sS'post_vars'
+p96
+S'<Storage {}>'
+p97
+ssS'frames'
+p98
+(lp99
+(dp100
+S'file'
+p101
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p102
+sS'dump'
+p103
+(dp104
+S'environment'
+p105
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0xaae114c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p106
+sS'ccode'
+p107
+S'<code object <module> at 0xa7e2c38, file "/home/.../applications/a/views/media/social.html", line 1>'
+p108
+ssS'lnum'
+p109
+I188
+sS'lines'
+p110
+(dp111
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p112
+sI183
+S'        if type(code) == types.CodeType:'
+p113
+sI184
+S'            ccode = code'
+p114
+sI185
+S'        else:'
+p115
+sI186
+S'            ccode = compile2(code,layer)'
+p116
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p117
+sI189
+S'    except HTTP:'
+p118
+sI190
+S'        raise'
+p119
+sI191
+S'    except Exception:'
+p120
+ssS'call'
+p121
+S'(code="if not nake:\\n    response.write(\'\\\\n    \', escape...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\', escape=False)", environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0xaae114c>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/media/social.html\')'
+p122
+sS'func'
+p123
+S'restricted'
+p124
+sa(dp125
+g101
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/media/social.html'
+p126
+sg103
+(dp127
+sg109
+I111
+sg110
+(dp128
+I102
+S'            pass'
+p129
+sI103
+S"        response.write('\\n    ', escape=False)"
+p130
+sI104
+S'    else:'
+p131
+sI105
+S"        response.write('\\n        ', escape=False)"
+p132
+sI106
+S'        ##------- KEYS'
+p133
+sI107
+S'        ## iso_language_code, to_user_id_str, text, from_user_id_str, profile_image_url,'
+p134
+sI108
+S'        ## id, source, id_str, from_user, from_user_id, to_user_id, ge, created_at, metadata'
+p135
+sI109
+S'        ol =OL()'
+p136
+sI110
+S'        for item in items:'
+p137
+sI111
+S"            ol.append(DIV('%s %s via %s' % (item['text'], XML(A(item['created_at'])), XML(A(item['source'])))))"
+p138
+sI112
+S'            pass'
+p139
+sI113
+S"        response.write('\\n        ', escape=False)"
+p140
+sI114
+S'        response.write(XML(ol))'
+p141
+sI115
+S"        response.write('\\n    ', escape=False)"
+p142
+sI116
+S'        pass'
+p143
+sI117
+S"    response.write('\\n', escape=False)"
+p144
+sI118
+S'    pass'
+p145
+sI119
+S"response.write('\\n', escape=False)"
+p146
+sI120
+S'response.write(\'\\n      </div>\\n      <!-- end #content -->\\n\\n      <div id="utility" class="clear">&nbsp;</div>\\n\\n      <div id="footer">\', escape=False)'
+p147
+sI121
+S"response.write(A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements'])))"
+p148
+ssg121
+S'()'
+p149
+sg123
+S'<module>'
+p150
+sasS'pyver'
+p151
+S'Python 2.5.1: /usr/local/bin/python'
+p152
+sS'session'
+p153
+(dp154
+S'user_authorization_done'
+p155
+S'True'
+p156
+sS'_formkey[app_config_1]'
+p157
+S"'68410527-5c6f-4673-8a8a-58f5422cac7f'"
+p158
+sS'flash'
+p159
+S'None'
+p160
+sS'_formkey[links_create]'
+p161
+S"'f8e43d71-2aab-48dd-ac0f-6301d2985ea9'"
+p162
+sS'auth'
+p163
+S"<Storage {'expiration': 3600, 'user': <Storage {..., 1, 12, 17, 48, 16, 979133), 'remember': False}>"
+p164
+sS'authorized'
+p165
+g156
+ssS'etype'
+p166
+S"<type 'exceptions.UnicodeDecodeError'>"
+p167
+sS'date'
+p168
+S'Wed Jan 12 17:48:18 2011'
+p169
+sS'response'
+p170
+(dp171
+S'_vars'
+p172
+S"{'area': 'twitter', 'items': [{u'created_at': u'Wed, 12 Jan 2011 16:48:02 +0000', u'from_user': u'memellisay', u'from_user_id': 138684760, u'from_user_id_str': u'138684760', u'geo': None, u'id': 25232544408535040L, u'id_str': u'25232544408535040', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1210166228/Copy_of_belita_eye_url_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:58 +0000', u'from_user': u'faicol', u'from_user_id': 90601942, u'from_user_id_str': u'90601942', u'geo': None, u'id': 25232529975939072L, u'id_str': u'25232529975939072', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1199937843/iu_4987_dtac_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:57 +0000', u'from_user': u'putt_rrii', u'from_user_id': 163444945, u'from_user_id_str': u'163444945', u'geo': None, u'id': 25232525911654400L, u'id_str': u'25232525911654400', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a3.twimg.com/profile_images/1213800863/243216601_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:55 +0000', u'from_user': u'genesiamemah', u'from_user_id': 60649389, u'from_user_id_str': u'60649389', u'geo': None, u'id': 25232517602738176L, u'id_str': u'25232517602738176', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1211693708/241649288_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:54 +0000', u'from_user': u'nyalaterang', u'from_user_id': 185465769, u'from_user_id_str': u'185465769', u'geo': None, u'id': 25232513521688576L, u'id_str': u'25232513521688576', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1199756169/kopi_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:54 +0000', u'from_user': u'Marilurazo', u'from_user_id': 115792453, u'from_user_id_str': u'115792453', u'geo': None, u'id': 25232512255004672L, u'id_str': u'25232512255004672', u'iso_language_code': u'es', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1206397414/image_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:51 +0000', u'from_user': u'looneegh', u'from_user_id': 147791426, u'from_user_id_str': u'147791426', u'geo': None, u'id': 25232500305436672L, u'id_str': u'25232500305436672', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1128823733/TKR_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:51 +0000', u'from_user': u'isrezende', u'from_user_id': 140333847, u'from_user_id_str': u'140333847', u'geo': None, u'id': 25232499135221761L, u'id_str': u'25232499135221761', u'iso_language_code': u'pt', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1192873014/DSC_0889_normal.JPG', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:51 +0000', u'from_user': u'JHDELATEJERA', u'from_user_id': 95452658, u'from_user_id_str': u'95452658', u'geo': None, u'id': 25232498602541056L, u'id_str': u'25232498602541056', u'iso_language_code': u'es', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a3.twimg.com/profile_images/1203517232/avatar_twitter_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:47 +0000', u'from_user': u'LieeChao', u'from_user_id': 133544967, u'from_user_id_str': u'133544967', u'geo': None, u'id': 25232482479636481L, u'id_str': u'25232482479636481', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1193907922/IMG00929-20101219-0929_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:45 +0000', u'from_user': u'pedrosvdr', u'from_user_id': 98679826, u'from_user_id_str': u'98679826', u'geo': None, u'id': 25232476456615937L, u'id_str': u'25232476456615937', u'iso_language_code': u'it', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a1.twimg.com/profile_images/714832605/DSCN0206_normal.JPG', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:44 +0000', u'from_user': u'pistolnmawar', u'from_user_id': 180930290, u'from_user_id_str': u'180930290', u'geo': None, u'id': 25232472136491008L, u'id_str': u'25232472136491008', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1199782981/232992864_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:44 +0000', u'from_user': u'dhiesaster', u'from_user_id': 86372142, u'from_user_id_str': u'86372142', u'geo': None, u'id': 25232468890091520L, u'id_str': u'25232468890091520', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1192486257/what_a_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:42 +0000', u'from_user': u'Young_Rackem', u'from_user_id': 5971669, u'from_user_id_str': u'5971669', u'geo': None, u'id': 25232464045678593L, u'id_str': u'25232464045678593', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1206117314/RackemL2_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:38 +0000', u'from_user': u'swiftayfake', u'from_user_id': 198327371, u'from_user_id_str': u'198327371', u'geo': None, u'id': 25232445175500800L, u'id_str': u'25232445175500800', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1212068503/Image4-1_normal.jpg', ...}], 'nake': False, 'sub_area': None}"
+p173
+sg78
+S"<SimpleCookie: session_id_a='127.0.0.1-76250500-f357-4eb7-95d6-602a5ce036a8'>"
+p174
+sS'links'
+p175
+S"[['web2py', 'http://www.web2py.com', 1], ['Python', 'http://www.python.org', 2], ['DePaul CTI', 'http://www.cs.depaul.edu', 3], ['DePaul University', 'http://www.depaul.edu', 5], ['downloads', '/a/default/page/32', 15], ['media / picasa / gallery', '/a/media/picasa/gallery', 16], ['manage media / manage picasa albums / manage photos', '/a/media/picasa/albums', 17], ['setup, application initialization', '/a/setup', 18], ['twitter', '/a/media/social/twitter', 19]]"
+p176
+sS'themes'
+p177
+S"['0', '1']"
+p178
+sS'meta'
+p179
+S'<Storage {}>'
+p180
+sS'anon_user'
+p181
+S"<Row {'auth_event': <gluon.dal.Set object at 0xa...elete_record': <function <lambda> at 0xa924224>}>"
+p182
+sS'_view_environment'
+p183
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0xaae114c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p184
+sS'keywords'
+p185
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p186
+sS'files'
+p187
+S'[]'
+p188
+sS'_caller'
+p189
+S'<function <lambda> at 0xab3a72c>'
+p190
+sS'title'
+p191
+S'"molhokwai.net - \'a\' cm/dms"'
+p192
+sS'home_page'
+p193
+S"<Row {'post_text_TCode': 'page_id_24', 'post_tim...elete_record': <function <lambda> at 0xab3a6f4>}>"
+p194
+sS'menu'
+p195
+S"[['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18']]"
+p196
+sS'flash'
+p197
+S"''"
+p198
+sS'theme'
+p199
+S"'blue'"
+p200
+sS'session_file'
+p201
+S"<open file '/home/herve/development/workspaces/m...4eb7-95d6-602a5ce036a8', mode 'rb+' at 0xacccec0>"
+p202
+sS'_custom_commit'
+p203
+S'None'
+p204
+sS'session_filename'
+p205
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-76250500-f357-4eb7-95d6-602a5ce036a8'"
+p206
+sg61
+S'<cStringIO.StringO object at 0xaae2c80>'
+p207
+sS'description'
+p208
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p209
+sS'session_id_name'
+p210
+S"'session_id_a'"
+p211
+sS'_custom_rollback'
+p212
+S'None'
+p213
+sS'pages'
+p214
+S"[['beliefs', False, '/a/default/page/15'], ['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18'], ['SMS', False, '/a/default/page/21'], ['', False, '/a/default/page/23'], ['a_home', False, '/a/default/page/24'], ['a_help', False, '/a/default/page/26'], ['help', False, '/a/default/page/27'], ['a_home', False, '/a/default/page/29'], ['siblos', False, '/a/default/page/30'], ['dev', False, '/a/default/page/31'], ['downloads', False, '/a/default/page/32'], ['themes', False, '/a/default/page/35'], ['media upload', False, '/a/default/page/36'], ['acknowledgements', False, '/a/default/page/37']]"
+p215
+sS'categories'
+p216
+S"[['misc', 2, '/a/default/category/misc'], ['message', 1, '/a/default/category/message']]"
+p217
+sS'help_page'
+p218
+S"<Row {'post_text_TCode': 'page_id_26', 'post_tim...elete_record': <function <lambda> at 0xab3aa04>}>"
+p219
+sS'session_id'
+p220
+S"'127.0.0.1-76250500-f357-4eb7-95d6-602a5ce036a8'"
+p221
+sS'headers'
+p222
+S"<Storage {'Expires': 'Wed, 12 Jan 2011 16:48:16 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p223
+sS'status'
+p224
+S'200'
+p225
+sS'postprocessing'
+p226
+S'[]'
+p227
+sS'auth_users'
+p228
+S'<gluon.dal.Rows object at 0xaa164ac>'
+p229
+sS'view'
+p230
+S"'media/social.html'"
+p231
+ssS'locals'
+p232
+(dp233
+S'protocol'
+p234
+S"'http'"
+p235
+sS'app_details'
+p236
+S'<__builtin__.AppDetails instance at 0xab24b8c>'
+p237
+sS'Service'
+p238
+S"<class 'gluon.tools.Service'>"
+p239
+sS'OBJECT'
+p240
+S"<class 'gluon.html.OBJECT'>"
+p241
+sS'SQLDB'
+p242
+S"<class 'gluon.dal.DAL'>"
+p243
+sg153
+S"<Storage {'user_authorization_done': True, '_for...79133), 'remember': False}>, 'authorized': True}>"
+p244
+sS'LINK'
+p245
+S"<class 'gluon.html.LINK'>"
+p246
+sS'BR'
+p247
+S"<class 'gluon.html.BR'>"
+p248
+sS'local_import'
+p249
+S'<function <lambda> at 0xab3a48c>'
+p250
+sS'OPTGROUP'
+p251
+S"<class 'gluon.html.OPTGROUP'>"
+p252
+sS'expressions'
+p253
+S'{\'rel_url_and_end_tags_find\': [\'[0-9]{0,1}/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\\\'\\\\.}>\\\\),\\\\"]\'], \'url_find\': [\'([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|...z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\\\'\\\\.}>\\\\),\\\\"]\', r\'([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}|...ww|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+)(:[0-9]*)?\', r\'(~/|/|\\./)([-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]|\\\\)+\', r"\'\\<((mailto:)|)[-A-Za-z0-9\\.]+@[-A-Za-z0-9\\.]+"]}'
+p254
+sS'link_labels'
+p255
+S"{'link_title': 'Name', 'link_url': 'URL'}"
+p256
+sS'PRE'
+p257
+S"<class 'gluon.html.PRE'>"
+p258
+sS'IS_INT_IN_RANGE'
+p259
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p260
+sS'IS_LOWER'
+p261
+S"<class 'gluon.validators.IS_LOWER'>"
+p262
+sS'IS_STRONG'
+p263
+S"<class 'gluon.validators.IS_STRONG'>"
+p264
+sS'Recaptcha'
+p265
+S"<class 'gluon.tools.Recaptcha'>"
+p266
+sS'cache'
+p267
+S'<gluon.cache.Cache object at 0xaae2e2c>'
+p268
+sS'IS_IN_DB'
+p269
+S"<class 'gluon.validators.IS_IN_DB'>"
+p270
+sS'TAG'
+p271
+S'<gluon.html.__TAG__ object at 0x57c1cc>'
+p272
+sS'SQLField'
+p273
+S"<class 'gluon.dal.Field'>"
+p274
+sS'BODY'
+p275
+S"<class 'gluon.html.BODY'>"
+p276
+sS'IS_DATE_IN_RANGE'
+p277
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p278
+sS'TH'
+p279
+S"<class 'gluon.html.TH'>"
+p280
+sS'URL'
+p281
+S'<function _URL at 0xab3a9cc>'
+p282
+sS'db'
+p283
+S"<DAL {'auth_permission': <Table {'ALL': <gluon.d..._name': <gluon.dal.Field object at 0xab4cc6c>}>}>"
+p284
+sS'auth'
+p285
+S'<gluon.tools.Auth object at 0xab5aecc>'
+p286
+sS'P'
+S"<class 'gluon.html.P'>"
+p287
+sS'TFOOT'
+p288
+S"<class 'gluon.html.TFOOT'>"
+p289
+sS'XHTML'
+p290
+S"<class 'gluon.html.XHTML'>"
+p291
+sS'datetime'
+p292
+S"<module 'datetime' from '/usr/local/lib/python2.5/lib-dynload/datetime.so'>"
+p293
+sS'ON'
+p294
+g156
+sS'OL'
+p295
+S"<class 'gluon.html.OL'>"
+p296
+sS'TEXTAREA'
+p297
+S"<class 'gluon.html.TEXTAREA'>"
+p298
+sS'Struct'
+p299
+S'<class __builtin__.Struct at 0xaae123c>'
+p300
+sS'MENU'
+p301
+S"<class 'gluon.html.MENU'>"
+p302
+sS'item'
+p303
+S"{u'created_at': u'Wed, 12 Jan 2011 16:48:02 +0000', u'from_user': u'memellisay', u'from_user_id': 138684760, u'from_user_id_str': u'138684760', u'geo': None, u'id': 25232544408535040L, u'id_str': u'25232544408535040', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1210166228/Copy_of_belita_eye_url_normal.jpg', ...}"
+p304
+sS'a_convert'
+p305
+S'<__builtin__.aConvert instance at 0xab2462c>'
+p306
+sS'EM'
+p307
+S"<class 'gluon.html.EM'>"
+p308
+sS'CODE'
+p309
+S"<class 'gluon.html.CODE'>"
+p310
+sS'HTTP'
+p311
+S"<class 'gluon.http.HTTP'>"
+p312
+sS'url_finders'
+p313
+S'[<_sre.SRE_Pattern object at 0xa675020>, <_sre.SRE_Pattern object at 0xa66a868>, <_sre.SRE_Pattern object at 0xa62dbd8>, <_sre.SRE_Pattern object at 0xa8732f0>]'
+p314
+sS'log_wrapped'
+p315
+S'<function log_wrapped at 0xa924f7c>'
+p316
+sS'HR'
+p317
+S"<class 'gluon.html.HR'>"
+p318
+sS'comment_labels'
+p319
+S"{'comment_author': 'Name', 'comment_author_email': 'Email', 'comment_author_website': 'Website', 'comment_text': 'Comment', 'post_id': 'Post ID'}"
+p320
+sS'IS_DATETIME'
+p321
+S"<class 'gluon.validators.IS_DATETIME'>"
+p322
+sS'HEAD'
+p323
+S"<class 'gluon.html.HEAD'>"
+p324
+sS'LABEL'
+p325
+S"<class 'gluon.html.LABEL'>"
+p326
+sS'cat_labels'
+p327
+S"{'category_name': 'Name'}"
+p328
+sS'META'
+p329
+S"<class 'gluon.html.META'>"
+p330
+sS'print_wrapped'
+p331
+S'<function print_wrapped at 0xa924e2c>'
+p332
+sS'SELECT'
+p333
+S"<class 'gluon.html.SELECT'>"
+p334
+sS'CENTER'
+p335
+S"<class 'gluon.html.CENTER'>"
+p336
+sS'prettydate'
+p337
+S'<function prettydate at 0xa611064>'
+p338
+sS'Crud'
+p339
+S"<class 'gluon.tools.Crud'>"
+p340
+sS'Auth'
+p341
+S"<class 'gluon.tools.Auth'>"
+p342
+sS'IS_EQUAL_TO'
+p343
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p344
+sS'IS_LIST_OF'
+p345
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p346
+sS'SQLFORM'
+p347
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p348
+sS'file_labels'
+p349
+S"{'file': 'File', 'filename': 'Enter file name'}"
+p350
+sS'LOAD'
+p351
+S'<gluon.compileapp.LoadFactory object at 0xaae21ac>'
+p352
+sS'redirect'
+p353
+S'<function redirect at 0x9b125c>'
+p354
+sS'FIELDSET'
+p355
+S"<class 'gluon.html.FIELDSET'>"
+p356
+sS'__builtins__'
+p357
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, 'Exception': <type 'exceptions.Exception'>, 'False': False, ...}"
+p358
+sS'embed64'
+p359
+S'<function embed64 at 0x57aaac>'
+p360
+sS'INPUT'
+p361
+S"<class 'gluon.html.INPUT'>"
+p362
+sS'EMBED'
+p363
+S"<class 'gluon.html.EMBED'>"
+p364
+sS'IS_IMAGE'
+p365
+S"<class 'gluon.validators.IS_IMAGE'>"
+p366
+sS'ol'
+p367
+S'<gluon.html.OL object at 0xa88fd4c>'
+p368
+sS'H2'
+p369
+S"<class 'gluon.html.H2'>"
+p370
+sS'H3'
+p371
+S"<class 'gluon.html.H3'>"
+p372
+sS'H1'
+p373
+S"<class 'gluon.html.H1'>"
+p374
+sS'H6'
+p375
+S"<class 'gluon.html.H6'>"
+p376
+sS'H4'
+p377
+S"<class 'gluon.html.H4'>"
+p378
+sS'H5'
+p379
+S"<class 'gluon.html.H5'>"
+p380
+sS'UL'
+p381
+S"<class 'gluon.html.UL'>"
+p382
+sS'IS_UPPER'
+p383
+S"<class 'gluon.validators.IS_UPPER'>"
+p384
+sS'xmlescape'
+p385
+S'<function xmlescape at 0x57a4c4>'
+p386
+sS'IS_TIME'
+p387
+S"<class 'gluon.validators.IS_TIME'>"
+p388
+sg197
+S"''"
+p389
+sS'OPTION'
+p390
+S"<class 'gluon.html.OPTION'>"
+p391
+sS'sub_area'
+p392
+S'None'
+p393
+sS'TITLE'
+p394
+S"<class 'gluon.html.TITLE'>"
+p395
+sS'CRYPT'
+p396
+S"<class 'gluon.validators.CRYPT'>"
+p397
+sS'administrators_emails'
+p398
+S"['molhokwai@gmail.com']"
+p399
+sS'IS_EMPTY_OR'
+p400
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p401
+sS'MARKMIN'
+p402
+S"<class 'gluon.html.MARKMIN'>"
+p403
+sS'current_language'
+p404
+S"'en-en'"
+p405
+sS'this_app'
+p406
+S"'a'"
+p407
+sS'AppDetails'
+p408
+S'<class __builtin__.AppDetails at 0xaae114c>'
+p409
+sS'nake'
+p410
+g83
+sS'service'
+p411
+S'<gluon.tools.Service object at 0xab12fac>'
+p412
+sS'area'
+p413
+S"'twitter'"
+p414
+sS'geocode'
+p415
+S'<function geocode at 0xa610a3c>'
+p416
+sS'TABLE'
+p417
+S"<class 'gluon.html.TABLE'>"
+p418
+sS'IS_IPV4'
+p419
+S"<class 'gluon.validators.IS_IPV4'>"
+p420
+sS'IS_LENGTH'
+p421
+S"<class 'gluon.validators.IS_LENGTH'>"
+p422
+sS'XML'
+p423
+S"<class 'gluon.html.XML'>"
+p424
+sS'B'
+S"<class 'gluon.html.B'>"
+p425
+sS'IMG'
+p426
+S"<class 'gluon.html.IMG'>"
+p427
+sS'SQLTABLE'
+p428
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p429
+sS'IS_MATCH'
+p430
+S"<class 'gluon.validators.IS_MATCH'>"
+p431
+sS'IS_ALPHANUMERIC'
+p432
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p433
+sS'SPAN'
+p434
+S"<class 'gluon.html.SPAN'>"
+p435
+sS'IS_SLUG'
+p436
+S"<class 'gluon.validators.IS_SLUG'>"
+p437
+sS'CLEANUP'
+p438
+S"<class 'gluon.validators.CLEANUP'>"
+p439
+sS'items'
+p440
+S"[{u'created_at': u'Wed, 12 Jan 2011 16:48:02 +0000', u'from_user': u'memellisay', u'from_user_id': 138684760, u'from_user_id_str': u'138684760', u'geo': None, u'id': 25232544408535040L, u'id_str': u'25232544408535040', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1210166228/Copy_of_belita_eye_url_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:58 +0000', u'from_user': u'faicol', u'from_user_id': 90601942, u'from_user_id_str': u'90601942', u'geo': None, u'id': 25232529975939072L, u'id_str': u'25232529975939072', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1199937843/iu_4987_dtac_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:57 +0000', u'from_user': u'putt_rrii', u'from_user_id': 163444945, u'from_user_id_str': u'163444945', u'geo': None, u'id': 25232525911654400L, u'id_str': u'25232525911654400', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a3.twimg.com/profile_images/1213800863/243216601_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:55 +0000', u'from_user': u'genesiamemah', u'from_user_id': 60649389, u'from_user_id_str': u'60649389', u'geo': None, u'id': 25232517602738176L, u'id_str': u'25232517602738176', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1211693708/241649288_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:54 +0000', u'from_user': u'nyalaterang', u'from_user_id': 185465769, u'from_user_id_str': u'185465769', u'geo': None, u'id': 25232513521688576L, u'id_str': u'25232513521688576', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1199756169/kopi_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:54 +0000', u'from_user': u'Marilurazo', u'from_user_id': 115792453, u'from_user_id_str': u'115792453', u'geo': None, u'id': 25232512255004672L, u'id_str': u'25232512255004672', u'iso_language_code': u'es', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1206397414/image_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:51 +0000', u'from_user': u'looneegh', u'from_user_id': 147791426, u'from_user_id_str': u'147791426', u'geo': None, u'id': 25232500305436672L, u'id_str': u'25232500305436672', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1128823733/TKR_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:51 +0000', u'from_user': u'isrezende', u'from_user_id': 140333847, u'from_user_id_str': u'140333847', u'geo': None, u'id': 25232499135221761L, u'id_str': u'25232499135221761', u'iso_language_code': u'pt', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1192873014/DSC_0889_normal.JPG', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:51 +0000', u'from_user': u'JHDELATEJERA', u'from_user_id': 95452658, u'from_user_id_str': u'95452658', u'geo': None, u'id': 25232498602541056L, u'id_str': u'25232498602541056', u'iso_language_code': u'es', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a3.twimg.com/profile_images/1203517232/avatar_twitter_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:47 +0000', u'from_user': u'LieeChao', u'from_user_id': 133544967, u'from_user_id_str': u'133544967', u'geo': None, u'id': 25232482479636481L, u'id_str': u'25232482479636481', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1193907922/IMG00929-20101219-0929_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:45 +0000', u'from_user': u'pedrosvdr', u'from_user_id': 98679826, u'from_user_id_str': u'98679826', u'geo': None, u'id': 25232476456615937L, u'id_str': u'25232476456615937', u'iso_language_code': u'it', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a1.twimg.com/profile_images/714832605/DSCN0206_normal.JPG', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:44 +0000', u'from_user': u'pistolnmawar', u'from_user_id': 180930290, u'from_user_id_str': u'180930290', u'geo': None, u'id': 25232472136491008L, u'id_str': u'25232472136491008', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1199782981/232992864_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:44 +0000', u'from_user': u'dhiesaster', u'from_user_id': 86372142, u'from_user_id_str': u'86372142', u'geo': None, u'id': 25232468890091520L, u'id_str': u'25232468890091520', u'iso_language_code': u'id', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1192486257/what_a_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:42 +0000', u'from_user': u'Young_Rackem', u'from_user_id': 5971669, u'from_user_id_str': u'5971669', u'geo': None, u'id': 25232464045678593L, u'id_str': u'25232464045678593', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a2.twimg.com/profile_images/1206117314/RackemL2_normal.jpg', ...}, {u'created_at': u'Wed, 12 Jan 2011 16:47:38 +0000', u'from_user': u'swiftayfake', u'from_user_id': 198327371, u'from_user_id_str': u'198327371', u'geo': None, u'id': 25232445175500800L, u'id_str': u'25232445175500800', u'iso_language_code': u'en', u'metadata': {u'result_type': u'recent'}, u'profile_image_url': u'http://a0.twimg.com/profile_images/1212068503/Image4-1_normal.jpg', ...}]"
+p441
+sS'fetch'
+p442
+S'<function fetch at 0xa610994>'
+p443
+sS'IS_DATE'
+p444
+S"<class 'gluon.validators.IS_DATE'>"
+p445
+sS'IS_EMAIL'
+p446
+S"<class 'gluon.validators.IS_EMAIL'>"
+p447
+sS'IS_NOT_EMPTY'
+p448
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p449
+sg57
+S"<Storage {'function': 'social', 'body': <cString... 17, 48, 16, 979133), 'post_vars': <Storage {}>}>"
+p450
+sS'BEAUTIFY'
+p451
+S"<class 'gluon.html.BEAUTIFY'>"
+p452
+sS'TBODY'
+p453
+S"<class 'gluon.html.TBODY'>"
+p454
+sS'Field'
+p455
+S"<class 'gluon.dal.Field'>"
+p456
+sS'Mail'
+p457
+S"<class 'gluon.tools.Mail'>"
+p458
+sS'DIV'
+p459
+S"<class 'gluon.html.DIV'>"
+p460
+sS'LEGEND'
+p461
+S"<class 'gluon.html.LEGEND'>"
+p462
+sS'post_labels'
+p463
+S"{'post_category': 'Category', 'post_text': 'Post', 'post_text_TCode': 'Translation code (code & language texts must be set in the translation files)', 'post_time': 'Post Date', 'post_title': 'Title', 'post_type': 'Type', 'show_in_menu': 'Show in menu'}"
+p464
+sS'global_site_url'
+p465
+S"'http://localhost:8001'"
+p466
+sS'DAL'
+p467
+S"<class 'gluon.dal.DAL'>"
+p468
+sS'TT'
+p469
+S"<class 'gluon.html.TT'>"
+p470
+sS'TR'
+p471
+S"<class 'gluon.html.TR'>"
+p472
+sS'this_app_url'
+p473
+S"'http://localhost:8001/a'"
+p474
+sS'LI'
+p475
+S"<class 'gluon.html.LI'>"
+p476
+sS'IFRAME'
+p477
+S"<class 'gluon.html.IFRAME'>"
+p478
+sS'SCRIPT'
+p479
+S"<class 'gluon.html.SCRIPT'>"
+p480
+sS'TD'
+p481
+S"<class 'gluon.html.TD'>"
+p482
+sS'PluginManager'
+p483
+S"<class 'gluon.tools.PluginManager'>"
+p484
+sS'IS_URL'
+p485
+S"<class 'gluon.validators.IS_URL'>"
+p486
+sS'A'
+S"<class 'gluon.html.A'>"
+p487
+sS'STYLE'
+p488
+S"<class 'gluon.html.STYLE'>"
+p489
+sS'rel_url_and_end_tags_finders'
+p490
+S'[<_sre.SRE_Pattern object at 0xa8984f0>]'
+p491
+sS'IS_DATETIME_IN_RANGE'
+p492
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p493
+sS'HTML'
+p494
+S"<class 'gluon.html.HTML'>"
+p495
+sS'FORM'
+p496
+S"<class 'gluon.html.FORM'>"
+p497
+sS'I'
+S"<class 'gluon.html.I'>"
+p498
+sS'crud'
+p499
+S'<gluon.tools.Crud object at 0xab126ac>'
+p500
+sS'IS_NOT_IN_DB'
+p501
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p502
+sS'aConvert'
+p503
+S'<class __builtin__.aConvert at 0xaae1e3c>'
+p504
+sS'app_config'
+p505
+S'<Row {\'APP_METAS\': ["molhokwai.net - \'a\' cm/dms"...elete_record\': <function <lambda> at 0xab3a09c>}>'
+p506
+sg170
+S"<Storage {'body': <cStringIO.StringO object at 0...bda> at 0xab3a72c>, 'view': 'media/social.html'}>"
+p507
+sS'THEAD'
+p508
+S"<class 'gluon.html.THEAD'>"
+p509
+sS'IS_NULL_OR'
+p510
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p511
+sS'IS_FLOAT_IN_RANGE'
+p512
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p513
+sS'IS_EXPR'
+p514
+S"<class 'gluon.validators.IS_EXPR'>"
+p515
+sS'T'
+S'<gluon.languages.translator object at 0xaae270c>'
+p516
+sS'RPXAccount'
+p517
+S"<class 'gluon.contrib.login_methods.rpx_account.RPXAccount'>"
+p518
+sS'IS_IN_SET'
+p519
+S"<class 'gluon.validators.IS_IN_SET'>"
+p520
+sS'IS_UPLOAD_FILENAME'
+p521
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p522
+sS're'
+p523
+S"<module 're' from '/usr/local/lib/python2.5/re.pyc'>"
+p524
+sS'IS_DECIMAL_IN_RANGE'
+p525
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p526
+sssS'traceback'
+p527
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/media/social.html", line 111, in <module>\nUnicodeDecodeError: \'ascii\' codec can\'t decode byte 0xc3 in position 121: ordinal not in range(128)\n'
+p528
+s.

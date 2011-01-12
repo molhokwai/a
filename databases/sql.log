@@ -159,3 +159,5 @@ timestamp: 2011-01-07T08:29:50.935854
 ALTER TABLE app_config ADD mail_settings TEXT;
 timestamp: 2011-01-07T11:37:43.745893
 ALTER TABLE app_config ADD app_details TEXT;
+timestamp: 2011-01-12T14:27:43.615483
+ALTER TABLE app_config ADD twitter_api TEXT;

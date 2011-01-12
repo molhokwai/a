@@ -1,0 +1,33 @@
+{{if not nake:}}
+    {{extend "layout.html"}}
+
+{{else:}}
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    <style type="text/css">
+        #footer, footer, #top-bar, top-bar {
+            display:none;
+        }
+    </style>
+{{pass}}
+
+{{if area in ['twitter']:}}
+    {{if sub_area in ['user']:}}
+        {{for item in items:}}
+            {{=XML(item.replace('\\n', ''))}}
+        {{pass}}
+    {{else:}}
+        {{
+          ##------- KEYS
+          ## iso_language_code, to_user_id_str, text, from_user_id_str, profile_image_url, 
+          ## id, source, id_str, from_user, from_user_id, to_user_id, ge, created_at, metadata
+          ol =OL()
+          for item in items:
+            ol.append(DIV('%s %s' % (XML(item['text']), XML(item['created_at']))))
+          pass
+        }}
+        {{=XML(ol)}}
+    {{pass}}
+{{pass}}

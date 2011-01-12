@@ -1,0 +1,19 @@
+{{if not nake:}}
+    {{extend "layout.html"}}
+    hyyyyyyyyyyyyyyyyyy
+{{else:}}
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    <style type="text/css">
+        #footer, footer, #top-bar, top-bar {
+            display:none;
+        }
+    </style>
+{{pass}}
+
+{{if area in ['twitter']:}}
+    {{=items}}
+
+{{pass}}

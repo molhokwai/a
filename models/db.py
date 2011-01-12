@@ -30,10 +30,12 @@ db.define_table('app_config',
             label=T('Languages')),
     SQLField('APP_METAS',               'list:string', required=True,    default=['<title>', '<web, utility, application, software, cms, dms>', '<description>'],  
             label=T('App Metas (title, keywords, description)')),
-    SQLField('MAIL_SETTINGS',           'list:string',                   default=["<sender@gmail.com>", '<smtp.gmail.com:587>', '<username:password>'],
+    SQLField('MAIL_SETTINGS',           'list:string',                   default=['<sender@gmail.com>', '<smtp.gmail.com:587>', '<username:password>'],
             label=T('Mail settings (sender, server, login)')),           
-    SQLField('PICASA_API',              'list:string',                   default=["<username>", '<password>'],
-            label=T('Picasa api (username, password)'))
+    SQLField('PICASA_API',              'list:string',                   default=['<username>', '<password>'],
+            label=T('Picasa api (username, password)')),
+    SQLField('TWITTER_API',              'list:string',                  default=['<username>', '<password>', '<hashes>'],
+            label=T('Twitter api (username, password, hashes -csv, filters -csv)'))
 )
 app_config=db(db.app_config.id>0).select()
 if len(app_config)>0:
