@@ -1,6 +1,7 @@
 # coding: utf8
 {
 '%(com_count)s Comments &raquo;': '%(com_count)s Comments &raquo;',
+'%(inst)s application updated.': '%(inst)s application updated.',
 '%(process)s successfull': '%(process)s successfull',
 '%(process)s unsuccessfull. Retry or contact administrator.': '%(process)s unsuccessfull. Retry or contact administrator.',
 '(Caught) Error occured': '(Caught) Error occured',
@@ -48,6 +49,7 @@
 'Link deleted': 'Link deleted',
 'Link updated': 'Link updated',
 'Links': 'Links',
+'Loading...': 'Loading...',
 'Logged in': 'Logged in',
 'Logged out': 'Logged out',
 'Login': 'Login',

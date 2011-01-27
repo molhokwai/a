@@ -158,6 +158,7 @@ db.define_table('posts',
     SQLField('post_category', required=True, default=-1),
     SQLField('show_in_menu',  'boolean', required=True, default=False),
     SQLField('is_translated', 'boolean', required=True, default=False),
+    SQLField('application', 'string', default=request.application),
     SQLField('post_attributes_json', 'text', required=True, 
             default="""{
                 "content_is" : {

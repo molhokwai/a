@@ -1,6 +1,21 @@
 {{if not nake:}}
     {{extend "layout.html"}}
 
+    <style type="text/css">
+        #tweets li img {
+            float:left;
+            width: 5%;
+            margin-right: 2%;
+        }
+        #tweets li {
+            list-style-type:none;
+            margin-top: 1.2%;
+            border: 1px solid #CDCDCD;
+        }
+        #tweets li *.author{
+            text-decoration: underline;
+        }
+    </style>
 {{else:}}
     {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
@@ -19,15 +34,47 @@
             {{=XML(item.replace('\\n', ''))}}
         {{pass}}
     {{else:}}
-        {{
-          ##------- KEYS
-          ## iso_language_code, to_user_id_str, text, from_user_id_str, profile_image_url, 
-          ## id, source, id_str, from_user, from_user_id, to_user_id, ge, created_at, metadata
-          ol =OL()
-          for item in items:
-            ol.append(DIV('%s %s' % (XML(item['text']), XML(item['created_at']))))
-          pass
-        }}
-        {{=XML(ol)}}
+        <div id="tweets">{{=T('Loading...')}}</div>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $.getJSON(
+                    '{{=URL(r=request, f="twitter.json")}}',
+                    function(json){
+                        var ul=document.createElement('ul');
+                        for(var i=0;i<json.length;i++){
+                            var li=document.createElement('li');
+                            
+                            var img=document.createElement('img');
+                            var textSpan=document.createElement('span');
+                            var userEm=document.createElement('em');
+                            var viaSpan=document.createElement('span');
+                            var clearSpan=document.createElement('span');
+                            
+                            img.src=json[i].profile_image_url;
+                            $(textSpan).append('"'+json[i].text+'" ');
+                            $(userEm).append('from '+json[i].from_user);
+
+                            while(json[i].source.indexOf('&lt;')>=0){ json[i].source=json[i].source.replace('&lt;', '<'); }
+                            while(json[i].source.indexOf('&gt;')>=0){ json[i].source=json[i].source.replace('&gt;', '>'); }
+                            $(viaSpan).append(' via '+json[i].source);
+                            
+                            $(textSpan).addClass('text');
+                            $(userEm).addClass('author');
+                            $(viaSpan).addClass('source');
+                            $(viaSpan).addClass('clear');
+                            
+                            $(li).append(img);
+                            $(li).append(textSpan);
+                            $(li).append(userEm);
+                            $(li).append(viaSpan);
+                            $(li).append(clearSpan);
+                            
+                            $(ul).append(li);
+                        }
+                        $('#tweets').html(ul);
+                    }
+                )
+            });
+        </script>
     {{pass}}
 {{pass}}

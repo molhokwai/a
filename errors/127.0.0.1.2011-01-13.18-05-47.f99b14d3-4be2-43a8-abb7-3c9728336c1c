@@ -1,0 +1,620 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/media.py'
+p4
+sS'code'
+p5
+S'from types import *\n\n###################################\n## CONTROLLER INITIALIZATION\n###################################    \nexec(\'from applications.%s.modules import common\' % this_app)\npage_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)\n\n# media_photos module\nexec(\'from applications.%s.modules import media_photos\' % this_app)\n\n###################################\n## CONTROLLER FUNCTIONS\n###################################    \n\n# The main page\ndef index():\n    redirect(URL(r=request, f=\'picasa\', args=\'gallery\'))\n    return dict(nake=None)\n\n# Picasa\ndef picasa():\n    area = \'gallery\'\n    if len(request.args)>0:\n        area=request.args[0]\n\n    try:\n        picasa_manager = media_photos.Manage(app_config)\n        if auth.user and auth.user.is_admin:\n            if area in [\'upload\', \'albums\', \'add\', \'edit\', \'delete\'] and not session.gdata_user:\n                session.redirect_url=URL(r=request, f=\'picasa\', args=[area])\n                redirect(URL(r=request, f=\'picasa\', args=[\'login\']))\n            else:\n                picasa_manager = media_photos.Manage(app_config, gdata_user=None, session=session)\n        \n            if area == \'login\':\n                form=FORM(INPUT(_type=\'email\', _name=\'email\', value=auth.user.email),\n                            INPUT(_type=\'password\', _name=\'password\'),\n                            INPUT(_type=\'submit\', _value=T(\'submit\'))\n                )\n                if form.accepts(request.vars, session):\n                    try:\n                        gdata_user={\n                            \'email\' : request.vars.email,\n                            \'password\' : request.vars.password\n                        }\n                        # programmatic login encapsulated in construction\n                        media_photos.Manage(app_config, gdata_user=gdata_user)\n                        session.gdata_user=gdata_user\n        \n                        session.flash = T(\'Login successfull\')\n                        if session.redirect_url:\n                            redirect(session.redirect_url)\n                        else:\n                            redirect(URL(r=request, args=[\'albums\']))\n                    except Exception, ex:\n                        log_wrapped(\'Error\', ex)\n                return dict(nake=None, area=area, form=form, item=\'user\')\n                \n            if area in [\'add\', \'edit\', \'delete\', \'upload\']:\n                # item : album || picture\n                item=request.args[1]\n    \n                if item==\'album\':\n                    if area == \'add\':\n        \n                        form=FORM(DIV(INPUT(_type=\'text\', _name=\'title\'), \n                                        TEXTAREA(_name=\'summary\'),\n                                        INPUT(_type=\'submit\', _value=T(\'submit\'))\n                                      )\n                                )\n                        if form.accepts(request.vars, session):\n                            if area == \'add\':\n                                try:\n                                    album = picasa_manager.client.InsertAlbum(title=request.vars.title, summary=request.vars.summary)\n                                    session.flash = T(\'Album successfully added\')\n                                    redirect(URL(r=request, args=[\'albums\']))\n                                except Exception, ex:\n                                    log_wrapped(\'Error\', ex)\n                                    response.flash = T(\'An error occured: %(error)s. You can retry or contact the administrator\', dict(error=str(ex)))\n        \n                        return dict(nake=None, area=area, form=form, item=item)\n        \n                    elif area == \'edit\':\n                        album_id=request.args[2]\n                        album_feed=picasa_manager.get_album_by_id(album_id)\n                        album_photos=picasa_manager.get_album_photos(\n                                            album_id, \n                                            username=session.gdata_user[\'email\'].replace(\'@gmail.com\', \'\'), \n                                            limit=10\n                                            )\n        \n                        form=FORM(DIV(INPUT(_type=\'text\', _name=\'title\', _value=album_feed.title.text), \n                                        TEXTAREA(_name=\'summary\',  value=album_feed.summary.text),\n                                        INPUT(_type=\'submit\', _value=T(\'submit\'))\n                                      )\n                                )\n                        if form.accepts(request.vars, session):\n                                try:\n                                    album_feed.title.text=request.vars.title\n                                    album_feed.summary.text=request.vars.summary\n                \n                                    updated_album = picasa_manager.client.Put(album_feed, album_feed.GetEditLink().href, converter=gdata.photos.AlbumEntryFromString)\n                                    session.flash = T(\'Album successfully updated\')\n                                    redirect(URL(r=request, args=[\'albums\']))\n                                except Exception, ex:\n                                    log_wrapped(\'Error\', ex)\n                                    response.flash = T(\'An error occured: %(error)s. You can retry or contact the administrator\', dict(error=str(ex)))\n        \n                        return dict(nake=None, area=area, form=form, item=item, album=album_photos, album_id=album_id)\n        \n                    elif area == \'delete\':\n                        album_id=request.args[2]\n                        album_feed=picasa_manager.get_album_by_id(album_id)\n                        album_photos=picasa_manager.get_album_photos(\n                                          album_id, \n                                          username=session.gdata_user[\'email\'].replace(\'@gmail.com\', \'\'), \n                                          limit=10\n                                          )\n        \n                        form=FORM(DIV(INPUT(_type=\'text\', _name=\'title\', _value=album_feed.title.text), \n                                        TEXTAREA(_name=\'summary\',  value=album_feed.summary.text),\n                                        INPUT(_type=\'submit\', _value=T(\'delete\'))\n                                      )\n                                )\n                        if form.accepts(request.vars, session):\n                            try:\n                                picasa_manager.client.Delete(album_feed)\n                                session.flash = T(\'Album deleted\')\n                                redirect(URL(r=request, args=[\'albums\']))\n                            except Exception, ex:\n                                log_wrapped(\'Error\', ex)\n                                response.flash = T(\'An error occured: %(error)s. You can retry or contact the administrator\', dict(error=str(ex)))\n        \n                        return dict(nake=None, area=area, form=form, item=item, album=album_photos, album_id=album_id)\n    \n                elif item==\'picture\':\n    \n                    if area == \'upload\':\n                        upload_nr=5\n                        album_id=request.args[2]\n                        album_url = \'/data/feed/api/user/%s/albumid/%s\' % (session.gdata_user[\'email\'], album_id)\n        \n                        form=FORM()\n                        for i in range(upload_nr):\n                            form.append(DIV(INPUT(_type=\'file\', _name=\'file_%i\' % i), \n                                            INPUT(_type=\'text\', _name=\'title_%i\' % i))\n                            )\n                        form.append(INPUT(_type=\'submit\', _value=T(\'submit\')))\n                        if form.accepts(request.vars, session):\n                            import gluon.contenttype as contenttype\n                            _exceptions=[]\n                            _file_tuples=[]\n                            for i in range(upload_nr):\n                                _file,filename,filetitle=None,\'\',\'\'\n                                for v in request.post_vars:\n                                    if v==\'file_%i\' % i:\n                                        try: \n                                            _file=request.post_vars[v].file\n                                            filename=request.post_vars[v].filename\n                                        except Exception, ex: log_wrapped(\'exception\', ex)\n    \n                                    elif v==\'title_%i\' % i:\n                                        filetitle=request.post_vars[v]\n    \n                                if _file:\n                                    if not filetitle:\n                                        if filename.find(\'\\\\\')>0: f_n_s=filename.split(\'\\\\\')\n                                        else: f_n_s=filename.split(\'/\')\n                                        filetitle=f_n_s[len(f_n_s)-1]\n                                    _file_tuples.append((_file, filename, filetitle))\n    \n                            for i in range(len(_file_tuples)):\n                                try:\n                                    photo = picasa_manager.client.InsertPhotoSimple(album_url, _file_tuples[i][2],\n                                                                    \'Uploaded using the API\', _file_tuples[i][0], \n                                                                    content_type=contenttype.contenttype(_file_tuples[i][1]))\n                                except Exception, ex:\n                                    _exceptions.append(ex)\n                                    \n                            if len(_exceptions)>0:\n                                response.flash=T(\'There were %i errors during the upload(s): %s\' % (len(_exceptions), str(_exceptions)))\n                                log_wrapped(\'exceptions\', str(_exceptions))\n                            else:\n                                redirect(URL(r=request, f=\'picasa\', args=[\'album\', album_id]))\n        \n                        return dict(nake=None, area=area, form=form, item=item)\n    \n                    elif area == \'edit\':\n                        photo_id, album_id=request.args[2], request.args[3]\n                        photo=picasa_manager.get_album_photo_by_id(\n                                            album_id, photo_id, \n                                            username=session.gdata_user[\'email\'].replace(\'@gmail.com\', \'\'), \n                                            raw_feed=True\n                                            )\n                        picasa_manager.initialize_photo_metadata(photo)\n        \n                        form=FORM(\n                                DIV(LABEL(T(\'title\')), INPUT(_type=\'text\', _name=\'title\', _value=photo.title.text)),\n                                DIV(LABEL(T(\'summary\')), TEXTAREA(_name=\'summary\', value=photo.summary.text)),\n                                DIV(LABEL(T(\'keywords\')), INPUT(_type=\'text\', _name=\'keywords\', _value=photo.media.keywords.text)),\n                                DIV(LABEL(XML(\'&nbsp;\')), INPUT(_type=\'submit\', _value=T(\'submit\')))\n                            )\n                        if form.accepts(request.vars, session):\n                            try:\n                                photo.title.text = request.vars.title\n                                photo.summary.text = request.vars.summary\n                                photo.media.keywords.text = request.vars.keywords\n                                updated_photo = picasa_manager.client.UpdatePhotoMetadata(photo)\n                                \n                                session.flash = T(\'Photo successfully updated\')\n                                redirect(URL(r=request, args=[\'edit\', \'album\', album_id]))\n                            except Exception, ex:\n                                log_wrapped(\'Error\', ex)\n                                response.flash = T(\'An error occured: %(error)s. You can retry or contact the administrator\', dict(error=str(ex)))\n    \n                        return dict(nake=None, area=area, form=form, item=item, photo=photo)\n        \n                    elif area == \'delete\':                        \n                        photo_id, album_id=request.args[2], request.args[3]\n                        photo=picasa_manager.get_album_photo_by_id(\n                                            album_id, photo_id, \n                                            username=session.gdata_user[\'email\'].replace(\'@gmail.com\', \'\'), \n                                            raw_feed=True\n                                            )\n                        form=FORM(\n                                DIV(LABEL(T(\'title\')), INPUT(_type=\'text\', _name=\'title\', _value=photo.title.text)),\n                                DIV(LABEL(T(\'summary\')), TEXTAREA(_name=\'summary\', value=photo.summary.text)),\n                                DIV(LABEL(T(\'keywords\')), INPUT(_type=\'text\', _name=\'keywords\', _value=photo.media.keywords.text)),\n                                DIV(LABEL(XML(\'&nbsp;\')), INPUT(_type=\'submit\', _value=T(\'delete\')))\n                            )\n                        if form.accepts(request.vars, session):\n                            try:\n                                picasa_manager.client.Delete(photo)\n                                session.flash = T(\'Photo deleted\')\n                                redirect(URL(r=request, args=[\'edit\', \'album\', album_id]))\n                            except Exception, ex:\n                                log_wrapped(\'Error\', ex)\n                                response.flash = T(\'An error occured: %(error)s. You can retry or contact the administrator\', dict(error=str(ex)))\n    \n                        return dict(nake=None, area=area, form=form, item=item, photo=photo)\n    \n    \n            elif area == \'albums\':\n                albums_feed=picasa_manager.get_albums_feed()\n                \n                form=DIV()\n                albums=TABLE(TR(TH(T(\'title\')), TH(T(\'nr of pictures\')), TH(), TH(), TH(), TH()))\n                for entry in albums_feed:\n                    albums.append(TR(\n                                        TD(entry.title.text),\n                                        TD(entry.numphotos.text),\n                                        TD(A(T(\'view\'), _href=URL(r=request, args=[\'album\', entry.gphoto_id.text]))), \n                                        TD( A(T(\'edit\'), _href=URL(r=request, args=[\'edit\', \'album\', entry.gphoto_id.text]))),\n                                        TD( A(T(\'delete\'), _href=URL(r=request, args=[\'delete\', \'album\', entry.gphoto_id.text]))),\n                                        TD( A(T(\'upload to\'), _href=URL(r=request, args=[\'upload\', \'picture\',  entry.gphoto_id.text]))),\n                                    )\n                            )\n                form.append(A(T(\'add\'), _class=\'display-block width100pc text-alignr\', _href=URL(r=request, args=[\'add\', \'album\'])))\n                form.append(albums)\n                return dict(nake=None, area=area, form=form, item=None)\n    \n    ## PUBLIC SECTION\n        if area == \'gallery\':\n            log_wrapped(\'request.args[0]\', request.args[0])\n            recent=picasa_manager.get_recent_photos()\n            gallery=picasa_manager.get_album_gallery()\n            return dict(nake=None, area=area, item=None, recent=recent, gallery=gallery)\n            \n        if area == \'album\':\n            album_id=request.args[1]\n            album=picasa_manager.get_album_photos(album_id)\n            return dict(nake=None, area=area, item=None, album=album, album_id=album_id)\n            \n        elif area == \'slideshow\':\n            album_id=request.args[1]\n            album=picasa_manager.get_album_photos(album_id)\n            if not session.current_photo or int(session.current_photo)>len(album)-1:\n                session.current_photo=0\n            photo=album[int(session.current_photo)]\n            session.current_photo+=1\n            response.refresh=\'<meta http-equiv="refresh" content="%i;%s" />\' % (2, URL(r=request, args=[\'slideshow\', album_id]))\n            return dict(nake=True, area=area, item=None, photo=photo, album_id=album_id)\n    \n    except Exception, ex:\n        log_wrapped(\'Exception\', ex)\n        if str(ex).lower().find(\'unknown user\')>=0:\n            session.flash = T(\'User is unknown by the Google Photos (Picasa) Service. User must be registered there: %(picasa_link)s\', \n                                dict(picasa_link=\'http://picasaweb.google.com\'))\n        if str(ex).lower().find(\'captcha required\')>=0:\n            session.flash = T(\'User credentials are unknown to the Google Photos (Picasa) Service. User should be modified by an administrator, in service setup.\')\n        redirect(URL(r=request, c=\'default\', f=\'error\'))\n\ndef social():\n    area = \'twitter\'\n    sub_area=None\n    _items=[]\n    if request.args[0] == \'twitter\' or request.args[0] == \'twitter.json\':\n        exec(\'from applications.%s.modules import twitter\' % request.application)\n        try:\n            if len(request.args)>1:\n                sub_area = request.args[1]\n                if sub_area == \'user\':\n                    api_config=db(db.app_config.id>0).select()[0].TWITTER_API\n                    _username=api_config[0]\n                    twitter = twitter.Manager(_username)\n                    _items = twitter.get_user_tweets()\n                    if type(_items)==DictType and \'error\' in _items:\n                        _items=[_items[\'request\'], _items[\'error\']]\n        except Exception, ex:\n            log_wrapped(\'Error\', ex)\n            if str(ex).lower().find(str(\'No JSON object could be decoded\').lower())>=0:\n                response.flash=T(\'No tweets for username and/or hash found (error: %(err)s)\', dict(err=str(ex)))\n            else:\n                response.flash=T(\'Error occured: : %(err)s\', dict(err=str(ex)))\n\n    return dict(nake=False, area=area, sub_area=sub_area, items=_items)\n\ndef twitter():\n    api_config=db(db.app_config.id>0).select()[0].TWITTER_API\n    _username = api_config[0]\n    _hashes, _filters = api_config[2], api_config[3]\n    _filter = \'#%s %s\' % (\' \'.join(_filters.split(\',\')), \' #\'.join(_hashes.split(\',\')))\n\n    exec(\'from applications.%s.modules import twitter\' % request.application)\n    twitter = twitter.Manager(_username)\n    _items = twitter.search_tweets(_hashes)\n\n    import gluon.contrib.simplejson as simplejson\n    return simplejson.dumps(_items)\n\nresponse._vars=response._caller(twitter)\n'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__hash__'
+p11
+S"<method-wrapper '__hash__' of exceptions.AttributeError object at 0x949e20c>"
+p12
+sS'__setattr__'
+p13
+S"<method-wrapper '__setattr__' of exceptions.AttributeError object at 0x949e20c>"
+p14
+sS'__reduce_ex__'
+p15
+S'<built-in method __reduce_ex__ of exceptions.AttributeError object at 0x949e20c>'
+p16
+sS'__getslice__'
+p17
+S"<method-wrapper '__getslice__' of exceptions.AttributeError object at 0x949e20c>"
+p18
+sS'__getitem__'
+p19
+S"<method-wrapper '__getitem__' of exceptions.AttributeError object at 0x949e20c>"
+p20
+sS'__setstate__'
+p21
+S'<built-in method __setstate__ of exceptions.AttributeError object at 0x949e20c>'
+p22
+sS'__reduce__'
+p23
+S'<built-in method __reduce__ of exceptions.AttributeError object at 0x949e20c>'
+p24
+sS'__str__'
+p25
+S"<method-wrapper '__str__' of exceptions.AttributeError object at 0x949e20c>"
+p26
+sS'args'
+p27
+S'("\'str\' object has no attribute \'read\'",)'
+p28
+sS'__getattribute__'
+p29
+S"<method-wrapper '__getattribute__' of exceptions.AttributeError object at 0x949e20c>"
+p30
+sS'__class__'
+p31
+S"<type 'exceptions.AttributeError'>"
+p32
+sS'__delattr__'
+p33
+S"<method-wrapper '__delattr__' of exceptions.AttributeError object at 0x949e20c>"
+p34
+sS'__repr__'
+p35
+S"<method-wrapper '__repr__' of exceptions.AttributeError object at 0x949e20c>"
+p36
+sS'__dict__'
+p37
+S'{}'
+p38
+sS'__doc__'
+p39
+S"'Attribute not found.'"
+p40
+sS'__init__'
+p41
+S"<method-wrapper '__init__' of exceptions.AttributeError object at 0x949e20c>"
+p42
+sS'__new__'
+p43
+S'<built-in method __new__ of type object at 0x8239b00>'
+p44
+ssS'evalue'
+p45
+S"'str' object has no attribute 'read'"
+p46
+sS'request'
+p47
+(dp48
+S'function'
+p49
+S"'twitter'"
+p50
+sS'body'
+p51
+S'<cStringIO.StringO object at 0x9afd220>'
+p52
+sS'wsgi'
+p53
+S"<Storage {'start_response': <function <lambda> a...b-ab5e-9792721cdadc', 'HTTP_KEEP_ALIVE': '115'}}>"
+p54
+sS'extension'
+p55
+S"'json'"
+p56
+sS'vars'
+p57
+S'<Storage {}>'
+p58
+sS'cid'
+p59
+S'None'
+p60
+sS'url'
+p61
+S'<gluon.html.XML object at 0x95877ac>'
+p62
+sS'raw_extension'
+p63
+S"'json'"
+p64
+sg27
+S'[]'
+p65
+sS'controller'
+p66
+S"'media'"
+p67
+sS'cookies'
+p68
+S"<SimpleCookie: session_id_a='127.0.0.1-61b8a423-...8dfcbf-27e1-4915-9fa5-5d96ff1957d8' theme='blue'>"
+p69
+sS'application'
+p70
+S"'a'"
+p71
+sS'ajax'
+p72
+S'True'
+p73
+sS'client'
+p74
+S"'127.0.0.1'"
+p75
+sS'env'
+p76
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x99d464c>}>"
+p77
+sS'raw_args'
+p78
+S'None'
+p79
+sS'get_vars'
+p80
+S'<Storage {}>'
+p81
+sS'folder'
+p82
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p83
+sS'now'
+p84
+S'datetime.datetime(2011, 1, 13, 18, 5, 45, 664017)'
+p85
+sS'post_vars'
+p86
+S'<Storage {}>'
+p87
+ssS'frames'
+p88
+(lp89
+(dp90
+S'file'
+p91
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p92
+sS'dump'
+p93
+(dp94
+S'environment'
+p95
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x9adf1ac>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BooleanType': <type 'bool'>, 'BufferType': <type 'buffer'>, 'BuiltinFunctionType': <type 'builtin_function_or_method'>, ...}"
+p96
+sS'ccode'
+p97
+S'<code object <module> at 0x9a8cda0, file "/home/...web/applications/a/controllers/media.py", line 1>'
+p98
+ssS'lnum'
+p99
+I188
+sS'lines'
+p100
+(dp101
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p102
+sI183
+S'        if type(code) == types.CodeType:'
+p103
+sI184
+S'            ccode = code'
+p104
+sI185
+S'        else:'
+p105
+sI186
+S'            ccode = compile2(code,layer)'
+p106
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p107
+sI189
+S'    except HTTP:'
+p108
+sI190
+S'        raise'
+p109
+sI191
+S'    except Exception:'
+p110
+ssS'call'
+p111
+S"(code='from types import *\\n\\n###########################...items)\\n\\nresponse._vars=response._caller(twitter)\\n', environment={'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x9adf1ac>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BooleanType': <type 'bool'>, 'BufferType': <type 'buffer'>, 'BuiltinFunctionType': <type 'builtin_function_or_method'>, ...}, layer='/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/media.py')"
+p112
+sS'func'
+p113
+S'restricted'
+p114
+sa(dp115
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/media.py'
+p116
+sg93
+(dp117
+sg99
+I332
+sg100
+(dp118
+I321
+S'    _username = api_config[0]'
+p119
+sI322
+S'    _hashes, _filters = api_config[2], api_config[3]'
+p120
+sI323
+S"    _filter = '#%s %s' % (' '.join(_filters.split(',')), ' #'.join(_hashes.split(',')))"
+p121
+sI324
+S''
+sI325
+S"    exec('from applications.%s.modules import twitter' % request.application)"
+p122
+sI326
+S'    twitter = twitter.Manager(_username)'
+p123
+sI327
+S'    _items = twitter.search_tweets(_hashes)'
+p124
+sI328
+S''
+sI329
+S'    import gluon.contrib.simplejson as simplejson'
+p125
+sI330
+S'    return simplejson.dumps(_items)'
+p126
+ssg111
+S'()'
+p127
+sg113
+S'<module>'
+p128
+sa(dp129
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/globals.py'
+p130
+sg93
+(dp131
+S'self'
+p132
+S'undefined'
+p133
+sS'f'
+S'<function twitter at 0x94c9064>'
+p134
+ssg99
+I95
+sg100
+(dp135
+I96
+S'        self._view_environment = None'
+p136
+sI97
+S'        self._custom_commit = None'
+p137
+sI98
+S'        self._custom_rollback = None'
+p138
+sI99
+S''
+sI90
+S"        self.flash = ''           # used by the default view layout"
+p139
+sI91
+S'        self.meta = Storage()     # used by web2py_ajax.html'
+p140
+sI92
+S'        self.menu = []            # used by the default view layout'
+p141
+sI93
+S'        self.files = []           # used by web2py_ajax.html'
+p142
+sI94
+S'        self._vars = None'
+p143
+sI95
+S'        self._caller = lambda f: f()'
+p144
+ssg111
+S'(f=<function twitter at 0x94c9064>)'
+p145
+sg113
+S'<lambda>'
+p146
+sa(dp147
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/media.py'
+p148
+sg93
+(dp149
+S'_hashes'
+p150
+S"'wisdom,change'"
+p151
+sS'twitter'
+p152
+S'<applications.a.modules.twitter.Manager instance at 0x9609aec>'
+p153
+sS'_items'
+p154
+g133
+sS'twitter.search_tweets'
+p155
+S'<bound method Manager.search_tweets of <applicat...a.modules.twitter.Manager instance at 0x9609aec>>'
+p156
+ssg99
+I327
+sg100
+(dp157
+I321
+S'    _username = api_config[0]'
+p158
+sI322
+S'    _hashes, _filters = api_config[2], api_config[3]'
+p159
+sI323
+S"    _filter = '#%s %s' % (' '.join(_filters.split(',')), ' #'.join(_hashes.split(',')))"
+p160
+sI324
+S''
+sI325
+S"    exec('from applications.%s.modules import twitter' % request.application)"
+p161
+sI326
+S'    twitter = twitter.Manager(_username)'
+p162
+sI327
+S'    _items = twitter.search_tweets(_hashes)'
+p163
+sI328
+S''
+sI329
+S'    import gluon.contrib.simplejson as simplejson'
+p164
+sI330
+S'    return simplejson.dumps(_items)'
+p165
+ssg111
+S'()'
+p166
+sg113
+S'twitter'
+p167
+sa(dp168
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/modules/twitter.py'
+p169
+sg93
+(dp170
+S'gluon.tools'
+p171
+S"<module 'gluon.tools' from '/home/herve/development/workspaces/molhokwai.net/web/gluon/tools.pyc'>"
+p172
+sS'self'
+p173
+S'<applications.a.modules.twitter.Manager instance at 0x9609aec>'
+p174
+sS'gluon.tools.fetch'
+p175
+S'<function fetch at 0x953c374>'
+p176
+sS'_filter'
+p177
+S"'wisdom,change'"
+p178
+sS').read'
+p179
+g133
+sS'global gluon'
+p180
+S"<module 'gluon' from '/home/herve/development/workspaces/molhokwai.net/web/gluon/__init__.pyc'>"
+p181
+sS'self.SEARCH_URL'
+p182
+S"'http://search.twitter.com/search.json?q=%s'"
+p183
+ssg99
+I29
+sg100
+(dp184
+I32
+S'        page = gluon.tools.fetch(self.USER_URL % (self._username)).read()'
+p185
+sI33
+S'        tweets=simplejson.loads(page)'
+p186
+sI24
+S'        self._username=_username'
+p187
+sI25
+S'        self._hashes=_hashes'
+p188
+sI26
+S''
+sI27
+S'    def search_tweets(self, _filter):'
+p189
+sI28
+S'        return simplejson.loads('
+p190
+sI29
+S"                gluon.tools.fetch(self.SEARCH_URL % _filter).read())['results']"
+p191
+sI30
+S''
+sI31
+S"    def get_user_tweets(self, _hashes=''):"
+p192
+ssg111
+S"(self=<applications.a.modules.twitter.Manager instance at 0x9609aec>, _filter='wisdom,change')"
+p193
+sg113
+S'search_tweets'
+p194
+sasS'pyver'
+p195
+S'Python 2.5.1: /usr/local/bin/python'
+p196
+sS'session'
+p197
+(dp198
+S'auth'
+p199
+S'None'
+p200
+ssS'etype'
+p201
+S"<type 'exceptions.AttributeError'>"
+p202
+sS'date'
+p203
+S'Thu Jan 13 18:05:47 2011'
+p204
+sS'response'
+p205
+(dp206
+S'_vars'
+p207
+S'None'
+p208
+sg68
+S"<SimpleCookie: session_id_a='127.0.0.1-61b8a423-dcee-465b-ab5e-9792721cdadc'>"
+p209
+sS'links'
+p210
+S"[['web2py', 'http://www.web2py.com', 1], ['Python', 'http://www.python.org', 2], ['DePaul CTI', 'http://www.cs.depaul.edu', 3], ['DePaul University', 'http://www.depaul.edu', 5], ['downloads', '/a/default/page/32', 15], ['media / picasa / gallery', '/a/media/picasa/gallery', 16], ['manage media / manage picasa albums / manage photos', '/a/media/picasa/albums', 17], ['setup, application initialization', '/a/setup', 18], ['twitter', '/a/media/social/twitter', 19]]"
+p211
+sS'themes'
+p212
+S"['0', '1']"
+p213
+sS'meta'
+p214
+S'<Storage {}>'
+p215
+sS'anon_user'
+p216
+S"<Row {'auth_event': <gluon.dal.Set object at 0x9...elete_record': <function <lambda> at 0x9444374>}>"
+p217
+sS'_view_environment'
+p218
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x9adf1ac>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p219
+sS'keywords'
+p220
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p221
+sS'files'
+p222
+S'[]'
+p223
+sS'_caller'
+p224
+S'<function <lambda> at 0x9b98064>'
+p225
+sS'title'
+p226
+S'"molhokwai.net - \'a\' cm/dms"'
+p227
+sS'home_page'
+p228
+S"<Row {'post_text_TCode': 'page_id_24', 'post_tim...elete_record': <function <lambda> at 0x970741c>}>"
+p229
+sS'menu'
+p230
+S"[['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18']]"
+p231
+sS'flash'
+p232
+S"''"
+p233
+sS'theme'
+p234
+S"'blue'"
+p235
+sS'session_file'
+p236
+S"<open file '/home/herve/development/workspaces/m...465b-ab5e-9792721cdadc', mode 'rb+' at 0x9617e78>"
+p237
+sS'_custom_commit'
+p238
+S'None'
+p239
+sS'session_filename'
+p240
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-61b8a423-dcee-465b-ab5e-9792721cdadc'"
+p241
+sg51
+S'<cStringIO.StringO object at 0x97f6540>'
+p242
+sS'description'
+p243
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p244
+sS'session_id_name'
+p245
+S"'session_id_a'"
+p246
+sS'_custom_rollback'
+p247
+S'None'
+p248
+sS'pages'
+p249
+S"[['beliefs', False, '/a/default/page/15'], ['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18'], ['SMS', False, '/a/default/page/21'], ['', False, '/a/default/page/23'], ['a_home', False, '/a/default/page/24'], ['a_help', False, '/a/default/page/26'], ['help', False, '/a/default/page/27'], ['a_home', False, '/a/default/page/29'], ['siblos', False, '/a/default/page/30'], ['dev', False, '/a/default/page/31'], ['downloads', False, '/a/default/page/32'], ['themes', False, '/a/default/page/35'], ['media upload', False, '/a/default/page/36'], ['acknowledgements', False, '/a/default/page/37']]"
+p250
+sS'categories'
+p251
+S"[['misc', 2, '/a/default/category/misc'], ['message', 1, '/a/default/category/message']]"
+p252
+sS'help_page'
+p253
+S"<Row {'post_text_TCode': 'page_id_26', 'post_tim...elete_record': <function <lambda> at 0x9707ca4>}>"
+p254
+sS'session_id'
+p255
+S"'127.0.0.1-61b8a423-dcee-465b-ab5e-9792721cdadc'"
+p256
+sS'headers'
+p257
+S"<Storage {'Expires': 'Thu, 13 Jan 2011 17:05:45 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p258
+sS'status'
+p259
+S'200'
+p260
+sS'postprocessing'
+p261
+S'[]'
+p262
+sS'auth_users'
+p263
+S'<gluon.dal.Rows object at 0x92e406c>'
+p264
+sS'view'
+p265
+S"'media/twitter.json'"
+p266
+ssS'locals'
+p267
+(dp268
+S'_filter'
+p269
+S"'wisdom,change'"
+p270
+sS'self'
+p271
+S'<applications.a.modules.twitter.Manager instance at 0x9609aec>'
+p272
+sssS'traceback'
+p273
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/media.py", line 332, in <module>\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/globals.py", line 95, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/media.py", line 327, in twitter\n    _items = twitter.search_tweets(_hashes)\n  File "applications/a/modules/twitter.py", line 29, in search_tweets\n    gluon.tools.fetch(self.SEARCH_URL % _filter).read())[\'results\']\nAttributeError: \'str\' object has no attribute \'read\'\n'
+p274
+s.

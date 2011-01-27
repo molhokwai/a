@@ -132,7 +132,15 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
     response.description = app_details.description
     
     # This dynamically adds the pages to the menu
-    _pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
+    _pages = []
+    try:
+        _pages = db((db.posts.post_type == 'page') &
+                    ((db.posts.application == request.application) | 
+                    (db.posts.application == None))
+                    ).select(db.posts.ALL)
+    except Exception, ex:
+        _pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
+        
     items = []
     menu_items = []
     for page in _pages:
@@ -159,17 +167,31 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
     cats = db().select(db.categories.ALL)
     items = []
     for cat in cats:
-        count = len(db(
-                       (db.posts.post_type == 'post') & 
-                       (db.posts.post_category == cat.id)
-                       ).select(db.posts.ALL,orderby=~db.posts.post_time))
+        try:
+            count = len(db(
+                           (db.posts.post_type == 'post') & 
+                           (db.posts.post_category == cat.id) &
+                           ((db.posts.application == request.application) | 
+                           (db.posts.application == None))
+                           ).select(db.posts.ALL,orderby=~db.posts.post_time))
+        except Exception, ex:
+            count = len(db(
+                           (db.posts.post_type == 'post') & 
+                           (db.posts.post_category == cat.id)
+                           ).select(db.posts.ALL,orderby=~db.posts.post_time))
         if count > 0:
             item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':request.application, 'name':cat.category_name}]
             items.append(item)
     response.categories = items
     
     # This returns all the links
-    links = db().select(db.links.ALL)
+    links = []
+    try :
+        links = db(((db.links.application == request.application) | 
+                    (db.links.application == None))
+                  ).select(db.links.ALL)
+    except:
+        links = db().select(db.links.ALL)
     items = []
     for link in links:
         item = [link.link_title, link.link_url, link.id]
@@ -188,10 +210,5 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
         response.theme = request.vars.theme
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
-        
-    if request.controller == 'twitter':
-        exec('from applications.%s.modules import twitter' % request.application)
-        twitter = twitter.Manager('compta')
-        response.sidebar = twitter.get_tweets()
 
     return page_helper, post_helper

@@ -295,7 +295,7 @@ def social():
     area = 'twitter'
     sub_area=None
     _items=[]
-    if request.args[0] == 'twitter':
+    if request.args[0] == 'twitter' or request.args[0] == 'twitter.json':
         exec('from applications.%s.modules import twitter' % request.application)
         try:
             if len(request.args)>1:
@@ -307,14 +307,6 @@ def social():
                     _items = twitter.get_user_tweets()
                     if type(_items)==DictType and 'error' in _items:
                         _items=[_items['request'], _items['error']]
-            else:
-                api_config=db(db.app_config.id>0).select()[0].TWITTER_API
-                _username = api_config[0]
-                _hashes, _filters = api_config[2], api_config[3]
-                _filter = '#%s %s' % (' '.join(_filters.split(',')), ' #'.join(_hashes.split(',')))
-                twitter = twitter.Manager(_username)
-                _items = twitter.search_tweets(_hashes)
-                
         except Exception, ex:
             log_wrapped('Error', ex)
             if str(ex).lower().find(str('No JSON object could be decoded').lower())>=0:
@@ -323,3 +315,16 @@ def social():
                 response.flash=T('Error occured: : %(err)s', dict(err=str(ex)))
 
     return dict(nake=False, area=area, sub_area=sub_area, items=_items)
+
+def twitter():
+    api_config=db(db.app_config.id>0).select()[0].TWITTER_API
+    _username = api_config[0]
+    _hashes, _filters = api_config[2], api_config[3]
+    _filter = '#%s %s' % (' '.join(_filters.split(',')), ' #'.join(_hashes.split(',')))
+
+    exec('from applications.%s.modules import twitter' % request.application)
+    twitter = twitter.Manager(_username)
+    _items = twitter.search_tweets(_hashes)
+
+    import gluon.contrib.simplejson as simplejson
+    return simplejson.dumps(_items)

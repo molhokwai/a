@@ -5,7 +5,7 @@ from gluon.http import *
 from gluon.validators import *
 from gluon.sqlhtml import *
 
-import urllib
+import gluon.tools
 import gluon.contrib.simplejson as simplejson
 
 # request, response, session, cache, T, db(s) 
@@ -24,12 +24,12 @@ class Manager():
         self._username=_username
         self._hashes=_hashes
 
-    def search_tweets(self, _filter, log_wrapped):
+    def search_tweets(self, _filter):
         return simplejson.loads(
-                urllib.urlopen(self.SEARCH_URL % _filter).read())['results']
+                gluon.tools.fetch(self.SEARCH_URL % _filter).read())['results']
         
     def get_user_tweets(self, _hashes=''):
-        page = urllib.urlopen(self.USER_URL % (self._username)).read()
+        page = gluon.tools.fetch(self.USER_URL % (self._username)).read()
         tweets=simplejson.loads(page)
         
         if _hashes:

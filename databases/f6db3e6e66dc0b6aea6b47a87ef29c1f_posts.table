@@ -35,16 +35,20 @@ sS'post_type'
 p18
 S'CHAR(32)'
 p19
-sS'post_author'
+sS'application'
 p20
-S'REFERENCES authors(id) ON DELETE CASCADE'
+S'CHAR(512)'
 p21
-sS'is_translated'
+sS'post_author'
 p22
-S'CHAR(1)'
+S'REFERENCES authors(id) ON DELETE CASCADE'
 p23
-sS'id'
+sS'is_translated'
 p24
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
+S'CHAR(1)'
 p25
+sS'id'
+p26
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p27
 s.

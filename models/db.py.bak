@@ -34,7 +34,7 @@ db.define_table('app_config',
             label=T('Mail settings (sender, server, login)')),           
     SQLField('PICASA_API',              'list:string',                   default=['<username>', '<password>'],
             label=T('Picasa api (username, password)')),
-    SQLField('TWITTER_API',              'list:string',                  default=['<username>', '<password>', '<hash>'],
+    SQLField('TWITTER_API',              'list:string',                  default=['<username>', '<password>', '<hashes>'],
             label=T('Twitter api (username, password, hashes -csv, filters -csv)'))
 )
 app_config=db(db.app_config.id>0).select()
@@ -158,6 +158,7 @@ db.define_table('posts',
     SQLField('post_category', required=True, default=-1),
     SQLField('show_in_menu',  'boolean', required=True, default=False),
     SQLField('is_translated', 'boolean', required=True, default=False),
+    SQLField('application', 'boolean', default=request.application),
     SQLField('post_attributes_json', 'text', required=True, 
             default="""{
                 "content_is" : {

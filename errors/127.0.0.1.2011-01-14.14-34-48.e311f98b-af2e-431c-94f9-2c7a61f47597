@@ -1,0 +1,826 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/default.py'
+p4
+sS'code'
+p5
+S'###################################\n## CONTROLLER INITIALIZATION\n###################################    \nexec(\'from applications.%s.modules import common\' % this_app)\npage_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)\n\n\n###################################\n## CONTROLLER FUNCTIONS\n###################################    \n# The main page\n# Shows the home page if one created (see \'home_page\' function page with title)\n# Otherwise, defaults to showing the first 10 posts\ndef index():\n    if len(request.args)==0:\n        if response.home_page:\n            redirect(URL(r = request,c=\'default\',f = \'page/%i\' % response.home_page.id))\n    else:\n      return dict(posts = app_details.start_page_html)\n\n# The post page\n# Shows the entire post, the comments, and the comment form\ndef post():\n    #try: \n    post_id = int(request.args[0])\n    post = db(db.posts.id == post_id).select()[0]\n    comments = db(db.comments.post_id == post_id).select(db.comments.ALL)\n    comment_count = len(db(db.comments.post_id == post_id).select(db.comments.ALL))\n    db.comments.post_id.default = post_id\n    comment_form = SQLFORM(db.comments, fields = [\'comment_author\', \'comment_author_email\', \'comment_author_website\', \'comment_text\'], labels = comment_labels)\n        \n    if comment_form.accepts(request.vars, session):\n        session.flash = T("Comment added.")\n        redirect(URL(r = request,f = \'post/%i\' % post_id ))\n\n    return dict(post = post, comments = comments, comment_form = comment_form, comment_count = comment_count)\n    #except: \n    #    redirect(URL(r = request,f = \'index\'))\n\n# The page page\n# Shows the entire page. Does not show comments or the comment form\ndef page():\n    try:\n        if len(request.args)>0:\n            post=\'\'\n            if a_convert.to_int(request.args[0]):\n                post = db(db.posts.id == int(request.args[0])).select()[0]\n            else:\n                post = db(db.posts.post_title == request.args[0]).select()[0]\n                        \n            nake=(request.args[len(request.args)-1]==\'nake\'\n                 or post.post_text.find(\'<!-- nake page -->\')>=0)\n        \n            return dict(post = post, nake  = nake)\n        else:\n            redirect(URL(r = request,f = \'index\'))\n    except Exception, ex: \n        log_wrapped(\'Error\', str(ex))\n        session.flash=T("(Caught) Error occured: %(err)s ", dict(err=str(ex)))\n        redirect(URL(r = request,f = \'index\'))\n\n# The pages page\n# Shows links to all pages\ndef pages():\n    return dict(manage_title=T("pages"))\n\n# The category page\n# Shows all the posts in the requested category\ndef category():\n    def fp(p): return p.post_type==\'post\'\n    try:\n        cat_name = request.args[0]\n        cat = db(db.categories.category_name == cat_name\n                    ).select(db.categories.ALL)[0]\n        posts = db((db.posts.post_type == \'post\') &\n                   (db.posts.post_category == cat.id)\n                   ).select(db.posts.ALL) ## , orderby=~db.posts.post_time\n        filter(fp,posts)\n\n        response.sidebar_note = T("You are currently browsing the archives for the %(cat_name)s category.",dict(cat_name=cat_name))\n        return dict(posts = posts)\n    except:\n        redirect(URL(r = request,f = \'index\'))\n\n@auth.requires_login()\ndef add():\n    try:\n        area = request.args[0]\n\n        if area == "post":\n            db.posts.post_type.default = \'post\'\n            page_form = SQLFORM(db.posts, fields = [\'post_title\', \'post_text\', \n                                                    \'post_category\', \'is_translated\'], \n                                                    labels = post_labels)\n            page_form.append(INPUT(_type=\'checkbox\', \n                                    _name=\'post_attributes_content_is_original\', \n                                    _id=\'post_attributes_content_is_original\', value=\'\'))\n            page_title = T("Add Post")\n            \n            if page_form.accepts(request.vars, session):\n                tcode="post_id_"+str(page_form.vars.id)\n                from gluon.contrib import simplejson\n                _json=simplejson.loads(request.vars.post_attributes_json)\n                _json[\'content_is\'][\'original\']=request.vars.post_attributes_content_is_original==\'on\'\n                pg=db(db.posts.id==page_form.vars.id).update(\n                                                post_text_TCode=tcode,\n                                                post_attributes_json=simplejson.dumps(_json))\n                ## FEATURE REQUEST: to add the translation code if not existing\n                T(tcode)\n                session.flash = T("Post added.")\n                redirect(URL(r = request,f = \'post/%i\' % page_form.vars.id))\n        \n        elif area == "page":\n            db.posts.post_type.default = \'page\'\n            page_form = SQLFORM(db.posts, fields = [\'post_title\', \'post_text\', \n                                                    \'show_in_menu\', \'is_translated\'], \n                                                    labels = post_labels)\n            page_form.append(INPUT(_type=\'checkbox\', _name=\'post_attributes_content_is_original\', \n                                                    _id=\'post_attributes_content_is_original\', value=\'\'))\n            page_title = T("Add Page")\n            \n            if page_form.accepts(request.vars, session):\n                tcode="page_id_"+str(page_form.vars.id)\n                from gluon.contrib import simplejson\n                _json=simplejson.loads(request.vars.post_attributes_json)\n                _json[\'content_is\'][\'original\']=request.vars.post_attributes_content_is_original==\'on\'\n                pg=db(db.posts.id==page_form.vars.id).update(\n                                                post_text_TCode=tcode,\n                                                post_attributes_json=simplejson.dumps(_json)\n                                            )\n                ## FEATURE REQUEST: to add the translation code if not existing\n                T(tcode)\n                session.flash = T("Page added.")\n                redirect(URL(r = request,f = \'page/%i\' % page_form.vars.id))          \n                \n        else:\n            redirect(URL(r = request,f = \'index\'))\n            \n        return dict(page_title = page_title, page_form = page_form)\n    except Exception, ex:\n        session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))\n        redirect(URL(r = request,f = \'index\'))\n\n@auth.requires_login()\ndef edit():\n    this_item=None\n    area=None\n    id=None\n    p_a_c_i_o_val=None\n    try:\n        area = request.args[0]\n        id = int(request.args[1])\n        this_item = db(db.posts.id == id).select()[0]\n    except Exception, ex:\n        session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))\n        redirect(URL(r = request,f = \'index\'))\n\n    try:\n        from gluon.contrib import simplejson\n        _json=simplejson.loads(this_item.post_attributes_json)\n        p_a_c_i_o_val=\'on\' if _json[\'content_is\'][\'original\'] else \'\'\n    except Exception, ex:\n        session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))\n    \n    if area == \'post\':\n        edit_form = SQLFORM(db.posts, this_item, fields = [\'post_title\', \'post_text\', \'post_text_TCode\', \n                                                            \'post_category\',\'is_translated\'], \n                                                            deletable=True, labels = post_labels)\n        edit_form.append(INPUT(_type=\'checkbox\', _name=\'post_attributes_content_is_original\', \n                                                _id=\'post_attributes_content_is_original\', value=p_a_c_i_o_val))\n        edit_title = T("Edit Post")\n    \n        if edit_form.accepts(request.vars, session):\n            if request.vars.delete_this_record==\'on\':\n                session.flash = T("Post deleted.")\n                redirect(URL(r = request,f = \'index/posts\'))\n            else:    \n                _json[\'content_is\'][\'original\']=request.vars.post_attributes_content_is_original==\'on\'\n                db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))\n                session.flash = T("Post updated.")\n                redirect(URL(r = request,f = \'post/%s\' %id))\n\n    elif area == \'page\':\n        this_item = db(db.posts.id == id).select()[0]\n        edit_form = SQLFORM(db.posts, this_item, fields = [\'post_title\', \'post_text\', \'post_text_TCode\', \n                                                            \'is_translated\', \'show_in_menu\'], \n                                                            deletable=True, labels = post_labels)\n        edit_form.append(INPUT(_type=\'checkbox\', _name=\'post_attributes_content_is_original\', \n                                                 _id=\'post_attributes_content_is_original\', value=p_a_c_i_o_val))\n        edit_title = T("Edit Page")\n    \n        if edit_form.accepts(request.vars, session):\n            if request.vars.delete_this_record==\'on\':\n                session.flash = T("Page deleted.")\n                redirect(URL(r = request,f = \'pages\'))\n            else:\n                try:\n                    _json[\'content_is\'][\'original\']=request.vars.post_attributes_content_is_original==\'on\'\n                    db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))\n                    session.flash = T("Page updated.")\n                except Exception, ex:\n                    session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))\n                finally:\n                    redirect(URL(r = request,f = \'page/%s\' %id))\n                        \n    else:\n        redirect(URL(r = request,f = \'index\'))\n    \n    return dict(edit_form = edit_form, edit_title = edit_title, post=this_item)\n\n        \n@auth.requires_login()\ndef manage():\n\n    area = None\n    if len(request.args)>0:\n        area = request.args[0]\n    else:\n        area = \'post\'\n    \n    try: command = request.args[1]\n    except: command = ""\n        \n    if area == \'post\':\n        rows = db(db.posts.post_type == \'post\').select(db.posts.ALL)\n        manage_title = T(\'Manage Posts\')\n\n        if command == \'add\':\n            edit_form = SQLFORM(db.posts, labels = post_labels)\n            \n            if edit_form.accepts(request.vars, session):\n                session.flash = T("Post added")\n                redirect(URL(r = request, f = \'manage/post\'))\n            else:\n                session.flash = T("Error")\n       \n        elif command == \'edit\':\n            try: id = request.args[2]\n            except: id = ""\n            \n            if id != \'\':\n                this_post = db(db.posts.id == id).select()[0]\n                edit_form = SQLFORM(db.posts, this_post)\n                \n                if edit_form.accepts(request.vars, session):\n                    session.flash = T("Post updated")\n                    redirect(URL(r = request, f = \'manage\', args=[\'post\']))\n                else:\n                    session.flash=T("(Caught) Error occured")\n                    \n        elif command == \'delete\':\n            try: id = request.args[2]\n            except: id = ""\n            \n            if id != \'\':\n                db(db.posts.id == id).delete()\n                session.flash = T("Post deleted")\n                redirect(URL(r = request, f = \'index\'))\n        else:\n            edit_form = \'\'\n\n        return dict(rows = rows, manage_title = manage_title, edit_form = edit_form, area = area)\n    \n    elif area == \'link\':\n        rows = db().select(db.links.ALL)\n        manage_title = T(\'Manage Links\')\n\n        if command == \'add\':\n            edit_form = SQLFORM(db.links, labels = link_labels)\n            \n            if edit_form.accepts(request.vars, session):\n                session.flash = T("Link added")\n                redirect(URL(r = request, f = \'manage\', args=[\'link\']))\n            else:\n                session.flash=T("(Caught) Error occured")\n       \n        elif command == \'edit\':\n            try: id = request.args[2]\n            except: id = ""\n            \n            if id != \'\':\n                this_link = db(db.links.id == id).select()[0]\n                edit_form = SQLFORM(db.links, this_link)\n                \n                if edit_form.accepts(request.vars, session):\n                    session.flash = T("Link updated")\n                    redirect(URL(r = request, f = \'manage\', args=[\'link\']))\n                else:\n                    session.flash=T("(Caught) Error occured")\n        \n        elif command == \'delete\':\n            try: id = request.args[2]\n            except: id = ""\n            \n            if id != \'\':\n                db(db.links.id == id).delete()\n                session.flash = T("Link deleted")\n                redirect(URL(r = request, f = \'manage/link\'))\n        else:\n            edit_form = \'\'\n            \n        return dict(rows = rows, manage_title = manage_title, edit_form = edit_form, area = area)\n    \n    elif area == \'category\':\n        rows = db().select(db.categories.ALL)\n        manage_title = T(\'Manage Categories\')\n       \n        if command == \'add\':\n            edit_form = SQLFORM(db.categories, labels = cat_labels)\n            \n            if edit_form.accepts(request.vars, session):\n                session.flash = T("Category added")\n                redirect(URL(r = request, f = \'manage/category\'))\n        \n        elif command == \'edit\':\n            try: id = request.args[2]\n            except: id = ""\n            \n            if id != \'\':\n                this_cat = db(db.categories.id == id).select()[0]\n                edit_form = SQLFORM(db.categories, this_cat)\n                \n                if edit_form.accepts(request.vars, session):\n                    session.flash = T("Category updated")\n                    redirect(URL(r = request, f = \'manage\', args=[\'category\']))\n                else:\n                    session.flash=T("(Caught) Error occured")\n        \n        elif command == \'delete\':\n            try: id = request.args[2]\n            except: id = ""\n            \n            if id != \'\':\n                db(db.categories.id == id).delete()\n                session.flash = T("Category deleted")\n                redirect(URL(r = request, f = \'manage/category\'))\n        \n        else:\n            edit_form = \'\'\n\n        return dict(rows = rows, manage_title = manage_title, edit_form = edit_form, area = area)        \n    \n    else:\n        redirect(URL(r = request,f = \'index\'))\n\ndef error():\n    ticket=\'\'\n    code=\'\'\n    requested_uri=\'\'\n    err=\'\'\n\n    try:\n        ticket=request.vars.ticket\n        if ticket == \'None\': ticket=None\n        \n        code=request.vars.code\n        if code == \'None\': code=None\n        \n        requested_uri=request.vars.requested_uri\n        if requested_uri == \'None\': requested_uri=None\n    except Exception, ex:\n        err=str(ex)\n        session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))\n        \n    return dict(ticket=ticket, code=code, requested_uri=requested_uri, err=err)\n        \ndef files():\n    upload_form=SQLFORM(db.files,labels=file_labels)\n    if request.vars.file!=None:\n        # TODO: strip_path_and_sanitize()\n        upload_form.vars.filename=request.vars.file.filename.lower()\n        if upload_form.accepts(request.vars,session):\n            response.flash=T(\'file uploaded\')\n        \n    download_form=FORM(LABEL(T(\'Enter file name\'))\n                        ,INPUT(_name="filename", requires=IS_NOT_EMPTY())\n                        ,INPUT(_type="submit",_value=T(\'Submit\')))\n    if (download_form.accepts(request.vars,session)\n        or (request.vars.download and request.vars.filename)):\n        _file=db(db.files.filename==request.vars.filename.lower()).select()\n        if _file: \n            _file=_file[0]\n            redirect(URL(r = request,f = \'download/%s/%s\' % (_file.file,_file.filename)))\n        else:\n            response.flash=T(\'no file found with the name %(filename)s\',\n                             dict(filename=request.vars.filename.lower()))\n        \n    return dict(upload_form=upload_form,download_form=download_form,\n                upload_title=T(\'upload\'),download_title=T(\'download\'))\n\ndef json():\n    area=request.args[0]\n    return response.json({\n        \'status\' : 1,\n        \'message\' : \'done\',\n        \'result\' : {\n            \'pages\' : lambda x: db(db.posts.post_type==\'page\').select()\n        }.get(request.args[0], None)(request.args[0])\n    })\n    \ndef user():\n    """\n    exposes:\n    http://..../[app]/default/user/login \n    http://..../[app]/default/user/logout\n    http://..../[app]/default/user/register\n    http://..../[app]/default/user/profile\n    http://..../[app]/default/user/retrieve_password\n    http://..../[app]/default/user/change_password\n    use @auth.requires_login()\n        @auth.requires_membership(\'group name\')\n        @auth.requires_permission(\'read\',\'table name\',record_id)\n    to decorate functions that need access control\n    """\n    if request.args[0]==\'logout\':\n        session.user_authorization_done=False\n    if auth.user and request.vars.next:\n        redirect(request.vars.next)\n    return dict(form=auth())\n\n\n@auth.requires_login()\ndef app_admin():\n    area=request.args[0]\n    if area==\'auth_user\':\n        form=SQLFORM(db.auth_user,response.anon_user,fields=[\'display_name\',\'email\'])\n        if request.post_vars.email:\n            auth.user.email=request.vars.email\n            \n            if (request.vars.email==response.anon_user.email and\n                request.vars.display_name==response.anon_user.display_name):\n                if form.accepts(request.vars,session):\n                    session.flash =T("Update done.")\n                    redirect(URL(r = request,f=\'index\'))\n                else:\n                    db.auth_user.insert(registration_id=auth.user.registration_id,\n                                        email=request.vars.email,\n                                        display_name=request.vars.display_name)\n                    session.flash =T("Data successfully saved.")\n                    redirect(URL(r = request,f=\'index\'))\n        return dict(form=form,area=area)\n    if area==\'user\':\n        if auth.user:\n            if auth.user.is_admin:\n                _fields=[\'registration_id\',\'display_name\',\'email\',\'is_admin\']\n            else:\n                _fields=[\'display_name\',\'email\']\n                \n            form=None\n            usr=None\n            if len(request.args)>1 and len(request.args[1])>0:\n                usr=db(db.auth_user.id==request.args[1]).select()\n                if len(usr)>0:usr=usr[0]\n                else:\n                    session.flash=\'User not found.\'\n                    redirect(URL(r=request,f=\'app_admin/user/\'))\n                form=SQLFORM(db.auth_user,usr,fields=_fields,deletable=True)\n                if form.accepts(request.vars,session):\n                    if request.vars.delete_this_record==\'on\':\n                        response.flash=T(\'User deleted.\')\n                    else:\n                        response.flash=T(\'User updated.\')\n                _form_title=T("edit user")\n            else:\n                form=SQLFORM(db.auth_user,fields=_fields)\n                if form.accepts(request.vars,session):\n                    session.flash=\'User created.\'\n                    redirect(URL(r=request,f=\'app_admin/user/%(id)i\' % form.vars.id))\n                _form_title=T("create user")\n            return dict(form=form,area=area,form_title=_form_title)\n        else:            \n            response.flash=T(\'woooups... not allowed\')\n            return dict(form=\'...\',area=area,form_title=\'...\')\n\ndef download():\n    import os\n    return response.stream(open(os.path.join(request.folder,\'uploads\',request.args[0]),\'rb\'))\n\n@auth.requires_login()\ndef do_stuff():\n    if request.args[0] in [\'posts_app\', \'links_app\']:\n        instance=db.posts if request.args[0]==\'posts_app\' else db.links\n        if request.args[0]==\'_ids_\':\n            _ids=request.args[0].split(\',\')\n            for i in range(len(_ids)):\n                try:\n                    db(instance.id == int(_ids[i])).update(application=request.applciation)\n                except Exception, ex:\n                    pass\n        session.flash=T(\'%(inst)s application updated.\', dict(inst=str(instance)))\n    \n    redirect(URL(r = request,f = \'index\'))\n\nresponse._vars=response._caller(index)\n'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__hash__'
+p11
+S"<method-wrapper '__hash__' of OperationalError object at 0x871a784>"
+p12
+sS'__module__'
+p13
+S"'sqlite3'"
+p14
+sS'__reduce_ex__'
+p15
+S'<built-in method __reduce_ex__ of OperationalError object at 0x871a784>'
+p16
+sS'__getslice__'
+p17
+S"<method-wrapper '__getslice__' of OperationalError object at 0x871a784>"
+p18
+sS'__getitem__'
+p19
+S"<method-wrapper '__getitem__' of OperationalError object at 0x871a784>"
+p20
+sS'__setstate__'
+p21
+S'<built-in method __setstate__ of OperationalError object at 0x871a784>'
+p22
+sS'__reduce__'
+p23
+S'<built-in method __reduce__ of OperationalError object at 0x871a784>'
+p24
+sS'__str__'
+p25
+S"<method-wrapper '__str__' of OperationalError object at 0x871a784>"
+p26
+sS'args'
+p27
+S"('no such column: False',)"
+p28
+sS'__getattribute__'
+p29
+S"<method-wrapper '__getattribute__' of OperationalError object at 0x871a784>"
+p30
+sS'__class__'
+p31
+S"<class 'sqlite3.OperationalError'>"
+p32
+sS'__delattr__'
+p33
+S"<method-wrapper '__delattr__' of OperationalError object at 0x871a784>"
+p34
+sS'__repr__'
+p35
+S"<method-wrapper '__repr__' of OperationalError object at 0x871a784>"
+p36
+sS'__setattr__'
+p37
+S"<method-wrapper '__setattr__' of OperationalError object at 0x871a784>"
+p38
+sS'__dict__'
+p39
+S'{}'
+p40
+sS'__weakref__'
+p41
+S'None'
+p42
+sS'__doc__'
+p43
+S'None'
+p44
+sS'__init__'
+p45
+S"<method-wrapper '__init__' of OperationalError object at 0x871a784>"
+p46
+sS'__new__'
+p47
+S'<built-in method __new__ of type object at 0x8238fc0>'
+p48
+ssS'evalue'
+p49
+S'no such column: False'
+p50
+sS'request'
+p51
+(dp52
+S'function'
+p53
+S"'index'"
+p54
+sS'body'
+p55
+S'<cStringIO.StringO object at 0x880a340>'
+p56
+sS'wsgi'
+p57
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p58
+sS'extension'
+p59
+S"'html'"
+p60
+sS'vars'
+p61
+S'<Storage {}>'
+p62
+sS'cid'
+p63
+S'None'
+p64
+sS'url'
+p65
+S'<gluon.html.XML object at 0x880a68c>'
+p66
+sS'raw_extension'
+p67
+S'None'
+p68
+sg27
+S'[]'
+p69
+sS'controller'
+p70
+S"'default'"
+p71
+sS'cookies'
+p72
+S"<SimpleCookie: SESS29af1facda0a866a687d5055f2fad...-6f70dfb8-bc7e-4b26-8015-735407cb899d' theme='1'>"
+p73
+sS'application'
+p74
+S"'a'"
+p75
+sS'ajax'
+p76
+S'False'
+p77
+sS'client'
+p78
+S"'127.0.0.1'"
+p79
+sS'env'
+p80
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x87f87d4>}>"
+p81
+sS'raw_args'
+p82
+S'None'
+p83
+sS'get_vars'
+p84
+S'<Storage {}>'
+p85
+sS'folder'
+p86
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p87
+sS'now'
+p88
+S'datetime.datetime(2011, 1, 14, 14, 34, 47, 793949)'
+p89
+sS'post_vars'
+p90
+S'<Storage {}>'
+p91
+ssS'frames'
+p92
+(lp93
+(dp94
+S'file'
+p95
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p96
+sS'dump'
+p97
+(dp98
+S'environment'
+p99
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x8683f5c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p100
+sS'ccode'
+p101
+S'<code object <module> at 0x89529f8, file "/home/...b/applications/a/controllers/default.py", line 4>'
+p102
+ssS'lnum'
+p103
+I188
+sS'lines'
+p104
+(dp105
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p106
+sI183
+S'        if type(code) == types.CodeType:'
+p107
+sI184
+S'            ccode = code'
+p108
+sI185
+S'        else:'
+p109
+sI186
+S'            ccode = compile2(code,layer)'
+p110
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p111
+sI189
+S'    except HTTP:'
+p112
+sI190
+S'        raise'
+p113
+sI191
+S'    except Exception:'
+p114
+ssS'call'
+p115
+S'(code="###################################\\n## CONTROLLE...index\'))\\n\\nresponse._vars=response._caller(index)\\n", environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0x8683f5c>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/default.py\')'
+p116
+sS'func'
+p117
+S'restricted'
+p118
+sa(dp119
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/default.py'
+p120
+sg97
+(dp121
+S'post_helper'
+p122
+S'undefined'
+p123
+sS'app_details'
+p124
+S'<__builtin__.AppDetails instance at 0x8716f2c>'
+p125
+sS'common.controller_init'
+p126
+S'<function controller_init at 0x87f0b1c>'
+p127
+sS'page_helper'
+p128
+g123
+sS'db'
+p129
+S"<DAL {'auth_permission': <Table {'ALL': <gluon.d..._name': <gluon.dal.Field object at 0x88d030c>}>}>"
+p130
+sS'cache'
+p131
+S'<gluon.cache.Cache object at 0x880a8ec>'
+p132
+sS'request'
+p133
+S"<Storage {'function': 'index', 'body': <cStringI... 14, 34, 47, 793949), 'post_vars': <Storage {}>}>"
+p134
+sS'auth'
+p135
+S'<gluon.tools.Auth object at 0x88aefec>'
+p136
+sS'session'
+p137
+S"<Storage {'auth': None}>"
+p138
+sS'app_config'
+p139
+S'<Row {\'APP_METAS\': ["molhokwai.net - \'a\' cm/dms"...elete_record\': <function <lambda> at 0x87f8f0c>}>'
+p140
+sS'common'
+p141
+S"<module 'applications.a.modules.common' from 'applications/a/modules/common.py'>"
+p142
+sS'response'
+p143
+S"<Storage {'body': <cStringIO.StringO object at 0...da> at 0x87f8924>, 'view': 'default/index.html'}>"
+p144
+sS'T'
+S'<gluon.languages.translator object at 0x880a88c>'
+p145
+ssg103
+I5
+sg104
+(dp146
+I2
+S'## CONTROLLER INITIALIZATION'
+p147
+sI3
+S'###################################'
+p148
+sI4
+S"exec('from applications.%s.modules import common' % this_app)"
+p149
+sI5
+S'page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)'
+p150
+sI6
+S''
+sI7
+S''
+sI8
+S'###################################'
+p151
+sI9
+S'## CONTROLLER FUNCTIONS'
+p152
+sI10
+S'###################################'
+p153
+sI11
+S'# The main page'
+p154
+ssg115
+S'()'
+p155
+sg117
+S'<module>'
+p156
+sa(dp157
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/modules/common.py'
+p158
+sg97
+(dp159
+S'db'
+p160
+S"<DAL {'auth_permission': <Table {'ALL': <gluon.d..._name': <gluon.dal.Field object at 0x88d030c>}>}>"
+p161
+sS'db.posts'
+p162
+S"<Table {'post_text_TCode': <gluon.dal.Field obje...>, '_id': <gluon.dal.Field object at 0x8b2ec6c>}>"
+p163
+sS'db.posts.ALL'
+p164
+S'<gluon.dal.SQLALL object at 0x88d0f8c>'
+p165
+ssg103
+I138
+sg104
+(dp166
+I133
+S''
+sI134
+S'    # This dynamically adds the pages to the menu'
+p167
+sI135
+S"    _pages = db((db.posts.post_type == 'page') &"
+p168
+sI136
+S'                ((db.posts.application == request.application) |'
+p169
+sI137
+S'                (db.posts.application is None))'
+p170
+sI138
+S'                ).select(db.posts.ALL)'
+p171
+sI139
+S'    items = []'
+p172
+sI140
+S'    menu_items = []'
+p173
+sI141
+S'    for page in _pages:'
+p174
+sI142
+S"        item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':request.application, 'id':page.id}]"
+p175
+ssg115
+S'(request=<Storage {\'function\': \'index\', \'body\': <cStringI... 14, 34, 47, 793949), \'post_vars\': <Storage {}>}>, response=<Storage {\'body\': <cStringIO.StringO object at 0...da> at 0x87f8924>, \'view\': \'default/index.html\'}>, session=<Storage {\'auth\': None}>, cache=<gluon.cache.Cache object at 0x880a8ec>, T=<gluon.languages.translator object at 0x880a88c>, db=<DAL {\'auth_permission\': <Table {\'ALL\': <gluon.d..._name\': <gluon.dal.Field object at 0x88d030c>}>}>, auth=<gluon.tools.Auth object at 0x88aefec>, app_config=<Row {\'APP_METAS\': ["molhokwai.net - \'a\' cm/dms"...elete_record\': <function <lambda> at 0x87f8f0c>}>, app_details=<__builtin__.AppDetails instance at 0x8716f2c>)'
+p176
+sg117
+S'controller_init'
+p177
+sa(dp178
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py'
+p179
+sg97
+(dp180
+S'self.query'
+p181
+S'<gluon.dal.Query object at 0x87162cc>'
+p182
+sS'fields'
+p183
+S'(<gluon.dal.SQLALL object at 0x88d0f8c>,)'
+p184
+sS'self'
+p185
+S'<gluon.dal.Set object at 0x87dbe2c>'
+p186
+sS'self.db._adapter.select'
+p187
+S'<bound method SQLiteAdapter.select of <gluon.dal.SQLiteAdapter object at 0x880a6cc>>'
+p188
+sS'self.db._adapter'
+p189
+S'<gluon.dal.SQLiteAdapter object at 0x880a6cc>'
+p190
+sS'attributes'
+p191
+g40
+sS'self.db'
+p192
+S"<DAL {'auth_permission': <Table {'ALL': <gluon.d..._name': <gluon.dal.Field object at 0x88d030c>}>}>"
+p193
+ssg103
+I4499
+sg104
+(dp194
+I4494
+S''
+sI4495
+S'    def count(self):'
+p195
+sI4496
+S'        return self.db._adapter.count(self.query)'
+p196
+sI4497
+S''
+sI4498
+S'    def select(self, *fields, **attributes):'
+p197
+sI4499
+S'        return self.db._adapter.select(self.query,fields,attributes)'
+p198
+sI4500
+S''
+sI4501
+S'    def delete(self):'
+p199
+sI4502
+S'        tablename=self.db._adapter.get_table(self.query)'
+p200
+sI4503
+S'        self.delete_uploaded_files()'
+p201
+ssg115
+S'(self=<gluon.dal.Set object at 0x87dbe2c>, *fields=(<gluon.dal.SQLALL object at 0x88d0f8c>,), **attributes={})'
+p202
+sg117
+S'select'
+p203
+sa(dp204
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py'
+p205
+sg97
+(dp206
+S'rows'
+p207
+g123
+sS'response'
+p208
+S'<function response at 0x89e53ac>'
+p209
+sS'sql'
+p210
+S'"SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));"'
+p211
+ssg103
+I1003
+sg104
+(dp212
+I998
+S"            (cache_model, time_expire) = attributes['cache']"
+p213
+sI999
+S"            del attributes['cache']"
+p214
+sI1000
+S"            key = self.uri + '/' + sql"
+p215
+sI1001
+S'            rows = cache_model(key, lambda: response(sql), time_expire)'
+p216
+sI1002
+S'        else:'
+p217
+sI1003
+S'            rows = response(sql)'
+p218
+sI1004
+S'        if isinstance(rows,tuple):'
+p219
+sI1005
+S'            rows = list(rows)'
+p220
+sI1006
+S"        limitby = attributes.get('limitby',None) or (0,)"
+p221
+sI1007
+S'        rows = self.rowslice(rows,limitby[0],None)'
+p222
+ssg115
+S'(self=<gluon.dal.SQLiteAdapter object at 0x880a6cc>, query=<gluon.dal.Query object at 0x87162cc>, fields=(<gluon.dal.SQLALL object at 0x88d0f8c>,), attributes={})'
+p223
+sg117
+g203
+sa(dp224
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py'
+p225
+sg97
+(dp226
+S'self'
+p227
+S'<gluon.dal.SQLiteAdapter object at 0x880a6cc>'
+p228
+sS'self.execute'
+p229
+S'<bound method SQLiteAdapter.execute of <gluon.dal.SQLiteAdapter object at 0x880a6cc>>'
+p230
+sS'sql'
+p231
+S'"SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));"'
+p232
+ssg103
+I994
+sg104
+(dp233
+I992
+S'        """'
+p234
+sI993
+S'        def response(sql):'
+p235
+sI994
+S'            self.execute(sql)'
+p236
+sI995
+S'            return self.cursor.fetchall()'
+p237
+sI996
+S'        sql = self._select(query,fields,attributes)'
+p238
+sI997
+S"        if attributes.get('cache', None):"
+p239
+sI998
+S"            (cache_model, time_expire) = attributes['cache']"
+p240
+sI989
+S'    def select(self,query,fields,attributes):'
+p241
+sI990
+S'        """'
+p242
+sI991
+S'        Always returns a Rows object, even if it may be empty'
+p243
+ssg115
+S'(sql="SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));")'
+p244
+sg117
+S'response'
+p245
+sa(dp246
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py'
+p247
+sg97
+(dp248
+S'a'
+S'("SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));",)'
+p249
+sS'self'
+p250
+S'<gluon.dal.SQLiteAdapter object at 0x880a6cc>'
+p251
+sS'b'
+g40
+sS'self.log_execute'
+p252
+S'<bound method SQLiteAdapter.log_execute of <gluon.dal.SQLiteAdapter object at 0x880a6cc>>'
+p253
+ssg103
+I1067
+sg104
+(dp254
+I1062
+S'    def log_execute(self,*a,**b):'
+p255
+sI1063
+S'        self.db._lastsql = a[0]'
+p256
+sI1064
+S'        return self.cursor.execute(*a,**b)'
+p257
+sI1065
+S''
+sI1066
+S'    def execute(self,*a,**b):'
+p258
+sI1067
+S'        return self.log_execute(*a, **b)'
+p259
+sI1068
+S''
+sI1069
+S'    def represent(self, obj, fieldtype):'
+p260
+sI1070
+S'        if type(obj) in (types.LambdaType, types.FunctionType):'
+p261
+sI1071
+S'            obj = obj()'
+p262
+ssg115
+S'(self=<gluon.dal.SQLiteAdapter object at 0x880a6cc>, *a=("SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));",), **b={})'
+p263
+sg117
+S'execute'
+p264
+sa(dp265
+g95
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py'
+p266
+sg97
+(dp267
+S'a'
+S'("SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));",)'
+p268
+sS'self.cursor'
+p269
+S'<sqlite3.Cursor object at 0x871b470>'
+p270
+sS'self'
+p271
+S'<gluon.dal.SQLiteAdapter object at 0x880a6cc>'
+p272
+sS'b'
+g40
+sS'self.cursor.execute'
+p273
+S'<built-in method execute of sqlite3.Cursor object at 0x871b470>'
+p274
+ssg103
+I1064
+sg104
+(dp275
+I1059
+S'    def create_sequence_and_triggers(self, query, table, **args):'
+p276
+sI1060
+S'        self.execute(query)'
+p277
+sI1061
+S''
+sI1062
+S'    def log_execute(self,*a,**b):'
+p278
+sI1063
+S'        self.db._lastsql = a[0]'
+p279
+sI1064
+S'        return self.cursor.execute(*a,**b)'
+p280
+sI1065
+S''
+sI1066
+S'    def execute(self,*a,**b):'
+p281
+sI1067
+S'        return self.log_execute(*a, **b)'
+p282
+sI1068
+S''
+ssg115
+S'(self=<gluon.dal.SQLiteAdapter object at 0x880a6cc>, *a=("SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));",), **b={})'
+p283
+sg117
+S'log_execute'
+p284
+sasS'pyver'
+p285
+S'Python 2.5.1: /usr/local/bin/python'
+p286
+sS'session'
+p287
+(dp288
+S'auth'
+p289
+S'None'
+p290
+ssS'etype'
+p291
+S"<class 'sqlite3.OperationalError'>"
+p292
+sS'date'
+p293
+S'Fri Jan 14 14:34:48 2011'
+p294
+sg245
+(dp295
+S'_vars'
+p296
+S'None'
+p297
+sg72
+S"<SimpleCookie: session_id_a='127.0.0.1-9d8fbcc1-53af-4dc6-a862-098120d08f05'>"
+p298
+sS'meta'
+p299
+S'<Storage {}>'
+p300
+sS'anon_user'
+p301
+S"<Row {'auth_event': <gluon.dal.Set object at 0x8...elete_record': <function <lambda> at 0x892fb8c>}>"
+p302
+sS'_view_environment'
+p303
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x8683f5c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p304
+sS'keywords'
+p305
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p306
+sS'files'
+p307
+S'[]'
+p308
+sS'title'
+p309
+S'"molhokwai.net - \'a\' cm/dms"'
+p310
+sS'auth_users'
+p311
+S'<gluon.dal.Rows object at 0x88d9d4c>'
+p312
+sS'flash'
+p313
+S"''"
+p314
+sS'session_id_name'
+p315
+S"'session_id_a'"
+p316
+sS'_custom_commit'
+p317
+S'None'
+p318
+sS'session_filename'
+p319
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-9d8fbcc1-53af-4dc6-a862-098120d08f05'"
+p320
+sg55
+S'<cStringIO.StringO object at 0x880a420>'
+p321
+sS'description'
+p322
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p323
+sS'session_file'
+p324
+S"<open file '/home/herve/development/workspaces/m...4dc6-a862-098120d08f05', mode 'rb+' at 0x8952f98>"
+p325
+sS'_custom_rollback'
+p326
+S'None'
+p327
+sS'_caller'
+p328
+S'<function <lambda> at 0x87f8924>'
+p329
+sS'session_id'
+p330
+S"'127.0.0.1-9d8fbcc1-53af-4dc6-a862-098120d08f05'"
+p331
+sS'headers'
+p332
+S"<Storage {'Expires': 'Fri, 14 Jan 2011 13:34:47 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p333
+sS'status'
+p334
+S'200'
+p335
+sS'postprocessing'
+p336
+S'[]'
+p337
+sS'menu'
+p338
+S'[]'
+p339
+sS'view'
+p340
+S"'default/index.html'"
+p341
+ssS'locals'
+p342
+(dp343
+S'a'
+S'("SELECT  posts.id, posts.post_title, posts.post_t...page\') AND ((posts.application = \'a\') OR False));",)'
+p344
+sS'self'
+p345
+S'<gluon.dal.SQLiteAdapter object at 0x880a6cc>'
+p346
+sS'b'
+g40
+sssS'traceback'
+p347
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/default.py", line 5, in <module>\n    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)\n  File "applications/a/modules/common.py", line 138, in controller_init\n    ).select(db.posts.ALL)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py", line 4499, in select\n    return self.db._adapter.select(self.query,fields,attributes)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py", line 1003, in select\n    rows = response(sql)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py", line 994, in response\n    self.execute(sql)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py", line 1067, in execute\n    return self.log_execute(*a, **b)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/dal.py", line 1064, in log_execute\n    return self.cursor.execute(*a,**b)\nOperationalError: no such column: False\n'
+p348
+s.
