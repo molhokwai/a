@@ -163,3 +163,5 @@ timestamp: 2011-01-12T14:27:43.615483
 ALTER TABLE app_config ADD twitter_api TEXT;
 timestamp: 2011-01-14T14:34:48.094271
 ALTER TABLE posts ADD application CHAR(512);
+timestamp: 2011-01-31T14:30:22.667774
+ALTER TABLE app_config ADD app_themes TEXT;

@@ -1,0 +1,23 @@
+Main Background: 
+	-BG.png
+	-with background color #7db9e8
+	-repeat-x
+	-no repeat-y
+
+Background for Main content container:
+	-mainContainerBG.png
+	-repeat x, no repeat y
+	-with BG color #5c92f4
+
+NavigationBar:
+	NORMAL:
+		-Nav.png
+		-repeat-x
+	ONMOUSEOVER:
+		-Navover.png
+		-repeat-x
+
+Background for side bar(tag&pages)
+	-SideBG.png
+	-repeat-x
+	-BG color of #7db9e8

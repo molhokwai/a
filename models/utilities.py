@@ -82,7 +82,7 @@ class AppDetails():
                 <br>
                 <p class="text-alignr font-size09em italic width60pc">(if you find there is missing acknowledgedment, an e-mail to <a href="mailto:admin@molhokwai.net" title="[GMCP] Compose a new mail to admin@molhokwai.net" 
                 onclick="window.open('https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=admin@molhokwai.net','Compose new message','width=640,height=480');return false" rel="noreferrer">admin@molhokwai.net</a> 
-                is more than welcome)</p>                
+                is more than welcome)"</p>                
             """
         }
     }
@@ -91,7 +91,7 @@ if app_config and app_config.APP_METAS:
     app_details.title=app_config.APP_METAS[0]
     app_details.keywords=app_config.APP_METAS[1]
     app_details.description=app_config.APP_METAS[2]
-
+        
 class aConvert():
     def to_int(self, value):
         """Attention: Eventually returns 0 which 'equals' the False ValueError return"""
@@ -101,9 +101,91 @@ class aConvert():
             return False
 a_convert=aConvert()
 
+# session manager
+class SessionManager():
+    @property
+    def default_page(self):
+        return '/%s/company/index' % this_app
+
+    def company_id(self,value=None):
+        if not value is None:
+            session.company_id=value
+        if session.company_id:
+            args={ 'icon_url' : db(db.companies.id==session.company_id).select()[0].icon_url }
+            company=Struct(**args)
+        return session.company_id
+        
+    def user_is_in_company(self, company_id=None):
+        ## TODO: method in company management class, and this session_manager calling it...
+        if company_id is None:
+            company_id=self.company_id()
+        if not auth.user: 
+            return False
+        else:
+            res=db(db.companies.user==auth.user.id).select()
+            return len(res)>0
+# instance
+session_manager=SessionManager()
+
+# common
+class Common():
+    """def get_small_icon_url(self, icon_url):
+        _segs=icon_url.split('.')
+        _ext=_segs[len(_segs)-1]
+        return icon_url.replace('.%s' % _ext,'_small.%s' % _ext) 
+    """    
+    def get_shortened_text(self, _text, _max):
+        if len(_text)>_max:
+            return '%s...' % _text[:(_max-3)]
+        else:
+            return _text
+                            
+    def redirect(self, url):
+        """in case of redirection to an inner frame"""
+        inner_frames_args=['page-box', 'side-box', 'frame-box', 'is_iframe']
+        for ifa in inner_frames_args:
+            if url.lower().find(ifa.lower())>0:
+                redirect(session_manager.default_page)
+                break        
+        redirect(url)
+
+    def get_embed(self, provider, media_key, width=425, height=344):
+        embed=None
+        if provider=='youtube':
+            embed='    <object width="%(width)i" height="%(height)i">'
+            embed+='      <param name="movie" value="http://www.youtube.com/v/%(media_key)s?fs=1"></param>'
+            embed+='      <param name="allowFullScreen" value="true"></param>'
+            embed+='      <param name="allowScriptAccess" value="always"></param>'
+            embed+='      <embed src="http://www.youtube.com/v/%(media_key)s?fs=1"'
+            embed+='      type="application/x-shockwave-flash"'
+            embed+='      allowfullscreen="true"'
+            embed+='      allowscriptaccess="always"'
+            embed+='      width="%(width)i" height="%(height)i">'
+            embed+='      </embed>'
+            embed+='   </object>'
+        return embed % {'width':width, 'height':height, 'media_key':media_key}
+        
+#instance
+common=Common()
+
+# utilities
 class Struct:
     def __init__(self, **entries): 
         self.__dict__.update(entries)
+
+# utilities
+class Utilities():
+    def reverse_numeric_row_id(self, x, y):return y.id - x.id
+
+    def shorten_and_randomize(self, _list, nr):
+        import random
+        random.shuffle(_list)
+        if len(_list)>nr:
+            return _list[:nr]
+        else:
+            return _list        
+# instance
+utilities=Utilities()
 
 ########################
 ## Print, Log Wrapper
@@ -118,7 +200,7 @@ def log_wrapped(_name, _value):
         logging.info('-------| %s : %s' % (repr(_name), repr(_value)))
     else:
         print_wrapped(_name, _value)
-
+        
 #########################################################################
 ## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting
 #########################################################################

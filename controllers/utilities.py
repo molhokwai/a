@@ -1,0 +1,1 @@
+/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py

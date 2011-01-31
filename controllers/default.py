@@ -1,23 +1,35 @@
 ###################################
 ## CONTROLLER INITIALIZATION
-###################################    
+###################################
+class AppObjects:
+    details=None
+    config=None
+    log_wrapped=None
+
+app_objects=AppObjects()
+app_objects.details=app_details
+app_objects.config=app_config
+app_objects.log_wrapped=log_wrapped
+
 exec('from applications.%s.modules import common' % this_app)
 try:
-    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)
+    #app_objects=Struct({'details':app_details,'config':app_config,'log_wrapped':log_wrapped})
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
     log_wrapped('Er', ex)
 
 
 ###################################
 ## CONTROLLER FUNCTIONS
-###################################    
+###################################
+
 # The main page
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
     if len(request.args)==0:
         if response.home_page:
-            redirect(URL(r = request,c='default',f = 'page/%i' % response.home_page.id))
+            redirect(URL(r=request,c='default',f='page',args=[response.home_page.id]))
     else:
       return dict(posts = app_details.start_page_html)
 
@@ -157,6 +169,7 @@ def edit():
     this_item=None
     area=None
     id=None
+    # p_a_c_i_o_val : page attr. content is orginal value
     p_a_c_i_o_val=None
     try:
         area = request.args[0]

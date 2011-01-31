@@ -19,7 +19,10 @@ class PageHelper():
 ###################################
 ## METHODS
 ###################################    
-def init_app(request, response, session, cache, T, db, auth_users, app_details):
+def init_app(request, response, session, cache, T, db, auth_users, app_objects):
+    app_details = app_objects.details
+    app_config = app_objects.config
+    
     """Application first run initialization"""
     for au in auth_users:
         if au.email=='anonymous@molhokwai.net':response.anon_user=au
@@ -110,12 +113,16 @@ def help_page(response, page_helper, _pages):
 ###################################
 ## CONTROLLER INIT
 ###################################    
-def controller_init(request, response, session, cache, T, db, auth, app_config, app_details):
+def controller_init(request, response, session, cache, T, db, auth, app_objects):
+    app_details = app_objects.details
+    app_config = app_objects.config
+    log_wrapped = app_objects.log_wrapped
+    
     # This sets the session authorization values
     auth_users=db().select(db.auth_user.ALL)
     response.auth_users=auth_users
     
-    init_app(request, response, session, cache, T, db, auth_users, app_details)
+    init_app(request, response, session, cache, T, db, auth_users, app_objects)
     
     if (not auth.user is None and not session.user_authorization_done):
         user_authorization(request, response, session, cache, T, db, auth)
@@ -141,7 +148,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
     except Exception, ex:
         _pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
         
-    items = []
+    items=[]
     menu_items = []
     for page in _pages:
         item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':request.application, 'id':page.id}]
@@ -149,8 +156,20 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
         if page.show_in_menu and len(menu_items)<10:
           menu_items.append(item)
     response.pages = items
-    response.menu=menu_items
     
+    # Menu order, Menu items...
+    menu_order=[ T('Home'), T('Mission'), T('Vision'), T('Community'), T('Work') , T('Books') ]
+    
+    page_menu_items=[]
+    for i in range(len(menu_items)):
+        if i<len(menu_order):
+            _title=menu_order[i]
+            item=filter(lambda x: x[0].lower()==str(_title).lower(), menu_items)
+            if len(item)>0:
+                menu_items.remove(item[0])
+                page_menu_items.append(item[0])
+    response.menu=page_menu_items
+            
     # instance
     page_helper=PageHelper()
     post_helper=PageHelper()
@@ -174,12 +193,12 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
                            (db.posts.post_category == cat.id) &
                            ((db.posts.application == request.application) | 
                            (db.posts.application == None))
-                           ).select(db.posts.ALL,orderby=~db.posts.post_time))
+                           ).select(db.posts.ALL)) #,orderby=~db.posts.post_time
         except Exception, ex:
             count = len(db(
                            (db.posts.post_type == 'post') & 
                            (db.posts.post_category == cat.id)
-                           ).select(db.posts.ALL,orderby=~db.posts.post_time))
+                           ).select(db.posts.ALL)) #,orderby=~db.posts.post_time
         if count > 0:
             item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':request.application, 'name':cat.category_name}]
             items.append(item)
@@ -200,13 +219,19 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
     response.links = items
     
     # Theme
-    response.themes=['0', '1']
+    response.themes=['0', '1','cms']
+    if app_config and app_config.APP_THEMES:
+        response.themes=app_config.APP_THEMES
+        
     if request.vars.theme:
         response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
     
     response.theme = '0'
+    if request.application in response.themes:
+        request.application = response.theme
+
     if request.vars.theme:
         response.theme = request.vars.theme
     elif request.cookies.has_key('theme'):

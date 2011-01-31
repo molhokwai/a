@@ -1,0 +1,261 @@
+/********************** 
+  top most context : page
+  -----------------------
+      
+  context : /cms.page
+**********************/
+
+#top-bar, #cse-search-form, #wrapper {
+  width: 60%;
+  margin: auto;
+}
+
+#cse-search-form {
+  width: 60%;
+  margin-top: -1%;
+}
+
+.page h2, .page h2 em {
+ font-weight: normal;
+ font-size: 0.9em;
+  letter-spacing:0.1em;
+}
+
+.statement div {
+  max-width:435px;
+}
+
+/********************** 
+  context : cms.user-menu
+**********************/
+#user-menu, #user-menu a {
+  float:right;
+  color: rgb(250, 255, 250);
+  letter-spacing:0.05em;
+}
+
+
+/********************** 
+  context : cms.top-bar
+**********************/
+#top-bar {
+  vertical-align:top;
+  margin-top:1%;
+}
+
+
+
+/********************** 
+  context : cms.menu-tabs
+**********************/
+#menu-tabs ul li a {
+  font-size:1.11em;
+  padding: 0 0.4em;
+  color: #FAFFFA;
+  text-decoration:none;
+}
+
+#menu-tabs ul li a span{
+  font-weight:normal;
+  letter-spacing:0.12em;
+  color: #FAFFFA;
+}
+#menu-tabs ul li:first-letter  {
+  text-transform:capitalize;
+}
+
+
+/********************** 
+  context : cms.contextual-nav
+**********************/
+#contextual-nav {
+  margin-top: 1%;
+  margin-right: -23%;
+}
+
+#contextual-nav h2 ul, #contextual-nav h2 ol {
+    margin: 0;
+    padding: 0;
+}
+
+#contextual-nav h2 ul li {
+    list-style-type: none;
+    list-style-image: none;
+    margin-bottom: 15px;
+}
+
+#contextual-nav h2 ul p, #contextual-nav h2 ul select {
+    margin: 5px 0 8px;
+}
+
+#contextual-nav h2 ul ul, #contextual-nav h2 ul ol {
+    margin: 5px 0 0 10px;
+}
+
+#contextual-nav h2 ul ul ul, #contextual-nav h2 ul ol {
+    margin: 0 0 0 10px;
+}
+
+ol li, #contextual-nav h2 ul ol li {
+    list-style: decimal outside;
+}
+
+#contextual-nav h2 ul ul li, #contextual-nav h2 ul ol li {
+    margin: 3px 0 0;
+    padding: 0;
+}
+
+
+/********************** 
+  context : (cms,pypress).contextual-nav
+**********************/
+p.metadata {
+  width:90%;
+  margin-top: 3%;
+  margin-left: 2%;
+  border: 1px dotted #CDCDFF;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  padding: 5px 10px;
+}
+.metadata a {
+  margin-right: 2%;
+  color:rgb(240, 250, 255);
+  font-style:italic;
+  text-decoration: none;
+  text-transform: lowercase;
+  border-top: 1px dotted rgb(240, 250, 255);
+}
+.page .metadata a {
+  text-transform: none !important;
+}
+
+
+/********************** 
+  context : (page,post).entry
+**********************/
+.post {
+  margin-right: 2%;
+  margin-left: 2%;
+  margin-bottom: 5%;
+}
+.post .entry {
+  min-height: 0;
+  margin-left: 2%;
+  margin-top: 2%;
+  border-top: 1px dotted rgb(250, 255, 255);
+  padding-right:5%;
+}
+.post .entry p strong, .post .entry p em {
+  color: #EFFFFF;
+}
+
+.post h2 a {
+  font-size:1.15em;
+  text-shadow:-1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF;
+  padding: 2% 0;
+  text-transform: capitalize;
+  font-size:1.25em;
+  color: maroon;
+  text-decoration: none;
+  letter-spacing: 0.075em;
+}
+
+.post .entry h3 {
+  font-size:1.1em;
+  color: #003300;
+  letter-spacing: 0.05em;
+}
+
+.post span.datetime {
+  margin-left:5%;
+  font-style:italic;
+  font-size: 0.9em;  
+}
+.pagetitle {
+  display:block;
+  font-style:italic;
+  font-size: 0.9em;
+  color:#111133;
+  text-align:center;
+  padding-top:1%;
+}
+
+#content .edit .entry {
+  border:none;
+}
+
+h2#comments, h2#respond {
+  color: maroon;
+  margin-left:2%;
+  font-size:1.2em;
+  letter-spacing:0.05em;
+  text-shadow:-1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF;
+}
+
+#commentlist li {
+  padding-top:1.5%;
+}
+#commentlist li cite {
+  text-transform:capitalize;
+}
+#commentlist li p {
+  line-height:170%;
+  letter-spacing:0.1em;
+  margin-top: 0.8%;
+}
+#commentlist li p:first-letter {
+  font-size:1.4em;
+  text-transform:capitalize;
+}
+
+/********************** 
+  context : cms.(pages element)
+**********************/
+.pages ul {
+  margin: 0 -5% !important;
+  list-style:none;
+}
+.pages ul li {
+  float:left;
+  padding: 1% 2% !important;
+  font-style:italic;
+}
+.pages ul li a {
+  color:#FAFFFA;
+}
+.entry .pages ul li a {
+  font-size: 1.05em;
+  text-decoration:none;
+  border-top: 1px dotted #FAFAFA;
+}
+
+/********************** 
+  context : web2py page elements
+**********************/
+#flash {
+  color:rgb(250, 255, 255);
+  text-align:center;
+  padding:0.7% 4%;
+  font-size:1.15em;
+  margin-top:1%;
+  border-right:2px solid rgb(252, 255, 255);
+  border-left:2px solid rgb(252, 255, 255);
+  -moz-border-radius:12px;
+  -webkit-border-radius:12px;
+  width:80%;letter-spacing: 0.1em;
+}
+
+
+/********************** 
+  context : google page elements
+**********************/
+#google_translate_element {
+ float: left;
+ text-align: left;
+ margin-left:1%;
+}
+.goog-te-combo {
+  float:left;
+  margin-right:1%;
+}

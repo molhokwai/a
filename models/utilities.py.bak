@@ -70,7 +70,7 @@ class AppDetails():
                 --------------------------------------------------------------------------------------------<br/>
                 idem, translated in available languages            
             """,
-            'a_acknowledgements' : """
+            'acknowledgements' : """
                 <ul>
                   <li><a href="http://www.web2py.org">web2py</a></li>
                   <li><a href="http://code.google.com/appengine">google app engine</a></li>
@@ -82,7 +82,7 @@ class AppDetails():
                 <br>
                 <p class="text-alignr font-size09em italic width60pc">(if you find there is missing acknowledgedment, an e-mail to <a href="mailto:admin@molhokwai.net" title="[GMCP] Compose a new mail to admin@molhokwai.net" 
                 onclick="window.open('https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=admin@molhokwai.net','Compose new message','width=640,height=480');return false" rel="noreferrer">admin@molhokwai.net</a> 
-                is more than welcome)</p>                
+                is more than welcome)"</p>                
             """
         }
     }
@@ -91,7 +91,7 @@ if app_config and app_config.APP_METAS:
     app_details.title=app_config.APP_METAS[0]
     app_details.keywords=app_config.APP_METAS[1]
     app_details.description=app_config.APP_METAS[2]
-
+        
 class aConvert():
     def to_int(self, value):
         """Attention: Eventually returns 0 which 'equals' the False ValueError return"""
@@ -118,7 +118,7 @@ def log_wrapped(_name, _value):
         logging.info('-------| %s : %s' % (repr(_name), repr(_value)))
     else:
         print_wrapped(_name, _value)
-
+        
 #########################################################################
 ## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting
 #########################################################################

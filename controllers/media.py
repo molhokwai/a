@@ -4,7 +4,11 @@ from types import *
 ## CONTROLLER INITIALIZATION
 ###################################    
 exec('from applications.%s.modules import common' % this_app)
-page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)
+try:
+    app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped})
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
+except Exception, ex:
+    log_wrapped('Er', ex)
 
 # media_photos module
 exec('from applications.%s.modules import media_photos' % this_app)
@@ -262,7 +266,6 @@ def picasa():
     
     ## PUBLIC SECTION
         if area == 'gallery':
-            log_wrapped('request.args[0]', request.args[0])
             recent=picasa_manager.get_recent_photos()
             gallery=picasa_manager.get_album_gallery()
             return dict(nake=None, area=area, item=None, recent=recent, gallery=gallery)

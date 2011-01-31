@@ -1,0 +1,40 @@
+{{extend 'layout.html'}}
+
+<style type="text/css">
+    table {
+        margin-top: 5px;
+    }
+    td {
+        font-family: Arial, Helvetica, sans-serif;
+        vertical-align: top;
+        color: #777;
+        font-size: 0.9em;
+        padding: 0px 5px 0px 0px;
+        text-align: left;
+    }
+    input {
+        margin-bottom: 5px;
+    }
+    textarea {
+        width: 390px;
+    }
+</style>
+
+<div class="post">
+    <h2>{{=upload_title}}</h2>
+
+    <div class="entry">
+        <div id="post_form">{{=upload_form}}</div>
+    </div>
+</div>
+
+
+<div class="post">
+    <h2>{{=download_title}}</h2>
+
+    <div class="entry">
+        <div id="post_form">
+            {{=download_form}}
+        </div>
+    </div>
+</div>

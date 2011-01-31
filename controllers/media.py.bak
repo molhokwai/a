@@ -4,7 +4,11 @@ from types import *
 ## CONTROLLER INITIALIZATION
 ###################################    
 exec('from applications.%s.modules import common' % this_app)
-page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_config, app_details)
+try:
+    app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped})
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
+except Exception, ex:
+    log_wrapped('Er', ex)
 
 # media_photos module
 exec('from applications.%s.modules import media_photos' % this_app)
@@ -325,4 +329,6 @@ def twitter():
     exec('from applications.%s.modules import twitter' % request.application)
     twitter = twitter.Manager(_username)
     _items = twitter.search_tweets(_hashes)
-    return response.json(_items)
+
+    import gluon.contrib.simplejson as simplejson
+    return simplejson.dumps(_items)

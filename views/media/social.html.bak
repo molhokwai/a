@@ -51,8 +51,8 @@
                             var clearSpan=document.createElement('span');
                             
                             img.src=json[i].profile_image_url;
-                            $(textSpan).append('"'+json[i].text+'"');
-                            $(userEm).append(' from '+json[i].from_user);
+                            $(textSpan).append('"'+json[i].text+'" ');
+                            $(userEm).append('from '+json[i].from_user);
 
                             while(json[i].source.indexOf('&lt;')>=0){ json[i].source=json[i].source.replace('&lt;', '<'); }
                             while(json[i].source.indexOf('&gt;')>=0){ json[i].source=json[i].source.replace('&gt;', '>'); }

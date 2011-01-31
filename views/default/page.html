@@ -1,5 +1,5 @@
 {{if not nake:}}
-    {{extend 'layout.html'}}
+    {{extend 'themes/%s/layout.html' % response.theme}}
 {{pass}}
 
 {{if post.is_translated:}}

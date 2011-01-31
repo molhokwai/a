@@ -1,0 +1,20 @@
+{{extend 'layout.html'}}
+
+<BLOCKQUOTE>Erreur<BR/>
+    {{if ticket:}}<b>Erreur interne</b>, ticket: <a href="/admin/default/ticket/{{=ticket}}" target="_blank">{{=ticket}}</a><br/>{{pass}}
+    {{if code=='400':}}<b>Page non trouvée</b>, la page est introuvable...<br/>
+    {{else:}}{{if code=='403':}}<b>Non autorisé</b>, hummmm... besoin de permissions supplémentaires, ou ceci serait-il une erreur?<br/>
+    {{else:}}{{if code=='500':}}<b>Erreur serveur</b>, il s&#39;est passé quelque chose d&#39;anormal...<br/>{{pass}}{{pass}}{{pass}}
+    {{if requested_uri:}}<b>Requête (uri)</b>: {{=requested_uri}}{{pass}}
+    {{if err!='':}}<b>Erreur</b>: {{=err}}{{pass}}
+</BLOCKQUOTE>
+<BR>
+<BR>
+<BLOCKQUOTE>Error<BR/>
+    {{if ticket:}}<b>Internal error</b>, ticket: <a href="/admin/default/ticket/{{=ticket}}" target="_blank">{{=ticket}}</a>{{pass}}<br/>
+    {{if code=='400':}}<b>Page Not Found</b>, the page is nowhere to be found...
+    {{else:}}{{if code=='403':}}<b>Permission denied</b>, hummmm... need extra permissions, or do we have an error here?
+    {{else:}}{{if code=='500':}}<b>Server error</b>, something baaad happened...{{pass}}{{pass}}{{pass}}<br/>
+    {{if requested_uri:}}<b>Requested Uri</b>: {{=requested_uri}}{{pass}}
+    {{if err!='':}}<b>Error</b>: {{=err}}{{pass}}
+</BLOCKQUOTE>

@@ -1,4 +1,4 @@
-{{extend 'layout.html'}}
+{{extend 'themes/%s/layout.html' % response.theme}}
 
 <BLOCKQUOTE>Erreur<BR/>
     {{if ticket:}}<b>Erreur interne</b>, ticket: <a href="/admin/default/ticket/{{=ticket}}" target="_blank">{{=ticket}}</a><br/>{{pass}}
