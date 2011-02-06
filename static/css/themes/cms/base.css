@@ -120,7 +120,11 @@ body {
   max-width:410px;
   margin: 15px 0 0 15px;
   padding: 0 6px 0 10px;
-  border-left: 1px solid #231212;
+  border-left: 0.2em solid #FAFFFF;
+}
+
+.page .statement div.float-left span.content-text{
+    margin-top:-3%;
 }
 
 .note {
@@ -176,7 +180,7 @@ a:hover {
 h1 {
   padding: 0.9% 0;
   color: brown;
-  font-size:1.25em;
+  font-size:1.4em;
   text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF;
 }
 h2 {

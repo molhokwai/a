@@ -93,7 +93,8 @@ var focus=function(cmd){
     switch(cmd){
         case 'form':
             if ($('form:visible:last')){
-                if ($($('form:visible:last')).formFirstField) {
+                if (typeof($($('form:visible:last')).formFirstField)=='function'
+                     && $($('form:visible:last')).formFirstField()) {
                     $($('form:visible:last')).formFirstField().focus();
                 }
                 else {
@@ -270,6 +271,7 @@ $(document).ready(function(){
     $('body').keyup(function(event){
       if (event.keyCode==17){
           if (ctrl_timeout!=null){
+              $('#cli_web').show();
               $('#_cmd').focus();
           }
           ctrl_timeout=setTimeout('clearTimeout(ctrl_timeout); ctrl_timeout=null;', ctrl_max_interval);

@@ -1,20 +1,11 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################
-class AppObjects:
-    details=None
-    config=None
-    log_wrapped=None
 
-app_objects=AppObjects()
-app_objects.details=app_details
-app_objects.config=app_config
-app_objects.log_wrapped=log_wrapped
-
-exec('from applications.%s.modules import common' % this_app)
 try:
-    #app_objects=Struct({'details':app_details,'config':app_config,'log_wrapped':log_wrapped})
-    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
+    exec('from applications.%s.modules import common' % this_app)
+    app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped})
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)    
 except Exception, ex:
     log_wrapped('Er', ex)
 
@@ -29,9 +20,19 @@ except Exception, ex:
 def index():
     if len(request.args)==0:
         if response.home_page:
-            redirect(URL(r=request,c='default',f='page',args=[response.home_page.id]))
+            redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
+        else:
+            redirect(URL(r=request, c='setup'))
     else:
-      return dict(posts = app_details.start_page_html)
+      if a_convert.to_int(request.args[0]):
+          return dict(posts = db(db.posts.id == int(request.args[0])).select())
+      else:
+          posts=db(db.posts.post_title == request.args[0]).select()
+          if not posts:
+              posts = response.posts.filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0)
+          return dict(posts = posts)
+          
+      
 
 # The post page
 # Shows the entire post, the comments, and the comment form
@@ -61,14 +62,18 @@ def page():
             if a_convert.to_int(request.args[0]):
                 post = db(db.posts.id == int(request.args[0])).select()[0]
             else:
-                post = db(db.posts.post_title == request.args[0]).select()[0]
-                        
+                post = db(db.posts.post_title == request.args[0]).select()
+                if not post:
+                    post = response.pages.filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0)
+                if post: post=post[0]
+            
             nake=(request.args[len(request.args)-1]=='nake'
                  or post.post_text.find('<!-- nake page -->')>=0)
         
             return dict(post = post, nake  = nake)
         else:
             redirect(URL(r = request,f = 'index'))
+            
     except Exception, ex: 
         log_wrapped('Error', str(ex))
         session.flash=T("(Caught) Error occured: %(err)s ", dict(err=str(ex)))
@@ -87,7 +92,7 @@ def category():
         cat_name = request.args[0]
         cat = db(db.categories.category_name == cat_name
                     ).select(db.categories.ALL)[0]
-        _posts=[]
+        posts=[]
         try:
             posts = db((db.posts.post_type == 'post') &
                        (db.posts.post_category == cat.id) &

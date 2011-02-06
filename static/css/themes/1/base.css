@@ -50,3 +50,7 @@ iframe[name='photo_frame'] {
     background-image: -moz-linear-gradient(top, rgb(75,75,75), rgb(0,0,0));
     filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=rgb(75,75,75),endColorstr=rgb(0,0,0));        
 }
+
+.page h2.nav {
+    display:none;
+}

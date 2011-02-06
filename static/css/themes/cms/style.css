@@ -11,8 +11,11 @@
 }
 
 #cse-search-form {
-  width: 60%;
-  margin-top: -1%;
+  width: 100%;
+}
+
+#utilities {
+  min-height:4em;
 }
 
 .page h2, .page h2 em {
@@ -251,7 +254,6 @@ h2#comments, h2#respond {
   context : google page elements
 **********************/
 #google_translate_element {
- float: left;
  text-align: left;
  margin-left:1%;
 }

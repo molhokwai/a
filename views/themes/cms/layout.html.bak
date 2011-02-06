@@ -26,6 +26,14 @@
     <script type="text/javascript">
       <!-- /* this adds sfhover class to menu li items to make IE6 work */ jQuery(document).ready(function(){jQuery('li.web2py-menu-expand').hover(function ()     {jQuery(this).addClass('sfhover');},function () {jQuery(this).removeClass('sfhover');});});//-->
     </script>
+    <script type="text/javascript">
+      var server={
+          request : {
+              application : '{{=this_app}}'
+          },
+          pages : []
+      };
+    </script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
@@ -35,21 +43,27 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            setTimeout("$('#google_translate_element').hide('slow');$('#cse-search-form').hide('slow');$('#cli_web').hide('slow');", 300);
+            $('#google_translate_element').hide();
+            $('#cse-search-form').hide();
+            $('#cli_web').hide('slow');
         });
-
+        
+        var huTi=null;
         var toggleUtilities=function(a){
-            var selectors=[
-                '#google_translate_element',
-                '#cse-search-form',
-                '#cli_web',
-            ];
+            var selectors={
+                '#google_translate_element' : '.goog-te-combo';
+                '#cse-search-form' : '.gsc-input',
+                '#cli_web' : '#_cmd'
+            };
             
-            for(var i=0;i<selectors.length;i++){
-                if(a.href.indexOf(selectors[i])>=0) 
-                    $(selectors[i]).show();
-                else 
-                    $(selectors[i]).hide();
+            for(k in selectors){
+                if(a.href.indexOf(k)>=0 && !$(k).is(':visible')){
+                    $(k).show();
+                    $(selectors[k]).focus();
+                }
+                else{
+                    $(k).hide();
+                }
             }
         };
     </script>    
@@ -59,7 +73,6 @@
       <a href="#google_translate_element" onclick="toggleUtilities(this);" class="float-left">{{=T('translation')}} | </a>
       <a href="#cse-search-form" onclick="toggleUtilities(this);" class="float-left"> {{=T('search (google)')}} | </a>
       <a href="#cli_web" onclick="toggleUtilities(this);" class="float-left"> <em>{{=T('command line')}} | </em></a>
-      <a href="#none" onclick="toggleUtilities(this);" class="float-left"> ({{=T('hide all')}})</a>
 
        <span id="user-menu">
          {{ if 'auth' in globals():}}
@@ -75,45 +88,51 @@
 
       <div class="clear"></div>
                     
-      <div id="google_translate_element"></div>
-      <script>
-        function googleTranslateElementInit() {
-          new google.translate.TranslateElement({
-            pageLanguage: '{{=current_language[:2]}}'
-          }, 'google_translate_element');
-        }
-      </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     
-      <!-- end #google_translate_element-->    
+      <div id="utilities" class="padt2pc">
 
-      <div class="clear"></div>
-      
-      <div id="cli_web">
-        <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">
-            <input type="text" id="_cmd" name="_cmd" />
-            {{if session.cli_web_flash:}}<font class="flash small">{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}</font>{{pass}}
-        </form>
+          <div id="google_translate_element"></div>
+          <script>
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: '{{=current_language[:2]}}'
+              }, 'google_translate_element');
+            }
+          </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     
+          <!-- end #google_translate_element-->    
+    
+          <div class="clear"></div>
+          
+          <div id="cli_web">
+            <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">
+                <input type="text" id="_cmd" name="_cmd" />
+                {{if session.cli_web_flash:}}<font class="flash small">{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}</font>{{pass}}
+            </form>
+          </div>
+          <!-- end #cli_web -->
+    
+          <div id="cse-search-form">Loading</div>
+          <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+          <script type="text/javascript">
+            google.load('search', '1', {language : '{{=current_language[:2]}}'});
+            google.setOnLoadCallback(function() {
+              var customSearchControl = new google.search.CustomSearchControl('014007428035866690530:qpoerqfcidu');
+              customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+              var options = new google.search.DrawOptions();
+              options.setSearchFormRoot('cse-search-form');
+          
+              options.setAutoComplete(true);
+              customSearchControl.draw('cse', options);
+            }, true);
+          </script>
+          <!-- end #cse-search-form -->
+    
       </div>
-      <!-- end #cli_web -->
+      <!-- end #utilities -->
 
     </div>
     <!-- end #top-bar-->
 
     <div class="clear"></div>
-
-    <div id="cse-search-form">Loading</div>
-    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
-    <script type="text/javascript">
-      google.load('search', '1', {language : '{{=current_language[:2]}}'});
-      google.setOnLoadCallback(function() {
-        var customSearchControl = new google.search.CustomSearchControl('014007428035866690530:qpoerqfcidu');
-        customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-        var options = new google.search.DrawOptions();
-        options.setSearchFormRoot('cse-search-form');
-      
-        options.setAutoComplete(true);
-        customSearchControl.draw('cse', options);
-      }, true);
-    </script>
     
     <div id="wrapper">
         <span id="logo">
@@ -250,7 +269,7 @@
                       <a class="addthis_button_google"></a>
                       <a class="addthis_button_twitter"></a>
                     </div>
-                    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4c0f94e418ef2928"></script>
+                    <!--script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4c0f94e418ef2928"></script-->
                     <!-- AddThis Buttons END -->
                     <div class="clear"></div>
                   </div>

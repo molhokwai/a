@@ -165,3 +165,7 @@ timestamp: 2011-01-14T14:34:48.094271
 ALTER TABLE posts ADD application CHAR(512);
 timestamp: 2011-01-31T14:30:22.667774
 ALTER TABLE app_config ADD app_themes TEXT;
+timestamp: 2011-02-06T10:40:10.430587
+ALTER TABLE posts ADD post_posts TEXT;
+timestamp: 2011-02-06T11:15:15.161280
+ALTER TABLE app_config ADD app_init TEXT;

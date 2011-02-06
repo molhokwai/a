@@ -1,0 +1,20 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/setup.py'
+p4
+sS'code'
+p5
+S"###################################\n## CONTROLLER INITIALIZATION\n###################################    \nexec('from applications.%s.modules import common' % this_app)\napp_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped})\ncommon.app_init(request, response, session, cache, T, db, app_objects)\npage_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)\n\ntry: pass\nexcept Exception, ex:\n    log_wrapped('Er', ex)\n\n###################################\n## CONTROLLER FUNCTIONS\n###################################    \n\n@auth.requires_login()\ndef index():\n    if auth.user.email in administrators_emails:\n        auth.user.is_admin=True\n        for _email in administrators_emails:\n            db(db.auth_user.email==_email).update(is_admin=True)    \n        \n        form=SQLFORM(db.app_config, app_config)\n        if form.accepts(request.vars, session):\n            session.flash=T('Application setup/configuration done')\n            redirect(URL(r=request, c='default'))\n    else:\n        form=FORM(DIV(T('Your email is not in the administrators\\' list.')))\n    return dict(form = form)\n\nresponse._vars=response._caller(index)\n"
+p6
+sS'snapshot'
+p7
+(dp8
+sS'traceback'
+p9
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/controllers/setup.py", line 7, in <module>\n    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)\n  File "applications/a/modules/common.py", line 148, in controller_init\n    response.posts = db().select(posts.ALL)\nNameError: global name \'posts\' is not defined\n'
+p10
+s.

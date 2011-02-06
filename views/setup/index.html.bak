@@ -1,16 +1,4 @@
+
 {{extend 'layout.html'}}
-<style type="text/css">
-    form table tr {
-        margin-top: 2%;
-    }
-    form label {
-        display: inline;
-        max-width: 100%;
-    }
-    form ul li {
-        list-style-type: none;
-        float: left;
-    }
-</style>
-{{=H2(T('setup/configuration'))}}
-{{=form}}
+<h1>This is the setup/index.html template</h1>
+{{=BEAUTIFY(response._vars)}}

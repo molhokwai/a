@@ -18,7 +18,7 @@ else:                                         # else use a normal relational dat
 #################################
 
 ## Administrators
-administrators_emails=['molhokwai@gmail.com']
+administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com']
 
 ## Table app config
 db.define_table('app_config',
@@ -72,7 +72,7 @@ service=Service(globals())           # for json, xml, jsonrpc, xmlrpc, amfrpc
 #     mail.settings.login='username:password'       # your credentials or None
 
 auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
-auth.settings.table_user = db.define_table('auth_user',    
+auth.settings.table_user = db.define_table('auth_user',
     Field('registration_id', length=512,
           label=T('registration id'),
           requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
@@ -161,6 +161,7 @@ db.define_table('posts',
     SQLField('show_in_menu',  'boolean', required=True, default=False),
     SQLField('is_translated', 'boolean', required=True, default=False),
     SQLField('application', 'string', default=request.application),
+    SQLField('post_posts', 'list:string'),
     SQLField('post_attributes_json', 'text', required=True, 
             default="""{
                 "content_is" : {

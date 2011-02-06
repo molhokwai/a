@@ -266,7 +266,6 @@ def picasa():
     
     ## PUBLIC SECTION
         if area == 'gallery':
-            log_wrapped('request.args[0]', request.args[0])
             recent=picasa_manager.get_recent_photos()
             gallery=picasa_manager.get_album_gallery()
             return dict(nake=None, area=area, item=None, recent=recent, gallery=gallery)

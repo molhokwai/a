@@ -1,17 +1,33 @@
 {{if not nake:}}
-
-    {{extend 'layout.html'}}
-
+    {{extend 'themes/%s/layout.html' % response.theme}}
 {{pass}}
 
-{{if post.is_translated:}}
-    {{include "utilities/language_choice_bar.html"}}
-{{pass}}
-<!--h2><em>{{=T("you are here")}}:</em> {{=post.post_title}}</h2 -->
+<div class="page">
 
-{{if post.is_translated:}}
-    {{=XML(T(post.post_text_TCode))}}
-{{else:}}
-    {{=XML(post.post_text)}}
-{{pass}}
-{{if session.authorized:}}<a href="/{{=request.application}}/default/edit/page/{{=post.id}}" class="color-transparent">{{=T("Edit this entry")}}.</a>{{pass}}
+    {{if post:}}
+        {{if post.is_translated:}}
+            {{include "utilities/language_choice_bar.html"}}
+        {{pass}}
+        <h2 class="nav"><em>{{=T("you are here")}}:</em> {{=post.post_title}}</h2>
+        
+        {{if post.is_translated:}}
+            {{=XML(T(post.post_text_TCode))}}
+        {{else:}}
+            {{=XML(post.post_text)}}
+        {{pass}}
+        
+        {{if post.post_posts:}}
+            {{Pr=P(T('related entries:'))}}
+            {{for p in posts:}}
+                {{Pr.append(A(T(p.post_title), _href=URL(r=request, f='post', args=[p.id])))}}
+            {{pass}}
+            {{=Pr}}
+        {{pass}}
+        
+        
+        {{if session.authorized:}}<a href="/{{=request.application}}/default/edit/page/{{=post.id}}" class="color-transparent">{{=T("Edit this entry")}}.</a>{{pass}}
+    {{else:}}
+        {{=T('No entry found...')}}
+    {{pass}}
+    
+</div>

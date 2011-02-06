@@ -40,7 +40,7 @@ a:visited {
     color: rgb(255,254,253);
 }
 
-.iframe[name='photo_frame'] {
+iframe[name='photo_frame'] {
     background-color: rgb(255, 255, 255);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(180,180,180)), color-stop(1, rgb(255,255,255)));
     background-image: -moz-linear-gradient(top, rgb(180,180,180), rgb(255,255,255));

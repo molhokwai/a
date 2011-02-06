@@ -1,10 +1,12 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################    
-exec('from applications.%s.modules import common' % this_app)
+
 try:
+    exec('from applications.%s.modules import common' % this_app)
     app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped})
-    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
+    common.app_init(request, response, session, cache, T, db, app_objects)
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)    
 except Exception, ex:
     log_wrapped('Er', ex)
 

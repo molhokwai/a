@@ -18,13 +18,17 @@ class PageHelper():
 
 ###################################
 ## METHODS
-###################################    
-def init_app(request, response, session, cache, T, db, auth_users, app_objects):
+###################################
+def app_init(request, response, session, cache, T, db, app_objects):
     app_details = app_objects.details
     app_config = app_objects.config
+    log_wrapped=app_objects.log_wrapped
+
+    if not response.auth_users:
+        response.auth_users=db().select(db.auth_user.ALL)
     
     """Application first run initialization"""
-    for au in auth_users:
+    for au in response.auth_users:
         if au.email=='anonymous@molhokwai.net':response.anon_user=au
     if response.anon_user is None:
         response.anon_user_id=db.auth_user.insert(
@@ -36,20 +40,23 @@ def init_app(request, response, session, cache, T, db, auth_users, app_objects):
         response.anon_user=db(db.auth_user.id==response.anon_user_id).select()[0]
 
     try:
-        initial_posts={
-            'a_home'           : 'home',
-            'a_help'           : 'help',
-            'acknowledgements' : 'acknowledgements'
-        }
-        for post_title in initial_posts:
+        p_home_k=app_details.init_app_config['pages']['home_k']
+        p_help_k=app_details.init_app_config['pages']['help_k']
+        initial_posts=[
+            p_home_k,
+            p_help_k,
+            'acknowledgements'
+        ]
+        for i in range(len(initial_posts)):
+            post_title=initial_posts[i]            
             if not db(db.posts.post_title==post_title).select():
-                post_text=app_details.init_app_config['pages'][initial_posts[post_title]]
+                post_text=app_details.init_app_config['pages'][post_title]
                 db.posts.insert(
                     post_type='page',
                     post_title=post_title,
                     post_text=post_text,
                     show_in_menu=True
-                    )
+                )
         initial_links={
             'media / picasa / gallery'                           : '/%s/media/picasa/gallery' % request.application,
             'manage media / manage picasa albums / manage photos': '/%s/media/picasa/albums' % request.application,
@@ -89,24 +96,24 @@ def user_authorization(request, response, session, cache, T, db, auth):
                                         display_name=display_name,email=auth.user.email))
     session.authorized=auth.user.is_admin
 
-def home_page(response, page_helper, _pages):
+def home_page(response, page_helper, _pages, request, T):
     """gets the home page, if one created.
-        Convention over configuration: Home page is the one with title T('a_home'),
+        Convention over configuration: Home page is the one with title T('%s_home' % request.application),
         The corresponding eventual language translation of 'home'.
         
         TODO: as proprty in a configuration framework (see if pypress4gae offers home/index page
         configuration, and if so eventually switch to it)
     """
     if response.menu:
-        page_helper._title='a_home'
+        page_helper._title=T('%s_home' % request.application)
         return filter(page_helper.get_page_by_title,_pages)
 
-def help_page(response, page_helper, _pages):
+def help_page(response, page_helper, _pages, request, T):
     """Gets the help page, if one created
         See home_page
     """
     if response.menu:
-        page_helper._title='a_help'
+        page_helper._title=T('%s_help' % request.application)
         return filter(page_helper.get_page_by_title,_pages)
 
 
@@ -117,13 +124,11 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     app_details = app_objects.details
     app_config = app_objects.config
     log_wrapped = app_objects.log_wrapped
+
+    if not response.auth_users:
+        response.auth_users=db().select(db.auth_user.ALL)
     
     # This sets the session authorization values
-    auth_users=db().select(db.auth_user.ALL)
-    response.auth_users=auth_users
-    
-    init_app(request, response, session, cache, T, db, auth_users, app_objects)
-    
     if (not auth.user is None and not session.user_authorization_done):
         user_authorization(request, response, session, cache, T, db, auth)
         session.user_authorization_done=True
@@ -137,6 +142,9 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     response.title = app_details.title
     response.keywords = app_details.keywords
     response.description = app_details.description
+
+    # All posts
+    response.posts = db().select(db.posts.ALL)
     
     # This dynamically adds the pages to the menu
     _pages = []
@@ -175,11 +183,11 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     post_helper=PageHelper()
     
     # home page
-    _home_page=home_page(response, page_helper, _pages)
+    _home_page=home_page(response, page_helper, _pages, request, T)
     response.home_page=_home_page[0] if (_home_page and len(_home_page)>0) else None
 
     # help page
-    _help_page=help_page(response, page_helper, _pages)
+    _help_page=help_page(response, page_helper, _pages, request, T)
     response.help_page=_help_page[0] if (_help_page and len(_help_page)>0) else None
         
     # This returns all the categories and their post count
@@ -230,7 +238,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     
     response.theme = '0'
     if request.application in response.themes:
-        request.application = response.theme
+        response.theme = request.application
 
     if request.vars.theme:
         response.theme = request.vars.theme

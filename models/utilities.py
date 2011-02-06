@@ -4,13 +4,17 @@
 ## APPLICATION DETAILS, COMMON'Z & UTILITIES
 #########################################################################
 
+p_help_k=T('%(app)s_help', dict(app=request.application))
+p_home_k=T('%(app)s_home', dict(app=request.application))
 class AppDetails():
     title = T("molhokwai.net - 'a' cm/dms"), 
     keywords = T("blog, weblog, journal, web, log, web2py, pypress, cms, dms, simple, lightweight, straight-forward, direct, programming, programmer"),
     description = T("molhokwai.net - 'a' cm/dms, lightweight, simple, straight & direct")
     init_app_config = {
         'pages' : {
-            'help' : """
+            'help_k' : T('%(app)s_help', dict(app=request.application)),
+            'home_k' : T('%(app)s_home', dict(app=request.application)),                                
+            p_help_k : """
                 Dbl Ctrl to access <i>command line</i> <small>(css-ly removed outline makes cursor faintly visible in chrome, but it's there)</small>
                 <br/>
                 <br/>
@@ -33,7 +37,7 @@ class AppDetails():
                 --------------------------------------------------------------------------------------------<br/>
                 idem, translated in available languages
             """,
-            'home' : """
+            p_home_k : """
                 <b>Command line interface<br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;<small>command based human machine interface basic cms</small>...
                 <br/>
