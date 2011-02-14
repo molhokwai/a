@@ -1,0 +1,71 @@
+        <style type="text/css">
+            #feed div.item div.item-content:first-letter {
+                font-size: 1.2em;
+                text-transform: capitalize;
+                font-weight: bold;
+            }
+        </style>
+        <script type="text/javascript">
+            var exclusions=[0];
+            $(document).ready(function(){
+                $.getJSON(
+                    'http://pipes.yahoo.com/pipes/pipe.run?_id=4ff08a643c6bf9dc6bca5d9da6120ed1&_render=json',
+                    function(json){
+                        for(var i=0;i<json.value.items.length;i++){
+                            if(!(i in exclusions)){
+                                var item=json.value.items[i];
+
+                                /* instances */
+                                var itemDiv=document.createElement('div');
+                                var h2=document.createElement('h2');
+                                var meta=document.createElement('span');
+                                var content=document.createElement('div');
+                                var links=document.createElement('span');
+                                var link=document.createElement('a');
+                                var origLink=document.createElement('a');
+
+                                /* head */
+                                itemDiv.id=item.guid;
+                                h2.innerHTML=item.title;
+
+                                /* subtitle, meta */
+                                meta.innerHTML=item.author + ' - ' + item.pubDate;
+
+                                /* content */
+                                content.innerHTML=item.description;
+                                
+                                /* links */
+                                link.innerHTML='link/lien';
+                                link.href=item.link;
+                                link.target='_blank';
+
+                                origLink.innerHTML='source';
+                                origLink.href=item['feedburner:origLink'];
+                                origLink.target='_blank';
+
+                                links.appendChild(link);
+                                links.appendChild(document.createTextNode(' - '));
+                                links.appendChild(origLink);
+
+                                /* all together and append */
+                                itemDiv.appendChild(h2);
+                                itemDiv.appendChild(meta);
+                                itemDiv.appendChild(content);
+                                itemDiv.appendChild(links);
+
+                                /* styles */
+                                itemDiv.className+='item margt4pc';
+                                content.className+='item-content';
+                                meta.className+='meta display-block width100pc padl5pc italic font-s07em lowercase margb1pc';
+                                links.className+='links display-block width100pc text-alignr italic font-s09em lowercase';
+                                
+                                document.getElementById('feed').appendChild(itemDiv);
+                            }
+                        }
+                    }
+                );
+            });
+        </script>
+       <div id="feed" class="first-letter">
+       </div> 
+
