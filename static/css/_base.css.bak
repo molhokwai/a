@@ -76,6 +76,7 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
 {
     color: transparent;
     text-decoration: none;
+    border-color: transparent;
 }
 
 /* BORDERS */
@@ -303,10 +304,10 @@ minh0 {
 }
 
 /* POSITION, DISPLAY*/
-.display-block, .display, show {
+.display-block, .display, .show {
     display: block;
 }
-.display-none, .no-display, hide {
+.display-none, .no-display, .hide {
     display: none;
 }
 .display-inline {
@@ -585,6 +586,12 @@ minh0 {
 }
 .bold {
     font-weight: bold;
+}
+.font-size05em, font-s05em {
+    font-size: 0.5em;
+}
+.font-size06em, font-s06em {
+    font-size: 0.6em;
 }
 .font-size07em, font-s07em {
     font-size: 0.7em;

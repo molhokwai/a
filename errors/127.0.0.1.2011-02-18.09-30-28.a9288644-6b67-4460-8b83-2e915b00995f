@@ -1,0 +1,823 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/models/utilities.py'
+p4
+sS'code'
+p5
+S'# coding: utf8\n\n#########################################################################\n## APPLICATION DETAILS, COMMON\'Z & UTILITIES\n#########################################################################\n\np_help_k=T(\'%(app)s_help\', dict(app=request.application))\np_home_k=T(\'%(app)s_home\', dict(app=request.application))\nclass AppDetails():\n    title = T("molhokwai.net - \'a\' cm/dms"), \n    keywords = T("blog, weblog, journal, web, log, web2py, pypress, cms, dms, simple, lightweight, straight-forward, direct, programming, programmer"),\n    description = T("molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct")\n    init_app_config = {\n        \'pages\' : {\n            \'help_k\' : T(\'%(app)s_help\', dict(app=request.application)),\n            \'home_k\' : T(\'%(app)s_home\', dict(app=request.application)),                                \n            p_help_k : """\n                Dbl Ctrl to access <i>command line</i> <small>(css-ly removed outline makes cursor faintly visible in chrome, but it\'s there)</small>\n                <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                Add links to pages to access the pages from the command line\n                --------------------------------------------------------------------------------------------<br/>\n                login <br/>\n                logout <br/>\n                add <br/>\n                edit <br/>\n                delete <br/>\n                submit <br/>\n                pages <br/>\n                links <br/>\n                root <br/>\n                help <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                idem, translated in available languages\n            """,\n            p_home_k : """\n                <b>Command line interface<br/>\n                &nbsp;&nbsp;&nbsp;&nbsp;<small>command based human machine interface basic cms</small>...\n                <br/>\n                <br/>\n                Dbl Ctrl to access <i>command line</i> <small>(css-ly removed outline makes cursor faintly visible in chrome, but it\'s there)</small><br/>\n                &nbsp;&nbsp;&nbsp;&nbsp;<small>*<b>eventually</b>, if the page has elligible primary content, search falls back on <img src="http://www.google.com/uds/css/small-logo.png" alt="Google(reg)"> search \n                if no <i>internally found</i> response</small>.<br/>\n                --------------------------------------------------------------------------------------------\n                <br/>\n                <br/>\n                login <br/>\n                logout <br/>\n                add <br/>\n                edit <br/>\n                delete <br/>\n                submit <br/>\n                pages <br/>\n                links <br/>\n                root <br/>\n                help <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                Add links to pages to access them from the command line<br/>\n                --------------------------------------------------------------------------------------------<br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                idem, translated in available languages            \n            """,\n            \'acknowledgements\' : """\n                <ul>\n                  <li><a href="http://www.web2py.org">web2py</a></li>\n                  <li><a href="http://code.google.com/appengine">google app engine</a></li>\n                  <li><a href="http://python.org">python</a></li>\n                  <li><a href="http://jquery.org">jquery</a></li>\n                  <li><a href="http://www.google.be/search?sourceid=chrome&amp;ie=UTF-8&amp;q=pypress">pypress</a></li>\n                  <li><a href="http://www.google.be/search?sourceid=chrome&amp;ie=UTF-8&amp;q=pypress#sclient=psy&amp;hl=nl&amp;source=hp&amp;q=acknowledgements:everything+up+to+now&amp;aq=f&amp;aqi=&amp;aql=&amp;oq=&amp;gs_rfai=&amp;pbx=1&amp;psj=1&amp;fp=1eb96132f70894e9">...</a> </li>\n                </ul>\n                <br>\n                <p class="text-alignr font-size09em italic width60pc">(if you find there is missing acknowledgedment, an e-mail to <a href="mailto:admin@molhokwai.net" title="[GMCP] Compose a new mail to admin@molhokwai.net" \n                onclick="window.open(\'https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=admin@molhokwai.net\',\'Compose new message\',\'width=640,height=480\');return false" rel="noreferrer">admin@molhokwai.net</a> \n                is more than welcome)"</p>                \n            """\n        }\n    }\napp_details=AppDetails()\nif app_config and app_config.APP_METAS:\n    app_details.title=app_config.APP_METAS[0]\n    app_details.keywords=app_config.APP_METAS[1]\n    app_details.description=app_config.APP_METAS[2]\n        \nclass aConvert():\n    def to_int(self, value):\n        """Attention: Eventually returns 0 which \'equals\' the False ValueError return"""\n        try:\n            return int(value)\n        except ValueError:\n            return False\na_convert=aConvert()\n\n# session manager\nclass SessionManager():\n    @property\n    def default_page(self):\n        return \'/%s/company/index\' % this_app\n\n    def company_id(self,value=None):\n        if not value is None:\n            session.company_id=value\n        if session.company_id:\n            args={ \'icon_url\' : db(db.companies.id==session.company_id).select()[0].icon_url }\n            company=Struct(**args)\n        return session.company_id\n        \n    def user_is_in_company(self, company_id=None):\n        ## TODO: method in company management class, and this session_manager calling it...\n        if company_id is None:\n            company_id=self.company_id()\n        if not auth.user: \n            return False\n        else:\n            res=db(db.companies.user==auth.user.id).select()\n            return len(res)>0\n# instance\nsession_manager=SessionManager()\n\n# common\nclass Common():\n    """def get_small_icon_url(self, icon_url):\n        _segs=icon_url.split(\'.\')\n        _ext=_segs[len(_segs)-1]\n        return icon_url.replace(\'.%s\' % _ext,\'_small.%s\' % _ext) \n    """    \n    def get_shortened_text(self, _text, _max):\n        if len(_text)>_max:\n            return \'%s...\' % _text[:(_max-3)]\n        else:\n            return _text\n                            \n    def redirect(self, url):\n        """in case of redirection to an inner frame"""\n        inner_frames_args=[\'page-box\', \'side-box\', \'frame-box\', \'is_iframe\']\n        for ifa in inner_frames_args:\n            if url.lower().find(ifa.lower())>0:\n                redirect(session_manager.default_page)\n                break        \n        redirect(url)\n\n    def get_embed(self, provider, media_key, width=425, height=344):\n        embed=None\n        if provider==\'youtube\':\n            embed=\'    <object width="%(width)i" height="%(height)i">\'\n            embed+=\'      <param name="movie" value="http://www.youtube.com/v/%(media_key)s?fs=1"></param>\'\n            embed+=\'      <param name="allowFullScreen" value="true"></param>\'\n            embed+=\'      <param name="allowScriptAccess" value="always"></param>\'\n            embed+=\'      <embed src="http://www.youtube.com/v/%(media_key)s?fs=1"\'\n            embed+=\'      type="application/x-shockwave-flash"\'\n            embed+=\'      allowfullscreen="true"\'\n            embed+=\'      allowscriptaccess="always"\'\n            embed+=\'      width="%(width)i" height="%(height)i">\'\n            embed+=\'      </embed>\'\n            embed+=\'   </object>\'\n        return embed % {\'width\':width, \'height\':height, \'media_key\':media_key}\n        \n#instance\ncommon=Common()\n\n# utilities\nclass Struct:\n    def __init__(self, **entries): \n        self.__dict__.update(entries)\n\n# utilities\nclass Utilities():\n    def reverse_numeric_row_id(self, x, y):return y.id - x.id\n\n    def shorten_and_randomize(self, _list, nr):\n        import random\n        random.shuffle(_list)\n        if len(_list)>nr:\n            return _list[:nr]\n        else:\n            return _list        \n# instance\nutilities=Utilities()\n\n########################\n## Print, Log Wrapper\n########################\n\ndef print_wrapped(_name, _value):\n    print \'-------| %s : %s\' % (repr(_name), repr(_value))\n\ndef log_wrapped(_name, _value):\n    if request.env.web2py_runtime_gae:\n        import logging\n        logging.info(\'-------| %s : %s\' % (repr(_name), repr(_value)))\n    else:\n        print_wrapped(_name, _value)\n        \n#########################################################################\n## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting\n#########################################################################\nexpressions={\n  \'url_find\' : [\n"([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\\\.)[-A-Za-z0-9\\\\.]+)(:[0-9]*)?/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\'\\\\.}>\\\\),\\\\\\"]",\n"([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\\\.)[-A-Za-z0-9\\\\.]+)(:[0-9]*)?",\n"(~/|/|\\\\./)([-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]|\\\\\\\\)+",\n"\'\\\\<((mailto:)|)[-A-Za-z0-9\\\\.]+@[-A-Za-z0-9\\\\.]+"\n  ],\n  \'rel_url_and_end_tags_find\' : ["[0-9]{0,1}/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\'\\\\.}>\\\\),\\\\\\"]"]\n}\n\nimport re\nurl_finders = [\nre.compile(expressions[\'url_find\'][0]),\nre.compile(expressions[\'url_find\'][1]),\nre.compile(expressions[\'url_find\'][2]),\nre.compile(expressions[\'url_find\'][3]),\n]\nrel_url_and_end_tags_finders = [\nre.compile(expressions[\'rel_url_and_end_tags_find\'][0]),\n]\n'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__hash__'
+p11
+S"<method-wrapper '__hash__' of exceptions.NameError object at 0x911a7ec>"
+p12
+sS'__setattr__'
+p13
+S"<method-wrapper '__setattr__' of exceptions.NameError object at 0x911a7ec>"
+p14
+sS'__reduce_ex__'
+p15
+S'<built-in method __reduce_ex__ of exceptions.NameError object at 0x911a7ec>'
+p16
+sS'__getslice__'
+p17
+S"<method-wrapper '__getslice__' of exceptions.NameError object at 0x911a7ec>"
+p18
+sS'__getitem__'
+p19
+S"<method-wrapper '__getitem__' of exceptions.NameError object at 0x911a7ec>"
+p20
+sS'__setstate__'
+p21
+S'<built-in method __setstate__ of exceptions.NameError object at 0x911a7ec>'
+p22
+sS'__reduce__'
+p23
+S'<built-in method __reduce__ of exceptions.NameError object at 0x911a7ec>'
+p24
+sS'__str__'
+p25
+S"<method-wrapper '__str__' of exceptions.NameError object at 0x911a7ec>"
+p26
+sS'args'
+p27
+S'("name \'app_config\' is not defined",)'
+p28
+sS'__getattribute__'
+p29
+S"<method-wrapper '__getattribute__' of exceptions.NameError object at 0x911a7ec>"
+p30
+sS'__class__'
+p31
+S"<type 'exceptions.NameError'>"
+p32
+sS'__delattr__'
+p33
+S"<method-wrapper '__delattr__' of exceptions.NameError object at 0x911a7ec>"
+p34
+sS'__repr__'
+p35
+S"<method-wrapper '__repr__' of exceptions.NameError object at 0x911a7ec>"
+p36
+sS'__dict__'
+p37
+S'{}'
+p38
+sS'__doc__'
+p39
+S"'Name not found globally.'"
+p40
+sS'__init__'
+p41
+S"<method-wrapper '__init__' of exceptions.NameError object at 0x911a7ec>"
+p42
+sS'__new__'
+p43
+S'<built-in method __new__ of type object at 0x8239980>'
+p44
+ssS'evalue'
+p45
+S"name 'app_config' is not defined"
+p46
+sS'request'
+p47
+(dp48
+S'function'
+p49
+S"'error'"
+p50
+sS'body'
+p51
+S'<cStringIO.StringO object at 0x911aca0>'
+p52
+sS'wsgi'
+p53
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p54
+sS'extension'
+p55
+S"'html'"
+p56
+sS'vars'
+p57
+S"<Storage {'ticket': 'cms/127.0.0.1.2011-02-18.09...: '/cms/default/error', 'requested_uri': 'None'}>"
+p58
+sS'cid'
+p59
+S'None'
+p60
+sS'url'
+p61
+S'<gluon.html.XML object at 0x911afec>'
+p62
+sS'raw_extension'
+p63
+S'None'
+p64
+sg27
+S'[]'
+p65
+sS'controller'
+p66
+S"'default'"
+p67
+sS'cookies'
+p68
+S"<SimpleCookie: session_id_a='127.0.0.1-6ba39852-...d99769a-4fa4-4455-b547-39c9e95d24f3' theme='cms'>"
+p69
+sS'application'
+p70
+S"'cms'"
+p71
+sS'ajax'
+p72
+S'False'
+p73
+sS'client'
+p74
+S"'127.0.0.1'"
+p75
+sS'env'
+p76
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x8fb7bc4>}>"
+p77
+sS'raw_args'
+p78
+S'None'
+p79
+sS'get_vars'
+p80
+S"<Storage {'ticket': 'cms/127.0.0.1.2011-02-18.09...: '/cms/default/error', 'requested_uri': 'None'}>"
+p81
+sS'folder'
+p82
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/'"
+p83
+sS'now'
+p84
+S'datetime.datetime(2011, 2, 18, 9, 30, 28, 409845)'
+p85
+sS'post_vars'
+p86
+S'<Storage {}>'
+p87
+ssS'frames'
+p88
+(lp89
+(dp90
+S'file'
+p91
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p92
+sS'dump'
+p93
+(dp94
+S'environment'
+p95
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x90ef2fc>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, 'CRYPT': <class 'gluon.validators.CRYPT'>, ...}"
+p96
+sS'ccode'
+p97
+S'<code object <module> at 0x8f06d58, file "/home/...eb/applications/cms/models/utilities.py", line 7>'
+p98
+ssS'lnum'
+p99
+I188
+sS'lines'
+p100
+(dp101
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p102
+sI183
+S'        if type(code) == types.CodeType:'
+p103
+sI184
+S'            ccode = code'
+p104
+sI185
+S'        else:'
+p105
+sI186
+S'            ccode = compile2(code,layer)'
+p106
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p107
+sI189
+S'    except HTTP:'
+p108
+sI190
+S'        raise'
+p109
+sI191
+S'    except Exception:'
+p110
+ssS'call'
+p111
+S'(code="# coding: utf8\\n\\n################################...(expressions[\'rel_url_and_end_tags_find\'][0]),\\n]\\n", environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0x90ef2fc>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, \'CRYPT\': <class \'gluon.validators.CRYPT\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/models/utilities.py\')'
+p112
+sS'func'
+p113
+S'restricted'
+p114
+sa(dp115
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/models/utilities.py'
+p116
+sg93
+(dp117
+S'app_config'
+p118
+S'undefined'
+p119
+ssg99
+I94
+sg100
+(dp120
+I96
+S'    app_details.keywords=app_config.APP_METAS[1]'
+p121
+sI97
+S'    app_details.description=app_config.APP_METAS[2]'
+p122
+sI98
+S''
+sI89
+S'                is more than welcome)"</p>'
+p123
+sI90
+S'            """'
+p124
+sI91
+S'        }'
+p125
+sI92
+S'    }'
+p126
+sI93
+S'app_details=AppDetails()'
+p127
+sI94
+S'if app_config and app_config.APP_METAS:'
+p128
+sI95
+S'    app_details.title=app_config.APP_METAS[0]'
+p129
+ssg111
+S'()'
+p130
+sg113
+S'<module>'
+p131
+sasS'pyver'
+p132
+S'Python 2.5.1: /usr/local/bin/python'
+p133
+sS'session'
+p134
+(dp135
+S'auth'
+p136
+S'None'
+p137
+ssS'etype'
+p138
+S"<type 'exceptions.NameError'>"
+p139
+sS'date'
+p140
+S'Fri Feb 18 09:30:28 2011'
+p141
+sS'response'
+p142
+(dp143
+S'status'
+p144
+S'200'
+p145
+sg51
+S'<cStringIO.StringO object at 0x92603a0>'
+p146
+sg68
+S"<SimpleCookie: session_id_cms='127.0.0.1-7d99769a-4fa4-4455-b547-39c9e95d24f3'>"
+p147
+sS'_vars'
+p148
+S'None'
+p149
+sS'session_file'
+p150
+S"<open file '/home/herve/development/workspaces/m...4455-b547-39c9e95d24f3', mode 'rb+' at 0x8f06068>"
+p151
+sS'flash'
+p152
+S"''"
+p153
+sS'_custom_rollback'
+p154
+S'None'
+p155
+sS'session_id'
+p156
+S"'127.0.0.1-7d99769a-4fa4-4455-b547-39c9e95d24f3'"
+p157
+sS'headers'
+p158
+S"<Storage {'Expires': 'Fri, 18 Feb 2011 08:30:28 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p159
+sS'meta'
+p160
+S'<Storage {}>'
+p161
+sS'session_filename'
+p162
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-7d99769a-4fa4-4455-b547-39c9e95d24f3'"
+p163
+sS'postprocessing'
+p164
+S'[]'
+p165
+sS'menu'
+p166
+S'[]'
+p167
+sS'_view_environment'
+p168
+S"{'A': <class 'gluon.html.A'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, 'CRYPT': <class 'gluon.validators.CRYPT'>, 'DAL': <class 'gluon.dal.DAL'>, ...}"
+p169
+sS'session_id_name'
+p170
+S"'session_id_cms'"
+p171
+sS'_custom_commit'
+p172
+S'None'
+p173
+sS'_caller'
+p174
+S'<function <lambda> at 0x8fb7f44>'
+p175
+sS'files'
+p176
+S'[]'
+p177
+sS'view'
+p178
+S"'default/error.html'"
+p179
+ssS'locals'
+p180
+(dp181
+S'app_details'
+p182
+S'<__builtin__.AppDetails instance at 0x911aecc>'
+p183
+sS'OBJECT'
+p184
+S"<class 'gluon.html.OBJECT'>"
+p185
+sS'SQLDB'
+p186
+S"<class 'gluon.dal.DAL'>"
+p187
+sg134
+S"<Storage {'auth': None}>"
+p188
+sS'LINK'
+p189
+S"<class 'gluon.html.LINK'>"
+p190
+sS'BR'
+p191
+S"<class 'gluon.html.BR'>"
+p192
+sS'local_import'
+p193
+S'<function <lambda> at 0x91214fc>'
+p194
+sS'OPTGROUP'
+p195
+S"<class 'gluon.html.OPTGROUP'>"
+p196
+sS'PRE'
+p197
+S"<class 'gluon.html.PRE'>"
+p198
+sS'IS_INT_IN_RANGE'
+p199
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p200
+sS'IS_LOWER'
+p201
+S"<class 'gluon.validators.IS_LOWER'>"
+p202
+sS'IS_STRONG'
+p203
+S"<class 'gluon.validators.IS_STRONG'>"
+p204
+sS'p_home_k'
+p205
+S"<lazyT '%(app)s_home'>"
+p206
+sS'cache'
+p207
+S'<gluon.cache.Cache object at 0x911a54c>'
+p208
+sS'IS_IN_DB'
+p209
+S"<class 'gluon.validators.IS_IN_DB'>"
+p210
+sS'TAG'
+p211
+S'<gluon.html.__TAG__ object at 0x9421cc>'
+p212
+sS'SQLField'
+p213
+S"<class 'gluon.dal.Field'>"
+p214
+sS'BODY'
+p215
+S"<class 'gluon.html.BODY'>"
+p216
+sS'IS_DATE_IN_RANGE'
+p217
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p218
+sS'IFRAME'
+p219
+S"<class 'gluon.html.IFRAME'>"
+p220
+sS'URL'
+p221
+S'<function _URL at 0x9121ae4>'
+p222
+sS'P'
+S"<class 'gluon.html.P'>"
+p223
+sS'TFOOT'
+p224
+S"<class 'gluon.html.TFOOT'>"
+p225
+sS'XHTML'
+p226
+S"<class 'gluon.html.XHTML'>"
+p227
+sS'ON'
+p228
+S'True'
+p229
+sS'OL'
+p230
+S"<class 'gluon.html.OL'>"
+p231
+sS'TEXTAREA'
+p232
+S"<class 'gluon.html.TEXTAREA'>"
+p233
+sS'MENU'
+p234
+S"<class 'gluon.html.MENU'>"
+p235
+sS'EM'
+p236
+S"<class 'gluon.html.EM'>"
+p237
+sS'CODE'
+p238
+S"<class 'gluon.html.CODE'>"
+p239
+sS'HTTP'
+p240
+S"<class 'gluon.http.HTTP'>"
+p241
+sS'HR'
+p242
+S"<class 'gluon.html.HR'>"
+p243
+sS'IS_DATETIME'
+p244
+S"<class 'gluon.validators.IS_DATETIME'>"
+p245
+sS'STYLE'
+p246
+S"<class 'gluon.html.STYLE'>"
+p247
+sS'LABEL'
+p248
+S"<class 'gluon.html.LABEL'>"
+p249
+sS'CLEANUP'
+p250
+S"<class 'gluon.validators.CLEANUP'>"
+p251
+sS'SELECT'
+p252
+S"<class 'gluon.html.SELECT'>"
+p253
+sS'CENTER'
+p254
+S"<class 'gluon.html.CENTER'>"
+p255
+sS'__builtins__'
+p256
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, 'Exception': <type 'exceptions.Exception'>, 'False': False, ...}"
+p257
+sS'IS_LIST_OF'
+p258
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p259
+sS'SQLFORM'
+p260
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p261
+sS'LOAD'
+p262
+S'<gluon.compileapp.LoadFactory object at 0x911a64c>'
+p263
+sS'redirect'
+p264
+S'<function redirect at 0x35c25c>'
+p265
+sS'FIELDSET'
+p266
+S"<class 'gluon.html.FIELDSET'>"
+p267
+sS'IS_EQUAL_TO'
+p268
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p269
+sS'embed64'
+p270
+S'<function embed64 at 0x940aac>'
+p271
+sS'INPUT'
+p272
+S"<class 'gluon.html.INPUT'>"
+p273
+sS'EMBED'
+p274
+S"<class 'gluon.html.EMBED'>"
+p275
+sS'FORM'
+p276
+S"<class 'gluon.html.FORM'>"
+p277
+sS'H2'
+p278
+S"<class 'gluon.html.H2'>"
+p279
+sS'H3'
+p280
+S"<class 'gluon.html.H3'>"
+p281
+sS'H1'
+p282
+S"<class 'gluon.html.H1'>"
+p283
+sS'H6'
+p284
+S"<class 'gluon.html.H6'>"
+p285
+sS'H4'
+p286
+S"<class 'gluon.html.H4'>"
+p287
+sS'H5'
+p288
+S"<class 'gluon.html.H5'>"
+p289
+sS'UL'
+p290
+S"<class 'gluon.html.UL'>"
+p291
+sS'IS_UPPER'
+p292
+S"<class 'gluon.validators.IS_UPPER'>"
+p293
+sS'xmlescape'
+p294
+S'<function xmlescape at 0x9404c4>'
+p295
+sS'IS_TIME'
+p296
+S"<class 'gluon.validators.IS_TIME'>"
+p297
+sS'OPTION'
+p298
+S"<class 'gluon.html.OPTION'>"
+p299
+sS'TITLE'
+p300
+S"<class 'gluon.html.TITLE'>"
+p301
+sS'CRYPT'
+p302
+S"<class 'gluon.validators.CRYPT'>"
+p303
+sS'IS_EMPTY_OR'
+p304
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p305
+sS'MARKMIN'
+p306
+S"<class 'gluon.html.MARKMIN'>"
+p307
+sS'IS_DATE'
+p308
+S"<class 'gluon.validators.IS_DATE'>"
+p309
+sS'SCRIPT'
+p310
+S"<class 'gluon.html.SCRIPT'>"
+p311
+sS'AppDetails'
+p312
+S'<class __builtin__.AppDetails at 0x90ef2fc>'
+p313
+sS'TABLE'
+p314
+S"<class 'gluon.html.TABLE'>"
+p315
+sS'IS_IPV4'
+p316
+S"<class 'gluon.validators.IS_IPV4'>"
+p317
+sS'IS_LENGTH'
+p318
+S"<class 'gluon.validators.IS_LENGTH'>"
+p319
+sS'XML'
+p320
+S"<class 'gluon.html.XML'>"
+p321
+sS'B'
+S"<class 'gluon.html.B'>"
+p322
+sS'IMG'
+p323
+S"<class 'gluon.html.IMG'>"
+p324
+sS'SQLTABLE'
+p325
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p326
+sS'IS_MATCH'
+p327
+S"<class 'gluon.validators.IS_MATCH'>"
+p328
+sS'IS_ALPHANUMERIC'
+p329
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p330
+sS'SPAN'
+p331
+S"<class 'gluon.html.SPAN'>"
+p332
+sS'IS_SLUG'
+p333
+S"<class 'gluon.validators.IS_SLUG'>"
+p334
+sS'BEAUTIFY'
+p335
+S"<class 'gluon.html.BEAUTIFY'>"
+p336
+sS'META'
+p337
+S"<class 'gluon.html.META'>"
+p338
+sS'p_help_k'
+p339
+S"<lazyT '%(app)s_help'>"
+p340
+sS'IS_EMAIL'
+p341
+S"<class 'gluon.validators.IS_EMAIL'>"
+p342
+sS'IS_NOT_EMPTY'
+p343
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p344
+sS'IS_FLOAT_IN_RANGE'
+p345
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p346
+sS'TBODY'
+p347
+S"<class 'gluon.html.TBODY'>"
+p348
+sS'Field'
+p349
+S"<class 'gluon.dal.Field'>"
+p350
+sS'DIV'
+p351
+S"<class 'gluon.html.DIV'>"
+p352
+sS'LEGEND'
+p353
+S"<class 'gluon.html.LEGEND'>"
+p354
+sS'DAL'
+p355
+S"<class 'gluon.dal.DAL'>"
+p356
+sS'TT'
+p357
+S"<class 'gluon.html.TT'>"
+p358
+sS'TR'
+p359
+S"<class 'gluon.html.TR'>"
+p360
+sS'LI'
+p361
+S"<class 'gluon.html.LI'>"
+p362
+sS'TH'
+p363
+S"<class 'gluon.html.TH'>"
+p364
+sS'TD'
+p365
+S"<class 'gluon.html.TD'>"
+p366
+sS'IS_URL'
+p367
+S"<class 'gluon.validators.IS_URL'>"
+p368
+sS'A'
+S"<class 'gluon.html.A'>"
+p369
+sS'HEAD'
+p370
+S"<class 'gluon.html.HEAD'>"
+p371
+sS'IS_DATETIME_IN_RANGE'
+p372
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p373
+sS'HTML'
+p374
+S"<class 'gluon.html.HTML'>"
+p375
+sS'IS_IMAGE'
+p376
+S"<class 'gluon.validators.IS_IMAGE'>"
+p377
+sS'I'
+S"<class 'gluon.html.I'>"
+p378
+sS'IS_NOT_IN_DB'
+p379
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p380
+sg142
+S"<Storage {'status': 200, 'body': <cStringIO.Stri...t': None, 'files': [], '_custom_rollback': None}>"
+p381
+sS'THEAD'
+p382
+S"<class 'gluon.html.THEAD'>"
+p383
+sS'IS_NULL_OR'
+p384
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p385
+sg47
+S"<Storage {'function': 'error', 'body': <cStringI..., 9, 30, 28, 409845), 'post_vars': <Storage {}>}>"
+p386
+sS'IS_EXPR'
+p387
+S"<class 'gluon.validators.IS_EXPR'>"
+p388
+sS'IS_IN_SET'
+p389
+S"<class 'gluon.validators.IS_IN_SET'>"
+p390
+sS'IS_UPLOAD_FILENAME'
+p391
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p392
+sS'IS_DECIMAL_IN_RANGE'
+p393
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p394
+sS'T'
+S'<gluon.languages.translator object at 0x911ae6c>'
+p395
+sssS'traceback'
+p396
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/cms/models/utilities.py", line 94, in <module>\n    if app_config and app_config.APP_METAS:\nNameError: name \'app_config\' is not defined\n'
+p397
+s.

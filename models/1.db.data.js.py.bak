@@ -1,0 +1,4 @@
+# coding: utf8
+db.define_table('json',
+    SQLField('data','text', required=True)
+)

@@ -9,7 +9,7 @@
     <meta name="keywords" content="{{=response.keywords}}" />
     <meta name="description" content="{{=response.description}}" />
     <meta name="google-site-verification" content="r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8" />
-    {{if response.refresh:}}{{=response.refresh}}{{pass}}
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
     
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />

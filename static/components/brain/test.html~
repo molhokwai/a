@@ -1,0 +1,64 @@
+<script type="text/javascript">
+    var dump=function(obj, depth){
+        if(typeof(obj) == 'number'){
+            return obj
+        }
+        else if(typeof(obj) == 'string'){
+            return "'"+obj+"'"
+        }
+
+        var is_a = obj.constructor.toString().indexOf("Array") >= 0;
+
+        if (!depth) depth = 0;
+        depth++;
+        
+        var tabs = '';
+        while(d<depth){
+            tabs += '\t';
+            d++;
+        }
+
+        var output = tabs + (!is_a ? "{" : "[");
+
+        try {
+            var i = 0;
+            for(k in obj){
+                var d = 0;
+
+                if (i>0) output += ",";
+                output +=  "\n" + tabs + '\t';
+
+                if (!is_a) {
+                    output += "'"+k+"'" + " : " + dump(obj[k], depth);
+                }
+                else {
+                    output += dump(obj[k], depth);
+                }
+                i++;
+            }
+            
+            output += (!is_a ? "\n"+tabs+"}" : "\n"+tabs+"]");
+            return output
+        }
+        catch(e){
+            return ''
+        }
+    }
+    var b={
+      'a' : {
+          'x' : '4',
+          'y' : {
+              'z' : 6
+          }
+      },
+      
+      'b' : ['1', 2, 3, 4],
+      'c' : 3
+    };
+    
+    alert(dump(b));
+    var c = eval("("+dump(b)+")");
+    alert(c.a.x);
+
+</script>
+

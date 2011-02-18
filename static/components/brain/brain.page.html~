@@ -1,0 +1,207 @@
+<style type="text/css">
+  nn-* div.field label {
+      display: inline:
+  }
+</style>
+
+<script type="text/javascript" src="/a/static/components/brain/brain-0.3.min.js"></script>
+<script type="text/javascript">
+    /* UTILITIES */
+    var convertToObject = function(val){
+        if (typeof(val)!='object'){
+            return eval("("+val+")")
+        }
+        else {
+            return val
+        }
+    };
+
+    var dump=function(obj){
+        for(property in obj){
+          var a=1;
+        }
+    }
+    /*  THANKS TO: 
+        ------
+        see: http://harthur.github.com/brain/ */
+    
+    /* PROCESS FUNCTIONS VARIABLES */
+    var nn = {    
+        net : new brain.NeuralNetwork(),
+        
+        init : {
+            options : {
+                'hidden' : [16],
+                'growthRate' : 1.0,
+                'learningRate' : 0.4
+            }
+        },
+        
+        train : {
+            options : {
+                'iterations'  : 20000,
+                'treshold'    : 0.01
+            }
+        }      
+    };
+    
+    var init=function(json, options){
+        if (json && json!=''){
+            json=convertToObject(json);
+        }
+    
+        if (options && options!=''){
+            options=convertToObject(options);
+            nn.init.options = options;
+        }
+        
+        if (json && json!=''){
+            nn.net = new brain.NeuralNetwork(nn.init.options);
+            nn.net.fromJSON(json);
+        }
+    };
+    
+    var train=function(data, options){
+        data=convertToObject(data);
+
+        if (options && options!=''){
+            options=convertToObject(options);
+            nn.train.options = options;
+        }
+        
+        /* with used for readability */
+        with(nn.train.options){
+            var o = nn.train.options;
+            nn.net.train(data, o.iterations, o.treshold);
+        }
+    }
+    
+    var run=function(input){
+        input=convertToObject(input);
+        $('#output').html(nn.net.run(input));
+    }
+
+    var validate=function(){
+        if ($('#nn-name').is('empty')){
+            $('#message').html('name is required');
+            return false
+        }
+        return true
+    }    
+    var save=function(){
+        if (!validate()) return
+        
+        $.getJSON(
+            '/data/create.json',
+            { 
+                'data' : nn.net.toJSON(),
+                'name' : $('#nn-name').val()
+            },
+            function(json){
+                alert(json.toString());
+                $('#message').html('neural net saved');
+            }
+        );
+    }
+    var get=function(){
+        if (!validate()) return
+        
+        $.ajax(
+            '/data/read.json',
+            { 
+                'name' : $('#nn-name').val()
+            },
+            function(result){
+                $('#nn-textarea').val(result);
+            }
+        );
+    }
+    
+    
+    var showHide=function(train, run, save_get){
+        var selectors_s_h={
+          '#nn-train' : train, 
+          '#nn-run' : run, 
+          '#nn-save_get' : save_get
+        };
+        
+        for(k in selectors_s_h){
+            if (selectors_s_h[k]) $(k).show();
+            else $(k).hide();
+        }
+    };
+    
+    /* ONLOAD */
+    $(document).ready(function(){
+        $('#init_options-textarea, #train_options-textarea').each(function(){
+                var s = $(this)[0].id.replace('#', '').split('_');
+                $(this).val(molhokwai.reflection.object.dump(nn[s[0]][s[1].split('-')[0]]));
+              }
+        );
+    });
+    
+    
+</script>
+
+<h1 id="nn_name">[]</h1>
+<div class="text-alignc">
+    <input type="button" class="submit right width20pc" value="Train"       onclick="showHide(true, false, false)">
+    <input type="button" class="submit right width20pc" value="Run"         onclick="showHide(false, true, false)">
+    <input type="button" class="submit right width20pc" value="Get / Save"  onclick="showHide(false, false, true)">
+    <div class="clear"></div>
+    <p id="message"></p>
+    <textarea name="nn-textarea" id="nn-textarea" rows="4" class="font-s06em width90pc" readonly="true">[nn json]</textarea>
+</div>
+
+<div id="nn-train" class="nn-train hide">
+    <form method="post" enctype="multipart/form-data" onsubmit="return false;">
+        <fieldset class="nn-train-fieldset">
+            <div class="field">
+              <label for="init_options-textarea">init options</label> <textarea name="init_options-textarea" id="init_options-textarea" rows="5"></textarea>
+            </div>
+            <div class="field">
+              <label for="train_options-textarea">train options</label> <textarea name="train_options-textarea" id="train_options-textarea" rows="4"></textarea>
+            </div>
+            
+            <div class="field margt2pc">
+              <label for="train_data-textarea">training data</label> <textarea name="train_data-textarea" id="train_data-textarea" rows="10">[training data json]</textarea>
+            </div>
+            <div class="field">
+              <label for="submit">&nbsp;</label>
+                <input type="submit" value="Init" title="If init options modified since last training" onclick="init($('#nn-textarea').val(), $('#init_options-textarea').val());"> 
+                <input type="submit" value="Train"  onclick="init($('#nn-textarea').val(), $('#init_options-textarea').val());">
+            </div>            
+        </fieldset>
+    </form>
+</div>
+
+<div id="nn-run" class="nn-run hide">
+    <form method="post" enctype="multipart/form-data" onsubmit="return false;">
+        <fieldset class="nn-run-fieldset">
+            <div id="output">
+            </div>
+            <div class="field margt2pc">
+              <label for="run-input">input</label> <textarea name="run-input" id="run-input" rows="20">[input]</textarea>
+            </div>
+            <div class="field">
+              <label for="submit">&nbsp;</label> <input type="submit" value="Run">
+            </div>            
+        </fieldset>
+    </form>
+</div>
+
+<div id="nn-save_get" class="nn-save hide">
+    <form method="post" enctype="multipart/form-data" onsubmit="return false;">
+        <fieldset id="nn-save_get-fieldset">
+            <div class="field">
+              <label for="nn-name">name*</label> <input type="text" id="nn-name" name="nn-name" value="[name]">
+            </div>
+            <div class="field">
+              <label for="submit">&nbsp;</label> 
+                  <input type="submit" value="Save" onclick="save();" title="Save Neural Network for later training & run | use">
+                  <input type="submit" value="Get" onclick="get();" title="To further train or run neural network: get -> init -> train | run...">
+            </div>            
+        </fieldset>
+    </form>
+</div>
+

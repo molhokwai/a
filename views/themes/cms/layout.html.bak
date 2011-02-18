@@ -51,7 +51,7 @@
         var huTi=null;
         var toggleUtilities=function(a){
             var selectors={
-                '#google_translate_element' : '.goog-te-combo';
+                '#google_translate_element' : '.goog-te-combo',
                 '#cse-search-form' : '.gsc-input',
                 '#cli_web' : '#_cmd'
             };
