@@ -41,8 +41,8 @@ def post():
     post_id = int(request.args[0])
     post = db(db.posts.id == post_id).select()[0]
     
-    if post and post.auth_requires_login:
-        redirect(r = request, f = 'user', args = ['login'])
+    if post and post.auth_requires_login and not auth.user:
+        redirect(URL(r = request, f = 'user', args = ['login']))
 
     comments = db(db.comments.post_id == post_id).select(db.comments.ALL)
     comment_count = len(db(db.comments.post_id == post_id).select(db.comments.ALL))
@@ -71,7 +71,7 @@ def page():
                     post = response.pages.filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0)
                 if post: post=post[0]
                 
-            if post and post.auth_requires_login:
+            if post and post.auth_requires_login and not auth.user:
                 redirect(r = request, f = 'user', args = ['login'])
                 
             
