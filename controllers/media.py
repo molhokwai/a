@@ -331,3 +331,93 @@ def twitter():
 
     import gluon.contrib.simplejson as simplejson
     return simplejson.dumps(_items)
+
+def blogger():
+    """UTILITIES"""
+    def blogger_languages_set():
+        c = utilities.get_cookie('blogger_languages')
+        if c:
+            session.blogger_languages = c.value
+        else:
+            session.blogger_languages = T.current_languages
+            
+    def themes_cookie_redirect():
+        if request.vars.blogger_themes:
+            utilities.set_cookie('blogger_themes', request.vars.blogger_themes)
+            session.blogger_themes = request.vars.blogger_themes
+            redirect(URL(r = request, f = 'blogger', args = ['themes', request.vars.blogger_themes]))
+            return True
+        else:
+            return False
+            
+    """FUNCTION OUTPUT"""
+    if (not app_config.BLOGGER_API or not app_config.BLOGGER_BLOGS_THEMES or not app_config.BLOGGER_BLOGS_LANGUAGES
+        or not len(app_config.BLOGGER_API)>0 or not len(app_config.BLOGGER_BLOGS_THEMES)>0 or not len(app_config.BLOGGER_BLOGS_LANGUAGES)>0):
+        response.flash = T('Blogger api credentials and config data not set in setup.')
+        return dict()
+
+    else:
+        Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+                          app_config.BLOGGER_BLOGS_LANGUAGES)
+        area = request.args[0]
+        
+        if area in ['themes_choice']:
+            themes = []
+            blogger_languages_set()
+            if not themes_cookies_redirect(): 
+                themes = [(_themes, '/%s/media/blogger/themes/%s' % (this_app, '-'.join(_themes))) for _themes in Blogger.themes_by_languages(session.blogger_languages.split(','))]
+            return dict(themes = themes)
+            
+        elif area in ['themes']:
+            form = FORM(_class="right width50pc")
+            lang_id_prefix = "languages_"
+            for lang in T.current_languages:
+                form.append(INPUT(_type='checkbox', _name="languages", id=lang_id_prefix+lang, 
+                            _checked=lang in session.blogger_languages if session.blogger_languages else False,
+                            _class="left"))
+            form.append(INPUT(_type='submit', _value=T('Submit'), _class="left"))
+            form.append(DIV(_class="clear"))
+            
+            if form.accepts(request.vars, session):
+                langs = []
+                for lang in T.current_languages:
+                    exec "val = request.vars.%s" % (lang_id_prefix+lang)
+                    if val.lower() == "on":
+                      langs.append(val)
+                if len(langs)==0:
+                    response.flash = T('At least one language required.')
+                else:
+                    utilities.set_cookie('blogger_languages', ','.join(langs))
+                    session.flash = T('Language(s) set.')
+                    redirect(URL(r = request))
+                
+            blogger_languages_set()
+            
+            tags = []
+            if len(request.args)<2:
+                if not session.blogger_themes:
+                    if request.cookies.has_key('blogger_themes'):
+                        session.blogger_themes = request.cookies['blogger_themes'].value
+                        
+                    elif not themes_cookie_redirect():
+                        redirect(URL(r = request, f = 'blogger', args = ['themes_choice']))
+            else:
+                session.blogger_themes = request.args[1]
+                
+            if session.blogger_themes:   
+                tags = [{_themes : (_tags, '/%s/media/blogger/tags/%s' % (this_app, '-'.join(_tags)))} 
+                                            for _tags in Blogger.tags_by_themes(session.blogger_themes.split('-'))]
+            return dict(tags = tags)
+            
+        elif area in ['tags']:
+            posts = []
+            if len(request.args)<2:
+                if not session.blogger_tags:
+                    redirect(URL(r = request, f = 'blogger', args = ['tags']))
+            else:
+                session.blogger_tags = request.args[1]
+                
+            if session.blogger_tags:
+                posts = [{_tags : _post} for _post in Blogger.posts_by_tags(session.blogger_tags.split('-'))]
+
+            return dict(posts = posts)

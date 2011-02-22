@@ -37,7 +37,13 @@ db.define_table('app_config',
     SQLField('PICASA_API',              'list:string',                   default=['<username>', '<password>'],
             label=T('Picasa api (username, password)')),
     SQLField('TWITTER_API',              'list:string',                  default=['<username>', '<password>', '<hashes>'],
-            label=T('Twitter api (username, password, hashes -csv, filters -csv)'))
+            label=T('Twitter api (username, password, hashes -csv, filters -csv)')),
+    SQLField('BLOGGER_API',              'list:string',                  default=['<username>', '<password>', '<source>'],
+            label=T('Blogger api (username, password, source)')),
+    SQLField('BLOGGER_BLOGS_THEMES',     'list:string',                  default=['<theme1:blog1,blog2,blog3...>', '<theme2:blog4,blog5...>', '<theme3:blog6...>'],
+            label=T('Blogger blogs themes')),
+    SQLField('BLOGGER_BLOGS_LANGUAGES',  'list:string',                  default=['<fr:blog3,blog4,blog6...>', '<nl:blog1,blog1...>', '<en:blog5...>'],
+            label=T('Blogger blogs languages'))
 )
 app_config=db(db.app_config.id>0).select()
 if len(app_config)>0:
@@ -122,24 +128,19 @@ if app_config and app_config.APP_CURRENT_LANGUAGES:
     current_language=app_config.APP_CURRENT_LANGUAGES[0]
 else:
     T.current_languages=['en','fr']
-current_language='en'
+
 if request.vars._language:
     session._language=request.vars._language
 if session._language:
-    T.force(session._language)
+    current_language = session._language
 else:
     if T.http_accept_language:
-        if T.http_accept_language[:2]=='fr':
-            current_language=T.current_languages[1]
-        else:
-            current_language=T.current_languages[0]
-    else:
-        current_language=T.current_languages[0]
-        
-    current_language=({}.get(current_language,lambda x: x+'-'+x)
-            )(current_language)
-    T.force(current_language)
-    
+        current_language=T.http_accept_language[:2]        
+T.force(current_language)
+
+if not session._language:
+    session._language = current_language
+
 import datetime
 
 ## Table posts

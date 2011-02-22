@@ -29,7 +29,7 @@ def index():
       else:
           posts=db(db.posts.post_title == request.args[0]).select()
           if not posts:
-              posts = response.posts.filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0)
+              posts = filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0,response.posts)
           return dict(posts = posts)
           
       
@@ -68,12 +68,16 @@ def page():
             else:
                 post = db(db.posts.post_title == request.args[0]).select()
                 if not post:
-                    post = response.pages.filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0)
-                if post: post=post[0]
+                    pg = filter(lambda x: x[0].lower().find(request.args[0].lower())>=0, response.pages)
+                    if not pg:
+                      # fix for _ replacing space in url
+                      pg = filter(lambda x: x[0].lower().find(request.args[0].replace('_', ' ').lower())>=0, response.pages)
+                    if pg and len(pg)>0: pg = pg[0]
+                    post = db(db.posts.id == int(pg[2].replace('/%s/default/page/' % this_app, ''))).select()
+                if post: post = post[0]
                 
             if post and post.auth_requires_login and not auth.user:
                 redirect(URL(r = request, f = 'user', args = ['login']))
-                
             
             nake=(request.args[len(request.args)-1]=='nake'
                  or post.post_text.find('<!-- nake page -->')>=0)

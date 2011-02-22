@@ -93,7 +93,8 @@ var focus=function(cmd){
     switch(cmd){
         case 'form':
             if ($('form:visible:last')){
-                if ($($('form:visible:last')).formFirstField) {
+                if (typeof($($('form:visible:last')).formFirstField)=='function'
+                     && $($('form:visible:last')).formFirstField()) {
                     $($('form:visible:last')).formFirstField().focus();
                 }
                 else {
@@ -270,6 +271,7 @@ $(document).ready(function(){
     $('body').keyup(function(event){
       if (event.keyCode==17){
           if (ctrl_timeout!=null){
+              $('#cli_web').show();
               $('#_cmd').focus();
           }
           ctrl_timeout=setTimeout('clearTimeout(ctrl_timeout); ctrl_timeout=null;', ctrl_max_interval);
@@ -277,11 +279,8 @@ $(document).ready(function(){
     });
     
     $('#_cmd').bind('keyup', function(e){
-        /* mozilla fix */
-        if ($.browser.mozilla){
-            if((e.keyCode ? e.keyCode : e.which) == 13) {
-                on_cli_web_submit();
-            }
+        if((e.keyCode ? e.keyCode : e.which) == 13) {
+            on_cli_web_submit();
         }
         
         /* history */
@@ -296,7 +295,17 @@ $(document).ready(function(){
 
     if (settings.google.search.load){
         settings.google.search.loaded=google_search_load();
-    }    
+    }
+    
+    $.getJSON(
+        '/'+server.request.application+'/default/json/pages',
+        function(json){
+            if(json.status==1){
+                server.pages=json.result;
+            }
+        }
+    );
+    
 });
 
 /* caught eval to more or less brutally evaluate the given command,
@@ -305,7 +314,13 @@ $(document).ready(function(){
 var cec_rv='boom, crashshsh...';
 var caught_eval=function(value){
     try{
-        return eval(value);
+        var e_v=eval(value);
+        if (typeof(e_v)=='function'){
+            return e_v();
+        }
+        else{
+            return e_v;
+        }
     }
     catch(e){
         return cec_rv;
@@ -324,7 +339,8 @@ var on_cli_web_submit=function(){
     
     /* quick fix */
     if ($('#_cmd').val()=='home'){ $('#_cmd').val('root');}
-    
+
+    /* FIRST: RAW EVAL ATTEMPT */
     try {
         /* raw eval */
         var rv=caught_eval($('#_cmd').val());
@@ -339,8 +355,12 @@ var on_cli_web_submit=function(){
             rv=caught_eval($('#_cmd').val().replace(' ', '.')+'()');
         }
         
+        /* THEN: PAGE CONTENT BASED ASSUMPTIONS */
         /* assumptions */
-        if (rv==cec_rv || eval(rv)==rv){
+        var x=rv;
+        var or=false; // XOR
+        try{ or=eval(rv)==rv; }catch(e){}
+        if (rv==cec_rv || ((!x && or) || (x && !or))){
             /* assumption: element focus */
             rv=focus($('#_cmd').val());
             
@@ -349,8 +369,34 @@ var on_cli_web_submit=function(){
                 rv=click($('#_cmd').val());
             }
         }
+
+        /* FINALLY: APPLICATION/SYSTEM CONTENT BASED ASSUMPTIONS */
+        /* page title match */
+        var pages_match={};
+        for(_id in server.pages){
+            var s_p_i_p_t=server.pages[_id].post_title;
+            var index=s_p_i_p_t.toLowerCase().indexOf($('#_cmd').val().toLowerCase());
+            if (index>=0){
+                pages_match[s_p_i_p_t.toLowerCase()]=index;
+            }
+        }
+        var p_match=null;
+        var i_match=-1;
+        for(p_t in pages_match){
+            if(pages_match[p_t]>=0){
+                if(i_match<0 || (pages_match[p_t]<i_match)){
+                    i_match=pages_match[p_t];
+                    p_match=p_t;
+                }
+            }
+        }
+        if(i_match>=0 && p_match){
+            rv=true;
+            alert('/'+server.request.application+'/default/page/'+p_match);
+            window.location='/'+server.request.application+'/default/page/'+p_match;
+        }
         
-        /* last chance... */
+        /* LAST CHANCE... */
         /* last chance function... */
         try{ 
             if (!rv){
@@ -413,7 +459,14 @@ var on_cli_web_submit=function(){
 /* convenience (for cli_web also) methods */
 var back=b=function(){
   history.go(-1);
+  return true
 }
 var forward=fwd=f=function(){
   history.go(+1);
+  return true
+}
+var exit=quit=q=function(){
+  self.opener=self;
+  self.close();
+  return true
 }

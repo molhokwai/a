@@ -3,26 +3,21 @@
 # PSEUDO CODE
 # -----------
 # 
-#    BLOGS & TAGS
-# blogger_blogs = {'blog1' : None, 'blog2' : None, 'blog3' : None}
-# for name in blogger_blogs:
-#     blogger_blogs[name] = {
-#         'url'   : 'http://%s/molhokwai.blogspot.com',
-#         'tags'  : Blogger.blog.get_tags(name), # returns dict
-#         'recent_posts' : Blogger.blog.get_recent_posts(name)
-#     }
-# all_tags = merge_tags(blogger_blogs)
+#    INSTANCIATION
+#    -------------
+#    Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+#                           app_config.BLOGGER_BLOGS_LANGUAGES)
+#    THEMES BY LANGUAGE
+#    ------------------
+#    Blogger.themes_by_languages(session.blogger_languages.split(','))
 # 
-#     GET TAGS POSTS
-# tags = ['tag1', 'tag2', 'tag3']
-# for name in blogger_blogs:
-#     for i in range(len(tags)):
-#         blogger_blogs[name]['tags'][tags[i]] = Blogger.blog.get_tags_posts(name,tags[i])
+#    TAGS BY THEMES
+#    --------------
+#    Blogger.tags_by_themes(session.blogger_themes.split('-'))
 # 
-#     SEARCH BLOGS
-# _filter = 'a search query'
-# for name in blogger_blogs:
-#     blogger_blogs[name][_filter] = Blogger.blog.search_posts(name,_filter)
+#    POSTS BY TAGS
+#    -------------
+#    Blogger.posts_by_tags(session.blogger_tags.split('-')
 # 
 """
 
@@ -249,5 +244,3 @@ while(_do):
 
                 c_blogger_service = GetBloggerService(c_username, c_password, c_source)
                 print str(CreateComment(c_blogger_service, blog_data['id'], post['id'], raw_input('Your comment : ')))
-
-

@@ -188,6 +188,16 @@ class Utilities():
             return _list[:nr]
         else:
             return _list        
+
+    def set_cookie(self, name, value):
+        response.cookies[name] = value
+        response.cookies[name]['expires'] = 365 * 24 * 3600
+        response.cookies[name]['path'] = '/'
+
+    def get_cookie(self, name):
+        if request.cookies.has_key(name):
+            return request.cookies[name]
+
 # instance
 utilities=Utilities()
 
