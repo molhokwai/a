@@ -7,8 +7,14 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     session.connect(request, response, db=db) # and store sessions and tickets there
     ### or use the following lines to store sessions in Memcache
     # from gluon.contrib.memdb import MEMDB
-    # from google.appengine.api.memcache import Client
+    # from google.appengine.api.memcache import Client    
     # session.connect(request, response, db=MEMDB(Client()))
+    
+    ### cache in ram
+    from gluon.contrib.gae_memcache import MemcacheClient
+    from gluon.contrib.memdb import MEMDB
+    cache.memcache = MemcacheClient(request)
+    cache.ram = cache.disk = cache.memcache
 else:                                         # else use a normal relational database
     db=SQLDB("sqlite://db.db")
 

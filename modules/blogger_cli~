@@ -83,9 +83,6 @@ def GetBlogs(blogger_service):
 
     for entry in feed.entry:
         data = GetMetas(entry.id.text, parent_item='user')
-        for l in entry.link:
-          if l.rel == 'alternate':
-            data['name'] = l.href.split('.')[0].split('//')[1]
         data['title'] = entry.title.text
         data['posts'] = []
         data['categories'] = []

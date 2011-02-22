@@ -7,19 +7,171 @@
 # 
 #    INSTANCIATION
 #    -------------
-#    Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+#    _blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
 #                           app_config.BLOGGER_BLOGS_LANGUAGES)
 #    THEMES BY LANGUAGE
 #    ------------------
-#    Blogger.themes_by_languages(session.blogger_languages.split(','))
+#    blogger.themes_by_languages(session.blogger_languages.split(','))
 # 
 #    TAGS BY THEMES
 #    --------------
-#    Blogger.tags_by_themes(session.blogger_themes.split('-'))
+#    blogger.tags_by_themes(session.blogger_themes.split('-'))
 # 
 #    POSTS BY TAGS
 #    -------------
-#    Blogger.posts_by_tags(session.blogger_tags.split('-')
+#    blogger.posts_by_tags(session.blogger_tags.split('-')
 # 
 """
+class Blogger:
+    config_api = None
+    config_themes = None
+    config_blogs_languages = None
+    service = None
+    
+    _blogs = None
+        
+    def __init__(self, config_api, config_themes, config_blogs_languages, blogs = None):
+        self.config_api = config_api
+        self.config_themes = config_themes
+        self.config_blogs_languages = config_blogs_languages
+        self.service = blogger_service()
+        self._blogs = blogs
 
+    def blogger_service(self, username=None, password=None, source=None):
+        if username is None: username = self.config_api[0]
+        if password is None: password = self.config_api[1]
+        if source is None: source = self.config_api[2]
+
+        _service = service.GDataService(username, password)
+        _service.source = source
+        _service.service = 'blogger'
+        _service.account_type = 'GOOGLE'
+        _service.server = 'www.blogger.com'
+        _service.ProgrammaticLogin()
+        return _service
+
+    @staticmethod
+    def config_items(_list):
+        """
+            Relies on this structure (used in setup: app_config): 
+                ['item1:sub_item6,sub_item5,sub_item3', 'item2:sub_item4,sub_item1,sub_item2', ]
+        """
+        return map(lambda x : x.split(':')[0], _list)
+    @staticmethod
+    def config_sub_items(_list):
+        """
+            Relies on this structure (used in setup: app_config): 
+                ['item1:sub_item6,sub_item5,sub_item3', 'item2:sub_item4,sub_item1,sub_item2', ]
+        """
+        return map(lambda x : x.split(':')[1].split(','), _list)
+        
+    @staticmethod
+    def config_sub_by_items(_list, items):
+        """
+            Relies on this structure (used in setup: app_config): 
+                ['item1:sub_item6,sub_item5,sub_item3', 'item2:sub_item4,sub_item1,sub_item2', ]
+        """
+        sub_by_items = map(lambda x : x.split(':')[1], 
+                filter(lambda x: x.split(':')[0] in items, _list))
+        sub_items = []
+        for sbi in sub_by_items:
+            sub_items += sbi.split(',')
+        return sub_items
+
+    @staticmethod
+    def concat_sub_by_belonging_items(master_list, sub_list, master_list_key, sub_list_key):
+        a = []
+        for am in map(lambda x: x[sub_list_key], filter(lambda y: y[master_list_key] in sub_list, master_list)):
+            a += am 
+        return a
+
+    @staticmethod
+    def get_blog_index_and_data(title):
+        for i in range(len(blogs)):
+            if blogs[i]['title'] == title:
+                return i,blogs[i]
+            i+=1
+    
+    @staticmethod
+    def get_categories(atomCategories):
+        return map(lambda x: x.term, atomCategories)
+
+    @property
+    def themes(self):
+        return Blogger.config_items(self.config_themes)
+    @property
+    def languages(self):
+        return Blogger.config_items(self.config_blogs_languages)
+    @property
+    def blogs(self):
+        return Blogger.config_sub_items(self.config_blogs_languages)
+
+    @property
+    def blogs(self):
+        if not self._blogs:
+            query = self.service.Query()
+            query.feed = '/feeds/default/blogs'
+            feed = self.service.Get(query.ToUri())
+        
+            self._blogs = []
+            for entry in feed.entry:
+                data = GetMetas(entry.id.text, parent_item='user')
+                for l in entry.link:
+                  if l.rel == 'alternate':
+                    data['name'] = l.href.split('.')[0].split('//')[1]
+                data['title'] = entry.title.text
+                data['posts'] = []
+                data['categories'] = []                
+                self._blogs.append(data)
+        return self._blogs
+        
+    @property
+    def blogs_datas(self):
+        for blog_index in range(len(self.blogs)):
+            blog_id=blogs[blog_index]['id']
+            feed = _blogger.service.GetFeed('/feeds/' + blog_id + '/posts/default')
+            self._blogs[blog_index]['posts'] = []
+            self._blogs[blog_index]['categories'] = []
+            for entry in feed.entry:
+                catgs=Blogger.get_categories(entry.category)
+                data = GetMetas(entry.id.text, parent_item='blog')
+                data['title'] = entry.title.text
+                data['content'] = entry.content.text
+                data['updated'] = entry.updated.text
+                data['categories'] = catgs
+                data['comments'] = []
+                self._blogs[blog_index]['posts'].append(data)
+                for c in catgs:
+                    if c not in self._blogs[blog_index]['categories']:
+                        self._blogs[blog_index]['categories'].append(c)
+        return self._blogs
+
+    def blogs_by_languages(self, languages):
+        return Blogger.config_sub_by_items(self.config_blogs_languages, languages)
+
+    def blogs_by_themes(self, themes):
+        return Blogger.sub_by_items(self.config_themes, themes)
+
+    def blogs_by_languages(self, languages):
+        return Blogger.sub_by_items(self.config_blogs_languages, languages)
+
+    def themes_by_languages(self, languages):
+        blogs_by_languages = Blogger.config_sub_by_items(self.config_blogs_languages, languages)
+        return filter(lambda x: filter(lambda y: y in self.blogs_by_themes(x), blogs_by_languages)>0, self.themes)
+
+    def tags_by_themes(self, themes):
+        """
+        def tags_by_themes(self, themes):
+            blogs_by_themes = blogs_by_themes(self, themes)
+            blogs_categories = map(lambda x: x['categories'], filter(lambda x: x['name'] in blogs_by_themes, self.blogs))
+            b_cs = []
+            for b_c in blogs_categories:
+                b_cs += b_c
+            return b_cs
+        """
+        blogs_by_themes = blogs_by_themes(self, themes)
+        return Blogger.concat_sub_by_belonging_items(self.blogs, blogs_by_themes, 'name', 'categories')
+
+    def posts_by_tags(self, themes):
+        blogs_by_themes = blogs_by_themes(self, themes)
+        return Blogger.concat_sub_by_belonging_items(self.blogs, blogs_by_themes, 'name', 'posts')

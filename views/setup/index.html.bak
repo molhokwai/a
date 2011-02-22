@@ -1,4 +1,7 @@
+{{extend 'themes/%s/layout.html' % response.theme}}
 
-{{extend 'layout.html'}}
-<h1>This is the setup/index.html template</h1>
-{{=BEAUTIFY(response._vars)}}
+<!-- h2>{{=edit_title}}</h2 -->
+............................................................................................<br/>
+{{=form}}
+
+{{=A(T('markup textareas'), _href='javascript:markup_textareas();', _class='color-transparent')}}

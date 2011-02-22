@@ -358,7 +358,7 @@ def blogger():
 
     else:
         Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
-                          app_config.BLOGGER_BLOGS_LANGUAGES)
+                          app_config.BLOGGER_BLOGS_LANGUAGES, posts = blogger_all_posts())
         area = request.args[0]
         
         if area in ['themes_choice']:
@@ -404,7 +404,7 @@ def blogger():
             else:
                 session.blogger_themes = request.args[1]
                 
-            if session.blogger_themes:   
+            if session.blogger_themes:
                 tags = [{_themes : (_tags, '/%s/media/blogger/tags/%s' % (this_app, '-'.join(_tags)))} 
                                             for _tags in Blogger.tags_by_themes(session.blogger_themes.split('-'))]
             return dict(tags = tags)
@@ -418,6 +418,17 @@ def blogger():
                 session.blogger_tags = request.args[1]
                 
             if session.blogger_tags:
-                posts = [{_tags : _post} for _post in Blogger.posts_by_tags(session.blogger_tags.split('-'))]
-
+                posts = [{_tags : _post} 
+                            for _post in Blogger.posts_by_tags(
+                                                        session.blogger_tags.split('-'), 
+                                                        session.blogger_themes.split('-'))]
             return dict(posts = posts)
+
+def blogger_blogs_data():
+    if (len(request.args)>0 and args[0] == 'refresh') or (not cache.ram.get('blogger_blogs_data')):
+        _blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+                          app_config.BLOGGER_BLOGS_LANGUAGES)
+        _blogger.blogs
+        _blogger.blogs_data
+        t = cache.ram('blogger_blogs_data', _blogger.blogs_data, time_expire=60*60)
+    return cache.ram.get('blogger_blogs_data')

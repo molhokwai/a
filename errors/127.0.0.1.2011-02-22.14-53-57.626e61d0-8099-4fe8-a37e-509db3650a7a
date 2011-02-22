@@ -1,0 +1,1099 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/setup/index.html'
+p4
+sS'code'
+p5
+S'response.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="\', escape=False)\nresponse.write(T.accepted_language or \'en\')\nresponse.write(\'">\\n\\n  <head>\\n    <title>\', escape=False)\nif response.title:\n    response.write(response.title)\nelse:\n    response.write(URL(r=request))\n    pass\nresponse.write(\'</title>\\n\\n    <title>\', escape=False)\nresponse.write(response.title or request.application)\nresponse.write(\'</title>\\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\\n    <meta name="keywords" content="\', escape=False)\nresponse.write(response.keywords)\nresponse.write(\'" />\\n    <meta name="description" content="\', escape=False)\nresponse.write(response.description)\nresponse.write(\'" />\\n    <meta name="google-site-verification" content="r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8" />\\n    \', escape=False)\nif response.refresh:\n    response.write(XML(response.refresh))\n    pass\nresponse.write(\'\\n    \\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/themes/\', escape=False)\nresponse.write(response.theme)\nresponse.write(\'/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />\\n    <style type="text/css"></style>\\n    \\n    \', escape=False)\nresponse.write(\'<script type="text/javascript">\\n<!--\\n/*\\nWritten by Massimo Di Pierro.\\n\\nThis is a minimalistic AJAX for web2py, for more sophisticated stuff\\nyou should use Scriptacolous or some other AJAX toolkit. Anyway...\\n\\nTo use web2py_ajax.html just make sure you include \\\'web2py_ajax.html\\\'\\nin your layout.html. This provides four functions:\\n\\npopup(url)\\ncollapse(id)\\nfade(id,value) // try value= +0.1 or -0.1\\najax(url,sources,taget) \\n// will send sources[i].value to url and dispaly result in target\\n*/\\n\\nfunction popup(url) {\\n  newwindow=window.open(url,\\\'name\\\',\\\'height=400,width=600\\\');\\n  if (window.focus) {newwindow.focus()}\\n  return false;\\n}\\n\\nfunction collapse(id) {\\n   if(this.document.getElementById(id).style.display=="none")\\n   (this.document.getElementById(id).style.display="block") ;\\n   else (this.document.getElementById(id).style.display="none") ;\\n}\\n\\nfunction fade(id,value) {\\n  var object=document.getElementById(id);\\n  if(value<0 && !object.style.opacity) {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity=1;\\n  }\\n  if(value>0 && object.style.opacity>=1) object.style.opacity=1;\\n  else if(value<0 && object.style.opacity<=0) {\\n     this.document.getElementById(id).style.display="none";\\n     object.style.opacity=0;\\n  }\\n  else {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity-=-value;\\n     setTimeout(function(){fade(id,value);},100);\\n     return false;\\n  }\\n  return true;\\n}\\n\\nfunction ajax(url,sources,target) {\\n  var req = null; \\n  var ctarget=document.getElementById(target);\\n  window.status="connecting...";\\n  if(window.XMLHttpRequest)\\n     req = new XMLHttpRequest(); \\n  else if (window.ActiveXObject)\\n     req  = new ActiveXObject("Microsoft.XMLHTTP");\\n  req.onreadystatechange = function() {\\n     window.status="waiting...";\\n     if(req.readyState == 4)\\n       if(req.status == 200) {\\n          window.status=\\\'Ajax Done!\\\'\\n          try { \\n             ctarget.innerHTML=req.responseText; \\n             try {ctarget.scrollTop=ctarget.scrollHeight-ctarget.clientHeight;}\\n             catch(err) {}\\n          } catch(err) { ctarget.value=req.responseText; }\\n       } else alert("AJAX Error: " + req.status);\\n  }\\n  var query=""\\n  for(i=0; i<sources.length; i++) {\\n     if(i>0) query=query+"&";\\n     query=query+encodeURIComponent(sources[i])+"="+encodeURIComponent(document.getElementById(sources[i]).value);\\n  }\\n  req.open("POST",url,true); \\n  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); \\n  req.send(query); \\n} \\n//-->\\n</script>\', escape=False)\nresponse.write(\'\\n\\n    <script type="text/javascript">\\n      var server={\\n          request : {\\n              application : \\\'\', escape=False)\nresponse.write(this_app)\nresponse.write(\'\\\'\\n          },\\n          pages : []\\n      };\\n    </script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/net.molhokwai/molhokwai.common.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/jquery/jquery-1.4.2.min.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/jquery.markitup.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/custom/script.js"></script>\\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/google/search_init.js"></script>\\n    <script type="text/javascript">\\n      $(document).ready(function(){\\n          var browser_not=true;\\n          try { \\n              browser_not=!($.browser.mozilla || $.browser.webkit); \\n          }\\n          catch(e) {} \\n          if (browser_not){\\n              $(\\\'#content\\\').append(\\\'<div class="text-alignc margt5pc"><em>\', escape=False)\nresponse.write(T("(Graphical design not tested (corrected) on this browser...)"))\nresponse.write(\'</em></div>\\\');\\n          }\\n      });      \\n    </script>\\n\\n  </head>\\n\\n  <body>\\n\\n    <div id="wrapper" class="margt2pc  width60pc">\\n\\n      <div id="user-menu" class="right">\\n         \', escape=False)\nif \'auth\' in globals():\n    response.write(\'\\n           \', escape=False)\n    if not auth.user:\n        response.write(\' \\n             \', escape=False)\n        response.write(A(T(\'login\'),_href=URL(r=request,c=\'default\',f=\'user/login\')))\n        response.write(\'\\n           \', escape=False)\n    else:\n        response.write(\'\\n             <!-- \', escape=False)\n        response.write(auth.user.display_name)\n        response.write(\' -->\\n             \', escape=False)\n        response.write(A(T(\'logout\'),_href=URL(r=request,c=\'default\',f=\'user/logout\')))\n        response.write(\' | \\n           \', escape=False)\n        pass\n    response.write(\'\\n         \', escape=False)\n    pass\nresponse.write(\'\\n      </div>\\n      <!-- end #user-menu -->\\n\\n      <div id="cli_web" class="left margt2pc  width100pc">\\n        <form onsubmit="return false;">\\n            <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>\\n            <font id="_cmd_msg" class="flash small">\\n                \', escape=False)\nif session.cli_web_flash:\n    response.write(session.cli_web_flash)\n    session.cli_web_flash=False\n    pass\nresponse.write(\'\\n                \', escape=False)\nflash = session.flash if session.flash else response.flash\nresponse.write(\'\\n                \', escape=False)\nif flash:\n    response.write(flash)\n    pass\nresponse.write(\'\\n            </font>\\n            <input type="hidden" id="_cmd_history_cur" value="-1"/>\\n        </form>\\n      </div>\\n      <!-- end #cli_web -->\\n    \\n      <div id="content" class="padl3pc left margt5pc width100pc">\\n        <div id="searchcontrol"></div>\\n        \', escape=False)\nresponse.write(\'\\n\\n<!-- h2>\', escape=False)\nresponse.write(edit_title)\nresponse.write(\'</h2 -->\\n............................................................................................<br/>\\n\', escape=False)\nresponse.write(form)\nresponse.write(\'\\n\\n\', escape=False)\nresponse.write(A(T(\'markup textareas\'), _href=\'javascript:markup_textareas();\', _class=\'color-transparent\'))\nresponse.write(\'\\n\', escape=False)\nresponse.write(\'\\n      </div>\\n      <!-- end #content -->\\n\\n      <div id="utility" class="clear">&nbsp;</div>\\n\\n      <div id="footer">\', escape=False)\nresponse.write(A(T(\'acknowledgements\'), _href=URL( r=request, c=\'default\', f=\'page\', args=[\'acknowledgements\'])))\nresponse.write(\'</div>\\n        \\n    </div>\\n    <!-- end #wrapper -->\\n\\n    <div id="tracking">\\n        <script type="text/javascript" id="tracking_src">\\n            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\\n            document.write(unescape("%3Cscript src=\\\'" + gaJsHost + "google-analytics.com/ga.js\\\' type=\\\'text/javascript\\\'%3E%3C/script%3E"));\\n        </script>\\n        <script type="text/javascript" id="tracking_process">\\n            try {\\n                var pageTracker = _gat._getTracker("UA-5101967-1");\\n                pageTracker._initData();\\n                pageTracker._trackPageview();\\n            }\\n            catch(e) {\\n                if (console) try{console.log(e);}catch(e){}\\n            }\\n        </script>\\n    </div>    \\n    <!-- end #tracking -->\\n\\n    <div id="links">\\n             \', escape=False)\nresponse.write(A(T(\'add page/post\'),_href=URL(r=request,c=\'default\',f=\'add/page\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\n_post=None\ntry: _post=post\nexcept Exception, ex: pass\nresponse.write(\'\\n             \', escape=False)\nif _post:\n    response.write(\'\\n                 \', escape=False)\n    if _post.post_type==\'page\':\n        response.write(\'\\n                     \', escape=False)\n        response.write(A(T(\'edit page/post ?\'),_href=URL(r=request,c=\'default\',f=\'edit/page/%i\' % _post.id), _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n    else:\n        response.write(\'\\n                     \', escape=False)\n        response.write(A(T(\'edit page/post ?\'),_href=URL(r=request,c=\'default\',f=\'edit/post/%i\' % _post.id), _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \', escape=False)\nif response.home_page:\n    response.write(\'\\n                 \', escape=False)\n    response.write(A(T(\'root\'),_href=URL(r=request,c=\'default\',f=\'page/%i\' % response.home_page.id), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \', escape=False)\nif response.help_page:\n    response.write(\'\\n                 \', escape=False)\n    response.write(A(T(\'help\'),_href=URL(r=request,c=\'default\',f=\'page/%i\' % response.help_page.id), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \\n             \', escape=False)\nresponse.write(A(T(\'links\'),_href=URL(r=request,c=\'default\',f=\'manage/link\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\nif response.links:\n    response.write(\'\\n                 \', escape=False)\n    for _name,_link,_id in response.links:\n        response.write(\'\\n                         \', escape=False)\n        response.write(A(T(_name),_href=_link, _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \\n             \', escape=False)\nresponse.write(A(T(\'pages\'),_href=URL(r=request,c=\'default\',f=\'pages\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\nif response.pages:\n    response.write(\'\\n                 \', escape=False)\n    for _title,_false,_link in response.links:\n        response.write(\'\\n                         \', escape=False)\n        response.write(A(T(_title),_href=_link, _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n    </div>\\n    <!-- end #links -->\\n  \\n  </body>\\n</html>\\n\', escape=False)'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__hash__'
+p11
+S"<method-wrapper '__hash__' of exceptions.NameError object at 0x966e02c>"
+p12
+sS'__setattr__'
+p13
+S"<method-wrapper '__setattr__' of exceptions.NameError object at 0x966e02c>"
+p14
+sS'__reduce_ex__'
+p15
+S'<built-in method __reduce_ex__ of exceptions.NameError object at 0x966e02c>'
+p16
+sS'__getslice__'
+p17
+S"<method-wrapper '__getslice__' of exceptions.NameError object at 0x966e02c>"
+p18
+sS'__getitem__'
+p19
+S"<method-wrapper '__getitem__' of exceptions.NameError object at 0x966e02c>"
+p20
+sS'__setstate__'
+p21
+S'<built-in method __setstate__ of exceptions.NameError object at 0x966e02c>'
+p22
+sS'__reduce__'
+p23
+S'<built-in method __reduce__ of exceptions.NameError object at 0x966e02c>'
+p24
+sS'__str__'
+p25
+S"<method-wrapper '__str__' of exceptions.NameError object at 0x966e02c>"
+p26
+sS'args'
+p27
+S'("name \'edit_title\' is not defined",)'
+p28
+sS'__getattribute__'
+p29
+S"<method-wrapper '__getattribute__' of exceptions.NameError object at 0x966e02c>"
+p30
+sS'__class__'
+p31
+S"<type 'exceptions.NameError'>"
+p32
+sS'__delattr__'
+p33
+S"<method-wrapper '__delattr__' of exceptions.NameError object at 0x966e02c>"
+p34
+sS'__repr__'
+p35
+S"<method-wrapper '__repr__' of exceptions.NameError object at 0x966e02c>"
+p36
+sS'__dict__'
+p37
+S'{}'
+p38
+sS'__doc__'
+p39
+S"'Name not found globally.'"
+p40
+sS'__init__'
+p41
+S"<method-wrapper '__init__' of exceptions.NameError object at 0x966e02c>"
+p42
+sS'__new__'
+p43
+S'<built-in method __new__ of type object at 0x8239980>'
+p44
+ssS'evalue'
+p45
+S"name 'edit_title' is not defined"
+p46
+sS'request'
+p47
+(dp48
+S'function'
+p49
+S"'index'"
+p50
+sS'body'
+p51
+S'<cStringIO.StringO object at 0x95e9920>'
+p52
+sS'wsgi'
+p53
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p54
+sS'extension'
+p55
+S"'html'"
+p56
+sS'vars'
+p57
+S'<Storage {}>'
+p58
+sS'cid'
+p59
+S'None'
+p60
+sS'url'
+p61
+S'<gluon.html.XML object at 0x95e9cac>'
+p62
+sS'raw_extension'
+p63
+S'None'
+p64
+sg27
+S'[]'
+p65
+sS'controller'
+p66
+S"'setup'"
+p67
+sS'cookies'
+p68
+S"<SimpleCookie: session_id_a='127.0.0.1-5aea260a-...-4dc8b4be-bfae-4101-9f33-852d6b597496' theme='1'>"
+p69
+sS'application'
+p70
+S"'a'"
+p71
+sS'ajax'
+p72
+S'False'
+p73
+sS'client'
+p74
+S"'127.0.0.1'"
+p75
+sS'env'
+p76
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x955df44>}>"
+p77
+sS'raw_args'
+p78
+S'None'
+p79
+sS'get_vars'
+p80
+S'<Storage {}>'
+p81
+sS'folder'
+p82
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p83
+sS'now'
+p84
+S'datetime.datetime(2011, 2, 22, 14, 53, 57, 138223)'
+p85
+sS'post_vars'
+p86
+S'<Storage {}>'
+p87
+ssS'frames'
+p88
+(lp89
+(dp90
+S'file'
+p91
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p92
+sS'dump'
+p93
+(dp94
+S'environment'
+p95
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x97be6ec>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p96
+sS'ccode'
+p97
+S'<code object <module> at 0x957f458, file "/home/...b/applications/a/views/setup/index.html", line 1>'
+p98
+ssS'lnum'
+p99
+I188
+sS'lines'
+p100
+(dp101
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p102
+sI183
+S'        if type(code) == types.CodeType:'
+p103
+sI184
+S'            ccode = code'
+p104
+sI185
+S'        else:'
+p105
+sI186
+S'            ccode = compile2(code,layer)'
+p106
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p107
+sI189
+S'    except HTTP:'
+p108
+sI190
+S'        raise'
+p109
+sI191
+S'    except Exception:'
+p110
+ssS'call'
+p111
+S'(code=\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\', environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0x97be6ec>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/setup/index.html\')'
+p112
+sS'func'
+p113
+S'restricted'
+p114
+sa(dp115
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/setup/index.html'
+p116
+sg93
+(dp117
+sg99
+I76
+sg100
+(dp118
+I67
+S'    pass'
+p119
+sI68
+S"response.write('\\n                ', escape=False)"
+p120
+sI69
+S'flash = session.flash if session.flash else response.flash'
+p121
+sI70
+S"response.write('\\n                ', escape=False)"
+p122
+sI71
+S'if flash:'
+p123
+sI72
+S'    response.write(flash)'
+p124
+sI73
+S'    pass'
+p125
+sI74
+S'response.write(\'\\n            </font>\\n            <input type="hidden" id="_cmd_history_cur" value="-1"/>\\n        </form>\\n      </div>\\n      <!-- end #cli_web -->\\n    \\n      <div id="content" class="padl3pc left margt5pc width100pc">\\n        <div id="searchcontrol"></div>\\n        \', escape=False)'
+p126
+sI75
+S"response.write('\\n\\n<!-- h2>', escape=False)"
+p127
+sI76
+S'response.write(edit_title)'
+p128
+sI77
+S"response.write('</h2 -->\\n............................................................................................<br/>\\n', escape=False)"
+p129
+sI78
+S'response.write(form)'
+p130
+sI79
+S"response.write('\\n\\n', escape=False)"
+p131
+sI80
+S"response.write(A(T('markup textareas'), _href='javascript:markup_textareas();', _class='color-transparent'))"
+p132
+sI81
+S"response.write('\\n', escape=False)"
+p133
+sI82
+S'response.write(\'\\n      </div>\\n      <!-- end #content -->\\n\\n      <div id="utility" class="clear">&nbsp;</div>\\n\\n      <div id="footer">\', escape=False)'
+p134
+sI83
+S"response.write(A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements'])))"
+p135
+sI84
+S'response.write(\'</div>\\n        \\n    </div>\\n    <!-- end #wrapper -->\\n\\n    <div id="tracking">\\n        <script type="text/javascript" id="tracking_src">\\n            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\\n            document.write(unescape("%3Cscript src=\\\'" + gaJsHost + "google-analytics.com/ga.js\\\' type=\\\'text/javascript\\\'%3E%3C/script%3E"));\\n        </script>\\n        <script type="text/javascript" id="tracking_process">\\n            try {\\n                var pageTracker = _gat._getTracker("UA-5101967-1");\\n                pageTracker._initData();\\n                pageTracker._trackPageview();\\n            }\\n            catch(e) {\\n                if (console) try{console.log(e);}catch(e){}\\n            }\\n        </script>\\n    </div>    \\n    <!-- end #tracking -->\\n\\n    <div id="links">\\n             \', escape=False)'
+p136
+sI85
+S"response.write(A(T('add page/post'),_href=URL(r=request,c='default',f='add/page'), _class='color-transparent'))"
+p137
+sI86
+S"response.write('\\n             ', escape=False)"
+p138
+ssg111
+S'()'
+p139
+sg113
+S'<module>'
+p140
+sasS'pyver'
+p141
+S'Python 2.5.1: /usr/local/bin/python'
+p142
+sS'session'
+p143
+(dp144
+S'user_authorization_done'
+p145
+S'True'
+p146
+sS'_formkey[app_config_1]'
+p147
+S"'d4eaa089-c116-4045-b1d0-73e846c02f21'"
+p148
+sS'flash'
+p149
+S'None'
+p150
+sS'auth'
+p151
+S"<Storage {'expiration': 3600, 'user': <Storage {..., 2, 22, 14, 53, 57, 138223), 'remember': False}>"
+p152
+sS'authorized'
+p153
+g146
+sS'_language'
+p154
+S"'en'"
+p155
+ssS'etype'
+p156
+S"<type 'exceptions.NameError'>"
+p157
+sS'date'
+p158
+S'Tue Feb 22 14:53:57 2011'
+p159
+sS'response'
+p160
+(dp161
+S'_vars'
+p162
+S"{'form': <gluon.sqlhtml.SQLFORM object at 0x97d5c6c>}"
+p163
+sg68
+S"<SimpleCookie: session_id_a='127.0.0.1-5aea260a-e901-47ef-aec7-e2a9736a0e75'>"
+p164
+sS'links'
+p165
+S"[['web2py', 'http://www.web2py.com', 1], ['Python', 'http://www.python.org', 2], ['DePaul CTI', 'http://www.cs.depaul.edu', 3], ['DePaul University', 'http://www.depaul.edu', 5], ['downloads', '/a/default/page/32', 15], ['media / picasa / gallery', '/a/media/picasa/gallery', 16], ['manage media / manage picasa albums / manage photos', '/a/media/picasa/albums', 17], ['setup, application initialization', '/a/setup', 18], ['twitter', '/a/media/social/twitter', 19]]"
+p166
+sS'posts'
+p167
+S'<gluon.dal.Rows object at 0x97bf58c>'
+p168
+sS'themes'
+p169
+S"['0', '1', 'cms']"
+p170
+sS'meta'
+p171
+S'<Storage {}>'
+p172
+sS'anon_user'
+p173
+S"<Row {'auth_event': <gluon.dal.Set object at 0x9...elete_record': <function <lambda> at 0x97b579c>}>"
+p174
+sS'_view_environment'
+p175
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x97be6ec>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p176
+sS'keywords'
+p177
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p178
+sS'files'
+p179
+S'[]'
+p180
+sS'_caller'
+p181
+S'<function <lambda> at 0x955dc6c>'
+p182
+sS'title'
+p183
+S'"molhokwai.net - \'a\' cm/dms"'
+p184
+sS'home_page'
+p185
+S"<Row {'post_text_TCode': 'page_id_24', 'post_att...elete_record': <function <lambda> at 0x963e56c>}>"
+p186
+sS'menu'
+p187
+S"[['home', False, '/a/default/page/16']]"
+p188
+sS'flash'
+p189
+S"''"
+p190
+sS'theme'
+p191
+S"'1'"
+p192
+sS'session_file'
+p193
+S"<open file '/home/herve/development/workspaces/m...47ef-aec7-e2a9736a0e75', mode 'rb+' at 0x957f380>"
+p194
+sS'_custom_commit'
+p195
+S'None'
+p196
+sS'session_filename'
+p197
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-5aea260a-e901-47ef-aec7-e2a9736a0e75'"
+p198
+sg51
+S'<cStringIO.StringO object at 0x9574200>'
+p199
+sS'description'
+p200
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p201
+sS'session_id_name'
+p202
+S"'session_id_a'"
+p203
+sS'_custom_rollback'
+p204
+S'None'
+p205
+sS'pages'
+p206
+S"[['beliefs', False, '/a/default/page/15'], ['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18'], ['SMS', False, '/a/default/page/21'], ['', False, '/a/default/page/23'], ['a_home', False, '/a/default/page/24'], ['a_help', False, '/a/default/page/26'], ['help', False, '/a/default/page/27'], ['a_home', False, '/a/default/page/29'], ['siblos', False, '/a/default/page/30'], ['dev', False, '/a/default/page/31'], ['downloads', False, '/a/default/page/32'], ['themes', False, '/a/default/page/35'], ['media upload', False, '/a/default/page/36'], ['acknowledgements', False, '/a/default/page/37'], ['test', False, '/a/default/page/38']]"
+p207
+sS'categories'
+p208
+S"[['misc', 2, '/a/default/category/misc'], ['message', 1, '/a/default/category/message']]"
+p209
+sS'help_page'
+p210
+S"<Row {'post_text_TCode': 'page_id_26', 'post_att...elete_record': <function <lambda> at 0x963e5dc>}>"
+p211
+sS'session_id'
+p212
+S"'127.0.0.1-5aea260a-e901-47ef-aec7-e2a9736a0e75'"
+p213
+sS'headers'
+p214
+S"<Storage {'Expires': 'Tue, 22 Feb 2011 13:53:57 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p215
+sS'status'
+p216
+S'200'
+p217
+sS'postprocessing'
+p218
+S'[]'
+p219
+sS'auth_users'
+p220
+S'<gluon.dal.Rows object at 0x97bf26c>'
+p221
+sS'view'
+p222
+S"'setup/index.html'"
+p223
+ssS'locals'
+p224
+(dp225
+S'protocol'
+p226
+S"'http'"
+p227
+sS'app_details'
+p228
+S'<__builtin__.AppDetails instance at 0x97d5bac>'
+p229
+sS'Service'
+p230
+S"<class 'gluon.tools.Service'>"
+p231
+sS'OBJECT'
+p232
+S"<class 'gluon.html.OBJECT'>"
+p233
+sS'SQLDB'
+p234
+S"<class 'gluon.dal.DAL'>"
+p235
+sg143
+S"<Storage {'user_authorization_done': True, '_for... False}>, 'authorized': True, '_language': 'en'}>"
+p236
+sS'LINK'
+p237
+S"<class 'gluon.html.LINK'>"
+p238
+sS'BR'
+p239
+S"<class 'gluon.html.BR'>"
+p240
+sS'local_import'
+p241
+S'<function <lambda> at 0x97b5ca4>'
+p242
+sS'OPTGROUP'
+p243
+S"<class 'gluon.html.OPTGROUP'>"
+p244
+sS'expressions'
+p245
+S'{\'rel_url_and_end_tags_find\': [\'[0-9]{0,1}/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\\\'\\\\.}>\\\\),\\\\"]\'], \'url_find\': [\'([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|...z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\\\'\\\\.}>\\\\),\\\\"]\', r\'([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}|...ww|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+)(:[0-9]*)?\', r\'(~/|/|\\./)([-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]|\\\\)+\', r"\'\\<((mailto:)|)[-A-Za-z0-9\\.]+@[-A-Za-z0-9\\.]+"]}'
+p246
+sS'SessionManager'
+p247
+S'<class __builtin__.SessionManager at 0x97d47dc>'
+p248
+sS'link_labels'
+p249
+S"{'link_title': 'Name', 'link_url': 'URL'}"
+p250
+sS'PRE'
+p251
+S"<class 'gluon.html.PRE'>"
+p252
+sS'IS_INT_IN_RANGE'
+p253
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p254
+sS'IS_LOWER'
+p255
+S"<class 'gluon.validators.IS_LOWER'>"
+p256
+sS'IS_STRONG'
+p257
+S"<class 'gluon.validators.IS_STRONG'>"
+p258
+sS'p_home_k'
+p259
+S"<lazyT '%(app)s_home'>"
+p260
+sS'Recaptcha'
+p261
+S"<class 'gluon.tools.Recaptcha'>"
+p262
+sS'cache'
+p263
+S'<gluon.cache.Cache object at 0x95e956c>'
+p264
+sS'IS_IN_DB'
+p265
+S"<class 'gluon.validators.IS_IN_DB'>"
+p266
+sS'TAG'
+p267
+S'<gluon.html.__TAG__ object at 0x91aa26c>'
+p268
+sS'SQLField'
+p269
+S"<class 'gluon.dal.Field'>"
+p270
+sS'BODY'
+p271
+S"<class 'gluon.html.BODY'>"
+p272
+sS'IS_DATE_IN_RANGE'
+p273
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p274
+sS'TH'
+p275
+S"<class 'gluon.html.TH'>"
+p276
+sS'URL'
+p277
+S'<function _URL at 0x94da534>'
+p278
+sS'db'
+p279
+S"<DAL {'auth_event': <Table {'origin': <gluon.dal..., 'id': <gluon.dal.Field object at 0x97c466c>}>}>"
+p280
+sS'auth'
+p281
+S'<gluon.tools.Auth object at 0x97c2e8c>'
+p282
+sS'P'
+S"<class 'gluon.html.P'>"
+p283
+sS'TFOOT'
+p284
+S"<class 'gluon.html.TFOOT'>"
+p285
+sS'XHTML'
+p286
+S"<class 'gluon.html.XHTML'>"
+p287
+sS'datetime'
+p288
+S"<module 'datetime' from '/usr/local/lib/python2.5/lib-dynload/datetime.so'>"
+p289
+sS'ON'
+p290
+g146
+sS'OL'
+p291
+S"<class 'gluon.html.OL'>"
+p292
+sS'TEXTAREA'
+p293
+S"<class 'gluon.html.TEXTAREA'>"
+p294
+sS'MENU'
+p295
+S"<class 'gluon.html.MENU'>"
+p296
+sS'common'
+p297
+S'<__builtin__.Common instance at 0x97d5c0c>'
+p298
+sS'a_convert'
+p299
+S'<__builtin__.aConvert instance at 0x97d5bcc>'
+p300
+sS'EM'
+p301
+S"<class 'gluon.html.EM'>"
+p302
+sS'CODE'
+p303
+S"<class 'gluon.html.CODE'>"
+p304
+sS'HTTP'
+p305
+S"<class 'gluon.http.HTTP'>"
+p306
+sS'url_finders'
+p307
+S'[<_sre.SRE_Pattern object at 0x9790b98>, <_sre.SRE_Pattern object at 0x9633350>, <_sre.SRE_Pattern object at 0x95557f0>, <_sre.SRE_Pattern object at 0x9460890>]'
+p308
+sS'log_wrapped'
+p309
+S'<function log_wrapped at 0x965f17c>'
+p310
+sS'HR'
+p311
+S"<class 'gluon.html.HR'>"
+p312
+sS'comment_labels'
+p313
+S"{'comment_author': 'Name', 'comment_author_email': 'Email', 'comment_author_website': 'Website', 'comment_text': 'Comment', 'post_id': 'Post ID'}"
+p314
+sS'IS_DATETIME'
+p315
+S"<class 'gluon.validators.IS_DATETIME'>"
+p316
+sS'HEAD'
+p317
+S"<class 'gluon.html.HEAD'>"
+p318
+sS'LABEL'
+p319
+S"<class 'gluon.html.LABEL'>"
+p320
+sS'cat_labels'
+p321
+S"{'category_name': 'Name'}"
+p322
+sS'META'
+p323
+S"<class 'gluon.html.META'>"
+p324
+sS'print_wrapped'
+p325
+S'<function print_wrapped at 0x97cfca4>'
+p326
+sS'SELECT'
+p327
+S"<class 'gluon.html.SELECT'>"
+p328
+sS'CENTER'
+p329
+S"<class 'gluon.html.CENTER'>"
+p330
+sS'prettydate'
+p331
+S'<function prettydate at 0x946f534>'
+p332
+sS'Crud'
+p333
+S"<class 'gluon.tools.Crud'>"
+p334
+sS'Utilities'
+p335
+S'<class __builtin__.Utilities at 0x97d483c>'
+p336
+sS'Auth'
+p337
+S"<class 'gluon.tools.Auth'>"
+p338
+sS'IS_EQUAL_TO'
+p339
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p340
+sS'IS_LIST_OF'
+p341
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p342
+sS'SQLFORM'
+p343
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p344
+sS'file_labels'
+p345
+S"{'file': 'File', 'filename': 'Enter file name'}"
+p346
+sS'LOAD'
+p347
+S'<gluon.compileapp.LoadFactory object at 0x97f9a6c>'
+p348
+sS'redirect'
+p349
+S'<function redirect at 0x8f9efb4>'
+p350
+sS'FIELDSET'
+p351
+S"<class 'gluon.html.FIELDSET'>"
+p352
+sS'__builtins__'
+p353
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, 'Exception': <type 'exceptions.Exception'>, 'False': False, ...}"
+p354
+sS'embed64'
+p355
+S'<function embed64 at 0x91b8844>'
+p356
+sS'INPUT'
+p357
+S"<class 'gluon.html.INPUT'>"
+p358
+sS'EMBED'
+p359
+S"<class 'gluon.html.EMBED'>"
+p360
+sS'IS_IMAGE'
+p361
+S"<class 'gluon.validators.IS_IMAGE'>"
+p362
+sS'H2'
+p363
+S"<class 'gluon.html.H2'>"
+p364
+sS'H3'
+p365
+S"<class 'gluon.html.H3'>"
+p366
+sS'H1'
+p367
+S"<class 'gluon.html.H1'>"
+p368
+sS'H6'
+p369
+S"<class 'gluon.html.H6'>"
+p370
+sS'H4'
+p371
+S"<class 'gluon.html.H4'>"
+p372
+sS'H5'
+p373
+S"<class 'gluon.html.H5'>"
+p374
+sS'UL'
+p375
+S"<class 'gluon.html.UL'>"
+p376
+sS'IS_UPPER'
+p377
+S"<class 'gluon.validators.IS_UPPER'>"
+p378
+sS'xmlescape'
+p379
+S'<function xmlescape at 0x91b825c>'
+p380
+sS'IS_TIME'
+p381
+S"<class 'gluon.validators.IS_TIME'>"
+p382
+sg189
+S"''"
+p383
+sS'OPTION'
+p384
+S"<class 'gluon.html.OPTION'>"
+p385
+sS'TITLE'
+p386
+S"<class 'gluon.html.TITLE'>"
+p387
+sS'CRYPT'
+p388
+S"<class 'gluon.validators.CRYPT'>"
+p389
+sS'administrators_emails'
+p390
+S"['molhokwai@gmail.com', 'herve.mayou@gmail.com']"
+p391
+sS'IS_EMPTY_OR'
+p392
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p393
+sS'MARKMIN'
+p394
+S"<class 'gluon.html.MARKMIN'>"
+p395
+sS'current_language'
+p396
+S"'en'"
+p397
+sS'this_app'
+p398
+S"'a'"
+p399
+sS'AppDetails'
+p400
+S'<class __builtin__.AppDetails at 0x97be6ec>'
+p401
+sS'Struct'
+p402
+S'<class __builtin__.Struct at 0x97d480c>'
+p403
+sS'service'
+p404
+S'<gluon.tools.Service object at 0x97c266c>'
+p405
+sS'SCRIPT'
+p406
+S"<class 'gluon.html.SCRIPT'>"
+p407
+sS'geocode'
+p408
+S'<function geocode at 0x946df0c>'
+p409
+sS'TABLE'
+p410
+S"<class 'gluon.html.TABLE'>"
+p411
+sS'IS_IPV4'
+p412
+S"<class 'gluon.validators.IS_IPV4'>"
+p413
+sS'IS_LENGTH'
+p414
+S"<class 'gluon.validators.IS_LENGTH'>"
+p415
+sS'XML'
+p416
+S"<class 'gluon.html.XML'>"
+p417
+sS'B'
+S"<class 'gluon.html.B'>"
+p418
+sS'IMG'
+p419
+S"<class 'gluon.html.IMG'>"
+p420
+sS'SQLTABLE'
+p421
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p422
+sS'IS_MATCH'
+p423
+S"<class 'gluon.validators.IS_MATCH'>"
+p424
+sS'IS_ALPHANUMERIC'
+p425
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p426
+sS'SPAN'
+p427
+S"<class 'gluon.html.SPAN'>"
+p428
+sS'IS_SLUG'
+p429
+S"<class 'gluon.validators.IS_SLUG'>"
+p430
+sS'CLEANUP'
+p431
+S"<class 'gluon.validators.CLEANUP'>"
+p432
+sS'fetch'
+p433
+S'<function fetch at 0x946de64>'
+p434
+sS'IS_DATE'
+p435
+S"<class 'gluon.validators.IS_DATE'>"
+p436
+sS'IS_EMAIL'
+p437
+S"<class 'gluon.validators.IS_EMAIL'>"
+p438
+sS'IS_NOT_EMPTY'
+p439
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p440
+sg47
+S"<Storage {'function': 'index', 'body': <cStringI... 14, 53, 57, 138223), 'post_vars': <Storage {}>}>"
+p441
+sS'BEAUTIFY'
+p442
+S"<class 'gluon.html.BEAUTIFY'>"
+p443
+sS'TBODY'
+p444
+S"<class 'gluon.html.TBODY'>"
+p445
+sS'Field'
+p446
+S"<class 'gluon.dal.Field'>"
+p447
+sS'Mail'
+p448
+S"<class 'gluon.tools.Mail'>"
+p449
+sS'DIV'
+p450
+S"<class 'gluon.html.DIV'>"
+p451
+sS'LEGEND'
+p452
+S"<class 'gluon.html.LEGEND'>"
+p453
+sS'post_labels'
+p454
+S"{'post_category': 'Category', 'post_text': 'Post', 'post_text_TCode': 'Translation code (code & language texts must be set in the translation files)', 'post_time': 'Post Date', 'post_title': 'Title', 'post_type': 'Type', 'show_in_menu': 'Show in menu'}"
+p455
+sS'global_site_url'
+p456
+S"'http://localhost:8001'"
+p457
+sS'form'
+p458
+S'<gluon.sqlhtml.SQLFORM object at 0x97d5c6c>'
+p459
+sS'json_labels'
+p460
+S"{'data': <lazyT 'data'>, 'name': <lazyT 'name'>}"
+p461
+sS'DAL'
+p462
+S"<class 'gluon.dal.DAL'>"
+p463
+sS'TT'
+p464
+S"<class 'gluon.html.TT'>"
+p465
+sS'TR'
+p466
+S"<class 'gluon.html.TR'>"
+p467
+sS'this_app_url'
+p468
+S"'http://localhost:8001/a'"
+p469
+sS'LI'
+p470
+S"<class 'gluon.html.LI'>"
+p471
+sS'IFRAME'
+p472
+S"<class 'gluon.html.IFRAME'>"
+p473
+sS'TD'
+p474
+S"<class 'gluon.html.TD'>"
+p475
+sS'PluginManager'
+p476
+S"<class 'gluon.tools.PluginManager'>"
+p477
+sS'IS_URL'
+p478
+S"<class 'gluon.validators.IS_URL'>"
+p479
+sS'A'
+S"<class 'gluon.html.A'>"
+p480
+sS'STYLE'
+p481
+S"<class 'gluon.html.STYLE'>"
+p482
+sS'rel_url_and_end_tags_finders'
+p483
+S'[<_sre.SRE_Pattern object at 0x9552e90>]'
+p484
+sS'IS_DATETIME_IN_RANGE'
+p485
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p486
+sS'HTML'
+p487
+S"<class 'gluon.html.HTML'>"
+p488
+sS'FORM'
+p489
+S"<class 'gluon.html.FORM'>"
+p490
+sS'I'
+S"<class 'gluon.html.I'>"
+p491
+sS'crud'
+p492
+S'<gluon.tools.Crud object at 0x97c236c>'
+p493
+sS'utilities'
+p494
+S'<__builtin__.Utilities instance at 0x97d5c2c>'
+p495
+sS'IS_NOT_IN_DB'
+p496
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p497
+sS'aConvert'
+p498
+S'<class __builtin__.aConvert at 0x97d471c>'
+p499
+sS'app_config'
+p500
+S'<Row {\'APP_METAS\': ["molhokwai.net - \'a\' cm/dms"...elete_record\': <function <lambda> at 0x97b564c>}>'
+p501
+sS'Common'
+p502
+S'<class __builtin__.Common at 0x97d47ac>'
+p503
+sg160
+S"<Storage {'body': <cStringIO.StringO object at 0...mbda> at 0x955dc6c>, 'view': 'setup/index.html'}>"
+p504
+sS'THEAD'
+p505
+S"<class 'gluon.html.THEAD'>"
+p506
+sS'IS_NULL_OR'
+p507
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p508
+sS'session_manager'
+p509
+S'<__builtin__.SessionManager instance at 0x97d5bec>'
+p510
+sS'IS_FLOAT_IN_RANGE'
+p511
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p512
+sS'IS_EXPR'
+p513
+S"<class 'gluon.validators.IS_EXPR'>"
+p514
+sS'T'
+S'<gluon.languages.translator object at 0x97f9fcc>'
+p515
+sS'RPXAccount'
+p516
+S"<class 'gluon.contrib.login_methods.rpx_account.RPXAccount'>"
+p517
+sS'IS_IN_SET'
+p518
+S"<class 'gluon.validators.IS_IN_SET'>"
+p519
+sS'IS_UPLOAD_FILENAME'
+p520
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p521
+sS'p_help_k'
+p522
+S"<lazyT '%(app)s_help'>"
+p523
+sS're'
+p524
+S"<module 're' from '/usr/local/lib/python2.5/re.pyc'>"
+p525
+sS'IS_DECIMAL_IN_RANGE'
+p526
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p527
+sssS'traceback'
+p528
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/setup/index.html", line 76, in <module>\nNameError: name \'edit_title\' is not defined\n'
+p529
+s.

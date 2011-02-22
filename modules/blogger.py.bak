@@ -1,246 +1,178 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# coding : utf8
+
 """
 # PSEUDO CODE
 # -----------
 # 
 #    INSTANCIATION
 #    -------------
-#    Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+#    _blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
 #                           app_config.BLOGGER_BLOGS_LANGUAGES)
 #    THEMES BY LANGUAGE
 #    ------------------
-#    Blogger.themes_by_languages(session.blogger_languages.split(','))
+#    blogger.themes_by_languages(session.blogger_languages.split(','))
 # 
 #    TAGS BY THEMES
 #    --------------
-#    Blogger.tags_by_themes(session.blogger_themes.split('-'))
+#    blogger.tags_by_themes(session.blogger_themes.split('-'))
 # 
 #    POSTS BY TAGS
 #    -------------
-#    Blogger.posts_by_tags(session.blogger_tags.split('-')
+#    blogger.posts_by_tags(session.blogger_tags.split('-')
 # 
 """
-
-from types import *
-import sys
-from gdata import service
-import gdata
-import atom
-
-i = 0
-
-username = 'molhokwai@gmail.com'
-password = 'xxxxx'
-source = 'molhokwai.net'
-
-for arg in sys.argv:
-    if arg.find('username=')==0: username = arg[9:]
-    elif arg.find('password=')==0: password = arg[9:]
-    elif arg.find('source=')==0: source = arg[7:]
-    i+=1
-
-def GetBloggerService(username, password, source):
-    _service = service.GDataService(username, password)
-    _service.source = source
-    _service.service = 'blogger'
-    _service.account_type = 'GOOGLE'
-    _service.server = 'www.blogger.com'
-    _service.ProgrammaticLogin()
-    return _service
-blogger_service = GetBloggerService(username, password, source)
-
+class Blogger:
+    config_api = None
+    config_themes = None
+    config_blogs_languages = None
+    service = None
     
-blogs=[]
-def GetMetas(entry_id_text, parent_item='user'):
-    # structure sample: "tag:blogger.com,1999:user-123456789123.blog-1234567891234567891"
-    # tag
-    s = entry_id_text.split(',')
-    tag = s[0].split(':')[1]
-    # year
-    s = s[1].split(':')
-    year = s[0]
-    # ids
-    s = s[1].split('.')
-    parent_item_id = s[0].split('-')[1]
-    item_id = s[1].split('-')[1]
-    return {
-        'id' : item_id,
-        'tag' : tag,
-        'year' : year,
-        parent_item : parent_item_id
-    }
+    _blogs = None
+        
+    def __init__(self, config_api, config_themes, config_blogs_languages, blogs = None):
+        self.config_api = config_api
+        self.config_themes = config_themes
+        self.config_blogs_languages = config_blogs_languages
+        self.service = blogger_service()
+        self._blogs = blogs
 
-            
-def GetBlogs(blogger_service):
-    query = service.Query()
-    query.feed = '/feeds/default/blogs'
-    feed = blogger_service.Get(query.ToUri())
+    def blogger_service(self, username=None, password=None, source=None):
+        if username is None: username = self.config_api[0]
+        if password is None: password = self.config_api[1]
+        if source is None: source = self.config_api[2]
 
-    for entry in feed.entry:
-        data = GetMetas(entry.id.text, parent_item='user')
-        data['title'] = entry.title.text
-        data['posts'] = []
-        data['categories'] = []
-        blogs.append(data)
+        _service = service.GDataService(username, password)
+        _service.source = source
+        _service.service = 'blogger'
+        _service.account_type = 'GOOGLE'
+        _service.server = 'www.blogger.com'
+        _service.ProgrammaticLogin()
+        return _service
 
-GetBlogs(blogger_service)
+    @staticmethod
+    def config_items(_list):
+        """
+            Relies on this structure (used in setup: app_config): 
+                ['item1:sub_item6,sub_item5,sub_item3', 'item2:sub_item4,sub_item1,sub_item2', ]
+        """
+        return map(lambda x : x.split(':')[0], _list)
+    @staticmethod
+    def config_sub_items(_list):
+        """
+            Relies on this structure (used in setup: app_config): 
+                ['item1:sub_item6,sub_item5,sub_item3', 'item2:sub_item4,sub_item1,sub_item2', ]
+        """
+        return map(lambda x : x.split(':')[1].split(','), _list)
+        
+    @staticmethod
+    def config_sub_by_items(_list, items):
+        """
+            Relies on this structure (used in setup: app_config): 
+                ['item1:sub_item6,sub_item5,sub_item3', 'item2:sub_item4,sub_item1,sub_item2', ]
+        """
+        sub_by_items = map(lambda x : x.split(':')[1], 
+                filter(lambda x: x.split(':')[0] in items, _list))
+        sub_items = []
+        for sbi in sub_by_items:
+            sub_items += sbi.split(',')
+        return sub_items
 
-def GetBlogIndexAndData(title):
-    for i in range(len(blogs)):
-        if blogs[i]['title'] == title:
-            return i,blogs[i]
-        i+=1
-def GetBlogCategories(atomCategories):
-    return map(lambda x: x.term, atomCategories)
+    @staticmethod
+    def concat_sub_by_belonging_items(master_list, sub_list, master_list_key, sub_list_key):
+        a = []
+        for am in map(lambda x: x[sub_list_key], filter(lambda y: y[master_list_key] in sub_list, master_list)):
+            a += am 
+        return a
 
-_do=True
-while(_do):
-    def blog_choice_data():
-        print "Enter a number:"
+
+    @staticmethod
+    def get_blog_index_and_data(title):
         for i in range(len(blogs)):
-            print "\t%i : %s " % (i, blogs[i]['title'])
-        i = int(raw_input())
-        return i, blogs[i]
+            if blogs[i]['title'] == title:
+                return i,blogs[i]
+            i+=1
+    
+    @staticmethod
+    def get_categories(atomCategories):
+        return map(lambda x: x.term, atomCategories)
 
-    def blog_post_choice_data(blog_index):
-        posts = blogs[blog_index]['posts']
-        print "\tEnter a number:"
-        pr = ''
-        for i in range(len(posts)):
-            pr += "\t%i : %s " % (i, posts[i]['title'])
-        print pr
-        i = int(raw_input())
-        return i, posts[i]
+    @property
+    def themes(self):
+        return Blogger.config_items(self.config_themes)
+    @property
+    def languages(self):
+        return Blogger.config_items(self.config_blogs_languages)
+    @property
+    def blogs(self):
+        return Blogger.config_sub_items(self.config_blogs_languages)
 
-
-    print "Enter one of the options below:"
-    print "\t1 : User Blog Titles"
-    print "\t2 : Posts in Categories"
-    print "\t3 : Blog All Posts"
-    print "\t4 : Bog Post Comment(s)"
-    print "\t5 : Post A Comment"
-    print "\tq : Exit"
-
-    choice=raw_input()
-    _do = not choice == "q"
-    if not _do: sys.exit()
-
-    if choice == "1":
-        def PrintUserBlogTitles(blogger_service):
-            query = service.Query()
+    @property
+    def blogs(self):
+        if not self._blogs:
+            query = self.service.Query()
             query.feed = '/feeds/default/blogs'
-            feed = blogger_service.Get(query.ToUri())
-
-            print feed.title.text
+            feed = self.service.Get(query.ToUri())
+        
+            self._blogs = []
             for entry in feed.entry:
-                print "\t%s | %s " % (entry.title.text, entry.id.text)
-
-        PrintUserBlogTitles(blogger_service)
-
-    elif choice == "2":
-        def PrintPostsInCategories(blogger_service, blog_id, categories):
-            query = service.Query()
-            query.feed = '/feeds/' + blog_id + '/posts/default'
-            query.categories = categories
-            feed = blogger_service.Get(query.ToUri())
-
-            print "%s posts in categories: %s" % (feed.title.text,  ','.join(categories))
-            j = 0
-            for entry in feed.entry:
-                if j==0:
-                    pass
-                print "\t %s - categories : %s" % (entry.title.text, ','.join(GetBlogCategories(entry.category)))
-                #print "\t" + entry.content.text
-                #print "\t" + entry.updated.text
-                j+=1
-            print
-
-        blog_index, blog_data = blog_choice_data()
-
-        print "Enter categories as: cat1,cat2,cat3..."
-        categories=raw_input().split(',')
-
-        PrintPostsInCategories(blogger_service, blog_data['id'], categories)
-
-    elif choice in ["3", "4", "5"]:
-
-        def GetAllPosts(blogger_service, blog_index, do_print=True):
+                data = GetMetas(entry.id.text, parent_item='user')
+                for l in entry.link:
+                  if l.rel == 'alternate':
+                    data['name'] = l.href.split('.')[0].split('//')[1]
+                data['title'] = entry.title.text
+                data['posts'] = []
+                data['categories'] = []                
+                self._blogs.append(data)
+        return self._blogs
+        
+    @property
+    def blogs_datas(self):
+        for blog_index in range(len(self.blogs)):
             blog_id=blogs[blog_index]['id']
-            feed = blogger_service.GetFeed('/feeds/' + blog_id + '/posts/default')
-
-            blogs[blog_index]['posts'] = []
-            blogs[blog_index]['categories'] = []
+            feed = _blogger.service.GetFeed('/feeds/' + blog_id + '/posts/default')
+            self._blogs[blog_index]['posts'] = []
+            self._blogs[blog_index]['categories'] = []
             for entry in feed.entry:
-                catgs=GetBlogCategories(entry.category)
+                catgs=Blogger.get_categories(entry.category)
                 data = GetMetas(entry.id.text, parent_item='blog')
                 data['title'] = entry.title.text
                 data['content'] = entry.content.text
                 data['updated'] = entry.updated.text
-                data['categories'] = ','.join(catgs)
+                data['categories'] = catgs
                 data['comments'] = []
-                blogs[blog_index]['posts'].append(data)
-                if do_print:
-                    print "\t%s - updated: %s - categories: %s \n\t\t%s " % (entry.title.text, entry.updated.text, ','.join(catgs), entry.content.text)
+                self._blogs[blog_index]['posts'].append(data)
                 for c in catgs:
-                    if c not in blogs[blog_index]['categories']:
-                        blogs[blog_index]['categories'].append(c)
-            print
+                    if c not in self._blogs[blog_index]['categories']:
+                        self._blogs[blog_index]['categories'].append(c)
+        return self._blogs
 
-        if choice == "3":
-            blog_index, blog_data = blog_choice_data()
-            GetAllPosts(blogger_service, blog_index)
+    def blogs_by_languages(self, languages):
+        return Blogger.config_sub_by_items(self.config_blogs_languages, languages)
 
-        elif choice in ["4", "5"]:
+    def blogs_by_themes(self, themes):
+        return Blogger.sub_by_items(self.config_themes, themes)
 
-            def PrintAllComments(blogger_service, blog_index, post_index):
-                blog_id = blogs[blog_index]['id']
-                post_id = blogs[blog_index]['posts'][post_index]['id']
+    def blogs_by_languages(self, languages):
+        return Blogger.sub_by_items(self.config_blogs_languages, languages)
 
-                feed_url = '/feeds/' + blog_id + '/' + post_id + '/comments/default'
-                try : 
-                    feed = blogger_service.Get(feed_url)
+    def themes_by_languages(self, languages):
+        blogs_by_languages = Blogger.config_sub_by_items(self.config_blogs_languages, languages)
+        return filter(lambda x: filter(lambda y: y in self.blogs_by_themes(x), blogs_by_languages)>0, self.themes)
 
-                    print feed.title.text
-                    blogs[blog_index]['posts'][post_index]['comments'] = []
-                    if len(feed.entry)>0:
-                        for entry in feed.entry:
-                            print "\t" + entry.title.text
-                            print "\t" + entry.updated.text
-                            data = GetMetas(entry.id.text, parent_item = 'post')
-                            data['title'] = entry.title.text
-                            data['content'] = entry.content.text
-                            data['updated'] = entry.updated.text
-                            blogs[blog_index]['posts'][post_index]['comments'].append(data)
-                            print repr(data)
-                    else:
-                        print "No comment found"
-                    print
+    def tags_by_themes(self, themes):
+        """
+        def tags_by_themes(self, themes):
+            blogs_by_themes = blogs_by_themes(self, themes)
+            blogs_categories = map(lambda x: x['categories'], filter(lambda x: x['name'] in blogs_by_themes, self.blogs))
+            b_cs = []
+            for b_c in blogs_categories:
+                b_cs += b_c
+            return b_cs
+        """
+        blogs_by_themes = blogs_by_themes(self, themes)
+        return Blogger.concat_sub_by_belonging_items(self.blogs, blogs_by_themes, 'name', 'categories')
 
-                except gdata.service.RequestError, err:
-                    print "Error : %s " % str(err)
-                print
-
-            def CreateComment(blogger_service, blog_id, post_id, comment_text='Mostly harmless'):
-                feed_uri = '/feeds/' + blog_id + '/' + post_id + '/comments/default'
-
-                entry = gdata.GDataEntry()
-                entry.content = atom.Content(content_type='xhtml', text=comment_text)
-                return blogger_service.Post(entry, feed_uri)
-
-            blog_index, blog_data = blog_choice_data()
-            if len(blog_data['posts'])==0:
-                GetAllPosts(blogger_service, blog_index, do_print=False)
-            post_index, post = blog_post_choice_data(blog_index)
-
-            if choice == "4":
-                PrintAllComments(blogger_service, blog_index, post_index)
-
-            elif choice == "5":
-                print "Your google username and password are required each time you wish to enter a comment."
-                c_username = raw_input('Your google username : ')
-                c_password = raw_input('Your google password : ')
-                c_source = raw_input('(Optional) Your website url : ')
-                if not c_source : c_source = source
-
-                c_blogger_service = GetBloggerService(c_username, c_password, c_source)
-                print str(CreateComment(c_blogger_service, blog_data['id'], post['id'], raw_input('Your comment : ')))
+    def posts_by_tags(self, themes):
+        blogs_by_themes = blogs_by_themes(self, themes)
+        return Blogger.concat_sub_by_belonging_items(self.blogs, blogs_by_themes, 'name', 'posts')
