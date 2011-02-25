@@ -375,7 +375,10 @@ var on_cli_web_submit=function(){
         var pages_match={};
         for(_id in server.pages){
             var s_p_i_p_t=server.pages[_id].post_title;
-            pages_match[s_p_i_p_t.toLowerCase()]=s_p_i_p_t.toLowerCase().indexOf($('#_cmd').val().toLowerCase());
+            var index=s_p_i_p_t.toLowerCase().indexOf($('#_cmd').val().toLowerCase());
+            if (index>=0){
+                pages_match[s_p_i_p_t.toLowerCase()]=index;
+            }
         }
         var p_match=null;
         var i_match=-1;

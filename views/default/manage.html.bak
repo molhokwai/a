@@ -1,4 +1,4 @@
-{{extend 'layout.html'}}
+{{extend 'themes/%s/layout.html' % response.theme}}
 <script type="text/javascript">
   var confirmByIndex=function(index){
       var texts=new Array(
@@ -12,7 +12,8 @@
 
 {{if edit_form != "":}}
 
-    <!-- h2>{{=manage_title}}</h2 -->
+    <h2>{{=manage_title}}</h2>
+    <p>{{=manage_text}}</p>
     ............................................................................................<br/>
     {{=edit_form}}
     
@@ -33,8 +34,8 @@
     {{pass}}
 
     {{if area == 'link':}}
-        <a href="/{{=request.application}}/default/manage/link/add">{{=T("add")}}</a>
+        <a href="/{{=request.application}}/default/manage/link/add" class='color-transparent'>{{=T("add")}}</a>
     {{else:}}{{if area == 'category':}}
-        <a href="/{{=request.application}}/default/manage/category/add">{{=T("add")}}</a>
+        <a href="/{{=request.application}}/default/manage/category/add" class='color-transparent'>{{=T("add")}}</a>
     {{pass}}{{pass}}
 {{pass}}

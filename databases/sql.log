@@ -185,3 +185,12 @@ timestamp: 2011-02-21T11:11:52.304353
 ALTER TABLE app_config ADD blogger_blogs_languages TEXT;
 timestamp: 2011-02-21T11:11:52.415727
 ALTER TABLE app_config ADD blogger_api TEXT;
+timestamp: 2011-02-25T12:44:07.197609
+CREATE TABLE app_themes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme_name CHAR(512),
+    theme_base CHAR(512),
+    theme_stylesheet_url CHAR(512),
+    theme_editor CHAR(512)
+);
+success!

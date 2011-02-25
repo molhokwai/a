@@ -7,9 +7,11 @@
 p_help_k=T('%(app)s_help', dict(app=request.application))
 p_home_k=T('%(app)s_home', dict(app=request.application))
 class AppDetails():
+    name = T("'a' cm/dms"), 
     title = T("molhokwai.net - 'a' cm/dms"), 
     keywords = T("blog, weblog, journal, web, log, web2py, pypress, cms, dms, simple, lightweight, straight-forward, direct, programming, programmer"),
     description = T("molhokwai.net - 'a' cm/dms, lightweight, simple, straight & direct")
+    themes_base_list = app_themes_base_list
     init_app_config = {
         'pages' : {
             'help_k' : T('%(app)s_help', dict(app=request.application)),
@@ -92,9 +94,10 @@ class AppDetails():
     }
 app_details=AppDetails()
 if app_config and app_config.APP_METAS:
-    app_details.title=app_config.APP_METAS[0]
-    app_details.keywords=app_config.APP_METAS[1]
-    app_details.description=app_config.APP_METAS[2]
+    if len(app_config.APP_METAS)>0: app_details.name=app_config.APP_METAS[0]
+    if len(app_config.APP_METAS)>1: app_details.title=app_config.APP_METAS[1]
+    if len(app_config.APP_METAS)>2: app_details.keywords=app_config.APP_METAS[2]
+    if len(app_config.APP_METAS)>3: app_details.description=app_config.APP_METAS[3]
         
 class aConvert():
     def to_int(self, value):
@@ -197,6 +200,25 @@ class Utilities():
     def get_cookie(self, name):
         if request.cookies.has_key(name):
             return request.cookies[name]
+
+    theme_sep_token = '#:#'
+    def get_from_app_themes(self, name):
+        theme = filter(lambda x: x.split(theme_sep_token)[0] == name, app_config.APP_THEMES)
+        if theme and len(theme)>0:
+            return theme[0]
+    
+    def get_from_theme(self, what, name=None, theme=None):
+        if not name is None:
+            theme = self.get_from_app_themes(name)
+        whats = {'name':0, 'base':1, 'stylesheet':2, 'author':3}
+        return theme.split(theme_sep_token)[whats[what]]
+    
+    def get_base_of_theme(self, name):
+        if name in app_details.themes_base_list:
+            return name
+        else:
+            theme_base = self.get_from_theme('base', name=name)
+            return self.get_base_of_theme(theme_base)
 
 # instance
 utilities=Utilities()

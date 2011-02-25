@@ -23,6 +23,7 @@ def app_init(request, response, session, cache, T, db, app_objects):
     app_details = app_objects.details
     app_config = app_objects.config
     log_wrapped=app_objects.log_wrapped
+    utilities = app_objects.utilities
 
     if not response.auth_users:
         response.auth_users=db().select(db.auth_user.ALL)
@@ -124,6 +125,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     app_details = app_objects.details
     app_config = app_objects.config
     log_wrapped = app_objects.log_wrapped
+    utilities = app_objects.utilities
 
     if not response.auth_users:
         response.auth_users=db().select(db.auth_user.ALL)
@@ -139,12 +141,13 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             display_name='anonymous@molhokwai.net'
         auth.user.display_name=display_name
     
+    response.name = app_details.name
     response.title = app_details.title
     response.keywords = app_details.keywords
     response.description = app_details.description
 
     # All posts
-    response.posts = db().select(posts.ALL)
+    response.posts = db().select(db.posts.ALL)
     
     # This dynamically adds the pages to the menu
     _pages = []
@@ -211,7 +214,18 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':request.application, 'name':cat.category_name}]
             items.append(item)
     response.categories = items
-    
+
+    # This returns latest 5 posts
+    last_posts = sorted(response.posts, key=lambda x: x.post_time, reverse=True)
+    l_p_limit = 5
+    items = []
+    for i in range(l_p_limit):
+        post = last_posts[i]
+        #item = [post.post_title, post.post_time, '/%(app)s/default/post/%(id)s' % {'app':request.application, 'id':post.id}]
+        item = [post.post_title, post.post_time, URL(r = request, f = 'post/%d' % post.id)]
+        items.append(item)
+    response.last_posts = items
+        
     # This returns all the links
     links = []
     try :
@@ -227,7 +241,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     response.links = items
     
     # Theme
-    response.themes=['0', '1','cms']
+    response.themes=app_details.themes_base_list
     if app_config and app_config.APP_THEMES:
         response.themes=app_config.APP_THEMES
         
@@ -244,5 +258,16 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
         response.theme = request.vars.theme
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
+
+    response.base_theme = None
+    response.theme_stylesheet = None
+    base_theme = utilities.get_base_of_theme(response.theme)
+
+    if base_theme != response.theme:
+        response.child_theme = response.theme
+        response.theme = base_theme
+        log_wrapped('3', 3)
+        response.theme_stylesheet = utilities.get_from_theme('stylesheet', name=response.child_theme)
+        log_wrapped('4', 4)
 
     return page_helper, post_helper

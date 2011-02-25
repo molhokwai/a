@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    {{if response.child_theme and response.theme_stylesheet:}}
+        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+    {{pass}}
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
@@ -34,7 +37,7 @@
           pages : []
       };
     </script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
@@ -105,7 +108,7 @@
           <div id="cli_web">
             <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">
                 <input type="text" id="_cmd" name="_cmd" />
-                {{if session.cli_web_flash:}}<font class="flash small">{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}</font>{{pass}}
+                {{if session.cli_web_flash:}}<font class="flash small">{{=XML(session.cli_web_flash)}}{{ session.cli_web_flash=False }}</font>{{pass}}
             </form>
           </div>
           <!-- end #cli_web -->

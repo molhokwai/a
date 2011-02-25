@@ -7,8 +7,14 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     session.connect(request, response, db=db) # and store sessions and tickets there
     ### or use the following lines to store sessions in Memcache
     # from gluon.contrib.memdb import MEMDB
-    # from google.appengine.api.memcache import Client
+    # from google.appengine.api.memcache import Client    
     # session.connect(request, response, db=MEMDB(Client()))
+    
+    ### cache in ram
+    from gluon.contrib.gae_memcache import MemcacheClient
+    from gluon.contrib.memdb import MEMDB
+    cache.memcache = MemcacheClient(request)
+    cache.ram = cache.disk = cache.memcache
 else:                                         # else use a normal relational database
     db=SQLDB("sqlite://db.db")
 
@@ -45,9 +51,30 @@ db.define_table('app_config',
     SQLField('BLOGGER_BLOGS_LANGUAGES',  'list:string',                  default=['<fr:blog3,blog4,blog6...>', '<nl:blog1,blog1...>', '<en:blog5...>'],
             label=T('Blogger blogs languages'))
 )
+
+app_themes_base_list = ['0', '1', 'cms', 'wordpress', 'pypress']
+app_themes_list = app_themes_base_list
+
 app_config=db(db.app_config.id>0).select()
 if len(app_config)>0:
     app_config=app_config[0]
+    if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:
+        app_themes_list = []
+        for i in range(len(app_config.APP_THEMES)):
+            if app_config.APP_THEMES[i].find(':')>0:
+                app_themes_list.append(app_config.APP_THEMES[i].split(':')[0])
+            else:
+                app_themes_list.append(app_config.APP_THEMES[i])
+
+db.define_table('app_themes',
+    SQLField('theme_name', 'string', required=True, label=T('Theme name')),
+    SQLField('theme_base', 'string', required=True, label=T('Based on')),
+    SQLField('theme_stylesheet_url', 'string', required=True, label=T('Stylesheet url')),
+    SQLField('theme_editor', 'string', required=True, writable=False, label=T('Author/editor'))
+)
+db.app_themes.theme_name.requires = IS_ALPHANUMERIC()
+db.app_themes.theme_stylesheet_url.requires = IS_URL()
+db.app_themes.theme_base.requires = IS_IN_SET(app_themes_list)
 
 #########################################################################
 ## Global convenience variables

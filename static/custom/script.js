@@ -98,7 +98,9 @@ var focus=function(cmd){
                     $($('form:visible:last')).formFirstField().focus();
                 }
                 else {
-                    document.getElementById('_cmd').focus();                    
+                    if (document.getElementById('_cmd')){
+                        document.getElementById('_cmd').focus();                    
+                    }
                 }
                 rv=true;
             }

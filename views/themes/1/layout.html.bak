@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    {{if response.child_theme and response.theme_stylesheet:}}
+        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+    {{pass}}
     <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
     <style type="text/css"></style>
@@ -71,7 +74,7 @@
             <font id="_cmd_msg" class="flash small">
                 {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
                 {{flash = session.flash if session.flash else response.flash}}
-                {{if flash:}}{{=flash}}{{pass}}
+                {{if flash:}}{{=XML(flash)}}{{pass}}
             </font>
             <input type="hidden" id="_cmd_history_cur" value="-1"/>
         </form>

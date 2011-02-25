@@ -1,0 +1,22 @@
+(dp1
+S'theme_stylesheet_url'
+p2
+S'CHAR(512)'
+p3
+sS'theme_editor'
+p4
+S'CHAR(512)'
+p5
+sS'theme_base'
+p6
+S'CHAR(512)'
+p7
+sS'id'
+p8
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p9
+sS'theme_name'
+p10
+S'CHAR(512)'
+p11
+s.

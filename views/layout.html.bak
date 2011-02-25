@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    {{if response.child_theme and response.theme_stylesheet:}}
+        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+    {{pass}}
     <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
     <style type="text/css"></style>
@@ -28,7 +31,7 @@
           pages : []
       };
     </script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
