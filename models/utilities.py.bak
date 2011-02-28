@@ -203,7 +203,7 @@ class Utilities():
 
     theme_sep_token = '#:#'
     def get_from_app_themes(self, name):
-        theme = filter(lambda x: x.split(theme_sep_token)[0] == name, app_config.APP_THEMES)
+        theme = filter(lambda x: x.split(self.theme_sep_token)[0] == name, app_config.APP_THEMES)
         if theme and len(theme)>0:
             return theme[0]
     
@@ -211,7 +211,7 @@ class Utilities():
         if not name is None:
             theme = self.get_from_app_themes(name)
         whats = {'name':0, 'base':1, 'stylesheet':2, 'author':3}
-        return theme.split(theme_sep_token)[whats[what]]
+        return theme.split(self.theme_sep_token)[whats[what]]
     
     def get_base_of_theme(self, name):
         if name in app_details.themes_base_list:

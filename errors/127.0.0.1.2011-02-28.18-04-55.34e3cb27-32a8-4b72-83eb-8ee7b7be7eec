@@ -1,0 +1,514 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html'
+p4
+sS'code'
+p5
+S'if not nake:\n    response.write(\'\\n    \', escape=False)\n    response.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="\', escape=False)\n    response.write(T.accepted_language or \'en\')\n    response.write(\'">\\n  <head>\\n    <title>\', escape=False)\n    response.write(response.title or request.application)\n    response.write(\'</title>\\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\\n    <meta name="keywords" content="\', escape=False)\n    response.write(response.keywords)\n    response.write(\'" />\\n    <meta name="description" content="\', escape=False)\n    response.write(response.description)\n    response.write(\'" />\\n    <meta name="google-site-verification" content="2TmmFn8eNL7GNZuDtORTZ89uxj5fmTtuwqQLqv8webc" /><!-- old: r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8 -->\\n    <!-- include required CSS files, further most first -->\\n    <!-- include requires CSS files\\n    \', escape=False)\n    response.files.append(URL(request.application,\'static\',\'jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css\'))\n    response.write(\'\\n    -->\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/themes/\', escape=False)\n    response.write(response.theme)\n    response.write(\'/base.css" type="text/css" media="screen" />\\n    \', escape=False)\n    if response.child_theme and response.theme_stylesheet:\n        response.write(\'\\n        <link rel="stylesheet" href="\', escape=False)\n        response.write(response.theme_stylesheet)\n        response.write(\'" media="screen" />\\n    \', escape=False)\n        pass\n    response.write(\'\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/themes/\', escape=False)\n    response.write(response.theme)\n    response.write(\'/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/markitup/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />\\n    <!-- include requires CSS files\\n    \', escape=False)\n    ## TODO: why is this not working?\n    response.files.append(URL(request.application,\'static\',\'style.css\'))\n    response.write(\'\\n    -->\\n    \', escape=False)\n    response.write(\'<script type="text/javascript">\\n<!--\\n/*\\nWritten by Massimo Di Pierro.\\n\\nThis is a minimalistic AJAX for web2py, for more sophisticated stuff\\nyou should use Scriptacolous or some other AJAX toolkit. Anyway...\\n\\nTo use web2py_ajax.html just make sure you include \\\'web2py_ajax.html\\\'\\nin your layout.html. This provides four functions:\\n\\npopup(url)\\ncollapse(id)\\nfade(id,value) // try value= +0.1 or -0.1\\najax(url,sources,taget) \\n// will send sources[i].value to url and dispaly result in target\\n*/\\n\\nfunction popup(url) {\\n  newwindow=window.open(url,\\\'name\\\',\\\'height=400,width=600\\\');\\n  if (window.focus) {newwindow.focus()}\\n  return false;\\n}\\n\\nfunction collapse(id) {\\n   if(this.document.getElementById(id).style.display=="none")\\n   (this.document.getElementById(id).style.display="block") ;\\n   else (this.document.getElementById(id).style.display="none") ;\\n}\\n\\nfunction fade(id,value) {\\n  var object=document.getElementById(id);\\n  if(value<0 && !object.style.opacity) {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity=1;\\n  }\\n  if(value>0 && object.style.opacity>=1) object.style.opacity=1;\\n  else if(value<0 && object.style.opacity<=0) {\\n     this.document.getElementById(id).style.display="none";\\n     object.style.opacity=0;\\n  }\\n  else {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity-=-value;\\n     setTimeout(function(){fade(id,value);},100);\\n     return false;\\n  }\\n  return true;\\n}\\n\\nfunction ajax(url,sources,target) {\\n  var req = null; \\n  var ctarget=document.getElementById(target);\\n  window.status="connecting...";\\n  if(window.XMLHttpRequest)\\n     req = new XMLHttpRequest(); \\n  else if (window.ActiveXObject)\\n     req  = new ActiveXObject("Microsoft.XMLHTTP");\\n  req.onreadystatechange = function() {\\n     window.status="waiting...";\\n     if(req.readyState == 4)\\n       if(req.status == 200) {\\n          window.status=\\\'Ajax Done!\\\'\\n          try { \\n             ctarget.innerHTML=req.responseText; \\n             try {ctarget.scrollTop=ctarget.scrollHeight-ctarget.clientHeight;}\\n             catch(err) {}\\n          } catch(err) { ctarget.value=req.responseText; }\\n       } else alert("AJAX Error: " + req.status);\\n  }\\n  var query=""\\n  for(i=0; i<sources.length; i++) {\\n     if(i>0) query=query+"&";\\n     query=query+encodeURIComponent(sources[i])+"="+encodeURIComponent(document.getElementById(sources[i]).value);\\n  }\\n  req.open("POST",url,true); \\n  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); \\n  req.send(query); \\n} \\n//-->\\n</script>\', escape=False)\n    response.write(\'\\n    <script type="text/javascript">\\n      <!-- /* this adds sfhover class to menu li items to make IE6 work */ jQuery(document).ready(function(){jQuery(\\\'li.web2py-menu-expand\\\').hover(function ()     {jQuery(this).addClass(\\\'sfhover\\\');},function () {jQuery(this).removeClass(\\\'sfhover\\\');});});//-->\\n    </script>\\n    <script type="text/javascript">\\n      var server={\\n          request : {\\n              application : \\\'\', escape=False)\n    response.write(this_app)\n    response.write(\'\\\'\\n          },\\n          pages : []\\n      };\\n    </script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/net.molhokwai/molhokwai.common.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/jquery/jquery-1.4.2.min.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/markitup/jquery.markitup.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/custom/script.js"></script>\\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/google/search_init.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/components/jquery/add-ons.js"></script>\\n    <script type="text/javascript">\\n        $(document).ready(function(){\\n            $(\\\'#google_translate_element\\\').hide();\\n            $(\\\'#cse-search-form\\\').hide();\\n            $(\\\'#cli_web\\\').hide(\\\'slow\\\');\\n        });\\n        \\n        var huTi=null;\\n        var toggleUtilities=function(a){\\n            var selectors={\\n                \\\'#google_translate_element\\\' : \\\'.goog-te-combo\\\',\\n                \\\'#cse-search-form\\\' : \\\'.gsc-input\\\',\\n                \\\'#cli_web\\\' : \\\'#_cmd\\\'\\n            };\\n            \\n            for(k in selectors){\\n                if(a.href.indexOf(k)>=0 && !$(k).is(\\\':visible\\\')){\\n                    $(k).show();\\n                    $(selectors[k]).focus();\\n                }\\n                else{\\n                    $(k).hide();\\n                }\\n            }\\n        };\\n    </script>    \\n  </head>\\n  <body>\\n     <div id="top-bar">\\n      <a href="#google_translate_element" onclick="toggleUtilities(this);" class="float-left">\', escape=False)\n    response.write(T(\'translation\'))\n    response.write(\' | </a>\\n      <a href="#cse-search-form" onclick="toggleUtilities(this);" class="float-left"> \', escape=False)\n    response.write(T(\'search (google)\'))\n    response.write(\' | </a>\\n      <a href="#cli_web" onclick="toggleUtilities(this);" class="float-left"> <em>\', escape=False)\n    response.write(T(\'command line\'))\n    response.write(\' | </em></a>\\n\\n       <span id="user-menu">\\n         \', escape=False)\n    if \'auth\' in globals():\n        response.write(\'\\n           \', escape=False)\n        if not auth.user:\n            response.write(\' \\n             <a>]</a> \', escape=False)\n            response.write(A(T(\'login\'),_href=URL(r=request,c=\'default\',f=\'user/login\')))\n            response.write(\' <a>[</a>\\n           \', escape=False)\n        else:\n            response.write(\'\\n             \', escape=False)\n            response.write(auth.user.display_name)\n            response.write(\' \\n             \', escape=False)\n            response.write(A(T(\'logout\'),_href=URL(r=request,c=\'default\',f=\'user/logout\')))\n            response.write(\' |\\n           \', escape=False)\n            pass\n        response.write(\'\\n         \', escape=False)\n        pass\n    response.write(\'\\n       </span> \\n      <!-- end #user-menu -->\\n\\n      <div class="clear"></div>\\n                    \\n      <div id="utilities" class="padt2pc">\\n\\n          <div id="google_translate_element"></div>\\n          <script>\\n            function googleTranslateElementInit() {\\n              new google.translate.TranslateElement({\\n                pageLanguage: \\\'\', escape=False)\n    response.write(current_language[:2])\n    response.write(\'\\\'\\n              }, \\\'google_translate_element\\\');\\n            }\\n          </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     \\n          <!-- end #google_translate_element-->    \\n    \\n          <div class="clear"></div>\\n          \\n          <div id="cli_web">\\n            <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">\\n                <input type="text" id="_cmd" name="_cmd" />\\n                \', escape=False)\n    if session.cli_web_flash:\n        response.write(\'<font class="flash small">\', escape=False)\n        response.write(XML(session.cli_web_flash))\n        session.cli_web_flash=False\n        response.write(\'</font>\', escape=False)\n        pass\n    response.write(\'\\n            </form>\\n          </div>\\n          <!-- end #cli_web -->\\n    \\n          <div id="cse-search-form">Loading</div>\\n          <script src="http://www.google.com/jsapi" type="text/javascript"></script>\\n          <script type="text/javascript">\\n            google.load(\\\'search\\\', \\\'1\\\', {language : \\\'\', escape=False)\n    response.write(current_language[:2])\n    response.write(\'\\\'});\\n            google.setOnLoadCallback(function() {\\n              var customSearchControl = new google.search.CustomSearchControl(\\\'014007428035866690530:qpoerqfcidu\\\');\\n              customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);\\n              var options = new google.search.DrawOptions();\\n              options.setSearchFormRoot(\\\'cse-search-form\\\');\\n          \\n              options.setAutoComplete(true);\\n              customSearchControl.draw(\\\'cse\\\', options);\\n            }, true);\\n          </script>\\n          <!-- end #cse-search-form -->\\n    \\n      </div>\\n      <!-- end #utilities -->\\n\\n    </div>\\n    <!-- end #top-bar-->\\n\\n    <div class="clear"></div>\\n    \\n    <div id="wrapper">\\n        <span id="logo">\\n          <a class="text-decoration-none">v0.1.0</a>\\n          <!--href="/welcome/default/roadmap"-->\\n        </span>\\n        <!-- end #logo -->\\n\\n        <div id="menu-tabs">\\n          \', escape=False)\n    if response.menu:\n        response.write(\'\\n                  <ul>\\n                      \', escape=False)\n        for _name,_active,_link in response.menu:\n            response.write(\'\\n                          <li><a href="\', escape=False)\n            response.write(_link)\n            response.write(\'" \', escape=False)\n            if not _active:\n                response.write(\'class="inactive"\', escape=False)\n                pass\n            response.write(\'>\', escape=False)\n            response.write(T(_name))\n            response.write(\'</a></li>\\n                      \', escape=False)\n            pass\n        response.write(\'\\n                  </ul>\\n          \', escape=False)\n        pass\n    response.write(\'\\n        </div>\\n        <div class="clear"></div>\\n        <!-- end #menu-tabs -->\\n\\n        <div id="container">\\n          <div id="cse"></div>\\n          <!-- end #cse -->\\n\\n          <div id="content">\\n\\n            <div id="contextual-nav">\\n              <ul>\\n                  <li>                          \\n                      <h2 class="widgettitle">\', escape=False)\n    response.write(T(\'Tags(categories)\'))\n    response.write(\'\\n                          \', escape=False)\n    if response.categories:\n        response.write(\'\\n                              \', escape=False)\n        if session.authorized:\n            response.write(\'\\n                                  <span style="font-size: .8em; font-weight: normal;">\\n                                      [<a href="/\', escape=False)\n            response.write(request.application)\n            response.write(\'/default/manage/category">\', escape=False)\n            response.write(T(\'manage\'))\n            response.write(\'</a>]\\n                                  </span>\\n                              \', escape=False)\n            pass\n        response.write(\'\\n                          \', escape=False)\n        pass\n    response.write(\'\\n                      </h2>\\n                      <ul>\\n                          <li><a href="/\', escape=False)\n    response.write(request.application)\n    response.write(\'/default/index/posts">\', escape=False)\n    response.write(T(\'view all\'))\n    response.write(\'</a></li>\\n                          \', escape=False)\n    for _name,_count,_link in response.categories:\n        response.write(\'\\n                              <li><a href="\', escape=False)\n        response.write(_link)\n        response.write(\'">\', escape=False)\n        response.write(_name)\n        response.write(\'</a> (\', escape=False)\n        response.write(_count)\n        response.write(\')</li>\\n                          \', escape=False)\n        pass\n    response.write(\'\\n                      </ul>                   \\n                  </li>\\n                  <!-- end sidebar categories -->\\n                  \\n                  \', escape=False)\n    if response.links:\n        response.write(\'\\n                      <li>\\n                          <h2 class="widgettitle">\\n                              \', escape=False)\n        response.write(T(\'Links\'))\n        response.write(\'\\n                              \', escape=False)\n        if session.authorized:\n            response.write(\'\\n                                  <span style="font-size: .8em; font-weight: normal;">\\n                                      [<a href="/\', escape=False)\n            response.write(request.application)\n            response.write(\'/default/manage/link">\', escape=False)\n            response.write(T(\'manage\'))\n            response.write(\'</a>]\\n                                  </span>\\n                              \', escape=False)\n            pass\n        response.write(\'\\n                          </h2>\\n                          <ul>\\n                              \', escape=False)\n        for _name,_link,_id in utilities.shorten_and_randomize(response.links, 5):\n            response.write(\'\\n                                  <li>\\n                                      <a target="_blank" href="\', escape=False)\n            response.write(_link)\n            response.write(\'">\', escape=False)\n            response.write(_name)\n            response.write(\'</a>\\n                                  </li>\\n                              \', escape=False)\n            pass\n        response.write(\'\\n                          </ul>                       \\n                      </li>\\n                  \', escape=False)\n        pass\n    response.write(\'\\n                  <!-- end sidebar links -->\\n\\n                  \', escape=False)\n    if response.pages:\n        response.write(\'\\n                      <li class="pages">\\n                          <h2 class="widgettitle">\\n                              \', escape=False)\n        response.write(T(\'Pages\'))\n        response.write(\'\\n                              <span style="font-size: .8em; font-weight: normal;">\\n                                  [<a href="/\', escape=False)\n        response.write(request.application)\n        response.write(\'/default/pages">\', escape=False)\n        response.write(T(\'view all\'))\n        response.write(\'</a>]\\n                              </span>\\n                          </h2>\\n                          <ul>\\n                              \', escape=False)\n        for _name,_active,_link in utilities.shorten_and_randomize(response.pages, 10):\n            response.write(\'\\n                                  <li>\\n                                      .<a href="\', escape=False)\n            response.write(_link)\n            response.write(\'">\', escape=False)\n            response.write(T(_name))\n            response.write(\'</a>\\n                                  </li>\\n                              \', escape=False)\n            pass\n        response.write(\'\\n                          </ul>                       \\n                      </li>\\n                      <div class="clear"></div>\\n                      <br/>\\n                  \', escape=False)\n        pass\n    response.write(\'\\n                  <!-- end sidebar links -->\\n                      \\n                  \', escape=False)\n    if session.authorized:\n        response.write(\'\\n                      <li>\\n                          <h2>\', escape=False)\n        response.write(T(\'Mini Admin\'))\n        response.write(\'</h2>\\n                          <ul>\\n                              <li><a href="/\', escape=False)\n        response.write(request.application)\n        response.write(\'/default/add/page">\', escape=False)\n        response.write(T(\'add page\'))\n        response.write(\'</a></li>\\n                              <li><a href="/\', escape=False)\n        response.write(request.application)\n        response.write(\'/default/add/post">\', escape=False)\n        response.write(T(\'add post\'))\n        response.write(\'</a></li>\\n                              <li><a href="/\', escape=False)\n        response.write(request.application)\n        response.write(\'/default/manage/category/add">\', escape=False)\n        response.write(T(\'add category\'))\n        response.write(\'</a></li>\\n                          </ul>\\n                      </li>\\n                  \', escape=False)\n        pass\n    response.write(\'\\n                  <!-- -end mini admin -->\\n\\n                  \', escape=False)\n    if response.sidebar_note:\n        response.write(\'\\n                      <li>\\n                          <p>\', escape=False)\n        response.write(response.sidebar_note)\n        response.write(\'</p>\\n                      </li>   \\n                  \', escape=False)\n        pass\n    response.write(\'\\n                  <!-- end sidebar_note -->\\n              </ul>\\n            </div>\\n            <!-- end #contextual-nav -->          \\n              \\n            \', escape=False)\n    if response.flash:\n        response.write(\'\\n                <div id="flash">\', escape=False)\n        response.write(XML(response.flash))\n        response.write(\'</div>\\n            \', escape=False)\n        pass\n    response.write(\'\\n        \\n            \', escape=False)\n    response.write(\'\\n\', escape=False)\nelse:\n    response.write(\'\\n    \', escape=False)\n    if response.refresh:\n        response.write(XML(response.refresh))\n        pass\n    response.write(\'\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\n    response.write(this_app)\n    response.write(\'/static/css/themes/\', escape=False)\n    response.write(response.theme)\n    response.write(\'/base.css" type="text/css" media="screen" />\\n    <style type="text/css">\\n        #footer, footer, #top-bar, top-bar {\\n            display:none;\\n        }\\n    </style>\\n\', escape=False)\n    pass\nresponse.write(\'\\n\\n\', escape=False)\nif area in [\'login\', \'add\', \'edit\', \'delete\', \'upload\']:\n    response.write(\'\\n    <!-- NOT USED AT THIS POINT IN THIS PAGE -->\\n    \', escape=False)\n    response.write(form)\n    response.write(\'\\n\', escape=False)\n    pass\nresponse.write(\'\\n\\n\', escape=False)\nif area==\'themes_choice\':\n    response.write(\'\\n    <script type="text/javascript">\\n        $(document).ready(function(){\\n            langs_on = \', escape=False)\n    response.write(XML(langs_on)))\n    response.write(\';\\n            for(lang in langs_on){\\n                document.getElementById(lang).checked = langs_on[lang] == "on";\\n            }\\n        });\\n    </script>\\n    \', escape=False)\n    response.write(form)\n    response.write(\'\\n\\n    \', escape=False)\n    response.write(DIV(_class="clear"))\n    response.write(\'\\n\\n    \', escape=False)\n    for _themes, _link in themes:\n        response.write(\'\\n        \', escape=False)\n        response.write(A(_themes, _href=_link))\n        response.write(\'\\n    \', escape=False)\n        pass\n    response.write(\'\\n\', escape=False)\n    pass\nresponse.write(\'\\n\', escape=False)\nresponse.write(\'\\n          </div>\\n          <div class="clear"></div>\\n          <!-- end #content -->          \\n\\n          <div id="footer"><a \\n            title=\\\'\', escape=False)\nresponse.write(XML(T("This site is totally opened and free. You can do whatever you wish with it. And if you wish for a copy of it, just download the pages. If you wish to have the dynamic part , let us/me know and we&#39;re/I&#39;m creating a dowload section (if not already done at the time you read this).")))\nresponse.write(\'\\\'>\\n                &copy;Copynone</a>\\n            molhokwai.net, 2010 - on PyPress, a <a target="_blank" href="http://www.web2py.org">web2py<a> powered blog\\n                  on <a target="_blank" href="http://code.google.com/appengine">google app engine<a> \\n             <br/>| <a href="/cms/default/page/1517002">about us(me)</a>| <a href="/welcome/default/about">about this app</a> \\n             <br/><div id="molhokwai-addthis">\\n                    <!-- AddThis Buttons BEGIN -->\\n                    <div class="addthis_toolbox addthis_default_style float-left" style="margin-left:35%">\\n                      <a href="http://www.addthis.com/bookmark.php?v=250&amp;username=xa-4c0f94e418ef2928" class="addthis_button_compact">Share</a>\\n                      <span class="addthis_separator">|</span>\\n                      <a class="addthis_button_facebook"></a>\\n                      <a class="addthis_button_myspace"></a>\\n                      <a class="addthis_button_google"></a>\\n                      <a class="addthis_button_twitter"></a>\\n                    </div>\\n                    <!--script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4c0f94e418ef2928"></script-->\\n                    <!-- AddThis Buttons END -->\\n                    <div class="clear"></div>\\n                  </div>\\n                  <!-- end #molhokwai-addthis -->\\n          </div>\\n          <!-- end #footer -->\\n\\n        </div>\\n        <!-- end #container -->\\n\\n    </div>\\n    <!-- end #wrapper -->\\n\\n    <script type="text/javascript" id="tracking_src">\\n        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\\n        document.write(unescape("%3Cscript src=\\\'" + gaJsHost + "google-analytics.com/ga.js\\\' type=\\\'text/javascript\\\'%3E%3C/script%3E"));\\n    </script>\\n    <script type="text/javascript" id="tracking_process">\\n        try {\\n            var pageTracker = _gat._getTracker("UA-5101967-1");\\n            pageTracker._initData();\\n            pageTracker._trackPageview();\\n        }\\n        catch(e) {\\n            if (console) try{console.log(e);}catch(e){}\\n        }\\n    </script>\\n    <!-- end #tracking -->\\n\\n  </body>\\n</html>\\n\', escape=False)'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__getslice__'
+p11
+S"<method-wrapper '__getslice__' of exceptions.SyntaxError object at 0x9d14684>"
+p12
+sS'text'
+p13
+S"'    response.write(XML(langs_on)))\\n'"
+p14
+sS'__str__'
+p15
+S"<method-wrapper '__str__' of exceptions.SyntaxError object at 0x9d14684>"
+p16
+sS'__reduce__'
+p17
+S'<built-in method __reduce__ of exceptions.SyntaxError object at 0x9d14684>'
+p18
+sS'__dict__'
+p19
+S'{}'
+p20
+sS'__init__'
+p21
+S"<method-wrapper '__init__' of exceptions.SyntaxError object at 0x9d14684>"
+p22
+sS'__setattr__'
+p23
+S"<method-wrapper '__setattr__' of exceptions.SyntaxError object at 0x9d14684>"
+p24
+sS'__reduce_ex__'
+p25
+S'<built-in method __reduce_ex__ of exceptions.SyntaxError object at 0x9d14684>'
+p26
+sS'__new__'
+p27
+S'<built-in method __new__ of type object at 0x8239bc0>'
+p28
+sS'__class__'
+p29
+S"<type 'exceptions.SyntaxError'>"
+p30
+sS'filename'
+p31
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html'"
+p32
+sS'lineno'
+p33
+S'225'
+p34
+sS'msg'
+p35
+S"'invalid syntax'"
+p36
+sS'__doc__'
+p37
+S"'Invalid syntax.'"
+p38
+sS'__getitem__'
+p39
+S"<method-wrapper '__getitem__' of exceptions.SyntaxError object at 0x9d14684>"
+p40
+sS'__setstate__'
+p41
+S'<built-in method __setstate__ of exceptions.SyntaxError object at 0x9d14684>'
+p42
+sS'__getattribute__'
+p43
+S"<method-wrapper '__getattribute__' of exceptions.SyntaxError object at 0x9d14684>"
+p44
+sS'print_file_and_line'
+p45
+S'None'
+p46
+sS'args'
+p47
+S"('invalid syntax', ('/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html', 225, 34, '    response.write(XML(langs_on)))\\n'))"
+p48
+sS'offset'
+p49
+S'34'
+p50
+sS'__delattr__'
+p51
+S"<method-wrapper '__delattr__' of exceptions.SyntaxError object at 0x9d14684>"
+p52
+sS'__repr__'
+p53
+S"<method-wrapper '__repr__' of exceptions.SyntaxError object at 0x9d14684>"
+p54
+sS'__hash__'
+p55
+S"<method-wrapper '__hash__' of exceptions.SyntaxError object at 0x9d14684>"
+p56
+ssS'evalue'
+p57
+S'invalid syntax (blogger.html, line 225)'
+p58
+sS'request'
+p59
+(dp60
+S'function'
+p61
+S"'blogger'"
+p62
+sS'body'
+p63
+S'<cStringIO.StringO object at 0x9f989e0>'
+p64
+sS'wsgi'
+p65
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p66
+sS'extension'
+p67
+S"'html'"
+p68
+sS'vars'
+p69
+S'<Storage {}>'
+p70
+sS'cid'
+p71
+S'None'
+p72
+sS'url'
+p73
+S'<gluon.html.XML object at 0x9f98fac>'
+p74
+sS'raw_extension'
+p75
+S'None'
+p76
+sg47
+S"['themes_choice']"
+p77
+sS'controller'
+p78
+S"'media'"
+p79
+sS'cookies'
+p80
+S"<SimpleCookie: blogger_languages='fr' session_id...5552e70-e1d5-4e40-a22f-ccf8588f698f' theme='cms'>"
+p81
+sS'application'
+p82
+S"'cms'"
+p83
+sS'ajax'
+p84
+S'False'
+p85
+sS'client'
+p86
+S"'127.0.0.1'"
+p87
+sS'env'
+p88
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x9c1987c>}>"
+p89
+sS'raw_args'
+p90
+S"'themes_choice'"
+p91
+sS'get_vars'
+p92
+S'<Storage {}>'
+p93
+sS'folder'
+p94
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/'"
+p95
+sS'now'
+p96
+S'datetime.datetime(2011, 2, 28, 18, 4, 35, 207053)'
+p97
+sS'post_vars'
+p98
+S'<Storage {}>'
+p99
+ssS'frames'
+p100
+(lp101
+(dp102
+S'file'
+p103
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p104
+sS'dump'
+p105
+(dp106
+S'code'
+p107
+S'"if not nake:\\n    response.write(\'\\\\n    \', escape...cking -->\\\\n\\\\n  </body>\\\\n</html>\\\\n\', escape=False)"'
+p108
+sS'layer'
+p109
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html'"
+p110
+sS'global compile2'
+p111
+S'<function compile2 at 0x982c4fc>'
+p112
+sS'ccode'
+p113
+S'undefined'
+p114
+ssS'lnum'
+p115
+I186
+sS'lines'
+p116
+(dp117
+I181
+S''
+sI182
+S'    try:'
+p118
+sI183
+S'        if type(code) == types.CodeType:'
+p119
+sI184
+S'            ccode = code'
+p120
+sI185
+S'        else:'
+p121
+sI186
+S'            ccode = compile2(code,layer)'
+p122
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p123
+sI189
+S'    except HTTP:'
+p124
+sI190
+S'        raise'
+p125
+ssS'call'
+p126
+S'(code="if not nake:\\n    response.write(\'\\\\n    \', escape...cking -->\\\\n\\\\n  </body>\\\\n</html>\\\\n\', escape=False)", environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0xa37ce9c>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html\')'
+p127
+sS'func'
+p128
+S'restricted'
+p129
+sa(dp130
+g103
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p131
+sg105
+(dp132
+S'builtincompile'
+p133
+S'<built-in function compile>'
+p134
+sS'code'
+p135
+S'"if not nake:\\n    response.write(\'\\\\n    \', escape...cking -->\\\\n\\\\n  </body>\\\\n</html>\\\\n\', escape=False)"'
+p136
+sS'code.rstrip'
+p137
+S'<built-in method rstrip of str object at 0xa52c138>'
+p138
+sS').replace'
+p139
+g114
+sS'layer'
+p140
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html'"
+p141
+ssg115
+I173
+sg116
+(dp142
+I168
+S''
+sI169
+S'def compile2(code,layer):'
+p143
+sI170
+S'    """'
+p144
+sI171
+S"    The +'\\n' is necessary else compile fails when code ends in a comment."
+p145
+sI172
+S'    """'
+p146
+sI173
+S"    return compile(code.rstrip().replace('\\r\\n','\\n')+'\\n', layer, 'exec')"
+p147
+sI174
+S''
+sI175
+S"def restricted(code, environment={}, layer='Unknown'):"
+p148
+sI176
+S'    """'
+p149
+sI177
+S'    runs code in environment and returns the output. if an exception occurs'
+p150
+ssg126
+S'(code="if not nake:\\n    response.write(\'\\\\n    \', escape...cking -->\\\\n\\\\n  </body>\\\\n</html>\\\\n\', escape=False)", layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html\')'
+p151
+sg128
+S'compile2'
+p152
+sasS'pyver'
+p153
+S'Python 2.5.1: /usr/local/bin/python2.5'
+p154
+sS'session'
+p155
+(dp156
+S'_language'
+p157
+S"'en'"
+p158
+sS'blogger_languages'
+p159
+S"'fr'"
+p160
+sS'_formkey[default]'
+p161
+S"'440ea739-40fc-4a0f-9fe9-963247ffa90b'"
+p162
+sS'auth'
+p163
+S'None'
+p164
+ssS'etype'
+p165
+S"<type 'exceptions.SyntaxError'>"
+p166
+sS'date'
+p167
+S'Mon Feb 28 18:04:55 2011'
+p168
+sS'response'
+p169
+(dp170
+S'_vars'
+p171
+S"{'area': '', 'nake': False}"
+p172
+sg80
+S"<SimpleCookie: session_id_cms='127.0.0.1-05552e70-e1d5-4e40-a22f-ccf8588f698f'>"
+p173
+sS'links'
+p174
+S"[['web2py', 'http://www.web2py.com', 1], ['Python', 'http://www.python.org', 2], ['DePaul CTI', 'http://www.cs.depaul.edu', 3], ['DePaul University', 'http://www.depaul.edu', 5], ['downloads', '/a/default/page/32', 15], ['media / picasa / gallery', '/a/media/picasa/gallery', 16], ['manage media / manage picasa albums / manage photos', '/a/media/picasa/albums', 17], ['setup, application initialization', '/a/setup', 18], ['twitter', '/a/media/social/twitter', 19]]"
+p175
+sS'posts'
+p176
+S'<gluon.dal.Rows object at 0x9c1d8cc>'
+p177
+sS'themes'
+p178
+S"['0', '1', 'cms', 'pypress', 'test#:#0#:#http://localhost/css/base.css#:#molhokwai@gmail.com', 'test1#:#0#:#http://localhost/css/base1.css#:#herve.mayou@gmail.com']"
+p179
+sS'theme_stylesheet'
+p180
+S'None'
+p181
+sS'meta'
+p182
+S'<Storage {}>'
+p183
+sS'_view_environment'
+p184
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0xa37ce9c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p185
+sS'keywords'
+p186
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p187
+sS'files'
+p188
+S'[]'
+p189
+sS'last_posts'
+p190
+S"[['nn : bayesian classifer', datetime.datetime(2011, 2, 18, 12, 7, 56), <gluon.html.XML object at 0xa2d914c>], ['cms_home', datetime.datetime(2011, 2, 6, 13, 1, 36), <gluon.html.XML object at 0xa2d96cc>], ['cms_help', datetime.datetime(2011, 2, 6, 13, 1, 36), <gluon.html.XML object at 0xa2d97ec>], ['test', datetime.datetime(2011, 1, 14, 14, 59, 41), <gluon.html.XML object at 0xa2d93cc>], ['acknowledgements', datetime.datetime(2011, 1, 2, 10, 41, 29), <gluon.html.XML object at 0xa2d922c>]]"
+p191
+sS'title'
+p192
+S'"molhokwai.net - \'a\' cm/dms"'
+p193
+sS'home_page'
+p194
+S"<Row {'post_text_TCode': None, 'post_attributes_...elete_record': <function <lambda> at 0xa2ea72c>}>"
+p195
+sS'menu'
+p196
+S"[['home', False, '/cms/default/page/16'], ['community', False, '/cms/default/page/18']]"
+p197
+sS'flash'
+p198
+S"<lazyT 'An error occured : (-5, \\'No address ass...clicking here</a> or contact the administrator.'>"
+p199
+sS'theme'
+p200
+S"'cms'"
+p201
+sS'session_id_name'
+p202
+S"'session_id_cms'"
+p203
+sS'_custom_commit'
+p204
+S'None'
+p205
+sS'session_filename'
+p206
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-05552e70-e1d5-4e40-a22f-ccf8588f698f'"
+p207
+sg63
+S'<cStringIO.StringO object at 0xa291b20>'
+p208
+sS'description'
+p209
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p210
+sS'session_file'
+p211
+S"<open file '/home/herve/development/workspaces/m...e40-a22f-ccf8588f698f', mode 'rb+' at 0xb75b5338>"
+p212
+sS'_caller'
+p213
+S'<function <lambda> at 0xa0d8224>'
+p214
+sS'_custom_rollback'
+p215
+S'None'
+p216
+sS'pages'
+p217
+S"[['beliefs', False, '/cms/default/page/15'], ['home', False, '/cms/default/page/16'], ['community', False, '/cms/default/page/18'], ['SMS', False, '/cms/default/page/21'], ['', False, '/cms/default/page/23'], ['help', False, '/cms/default/page/27'], ['themes', False, '/cms/default/page/35'], ['acknowledgements', False, '/cms/default/page/37'], ['cms_home', False, '/cms/default/page/39'], ['cms_help', False, '/cms/default/page/40'], ['nn : bayesian classifer', False, '/cms/default/page/41']]"
+p218
+sS'categories'
+p219
+S"[['misc', 2, '/cms/default/category/misc']]"
+p220
+sS'name'
+p221
+S'"\'a\' cm/dms"'
+p222
+sS'auth_users'
+p223
+S'<gluon.dal.Rows object at 0x9be530c>'
+p224
+sS'help_page'
+p225
+S"<Row {'post_text_TCode': None, 'post_attributes_...elete_record': <function <lambda> at 0xa2ea95c>}>"
+p226
+sS'session_id'
+p227
+S"'127.0.0.1-05552e70-e1d5-4e40-a22f-ccf8588f698f'"
+p228
+sS'headers'
+p229
+S"<Storage {'Expires': 'Mon, 28 Feb 2011 17:04:35 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p230
+sS'status'
+p231
+S'200'
+p232
+sS'postprocessing'
+p233
+S'[]'
+p234
+sS'base_theme'
+p235
+S'None'
+p236
+sS'view'
+p237
+S"'media/blogger.html'"
+p238
+ssS'locals'
+p239
+(dp240
+g3
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html'"
+p241
+sg5
+S'"if not nake:\\n    response.write(\'\\\\n    \', escape...cking -->\\\\n\\\\n  </body>\\\\n</html>\\\\n\', escape=False)"'
+p242
+sssS'traceback'
+p243
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 186, in restricted\n    ccode = compile2(code,layer)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 173, in compile2\n    return compile(code.rstrip().replace(\'\\r\\n\',\'\\n\')+\'\\n\', layer, \'exec\')\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/cms/views/media/blogger.html", line 225\n    response.write(XML(langs_on)))\n                                 ^\nSyntaxError: invalid syntax\n'
+p244
+s.

@@ -13,6 +13,9 @@ except Exception, ex:
 # media_photos module
 exec('from applications.%s.modules import media_photos' % this_app)
 
+# blogger module, Blogger class
+exec('from applications.%s.modules.blogger import Blogger' % this_app)
+
 ###################################
 ## CONTROLLER FUNCTIONS
 ###################################    
@@ -334,12 +337,14 @@ def twitter():
 
 def blogger():
     """UTILITIES"""
-    def blogger_languages_set():
+    def blogger_languages_get():
         c = utilities.get_cookie('blogger_languages')
         if c:
-            session.blogger_languages = c.value
+            return c.value
+        elif session.blogger_languages:
+            return session.blogger_languages
         else:
-            session.blogger_languages = T.current_languages
+            return ','.join(T.current_languages)
             
     def themes_cookie_redirect():
         if request.vars.blogger_themes:
@@ -349,24 +354,62 @@ def blogger():
             return True
         else:
             return False
-            
+
+    def lang_form(T_current_languages, blogger_languages, form = None):
+        """
+            Issue: 
+                Checkbox [[checked=True | False | "on" | ""] or [value=["on" | ""]] or [_checked=True | False | "on" | ""] | None]
+                do not set the boxes check/unchecked...
+        """
+        langs_on = {}
+        for lang in T_current_languages:
+            langs_on[lang] = "on" if (form and form.vars[lang] == "on") or lang in blogger_languages else ""
+
+        form = FORM()
+        for lang in langs_on:
+            # see Issue above
+            _Checkbox = INPUT(_type="checkbox", _name=lang, _id=lang, checked=langs_on[lang] == "on")
+            form.append(DIV(_Checkbox,LABEL(lang, _class="padl2pc minw0"),
+                        _id="%s_div"%lang, _class="left"))
+        form.append(INPUT(_type="submit", _value=T('Submit'), _class="margl5pc"))
+        return langs_on,form
+                
     """FUNCTION OUTPUT"""
     if (not app_config.BLOGGER_API or not app_config.BLOGGER_BLOGS_THEMES or not app_config.BLOGGER_BLOGS_LANGUAGES
         or not len(app_config.BLOGGER_API)>0 or not len(app_config.BLOGGER_BLOGS_THEMES)>0 or not len(app_config.BLOGGER_BLOGS_LANGUAGES)>0):
         response.flash = T('Blogger api credentials and config data not set in setup.')
-        return dict()
+        return dict(area = '', nake = False)
 
     else:
-        Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
-                          app_config.BLOGGER_BLOGS_LANGUAGES, posts = blogger_all_posts())
+        _Blogger = None
+        try :
+            _Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+                              app_config.BLOGGER_BLOGS_LANGUAGES, blogs = blogger_blogs_data())
+        except Exception, ex:
+            response.flash = T('An error occured : %s. You can retry by <a href="%s">clicking here</a> or contact the administrator.' 
+                            % (str(ex), URL(r = request, args=request.args)))
+            log_wrapped('Err', ex)
+            return dict(area = '', nake = False)
+                    
         area = request.args[0]
-        
         if area in ['themes_choice']:
             themes = []
-            blogger_languages_set()
-            if not themes_cookies_redirect(): 
-                themes = [(_themes, '/%s/media/blogger/themes/%s' % (this_app, '-'.join(_themes))) for _themes in Blogger.themes_by_languages(session.blogger_languages.split(','))]
-            return dict(themes = themes)
+            session.blogger_languages = blogger_languages_get()
+            blogger_languages = session.blogger_languages.split(',')
+            
+            langs_on,form = lang_form(T.current_languages, blogger_languages, form = None)
+            if form.accepts(request.vars, session):
+                blogger_languages = []
+                for lang in T.current_languages:
+                    if form.vars[lang] and form.vars[lang] == "on":
+                        blogger_languages.append(lang)
+                    session.blogger_languages = ','.join(blogger_languages)
+                    utilities.set_cookie('blogger_languages', session.blogger_languages)
+                langs_on,form = lang_form(T.current_languages, blogger_languages, form = form)
+
+            if not themes_cookie_redirect():
+                themes = [(_themes, '/%s/media/blogger/themes/%s' % (this_app, _themes)) for _themes in _Blogger.themes_by_languages(blogger_languages)]
+            return dict(area = area, nake = False, form = form, themes = themes, langs_on = langs_on)
             
         elif area in ['themes']:
             form = FORM(_class="right width50pc")
@@ -381,7 +424,7 @@ def blogger():
             if form.accepts(request.vars, session):
                 langs = []
                 for lang in T.current_languages:
-                    exec "val = request.vars.%s" % (lang_id_prefix+lang)
+                    # exec "val = request.vars.%s" % (lang_id_prefix+lang)
                     if val.lower() == "on":
                       langs.append(val)
                 if len(langs)==0:
@@ -406,8 +449,8 @@ def blogger():
                 
             if session.blogger_themes:
                 tags = [{_themes : (_tags, '/%s/media/blogger/tags/%s' % (this_app, '-'.join(_tags)))} 
-                                            for _tags in Blogger.tags_by_themes(session.blogger_themes.split('-'))]
-            return dict(tags = tags)
+                                            for _tags in _Blogger.tags_by_themes(session.blogger_themes.split('-'))]
+            return dict(area = area, nake = False, tags = tags)
             
         elif area in ['tags']:
             posts = []
@@ -419,16 +462,20 @@ def blogger():
                 
             if session.blogger_tags:
                 posts = [{_tags : _post} 
-                            for _post in Blogger.posts_by_tags(
+                            for _post in _Blogger.posts_by_tags(
                                                         session.blogger_tags.split('-'), 
                                                         session.blogger_themes.split('-'))]
-            return dict(posts = posts)
+            return dict(area = area, nake = False, posts = posts)
 
 def blogger_blogs_data():
-    if (len(request.args)>0 and args[0] == 'refresh') or (not cache.ram.get('blogger_blogs_data')):
-        _blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
-                          app_config.BLOGGER_BLOGS_LANGUAGES)
-        _blogger.blogs
-        _blogger.blogs_data
-        t = cache.ram('blogger_blogs_data', _blogger.blogs_data, time_expire=60*60)
-    return cache.ram.get('blogger_blogs_data')
+    """
+    _Blogger = Blogger(app_config.BLOGGER_API, app_config.BLOGGER_BLOGS_THEMES, 
+                      app_config.BLOGGER_BLOGS_LANGUAGES)
+    _blogs = _Blogger.blogs
+    _blogs_datas = _Blogger.blogs_datas
+    t = cache.ram('blogger_blogs_data', lambda: _blogs_datas, time_expire=60*60)
+    return t
+    """
+    import urllib
+    from gluon.contrib import simplejson
+    return simplejson.loads(urllib.urlopen('http://localhost:8002/a/static/files/blogs.json').read())

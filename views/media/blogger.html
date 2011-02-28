@@ -1,0 +1,36 @@
+{{if not nake:}}
+    {{extend 'themes/%s/layout.html' % response.theme}}
+{{else:}}
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    <style type="text/css">
+        #footer, footer, #top-bar, top-bar {
+            display:none;
+        }
+    </style>
+{{pass}}
+
+{{if area in ['login', 'add', 'edit', 'delete', 'upload']:}}
+    <!-- NOT USED AT THIS POINT IN THIS PAGE -->
+    {{=form}}
+{{pass}}
+
+{{if area=='themes_choice':}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            langs_on = {{=XML(langs_on)}};
+            for(lang in langs_on){
+                document.getElementById(lang).checked = langs_on[lang] == "on";
+            }
+        });
+    </script>
+    {{=form}}
+
+    {{=DIV(_class="clear")}}
+
+    {{for _themes, _link in themes:}}
+        {{=A(_themes, _href=_link)}}
+    {{pass}}
+{{pass}}

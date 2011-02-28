@@ -183,7 +183,7 @@ class Struct:
 # utilities
 class Utilities():
     def reverse_numeric_row_id(self, x, y):return y.id - x.id
-
+    
     def shorten_and_randomize(self, _list, nr):
         import random
         random.shuffle(_list)

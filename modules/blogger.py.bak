@@ -22,6 +22,11 @@
 #    blogger.posts_by_tags(session.blogger_tags.split('-')
 # 
 """
+from types import *
+from gdata import service
+import gdata
+import atom
+
 class Blogger:
     config_api = None
     config_themes = None
@@ -29,13 +34,6 @@ class Blogger:
     service = None
     
     _blogs = None
-        
-    def __init__(self, config_api, config_themes, config_blogs_languages, blogs = None):
-        self.config_api = config_api
-        self.config_themes = config_themes
-        self.config_blogs_languages = config_blogs_languages
-        self.service = blogger_service()
-        self._blogs = blogs
 
     def blogger_service(self, username=None, password=None, source=None):
         if username is None: username = self.config_api[0]
@@ -49,6 +47,13 @@ class Blogger:
         _service.server = 'www.blogger.com'
         _service.ProgrammaticLogin()
         return _service
+                        
+    def __init__(self, config_api, config_themes, config_blogs_languages, blogs = None):
+        self.config_api = config_api
+        self.config_themes = config_themes
+        self.config_blogs_languages = config_blogs_languages
+        self.service = self.blogger_service(self.config_api[0], self.config_api[1], self.config_api[2])
+        self._blogs = blogs
 
     @staticmethod
     def config_items(_list):
@@ -85,14 +90,33 @@ class Blogger:
             a += am 
         return a
 
-
     @staticmethod
     def get_blog_index_and_data(title):
         for i in range(len(blogs)):
             if blogs[i]['title'] == title:
                 return i,blogs[i]
             i+=1
-    
+
+    @staticmethod
+    def get_metas(entry_id_text, parent_item='user'):
+        # structure sample: "tag:blogger.com,1999:user-123456789123.blog-1234567891234567891"
+        # tag
+        s = entry_id_text.split(',')
+        tag = s[0].split(':')[1]
+        # year
+        s = s[1].split(':')
+        year = s[0]
+        # ids
+        s = s[1].split('.')
+        parent_item_id = s[0].split('-')[1]
+        item_id = s[1].split('-')[1]
+        return {
+            'id' : item_id,
+            'tag' : tag,
+            'year' : year,
+            parent_item : parent_item_id
+        }
+        
     @staticmethod
     def get_categories(atomCategories):
         return map(lambda x: x.term, atomCategories)
@@ -110,13 +134,13 @@ class Blogger:
     @property
     def blogs(self):
         if not self._blogs:
-            query = self.service.Query()
+            query = service.Query()
             query.feed = '/feeds/default/blogs'
             feed = self.service.Get(query.ToUri())
         
             self._blogs = []
             for entry in feed.entry:
-                data = GetMetas(entry.id.text, parent_item='user')
+                data = Blogger.get_metas(entry.id.text, parent_item='user')
                 for l in entry.link:
                   if l.rel == 'alternate':
                     data['name'] = l.href.split('.')[0].split('//')[1]
@@ -129,13 +153,13 @@ class Blogger:
     @property
     def blogs_datas(self):
         for blog_index in range(len(self.blogs)):
-            blog_id=blogs[blog_index]['id']
-            feed = _blogger.service.GetFeed('/feeds/' + blog_id + '/posts/default')
+            blog_id=self._blogs[blog_index]['id']
+            feed = self.service.GetFeed('/feeds/' + blog_id + '/posts/default')
             self._blogs[blog_index]['posts'] = []
             self._blogs[blog_index]['categories'] = []
             for entry in feed.entry:
                 catgs=Blogger.get_categories(entry.category)
-                data = GetMetas(entry.id.text, parent_item='blog')
+                data = Blogger.get_metas(entry.id.text, parent_item='blog')
                 data['title'] = entry.title.text
                 data['content'] = entry.content.text
                 data['updated'] = entry.updated.text

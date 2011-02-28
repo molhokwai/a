@@ -83,6 +83,9 @@ def GetBlogs(blogger_service):
 
     for entry in feed.entry:
         data = GetMetas(entry.id.text, parent_item='user')
+        for l in entry.link:
+          if l.rel == 'alternate':
+            data['name'] = l.href.split('.')[0].split('//')[1]
         data['title'] = entry.title.text
         data['posts'] = []
         data['categories'] = []
@@ -124,6 +127,7 @@ while(_do):
     print "\t3 : Blog All Posts"
     print "\t4 : Bog Post Comment(s)"
     print "\t5 : Post A Comment"
+    print "\t6 : Dump to json file"
     print "\tq : Exit"
 
     choice=raw_input()
@@ -189,7 +193,6 @@ while(_do):
                 for c in catgs:
                     if c not in blogs[blog_index]['categories']:
                         blogs[blog_index]['categories'].append(c)
-            print
 
         if choice == "3":
             blog_index, blog_data = blog_choice_data()
@@ -250,4 +253,9 @@ while(_do):
                 c_blogger_service = GetBloggerService(c_username, c_password, c_source)
                 print str(CreateComment(c_blogger_service, blog_data['id'], post['id'], raw_input('Your comment : ')))
 
+    elif choice == "6":
+        import simplejson
+        f = open('blogs.json', 'w')
+        f.write(str(blogs))
+        f.close()
 
