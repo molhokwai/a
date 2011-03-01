@@ -1,0 +1,84 @@
+* {
+    font-family: "Arial";
+    letter-spacing: 0.05em;
+}
+
+#header {
+	/* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("headerBG.png");
+    background-repeat: repeat-x;
+    background-color: #ff0000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -moz-linear-gradient(top, transparent, #ff0000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
+    /* other */
+    color: #ffffff;
+}
+
+#header h1 {
+}
+
+
+#body .left+.left {
+    border-right: 1px dashed #ff0000;
+}
+
+#footer p {
+	/* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("headerBG.png");
+    background-repeat: repeat-x;
+    background-color: #ff0000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -moz-linear-gradient(top, transparent, #ff0000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
+    /* other */
+    border-top: 1px dashed #ff0000;    
+    color: #ffffff;
+    padding: 0.2%;
+    letter-spacing: 0.1em;
+}
+
+#footer p a {
+    color: #ffeeee;
+}
+
+blockquote {
+    border-bottom: 1px dotted #ff0000;
+    color: #452323;
+    font-style: oblique;
+    font-size: 0.9em;
+    margin-left: 10%;
+}
+
+#body .right embed.media+div, #body .right embed.media {
+    margin-left: 5%;
+    width: 50%;
+}
+#body .right embed.media {
+    height: 12.5em;
+    margin-top: 5%;
+    padding: 2%;
+	/* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("embedMediaBG.png");
+    background-repeat: repeat-x;
+    background-color: #000000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, #ff0000), color-stop(1, #000000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ff0000), color-stop(1, #000000));
+    background-image: -moz-linear-gradient(top, #ff0000, #000000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=#ff0000,endColorstr=#000000);
+    /* other */
+}
+#body .right embed.media+div {
+    font-size: 0.7em;
+    font-style: italic;
+    border-top: 1px dotted #ff0000;
+    margin-top: 2%;
+}

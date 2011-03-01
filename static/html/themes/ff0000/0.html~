@@ -1,0 +1,53 @@
+<html>  
+    <head>
+        <link rel="Stylesheet" href="/a/static/css/_base.css" />
+        <link rel="Stylesheet" href="base.css" />
+        
+        <script type="text/javascript" src="/a/static/components/jquery/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="/a/static/components/jquery/jquery.media.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $.fn.media.defaults.attrs = { 'class' : 'media', 'bgColor' : '#000000' };
+                $('.media').media();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="wrapper" class="width60pc margt1pc">
+            
+            <div id="header" class="padtb1pc">
+                <h1 class="font-s2em padl2pc left">Paradigm Shift</h1>
+                <h2 class="font-s095em padl2pc left margt1pc"> | </h2>
+                <h2 class="font-s095em padl2pc left margt1-2pc">Individual Freedom. Collective Responsibility.</h2>
+
+                <div class="clear"></div>
+            </div>
+            
+            
+            <div id="body" class="height50em">
+                
+                <div class="left width70pc">
+                    <blockquote class="width50pc margt5pc">
+                        Words are precious. Use each one of them wisely.
+                    </blockquote>
+                </div>
+                
+                <div class="left height49em margt1pc">
+                    &nbsp;
+                </div>
+                
+
+                <div class="right width25pc">
+                    <div class="media-box">
+                        <a class="media" href="/a/static/files/media/a.mp4">Mayou Nkensa Hervé, Tuesday the 1st of May, around 08:57'07''</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="footer" class="text-alignc font-s06em">
+                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS - webX.0 | contact: <a href="mailto:admin@molhokwai.net">admin@molhokwai.net</a></p>
+            </div>
+            
+        </div>
+    </body>
+</html>
