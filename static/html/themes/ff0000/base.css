@@ -1,6 +1,16 @@
+/*<!-- nake page -->*/
 * {
     font-family: "Arial";
     letter-spacing: 0.05em;
+}
+
+
+.color {
+    color: #ee0000;
+}
+
+a {
+    color: #110055;
 }
 
 #header {
@@ -19,33 +29,15 @@
 }
 
 #header h1 {
+    font-size: 1.6em;
+}
+#header h2 {
+    font-size: 0.6em;
 }
 
 
 #body .left+.left {
     border-right: 1px dashed #ff0000;
-}
-
-#footer p {
-	/* use .gradient in place in wrapper or #wrapper and remove these styles */
-    /* classical */
-    background-image: url("headerBG.png");
-    background-repeat: repeat-x;
-    background-color: #ff0000;
-    /* gradient */
-    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
-    background-image: -moz-linear-gradient(top, transparent, #ff0000);
-    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
-    /* other */
-    border-top: 1px dashed #ff0000;    
-    color: #ffffff;
-    padding: 0.2%;
-    letter-spacing: 0.1em;
-}
-
-#footer p a {
-    color: #ffeeee;
 }
 
 blockquote {
@@ -82,3 +74,56 @@ blockquote {
     border-top: 1px dotted #ff0000;
     margin-top: 2%;
 }
+
+#body #content h1, #body #sidebar h1 {
+    border-bottom: 2px dashed #ff0000;
+    color: #ee0000;
+}
+#body #content h1 {
+    font-size: 1.1em;
+    margin-top: 4%;
+    margin-bottom: 2%;
+}
+#body #content #lang-bar a {
+    font-size: 0.8em;
+}
+#body #content p, #body #content ul li {
+    font-size: 0.82em;
+}
+#body #content p:first-letter {
+    color: #dd0000;
+    font-size: 1.15em;
+}
+
+#body #sidebar, #body #sidebar a {
+    font-size: 0.85em;
+}
+#body #sidebar h1 {
+    font-size: 1.05em;
+    margin-top: 20%;
+    margin-bottom: 1%;
+    width: 100%;
+}
+
+#footer p {
+	/* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("headerBG.png");
+    background-repeat: repeat-x;
+    background-color: #ff0000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -moz-linear-gradient(top, transparent, #ff0000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
+    /* other */
+    border-top: 1px dashed #ff0000;    
+    color: #ffffff;
+    padding: 0.2%;
+    letter-spacing: 0.1em;
+}
+
+#footer p a {
+    color: #ffeeee;
+}
+

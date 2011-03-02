@@ -1,4 +1,3 @@
-<!-- nake page -->
 <html>  
     <head>
         <link rel="Stylesheet" href="/a/static/css/_base.css" />
@@ -17,9 +16,9 @@
         <div id="wrapper" class="width60pc margt1pc">
             
             <div id="header" class="padtb1pc">
-                <h1 class="font-s2em padl2pc left">Paradigm Shift</h1>
-                <h2 class="font-s095em padl2pc left margt1pc"> | </h2>
-                <h2 class="font-s095em padl2pc left margt1-2pc">Individual Freedom. Collective Responsibility.</h2>
+                <h1 class="padl2pc left">Paradigm Shift</h1>
+                <h2 class="padl2pc left margt1pc"> | </h2>
+                <h2 class="padl2pc left margt1-2pc">Individual Freedom. Collective Responsibility.</h2>
 
                 <div class="clear"></div>
             </div>
@@ -35,21 +34,27 @@
                     <div id="content" class="margt10pc">
 
                         <div id="lang-bar" class="text-alignr">
-                            <a href="#"></a> &nbsp; <a href=""></a>
+                            <a href="/a/static/html/themes/ff0000/1.html">english</a> | <a href="/a/static/html/themes/ff0000/1-fr.html">français</a>
                         </div>
-
-                        <h1>- Radical Honesty</h1>
-                        <p>As written somewhen in the past, discovered the <a href="http://radicalhonesty.com/index.php" target="_blank">radical honesty</a> <em>concept</em>, immediately agreed with it, as it always has been a goal/issue, now <em>worded</em>. Haven't read 
-                        and don't intend to read the book. Strive to practice it in every moment, in the most gentle way possible.</p>
                         
-                        <h1>- Relevant Prime Goal</h1>
-                        <p>Honouring Engagements. In <strong>J</strong>oy or Else, but <strong>A</strong>lways <strong>I</strong>n <strong>T</strong>ruth.</p>
+                        <h1>- Simplicité, Efficacité</h1>
+                        <p>Faire en sorte que ce qu'il y a à faire soit fait. Prendre en charge la tâche courante, la compléter, la livrer. Passer à la suivante.</p>
                         
-                        <h1>- Business</h1>
-                        <p>Doesn't necessarily mix with <strong>P</strong>leasure. It's about getting what needs to be done, done.</p>
+                        <h1>- Souplesse d'Esprit</h1>
+                        <p>Il y a une voie directe vers la solution. Á condition que l'orignalité, la créativité, la pensée hors-normes soient présentes.</p>
                         
-                        <h1>- CV, Projects, And Other</h1>
-                        <p>See Sidebar <font class="bold font-s1-6em color">&gt;</font> .</p>
+                        <h1>- Webx.0</h1>
+                        <p>Programmer <em><strong>sur</strong></em> le Web. C'est-à-dire:</p>
+                        <ul>
+                            <li>Utiliser la pléthore d'outils, d'applications, de systèmes, d'APIs... qui aujourd'hui permettent <em>Tout</em></li>
+                            <li>Les connecter, créer de nouveaux outils, de nouvelles applications, de nouveaux systèmes à partir de là... et utiliser ces dernières pour créer de nouveaux/nouvelles outils, applications, systèmes... et ainsi de suite*</li>
+                            <li>Utiliser l'Intelligence Collective</li>
+                        </ul>
+                        
+                        <h1>- CV, Projects, Et Autres</h1>
+                        <p>Voir barre de contenu de droite <font class="bold font-s1-6em color">&gt;</font> .</p>
+                        
+                        <span class="display-block margt5pc font-s07em italic margl5pc">*performance? Factorisation, mise en Cache, Clusters... et beaucoup d'autres solutions</span>
                     </div>
                 </div>
                 
@@ -96,7 +101,7 @@ https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyN
             <div class="clear"></div>
             
             <div id="footer" class="text-alignc font-s06em">
-                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS - webX.0 | contact: <a href="mailto:admin@molhokwai.net">admin@molhokwai.net</a></p>
+                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS/Javascript Wireframe - webX.0 | contact: <a href="mailto:admin@molhokwai.net">admin@molhokwai.net</a></p>
             </div>
             
         </div>

@@ -1,3 +1,4 @@
+<!-- nake page -->
 <html>  
     <head>
         <link rel="Stylesheet" href="/a/static/css/_base.css" />
@@ -26,23 +27,73 @@
             
             <div id="body" class="height50em">
                 
-                <div class="left width70pc">
-                    <blockquote class="width50pc margt5pc">
-                        Words are precious. Use each one of them wisely.
+                <div class="left width70pc padl2pc">
+                    <blockquote class="width60pc margt5pc">
+                        " Words are precious. Use each one of them wisely "
                     </blockquote>
+                    
+                    <div id="content" class="margt10pc">
+
+                        <div id="lang-bar" class="text-alignr">
+                            <a href="#"></a> &nbsp; <a href=""></a>
+                        </div>
+
+                        <h1>- Radical Honesty</h1>
+                        <p>As written somewhen in the past, discovered the <a href="http://radicalhonesty.com/index.php" target="_blank">radical honesty</a> <em>concept</em>, immediately agreed with it, as it always has been a goal/issue, now <em>worded</em>. Haven't read 
+                        and don't intend to read the book. Strive to practice it in every moment, in the most gentle way possible.</p>
+                        
+                        <h1>- Relevant Prime Goal</h1>
+                        <p>Honouring Engagements. In <strong>J</strong>oy or Else, but <strong>A</strong>lways <strong>I</strong>n <strong>T</strong>ruth.</p>
+                        
+                        <h1>- Business</h1>
+                        <p>Doesn't necessarily mix with <strong>P</strong>leasure. It's about getting what needs to be done, done.</p>
+                        
+                        <h1>- CV, Projects, And Other</h1>
+                        <p>See Sidebar <font class="bold font-s1-6em color">&gt;</font> .</p>
+                    </div>
                 </div>
                 
                 <div class="left height49em margt1pc">
                     &nbsp;
                 </div>
                 
-
-                <div class="right width25pc">
-                    <div class="media-box">
+                <div id="sidebar" class="right width25pc text-alignr">
+                    <div class="media-box width80pc">
                         <a class="media" href="/a/static/files/media/a.mp4">Mayou Nkensa Hervé, Tuesday the 1st of May, around 08:57'07''</a>
+                        
+                        <h1>Profesional - Profile, CV -</h1>
+                        <a target="_blank" href="https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyNmQyNDYwOWMtNWE2MC00N2M3LWFiMjQtMGE4NjE1ZmQyODNl">Light</a> | 
+                        <a target="_blank" href="https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyMmRjZGZhNWQtODRmOC00MTE5LWExZDktYjA2MWU1NjhhZDY2" target="_blank">Extended</a>
+                        
+                        <h1>Current Projects -</h1>
+                        <div class="text-alignl">
+                            <a target="_blank" href="https://github.com/molhokwai/a">'a' cms/dms</a> | 
+                            <a target="_blank" href="https://github.com/molhokwai/web-x0">web-x0 development</a> | 
+                            <a target="_blank" href="https://github.com/molhokwai/ai">ai learning (nn, ga)</a> | 
+                            <a target="_blank" href="https://github.com/molhokwai/jQuery.gaussianTextFx">jQuery.gaussianTextFx</a>
+                        </div>
+                        
+                        <h1>Book(s) -</h1>
+                        <div class="text-alignl">
+                            <a target="_blank" href="http://www.edifree.fr/doc/4311">Aux Oeuvreurs (French)</a>
+                        </div>
+                        
+                        <h1>Contact -</h1>
+                        <div class="text-alignl">
+                            <a href="callto:+3248937151">+32 489 33 71 51</a> | 
+                            <a href="mailto:herve.mayou@gmail.com">herve.mayou@gmail.com</a> | 
+                            <br/><a target="_blank" href="http://talkgadget.google.com/talkgadget/popout">voice, chat: herve.mayou</a>
+                        </div>
+<!--
+https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyMmRjZGZhNWQtODRmOC00MTE5LWExZDktYjA2MWU1NjhhZDY2
+https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyNmQyNDYwOWMtNWE2MC00N2M3LWFiMjQtMGE4NjE1ZmQyODNl
+    -->                    
+	                    </object -->
                     </div>
                 </div>
             </div>
+
+            <div class="clear"></div>
             
             <div id="footer" class="text-alignc font-s06em">
                     <p class="width80pc">@molhokwai.net 2011 - HTML/CSS - webX.0 | contact: <a href="mailto:admin@molhokwai.net">admin@molhokwai.net</a></p>
