@@ -127,7 +127,7 @@ def add():
 
         if area == "post":
             db.posts.post_type.default = 'post'
-            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 
+            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application', 
                                                     'post_category', 'is_translated', 'auth_requires_login'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', 
@@ -150,7 +150,7 @@ def add():
         
         elif area == "page":
             db.posts.post_type.default = 'page'
-            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 
+            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application',
                                                     'show_in_menu', 'is_translated'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
@@ -202,7 +202,7 @@ def edit():
         session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))
     
     if area == 'post':
-        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'post_text_TCode', 
+        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
                                                             'post_category', 'is_translated', 'auth_requires_login'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
@@ -221,7 +221,7 @@ def edit():
 
     elif area == 'page':
         this_item = db(db.posts.id == id).select()[0]
-        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'post_text_TCode', 
+        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
                                                             'is_translated', 'show_in_menu'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
@@ -386,7 +386,7 @@ def manage():
         record = None
         form = ''
         manage_title = T('Manage Child Theme')
-        manage_text = T('The theme inherits styles from the parent theme chosen, and sets its specific by calling the stylesheet url given, overwriting parent\' style, and/or creating new ones.')
+        manage_text = T('The theme inherits styles from the parent theme chosen, and sets its specific by hot linking to the stylesheet url given, overwriting parent\' style, and/or creating new ones.')
         
         if len(request.args)>1:
             name = request.args[1]
@@ -463,30 +463,40 @@ def error():
         session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))
         
     return dict(ticket=ticket, code=code, requested_uri=requested_uri, err=err)
-        
+
+@auth.requires_login()
+def upload():
+    form=SQLFORM(db.files, fields=['file'])
+    if request.vars.file:
+        form.vars.filename = request.vars.file.filename
+        form.vars.user = auth.user.id
+    if form.accepts(request.vars): 
+        response.flash='File uploaded'
+    return dict(form=form)
+
+@auth.requires_login()
 def files():
-    upload_form=SQLFORM(db.files,labels=file_labels)
-    if request.vars.file!=None:
-        # TODO: strip_path_and_sanitize()
-        upload_form.vars.filename=request.vars.file.filename.lower()
-        if upload_form.accepts(request.vars,session):
-            response.flash=T('file uploaded')
-        
-    download_form=FORM(LABEL(T('Enter file name'))
-                        ,INPUT(_name="filename", requires=IS_NOT_EMPTY())
-                        ,INPUT(_type="submit",_value=T('Submit')))
-    if (download_form.accepts(request.vars,session)
-        or (request.vars.download and request.vars.filename)):
-        _file=db(db.files.filename==request.vars.filename.lower()).select()
-        if _file: 
-            _file=_file[0]
-            redirect(URL(r = request,f = 'download/%s/%s' % (_file.file,_file.filename)))
+    if 'del' in request.get_vars:
+        db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['del'])).delete()
+        redirect(URL(r=request,c='default',f='files'))
+    elif 'ren' in request.get_vars and request.get_vars['new'] != 'null':
+        file = db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['ren'])).select()[0]
+        if request.get_vars['new'].find('.') == -1:
+            filename = request.get_vars['new'] + '.' + file.filename.split('.').pop()
         else:
-            response.flash=T('no file found with the name %(filename)s',
-                             dict(filename=request.vars.filename.lower()))
-        
-    return dict(upload_form=upload_form,download_form=download_form,
-                upload_title=T('upload'),download_title=T('download'))
+            filename = request.get_vars['new']
+        db(db.files.id==file.id).update(filename=filename)
+        redirect(URL(r=request,c='default',f='files'))
+    files=db(db.files.id>0).select(orderby=db.files.filename)
+    return dict(files=files)
+
+def file():
+    file = db(db.files.filename==request.args[0]).select()
+    if len(file) > 0:
+        request.args[0] = file[0].file
+        return response.download(request,db)
+    else:
+        return
 
 def json():
     area=request.args[0]    

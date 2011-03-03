@@ -1,0 +1,9 @@
+{{extend 'themes/%s/layout.html' % response.theme}}
+
+<!-- original code from http://www.google.be/search?sourceid=chrome&ie=UTF-8&q=host2py -->
+<h1>{{=T('Upload')}}</h1>
+{{=form}}
+
+<div class="meta text-alignr padr2pc bordert-dashed">
+{{=XML(T('<a href="%(url)s">Uploaded files</a>', dict(url=URL(r=request,c='default',f='files'))))}}
+</div>

@@ -1,0 +1,12 @@
+{{extend 'themes/%s/layout.html' % response.theme}}
+
+<h1>- {{=T('Files')}}</h1>
+<table width=100%>
+    <tr><th>{{=T('file')}}</th><th>{{=T('action')}}</th></tr>
+{{for file in files:}}
+   <tr>
+    <td><a href="{{=URL(r=request,c='default',f='file',args=[file.filename])}}">{{=file.filename}}</a></td>
+    <td><a href="javascript:;" onclick="location.href='?ren={{=file.id}}&new='+prompt('{{=T('New Filename'')}})">{{=T('rename')}}</a> | <a href="?del={{=file.id}}">{{=T('delete')}}</a></td>
+   </tr>
+{{pass}}
+</table>

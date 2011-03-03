@@ -1,4 +1,1 @@
-
-{{extend 'layout.html'}}
-<h1>This is the language_codes.html template</h1>
-{{=BEAUTIFY(response._vars)}}
+{{=T('page_id_1896006')}}

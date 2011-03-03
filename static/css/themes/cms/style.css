@@ -5,7 +5,7 @@
   context : /cms.page
 **********************/
 
-#top-bar, #cse-search-form, #wrapper {
+#top-bar, #wrapper {
   width: 60%;
   margin: auto;
 }

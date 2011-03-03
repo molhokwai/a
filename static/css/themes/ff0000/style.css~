@@ -1,0 +1,241 @@
+/********************** 
+  context : elements, commons
+**********************/
+
+* {
+    font-family: "Arial";
+    letter-spacing: 0.05em;
+}
+
+
+a {
+    color: #110055;
+}
+
+.color {
+    color: #ee0000;
+}
+
+.bordert-dashed {
+    border-top: 1px dashed #ff0000;
+}
+.borderb-dashed {
+    border-bottom: 1px dashed #ff0000;
+}
+
+/********************** 
+  context : top-bar, wrapper, utilities
+**********************/
+
+#top-bar, #cse-search-form, #wrapper {
+  width: 60%;
+  margin: auto;
+}
+#top-bar {
+  vertical-align:top;
+  margin-top:0.3%;
+  color: #880000;
+  font-size: 0.9em;
+}
+#top-bar a {
+  color: #880000;
+}
+
+#cse-search-form {
+  width: 100%;
+}
+
+#utilities {
+  min-height:2em;
+}
+
+#user-menu, #user-menu a {
+  float:right;
+  letter-spacing:0.05em;
+}
+
+#cli_web #_cmd {
+  border : none;
+}
+
+/********************** 
+  context : header
+**********************/
+#header {
+    /* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("headerBG.png");
+    background-repeat: repeat-x;
+    background-color: #ff0000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -moz-linear-gradient(top, transparent, #ff0000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
+    /* other */
+    color: #ffffff;
+}
+
+#header h1 {
+    font-size: 1.6em;
+}
+#header h2 {
+    font-size: 0.6em;
+}
+
+/********************** 
+  context : body, body elements
+**********************/
+#body .left+.left {
+    border-right: 1px dashed #ff0000;
+}
+
+blockquote {
+    border-bottom: 1px dotted #ff0000;
+    color: #452323;
+    font-style: oblique;
+    font-size: 0.9em;
+    margin-left: 10%;
+}
+
+#body .right embed.media+div, #body .right embed.media {
+    margin-left: 5%;
+    width: 50%;
+}
+#body .right iframe[name="iframe-chat"] {
+    width: 100%;
+    min-height: 8em;
+    margin-top: 4%;
+}
+#body .right embed.media, iframe[name="iframe-chat"] {
+    height: 12.5em;
+    margin-top: 5%;
+    padding: 2%;
+    /* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("embedMediaBG.png");
+    background-repeat: repeat-x;
+    background-color: #000000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, #ff0000), color-stop(1, #000000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ff0000), color-stop(1, #000000));
+    background-image: -moz-linear-gradient(top, #ff0000, #000000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=#ff0000,endColorstr=#000000);
+    /* other */
+}
+#body .right embed.media+div {
+    font-size: 0.7em;
+    font-style: italic;
+    border-top: 1px dotted #ff0000;
+    margin-top: 2%;
+}
+
+#body #content h1, #body #sidebar h1 {
+    border-bottom: 2px dashed #ff0000;
+    color: #ee0000;
+}
+#body #content h1 {
+    font-size: 1.1em;
+    margin-top: 4%;
+    margin-bottom: 2%;
+}
+#body #content h2.nav {
+    display: none;
+}
+#body #content #lang-bar a {
+    font-size: 0.8em;
+}
+#body #content p, #body #content ul li {
+    font-size: 0.82em;
+}
+#body #content p:first-letter {
+    color: #dd0000;
+    font-size: 1.15em;
+}
+
+#body #sidebar, #body #sidebar a {
+    font-size: 0.85em;
+}
+#body #sidebar h1 {
+    font-size: 1.05em;
+    margin-top: 20%;
+    margin-bottom: 1%;
+    width: 100%;
+}
+
+/********************** 
+  context : footer
+**********************/
+#footer p {
+    /* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("headerBG.png");
+    background-repeat: repeat-x;
+    background-color: #ff0000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -moz-linear-gradient(top, transparent, #ff0000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
+    /* other */
+    border-top: 1px dashed #ff0000;    
+    color: #ffffff;
+    padding: 0.2%;
+    letter-spacing: 0.1em;
+}
+
+#footer p a {
+    color: #ffeeee;
+}
+
+
+/********************** 
+  context : controls
+**********************/
+input[type="submit"], input[type="button"].submit, a.submit {
+    /* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("submitButtonBG.png");
+    background-repeat: repeat-x;
+    background-color: #ff0000;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, #ff0000));
+    background-image: -moz-linear-gradient(top, transparent, #ff0000);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=#ff0000);
+    /* other */
+    color: whiteSmoke;
+    padding: 4px 10px;
+    font-size: 1.1em;
+    font-weight: bolder;
+    border: 1px groove #CDCDEF;
+    border-radius: 6px 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    text-decoration: none;
+}
+.meta {
+    text-align: right;
+    padding-right: 2%;
+    color: #ee0000;
+    font-size: 0.95em;
+}
+.meta a {
+    color: #ee0000;
+    text-decoration: none;
+    padding: 4% 0 0.5% 1%;
+    margin-right: 1%;
+    border-bottom: 1px dashed #ff0000;
+}
+
+/********************** 
+  context : google page elements
+**********************/
+#google_translate_element {
+ text-align: left;
+ margin-left:1%;
+}
+.goog-te-combo {
+  float:left;
+  margin-right:1%;
+}

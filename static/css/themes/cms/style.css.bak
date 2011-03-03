@@ -5,7 +5,7 @@
   context : /cms.page
 **********************/
 
-#top-bar, #cse-search-form, #wrapper {
+#top-bar, #wrapper {
   width: 60%;
   margin: auto;
 }
@@ -16,15 +16,6 @@
 
 #utilities {
   min-height:4em;
-}
-
-h1 {
-    margin-bottom: -0.2em;
-    text-transform: capitalize;
-    color: brown;
-    font-size: 1.25em;
-    padding: 0.9% 0;
-    text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF;
 }
 
 .page h2, .page h2 em {

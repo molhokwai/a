@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{=T.accepted_language or 'en'}}">
+    <head>
+    <title>{{=response.title or request.application}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content="{{=response.keywords}}" />
+    <meta name="description" content="{{=response.description}}" />
+    <meta name="google-site-verification" content="2TmmFn8eNL7GNZuDtORTZ89uxj5fmTtuwqQLqv8webc" /><!-- old: r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8 -->
+    <!-- include required CSS files, further most first -->
+    <!-- include requires CSS files
+    {{response.files.append(URL(request.application,'static','jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css'))}}
+    -->
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    {{if response.child_theme and response.theme_stylesheet:}}
+        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+    {{pass}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
+    <!-- include requires CSS files
+    {{
+      ## TODO: why is this not working?
+      response.files.append(URL(request.application,'static','style.css'))
+    }}
+    -->
+    {{include 'web2py_ajax.html'}}
+    <script type="text/javascript">
+      <!-- /* this adds sfhover class to menu li items to make IE6 work */ jQuery(document).ready(function(){jQuery('li.web2py-menu-expand').hover(function ()     {jQuery(this).addClass('sfhover');},function () {jQuery(this).removeClass('sfhover');});});//-->
+    </script>
+    <script type="text/javascript">
+      var server={
+          request : {
+              application : '{{=this_app}}'
+          },
+          pages : []
+      };
+    </script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#google_translate_element').hide();
+            $('#cse-search-form').hide();
+            $('#cli_web').hide('slow');
+        });
+        
+        var huTi=null;
+        var toggleUtilities=function(a){
+            var selectors={
+                '#google_translate_element' : '.goog-te-combo',
+                '#cse-search-form' : '.gsc-input',
+                '#cli_web' : '#_cmd'
+            };
+            
+            for(k in selectors){
+                if(a.href.indexOf(k)>=0 && !$(k).is(':visible')){
+                    $(k).show();
+                    huTi = setTimeout('$("'+selectors[k]+'").focus();clearTiemout(huTi);', 200);
+                }
+                else{
+                    $(k).hide();
+                }
+            }
+            $("html").animate({ scrollTop: 0 });
+        };
+    </script>    
+    </head>
+    <body>
+        <div id="top-bar">
+            <a href="#google_translate_element" onclick="toggleUtilities(this);" class="float-left">{{=T('translation')}} | </a>
+            <a href="#cse-search-form" onclick="toggleUtilities(this);" class="float-left"> {{=T('search (google)')}} | </a>
+            <a href="#cli_web" onclick="toggleUtilities(this);" class="float-left"> <em>{{=T('command line')}} | </em></a>
+            
+            <span id="user-menu">
+             {{ if 'auth' in globals():}}
+               {{if not auth.user:}} 
+                 <a>]</a> {{=A(T('login'),_href=URL(r=request,c='default',f='user/login'))}} <a>[</a>
+               {{else:}}
+                 {{=auth.user.display_name}} 
+                 {{=A(T('logout'),_href=URL(r=request,c='default',f='user/logout'))}} |
+               {{pass}}
+             {{pass}}
+            </span> 
+            <!-- end #user-menu -->
+            
+            <div class="clear"></div>
+                    
+            <div id="utilities" class="padt2pc">
+            
+              <div id="google_translate_element"></div>
+              <script>
+                function googleTranslateElementInit() {
+                  new google.translate.TranslateElement({
+                    pageLanguage: '{{=current_language[:2]}}'
+                  }, 'google_translate_element');
+                }
+              </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     
+              <!-- end #google_translate_element-->    
+            
+              <div class="clear"></div>
+              
+              <div id="cli_web">
+                <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">
+                    <input type="text" id="_cmd" name="_cmd" />
+                    {{if session.cli_web_flash:}}<font class="flash small">{{=XML(session.cli_web_flash)}}{{ session.cli_web_flash=False }}</font>{{pass}}
+                </form>
+              </div>
+              <!-- end #cli_web -->
+            
+              <div id="cse-search-form">Loading</div>
+              <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+              <script type="text/javascript">
+                google.load('search', '1', {language : '{{=current_language[:2]}}'});
+                google.setOnLoadCallback(function() {
+                  var customSearchControl = new google.search.CustomSearchControl('014007428035866690530:qpoerqfcidu');
+                  customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+                  var options = new google.search.DrawOptions();
+                  options.setSearchFormRoot('cse-search-form');
+              
+                  options.setAutoComplete(true);
+                  customSearchControl.draw('cse', options);
+                }, true);
+              </script>
+              <!-- end #cse-search-form -->
+            
+            </div>
+            <!-- end #utilities -->
+            
+        </div>
+        <!-- end #top-bar-->
+        
+        <div class="clear"></div>
+            
+        <div id="wrapper" class="width60pc">
+            
+            <div id="header" class="padtb1pc">
+                <h1 class="font-s2em padl2pc left">Paradigm Shift</h1>
+                <h2 class="font-s095em padl2pc left margt1pc"> | </h2>
+                <h2 class="font-s095em padl2pc left margt1-2pc">Individual Freedom. Collective Responsibility.</h2>
+    
+                <div class="clear"></div>
+            </div>
+    
+            <!-- #menu-tabs deactivated. See cms theme for eventual reactivation -->
+            <!--div id="menu-tabs"></div -->
+            <!--div class="clear"></div -->
+            <!-- end #menu-tabs -->
+    
+            <div id="body" class="height50em">
+                
+                <div class="left width70pc padl2pc">
+                    <blockquote class="width60pc margt5pc">
+                        " Words are precious. Use each one of them wisely "
+                    </blockquote>
+
+                    {{if response.flash:}}
+                        <div id="flash">{{=XML(response.flash)}}</div>
+                    {{pass}}
+                            
+                    <div id="content" class="margt10pc">
+                        {{include}}
+                    </div>
+                    <!-- end #body #content -->
+
+                </div>
+                <!-- end #body .left -->
+                
+                <div class="left height49em margt1pc">
+                    &nbsp;
+                </div>
+                <!-- end #body .left+.left -->
+                
+                <div id="sidebar" class="right width25pc text-alignr">
+                    <!-- #sidebar menu & content deactivated. See cms theme foreventual reactivation -->
+                    {{include "themes/%s/sidebar.html" % response.theme}}                
+                </div>
+                <!-- end #sidebar -->
+                
+            </div>
+            <!-- end #body -->
+    
+            <div class="clear"></div>
+            
+            <div id="footer" class="text-alignc font-s06em">
+                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS/Javascript/Python - webX.0 | contact: <a href="mailto:admin@molhokwai.net">admin@molhokwai.net</a>
+                    - on PyPress, a <a target="_blank" href="http://www.web2py.org">web2py<a> powered site
+                      on <a target="_blank" href="http://code.google.com/appengine">google app engine<a> 
+                  </p>
+            </div>
+            <!-- end #footer -->
+                
+        </div>
+        <!-- end #wrapper -->
+
+        <script type="text/javascript" id="tracking_src">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript" id="tracking_process">
+            try {
+                var pageTracker = _gat._getTracker("UA-5101967-1");
+                pageTracker._initData();
+                pageTracker._trackPageview();
+            }
+            catch(e) {
+                if (console) try{console.log(e);}catch(e){}
+            }
+        </script>
+        <!-- end #tracking -->
+            
+        </body>
+</html>

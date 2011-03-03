@@ -1,38 +1,12 @@
-{{extend 'layout.html'}}
+{{extend 'themes/%s/layout.html' % response.theme}}
 
-<style type="text/css">
-    table {
-        margin-top: 5px;
-    }
-    td {
-        font-family: Arial, Helvetica, sans-serif;
-        vertical-align: top;
-        color: #777;
-        font-size: 0.9em;
-        padding: 0px 5px 0px 0px;
-        text-align: left;
-    }
-    input {
-        margin-bottom: 5px;
-    }
-    textarea {
-        width: 390px;
-    }
-</style>
-
-<div class="post">
-    <h2>{{=upload_title}}</h2>
-
-    <div class="entry">
-        <div id="post_form">{{=upload_form}}</div>
-    </div>
-</div>
-
-
-<div class="post">
-    <h2>{{=download_title}}</h2>
-
-    <div class="entry">
-        <div id="post_form">{{=download_form}}</div>
-    </div>
-</div>
+<h1>- {{=T('Files')}}</h1>
+<table width=100%>
+    <tr><th>{{=T('File')}}</th><th>{{=T('Action')}}</th></tr>
+{{for file in files:}}
+   <tr>
+    <td><a href="{{=URL(r=request,c='default',f='file',args=[file.filename])}}">{{=file.filename}}</a></td>
+    <td><a href="javascript:;" onclick="location.href='?ren={{=file.id}}&new='+prompt('{{=T('New Filename'')}})">{{=T('Rename')}}</a> | <a href="?del={{=file.id}}">{{=T('Delete')}}</a></td>
+   </tr>
+{{pass}}
+</table>

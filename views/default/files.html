@@ -1,40 +1,13 @@
 {{extend 'themes/%s/layout.html' % response.theme}}
 
-<style type="text/css">
-    table {
-        margin-top: 5px;
-    }
-    td {
-        font-family: Arial, Helvetica, sans-serif;
-        vertical-align: top;
-        color: #777;
-        font-size: 0.9em;
-        padding: 0px 5px 0px 0px;
-        text-align: left;
-    }
-    input {
-        margin-bottom: 5px;
-    }
-    textarea {
-        width: 390px;
-    }
-</style>
-
-<div class="post">
-    <h2>{{=upload_title}}</h2>
-
-    <div class="entry">
-        <div id="post_form">{{=upload_form}}</div>
-    </div>
-</div>
-
-
-<div class="post">
-    <h2>{{=download_title}}</h2>
-
-    <div class="entry">
-        <div id="post_form">
-            {{=download_form}}
-        </div>
-    </div>
-</div>
+<!-- original code from http://www.google.be/search?sourceid=chrome&ie=UTF-8&q=host2py -->
+<h1>- {{=T('Files')}}</h1>
+<p class="text-alignc">{{=T('To view/play if corresponding plugin available, click on file name.')}}</p>
+<table class="width100pc margt5pc bordert-dashed">
+{{for file in files:}}
+   <tr>
+    <td><a class="text-decoration-none font-s09em" href="{{=URL(r=request,c='default',f='file',args=[file.filename])}}">{{=file.filename}}</a></td>
+    <td class="meta"><a href="javascript:;" onclick="location.href='?ren={{=file.id}}&new='+prompt('{{=T('New Filename')}}')">{{=T('rename')}}</a> | <a href="?del={{=file.id}}">{{=T('delete')}}</a></td>
+   </tr>
+{{pass}}
+</table>

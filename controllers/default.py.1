@@ -1,132 +1,36 @@
-# This sets the session authorization values
-auth_users=db().select(db.auth_user.ALL)
-response.auth_users=auth_users
-
-def init_app():
-    """Application first run initialization"""
-    for au in auth_users:
-        if au.email=='anonymous@molhokwai.net':response.anon_user=au
-    if response.anon_user is None:
-        response.anon_user_id=db.auth_user.insert(
-                            registration_id='http://anonymous@molhokwai.net',
-                            display_name='anonymous',
-                            email='anonymous@molhokwai.net',
-                            is_anonymous=True
-                            )
-        response.anon_user=db(db.auth_user.id==response.anon_user_id).select()[0]
-init_app()        
-
-def get_usr_display_name(usr):
-    display_name=usr.preferredUsername
-    if display_name is None or display_name=='':
-        display_name=usr.first_name
-    if display_name is None or display_name=='':
-        display_name=usr.last_name
-    return display_name
-
-def user_authorization():
-    display_name=get_usr_display_name(auth.user)
-    if display_name is None or display_name=='':
-        if (auth.user.email is None or auth.user.email==''):
-            flash_msg="You are logged in. Your provider sent us empty email and username."
-            flash_msg+="Click <a href='%(app_admin_url)s'>here</a> to fill in the data or continue as anonymous."
-            session.flash=T(flash_msg,dict(app_admin_url=URL(r = request,f='app_admin/auth_user')))
-        else:
-            display_name=auth.user.email.split('@')[0]
-            flash_msg="You are logged in. With display name: %(display_name)s and email: %(email)s."
-            flash_msg+="Click <a href='%(app_admin_url)s'>here</a> to modify these data."
-            session.flash=T(flash_msg,dict(app_admin_url=URL(r = request,f='app_admin/auth_user'),
-                                        display_name=display_name,email=auth.user.email))
-    session.authorized=auth.user.is_admin
+###################################
+## CONTROLLER INITIALIZATION
+###################################
+try:
+    exec('from applications.%s.modules import common' % this_app)
+    app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped,'utilities':utilities})
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
+except Exception, ex:
+    log_wrapped('Er', ex)
 
 
-if (not auth.user is None and not session.user_authorization_done):
-    user_authorization()
-    session.user_authorization_done=True
-
-if auth.user and (auth.user.display_name is None or auth.user.display_name==''):
-    display_name=get_usr_display_name(auth.user)
-    if display_name is None or display_name =='':
-        display_name='anonymous@molhokwai.net'
-    auth.user.display_name=display_name
-
-response.title = "molhokwai.net on PyPress - a web2py powered weblog"
-response.keywords = "blog, weblog, journal, web, log, web2py, PyPress"
-response.description = "Just another PyPress weblog"
-
-# This dynamically adds the pages to the menu
-_pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
-items = []
-menu_items = []
-for page in _pages:
-    item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':request.application, 'id':page.id}]
-    items.append(item)
-    if page.show_in_menu and len(menu_items)<10:
-      menu_items.append(item)
-response.pages = items
-response.menu=menu_items
-
-# page helper
-class PageHelper():
-    _title=''
-    
-    def get_page_by_title(self,item):
-        return item.post_title.lower()==_title
-# instance
-page_helper=PageHelper()
-
-# This gets the home page, if one created
-def home_page():
-    """Convention over configuration: Home page is the one with title T('zorglub'),
-        The corresponding eventual language translation of 'home'.
-        
-        TODO: as proprty in a configuration framework (see if pypress4gae offers home/index page
-        configuration, and if so eventually switch to it)
-    """
-    if response.menu:
-        page_helper._title='a_home'
-        return filter(page_helper.get_page_by_title,_pages)
-# This gets the help page, if one created
-def help_page():
-    """See home_page"""
-    if response.menu:
-        page_helper._title='a_help'
-        return filter(page_helper.get_page_by_title,_pages)
-help_page=help_page()
-response.help_page=help_page[0] if (help_page and len(help_page)>0) else None
-
-# This returns all the categories and their post count
-cats = db().select(db.categories.ALL)
-items = []
-for cat in cats:
-    count = len(db(
-                   (db.posts.post_type == 'post') & 
-                   (db.posts.post_category == cat.id)
-                   ).select(db.posts.ALL,orderby=~db.posts.post_time))
-    if count > 0:
-        item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':request.application, 'name':cat.category_name}]
-        items.append(item)
-response.categories = items
-
-# This returns all the links
-links = db().select(db.links.ALL)
-items = []
-for link in links:
-    item = [link.link_title, link.link_url, link.id]
-    items.append(item)
-response.links = items
+###################################
+## CONTROLLER FUNCTIONS
+###################################
 
 # The main page
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
-    """hsh: home sweet home"""
-    if (len(request.args)==0):
-        hsh=home_page()
-        if hsh and len(hsh)>0:
-            redirect(URL(r = request,f = 'page/' +str(hsh[0].id)))
+    if len(request.args)==0:
+        if response.home_page:
+            redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
+        else:
+            redirect(URL(r=request, c='setup'))
     else:
-      return dict(posts = db(db.posts.post_type == 'post').select(db.posts.ALL, orderby=~db.posts.post_time))
+      if a_convert.to_int(request.args[0]):
+          return dict(posts = db(db.posts.id == int(request.args[0])).select())
+      else:
+          posts=db(db.posts.post_title == request.args[0]).select()
+          if not posts:
+              posts = filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0,response.posts)
+          return dict(posts = posts)          
+      
 
 # The post page
 # Shows the entire post, the comments, and the comment form
@@ -134,6 +38,10 @@ def post():
     #try: 
     post_id = int(request.args[0])
     post = db(db.posts.id == post_id).select()[0]
+    
+    if post and post.auth_requires_login and not auth.user:
+        redirect(URL(r = request, f = 'user', args = ['login']))
+
     comments = db(db.comments.post_id == post_id).select(db.comments.ALL)
     comment_count = len(db(db.comments.post_id == post_id).select(db.comments.ALL))
     db.comments.post_id.default = post_id
@@ -142,7 +50,7 @@ def post():
     if comment_form.accepts(request.vars, session):
         session.flash = T("Comment added.")
         redirect(URL(r = request,f = 'post/%i' % post_id ))
-        
+
     return dict(post = post, comments = comments, comment_form = comment_form, comment_count = comment_count)
     #except: 
     #    redirect(URL(r = request,f = 'index'))
@@ -150,11 +58,35 @@ def post():
 # The page page
 # Shows the entire page. Does not show comments or the comment form
 def page():
-    try: 
-        post_id = int(request.args[0])
-        post = db(db.posts.id == post_id).select()[0]
-        return dict(post = post)
-    except: 
+    try:
+        if len(request.args)>0:
+            post=''
+            if a_convert.to_int(request.args[0]):
+                post = db(db.posts.id == int(request.args[0])).select()[0]
+            else:
+                post = db(db.posts.post_title == request.args[0]).select()
+                if not post:
+                    pg = filter(lambda x: x[0].lower().find(request.args[0].lower())>=0, response.pages)
+                    if not pg:
+                      # fix for _ replacing space in url
+                      pg = filter(lambda x: x[0].lower().find(request.args[0].replace('_', ' ').lower())>=0, response.pages)
+                    if pg and len(pg)>0: pg = pg[0]
+                    post = db(db.posts.id == int(pg[2].replace('/%s/default/page/' % this_app, ''))).select()
+                if post: post = post[0]
+                
+            if post and post.auth_requires_login and not auth.user:
+                redirect(URL(r = request, f = 'user', args = ['login']))
+            
+            nake=(request.args[len(request.args)-1]=='nake'
+                 or post.post_text.find('<!-- nake page -->')>=0)
+        
+            return dict(post = post, nake  = nake)
+        else:
+            redirect(URL(r = request,f = 'index'))
+            
+    except Exception, ex: 
+        log_wrapped('Error', str(ex))
+        session.flash=T("(Caught) Error occured: %(err)s ", dict(err=str(ex)))
         redirect(URL(r = request,f = 'index'))
 
 # The pages page
@@ -170,9 +102,17 @@ def category():
         cat_name = request.args[0]
         cat = db(db.categories.category_name == cat_name
                     ).select(db.categories.ALL)[0]
-        posts = db((db.posts.post_type == 'post') &
-                   (db.posts.post_category == cat.id)
-                   ).select(db.posts.ALL) ## , orderby=~db.posts.post_time
+        posts=[]
+        try:
+            posts = db((db.posts.post_type == 'post') &
+                       (db.posts.post_category == cat.id) &
+                        ((db.posts.application == request.application) | 
+                        (db.posts.application == None))
+                       ).select(db.posts.ALL) ## , orderby=~db.posts.post_time
+        except Exception, ex:
+            posts = db((db.posts.post_type == 'post') &
+                       (db.posts.post_category == cat.id)
+                       ).select(db.posts.ALL) ## , orderby=~db.posts.post_time
         filter(fp,posts)
 
         response.sidebar_note = T("You are currently browsing the archives for the %(cat_name)s category.",dict(cat_name=cat_name))
@@ -180,20 +120,29 @@ def category():
     except:
         redirect(URL(r = request,f = 'index'))
 
+@auth.requires_login()
 def add():
     try:
         area = request.args[0]
 
         if area == "post":
             db.posts.post_type.default = 'post'
-            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 
-                                                    'post_category', 'is_translated'], 
+            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application', 
+                                                    'post_category', 'is_translated', 'auth_requires_login'], 
                                                     labels = post_labels)
+            page_form.append(INPUT(_type='checkbox', 
+                                    _name='post_attributes_content_is_original', 
+                                    _id='post_attributes_content_is_original', value=''))
             page_title = T("Add Post")
             
             if page_form.accepts(request.vars, session):
                 tcode="post_id_"+str(page_form.vars.id)
-                pg=db(db.posts.id==page_form.vars.id).update(post_text_TCode=tcode)
+                from gluon.contrib import simplejson
+                _json=simplejson.loads(request.vars.post_attributes_json)
+                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                pg=db(db.posts.id==page_form.vars.id).update(
+                                                post_text_TCode=tcode,
+                                                post_attributes_json=simplejson.dumps(_json))
                 ## FEATURE REQUEST: to add the translation code if not existing
                 T(tcode)
                 session.flash = T("Post added.")
@@ -201,14 +150,22 @@ def add():
         
         elif area == "page":
             db.posts.post_type.default = 'page'
-            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 
+            page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application',
                                                     'show_in_menu', 'is_translated'], 
                                                     labels = post_labels)
+            page_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
+                                                    _id='post_attributes_content_is_original', value=''))
             page_title = T("Add Page")
             
             if page_form.accepts(request.vars, session):
                 tcode="page_id_"+str(page_form.vars.id)
-                pg=db(db.posts.id==page_form.vars.id).update(post_text_TCode=tcode)
+                from gluon.contrib import simplejson
+                _json=simplejson.loads(request.vars.post_attributes_json)
+                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                pg=db(db.posts.id==page_form.vars.id).update(
+                                                post_text_TCode=tcode,
+                                                post_attributes_json=simplejson.dumps(_json)
+                                            )
                 ## FEATURE REQUEST: to add the translation code if not existing
                 T(tcode)
                 session.flash = T("Page added.")
@@ -219,21 +176,37 @@ def add():
             
         return dict(page_title = page_title, page_form = page_form)
     except Exception, ex:
-        session.flash=T("Error occured")
+        session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))
         redirect(URL(r = request,f = 'index'))
 
+@auth.requires_login()
 def edit():
+    this_item=None
+    area=None
+    id=None
+    # p_a_c_i_o_val : page attr. content is orginal value
+    p_a_c_i_o_val=None
     try:
         area = request.args[0]
-        id = request.args[1]
-    except:
+        id = int(request.args[1])
+        this_item = db(db.posts.id == id).select()[0]
+    except Exception, ex:
+        session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))
         redirect(URL(r = request,f = 'index'))
+
+    try:
+        from gluon.contrib import simplejson
+        _json=simplejson.loads(this_item.post_attributes_json)
+        p_a_c_i_o_val='on' if _json['content_is']['original'] else ''
+    except Exception, ex:
+        session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))
     
     if area == 'post':
-        this_item = db(db.posts.id == id).select()[0]
-        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'post_text_TCode', 
-                                                            'post_category','is_translated'], 
+        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
+                                                            'post_category', 'is_translated', 'auth_requires_login'], 
                                                             deletable=True, labels = post_labels)
+        edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
+                                                _id='post_attributes_content_is_original', value=p_a_c_i_o_val))
         edit_title = T("Edit Post")
     
         if edit_form.accepts(request.vars, session):
@@ -241,26 +214,41 @@ def edit():
                 session.flash = T("Post deleted.")
                 redirect(URL(r = request,f = 'index/posts'))
             else:    
+                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
                 session.flash = T("Post updated.")
                 redirect(URL(r = request,f = 'post/%s' %id))
 
     elif area == 'page':
         this_item = db(db.posts.id == id).select()[0]
-        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'post_text_TCode', 
+        edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
                                                             'is_translated', 'show_in_menu'], 
                                                             deletable=True, labels = post_labels)
+        edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
+                                                 _id='post_attributes_content_is_original', value=p_a_c_i_o_val))
         edit_title = T("Edit Page")
     
         if edit_form.accepts(request.vars, session):
-            session.flash = T("Page updated.")
-            redirect(URL(r = request,f = 'page/%s' %id))
-                    
+            if request.vars.delete_this_record=='on':
+                session.flash = T("Page deleted.")
+                redirect(URL(r = request,f = 'pages'))
+            else:
+                try:
+                    _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                    db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
+                    session.flash = T("Page updated.")
+                except Exception, ex:
+                    session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))
+                finally:
+                    redirect(URL(r = request,f = 'page/%s' %id))
+                        
     else:
         redirect(URL(r = request,f = 'index'))
     
-    return dict(edit_form = edit_form, edit_title = edit_title)
+    return dict(edit_form = edit_form, edit_title = edit_title, post=this_item)
 
         
+@auth.requires_login()
 def manage():
 
     area = None
@@ -272,7 +260,10 @@ def manage():
     try: command = request.args[1]
     except: command = ""
         
-    if area == 'post':
+    if area == 'page':
+        redirect(URL(r = request, f='pages'))
+    
+    elif area == 'post':
         rows = db(db.posts.post_type == 'post').select(db.posts.ALL)
         manage_title = T('Manage Posts')
 
@@ -295,10 +286,10 @@ def manage():
                 
                 if edit_form.accepts(request.vars, session):
                     session.flash = T("Post updated")
-                    redirect(URL(r = request, f = 'manage/post'))
+                    redirect(URL(r = request, f = 'manage', args=['post']))
                 else:
-                    session.flash = T("Error occured")
-        
+                    session.flash=T("(Caught) Error occured")
+                    
         elif command == 'delete':
             try: id = request.args[2]
             except: id = ""
@@ -310,7 +301,7 @@ def manage():
         else:
             edit_form = ''
 
-        return dict(rows = rows, manage_title = manage_title, edit_form = edit_form, area = area)
+        return dict(rows = rows, manage_title = manage_title, manage_text='', edit_form = edit_form, area = area)
     
     elif area == 'link':
         rows = db().select(db.links.ALL)
@@ -321,9 +312,9 @@ def manage():
             
             if edit_form.accepts(request.vars, session):
                 session.flash = T("Link added")
-                redirect(URL(r = request, f = 'manage/link'))
+                redirect(URL(r = request, f = 'manage', args=['link']))
             else:
-                session.flash = T("Error occured")
+                session.flash=T("(Caught) Error occured")
        
         elif command == 'edit':
             try: id = request.args[2]
@@ -335,9 +326,9 @@ def manage():
                 
                 if edit_form.accepts(request.vars, session):
                     session.flash = T("Link updated")
-                    redirect(URL(r = request, f = 'manage/link'))
+                    redirect(URL(r = request, f = 'manage', args=['link']))
                 else:
-                    session.flash = T("Error occured")
+                    session.flash=T("(Caught) Error occured")
         
         elif command == 'delete':
             try: id = request.args[2]
@@ -350,7 +341,7 @@ def manage():
         else:
             edit_form = ''
             
-        return dict(rows = rows, manage_title = manage_title, edit_form = edit_form, area = area)
+        return dict(rows = rows, manage_title = manage_title, manage_text='', edit_form = edit_form, area = area)
     
     elif area == 'category':
         rows = db().select(db.categories.ALL)
@@ -373,9 +364,9 @@ def manage():
                 
                 if edit_form.accepts(request.vars, session):
                     session.flash = T("Category updated")
-                    redirect(URL(r = request, f = 'manage/category'))
+                    redirect(URL(r = request, f = 'manage', args=['category']))
                 else:
-                    session.flash = T("Error occured")
+                    session.flash=T("(Caught) Error occured")
         
         elif command == 'delete':
             try: id = request.args[2]
@@ -389,11 +380,68 @@ def manage():
         else:
             edit_form = ''
 
-        return dict(rows = rows, manage_title = manage_title, edit_form = edit_form, area = area)        
+        return dict(rows = rows, manage_title = manage_title, manage_text='', edit_form = edit_form, area = area)        
     
+    elif area == 'theme':
+        record = None
+        form = ''
+        manage_title = T('Manage Child Theme')
+        manage_text = T('The theme inherits styles from the parent theme chosen, and sets its specific by hot linking to the stylesheet url given, overwriting parent\' style, and/or creating new ones.')
+        
+        if len(request.args)>1:
+            name = request.args[1]
+            theme = utilities.get_from_app_themes(name)
+            if theme:
+                if  theme.find(utilities.theme_sep_token)>0:
+                    db.app_themes.id.default = -10
+                    db.app_themes.theme_name.default = name
+                    db.app_themes.theme_base.default = utilities.get_from_theme('base', name=None, theme=theme)
+                    db.app_themes.theme_stylesheet_url.default = utilities.get_from_theme('stylesheet', name=None, theme=theme)
+                else:
+                    response.flash = T('Base themes are not editable')
+            else:
+                response.flash = T('Theme not found')
+
+        db.app_themes.theme_editor.default = auth.user.email
+
+        form = SQLFORM(db.app_themes, deletable=True)
+        if form.accepts(request.vars, session, dbio = False):
+            def get_theme(f_v):
+                return ('%(name)s%(token)s%(base)s%(token)s%(stylesheet)s%(token)s%(author)s' % 
+                        dict(
+                           name=f_v.theme_name,base=f_v.theme_base,
+                           stylesheet=f_v.theme_stylesheet_url,
+                           author=auth.user.email,token=utilities.theme_sep_token)
+                )
+            theme = None
+            error = False
+            for i in range(len(app_config.APP_THEMES)):
+                t = utilities.get_from_theme('name', theme=app_config.APP_THEMES[i])
+                if t == form.vars.theme_name:
+                    if (utilities.get_from_theme('author', theme=app_config.APP_THEMES[i]) !=auth.user.email
+                        and utilities.get_from_theme('stylesheet', theme=app_config.APP_THEMES[i]) !=form.vars.theme_stylesheet_url):
+                        response.flash = T('This theme name is already in use.')
+                        error = True
+                    else:
+                        app_config.APP_THEMES[i] = get_theme(form.vars)
+                        theme = t
+                        
+            if not theme and not error:
+                theme = get_theme(form.vars)
+                app_config.APP_THEMES.append(theme)
+                
+            if theme:
+                db(db.app_config.id == app_config.id).update(APP_THEMES = app_config.APP_THEMES)
+                session.flash = T('Theme saved. Click here to test it: %(url)s', 
+                                dict(url=A(T('test %s' % form.vars.theme_name), 
+                                _href=URL(r = request, args=request.args, vars=dict(theme=form.vars.theme_name))))
+                                )
+                redirect(URL(r = request, args = [request.args[0], form.vars.theme_name]))
+    
+        return dict(edit_form = form, manage_title=manage_title, manage_text=manage_text)
+        
     else:
         redirect(URL(r = request,f = 'index'))
-
 
 def error():
     ticket=''
@@ -412,33 +460,55 @@ def error():
         if requested_uri == 'None': requested_uri=None
     except Exception, ex:
         err=str(ex)
-
+        session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))
+        
     return dict(ticket=ticket, code=code, requested_uri=requested_uri, err=err)
-        
-def files():
-    upload_form=SQLFORM(db.files,labels=file_labels)
-    if request.vars.file!=None:
-        # TODO: strip_path_and_sanitize()
-        upload_form.vars.filename=request.vars.file.filename.lower()
-        if upload_form.accepts(request.vars,session):
-            response.flash=T('file uploaded')
-        
-    download_form=FORM(LABEL(T('Enter file name'))
-                        ,INPUT(_name="filename", requires=IS_NOT_EMPTY())
-                        ,INPUT(_type="submit",_value=T('Submit')))
-    if (download_form.accepts(request.vars,session)
-        or (request.vars.download and request.vars.filename)):
-        _file=db(db.files.filename==request.vars.filename.lower()).select()
-        if _file: 
-            _file=_file[0]
-            redirect(URL(r = request,f = 'download/%s/%s' % (_file.file,_file.filename)))
-        else:
-            response.flash=T('no file found with the name %(filename)s',
-                             dict(filename=request.vars.filename.lower()))
-        
-    return dict(upload_form=upload_form,download_form=download_form,
-                upload_title=T('upload'),download_title=T('download'))
 
+@auth.requires_login()
+def upload():
+    form=SQLFORM(db.files, fields=['file'])
+    if 'file' in request.vars:
+        form.vars.filename = request.vars.file.filename
+        form.vars.user = auth.user.id
+    if form.accepts(request.vars): 
+        response.flash='File uploaded'
+    return dict(form=form)
+
+@auth.requires_login()
+def files():
+    if 'del' in request.get_vars:
+        db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['del'])).delete()
+        redirect(URL(r=request,c='default',f='files'))
+    elif 'ren' in request.get_vars and request.get_vars['new'] != 'null':
+        file = db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['ren'])).select()[0]
+        if request.get_vars['new'].find('.') == -1:
+            filename = request.get_vars['new'] + '.' + file.filename.split('.').pop()
+        else:
+            filename = request.get_vars['new']
+        db(db.files.id==file.id).update(filename=filename)
+        redirect(URL(r=request,c='default',f='files'))
+    files=db(db.files.id>0).select(orderby=db.files.filename)
+    return dict(files=files)
+
+def file():
+    file = db(db.files.filename==request.args[0]).select()
+    if len(file) > 0:
+        request.args[0] = file[0].file
+        return response.download(request,db)
+    else:
+        return
+
+def json():
+    area=request.args[0]    
+    return response.json({
+        'status' : 1,
+        'message' : 'done',
+        'result' : {
+            'pages' : lambda x: db(db.posts.post_type=='page').select(),
+            'themes' : lambda x: app_config.APP_THEMES
+        }.get(request.args[0], None)(request.args[0])
+    })
+    
 def user():
     """
     exposes:
@@ -455,9 +525,12 @@ def user():
     """
     if request.args[0]=='logout':
         session.user_authorization_done=False
+    if auth.user and request.vars.next:
+        redirect(request.vars.next)
     return dict(form=auth())
 
 
+@auth.requires_login()
 def app_admin():
     area=request.args[0]
     if area=='auth_user':
@@ -514,22 +587,19 @@ def download():
     import os
     return response.stream(open(os.path.join(request.folder,'uploads',request.args[0]),'rb'))
 
+@auth.requires_login()
 def do_stuff():
-    if request.args[0]=='u_tcode_istrans':
-        for pg in _pages:
-            tcode="page_id_"+str(pg.id)
-            is_trans=str(pg.id) in request.vars.ids.split(',')
-            upd=db(db.posts.id==pg.id).update(post_text_TCode=tcode,is_translated=is_trans)
-        session.flash=T('Translated pages post text T code updated.')
-    elif request.args[0]=='u_none_tcode_istrans':
-        for pg in _pages:
-            tcode="page_id_"+str(pg.id)
-            if str(pg.id) in request.vars.ids.split(','):
-                upd=db(db.posts.id==pg.id).update(post_text_TCode=None,is_translated=False)
-        session.flash=T('Translated pages post text T code updated.')
-    elif request.args[0]=='u_auth_user':
-        for au in db().select(db.auth_user.ALL):
-            upd=db(db.auth_user.id==au.id).update(is_admin=False,is_anonymous=False)
-        session.flash=T('Auth user fields updated.')
-        
+    log_wrapped('1', 1)
+    if request.args[0] in ['posts_app', 'links_app']:
+        log_wrapped('2', 2)
+        instance=db.posts if request.args[0]=='posts_app' else db.links
+        _ids=request.args[1].split(',')
+        log_wrapped('_ids', _ids)
+        for i in range(len(_ids)):
+            try:
+                db(instance.id == int(_ids[i])).update(application=request.application)
+            except Exception, ex:
+                pass
+        session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
+    
     redirect(URL(r = request,f = 'index'))
