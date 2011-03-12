@@ -1,0 +1,4 @@
+
+{{extend 'layout.html'}}
+<h1>This is the themes/ff0000/b/sidebar.html template</h1>
+{{=BEAUTIFY(response._vars)}}

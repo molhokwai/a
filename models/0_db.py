@@ -227,7 +227,7 @@ db.posts.post_category.requires = IS_IN_DB(db, 'categories.id', 'categories.cate
 
 db.define_table('files',
     SQLField('file','upload', required=True, autodelete=True),
-    SQLField('filename', required=True),
+    SQLField('filename'),
     SQLField('user', required=True, readable=False, writable=False)
 )
 db.files.filename.requires = IS_NOT_IN_DB(db, 'files.filename')

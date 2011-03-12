@@ -642,6 +642,12 @@ minh0 {
 .font-size16em, .font-s16em {
     font-size: 1.6em;
 }
+.font-size18em, .font-s18em {
+    font-size: 1.8em;
+}
+.font-size2em, .font-s2em {
+    font-size: 2em;
+}
 
 .fontf-helvetica {
     font-family: "Helvetica";

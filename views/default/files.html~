@@ -7,7 +7,11 @@
 {{for file in files:}}
    <tr>
     <td><a class="text-decoration-none font-s09em" href="{{=URL(r=request,c='default',f='file',args=[file.filename])}}">{{=file.filename}}</a></td>
-    <td class="meta"><a href="javascript:;" onclick="location.href='?ren={{=file.id}}&new='+prompt('{{=T('New Filename')}}')">{{=T('rename')}}</a> | <a href="?del={{=file.id}}">{{=T('delete')}}</a></td>
+    <td class="meta"><a onclick="location.href='?ren={{=file.id}}&new='+prompt('{{=T('New Filename')}}')">{{=T('rename')}}</a> | <a href="?del={{=file.id}}">{{=T('delete')}}</a></td>
    </tr>
 {{pass}}
 </table>
+
+<div class="meta text-alignr padr2pc bordert-dashed">
+{{=XML(T('<a href="%(url)s">Upload files</a>', dict(url=URL(r=request,c='default',f='upload'))))}}
+</div>

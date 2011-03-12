@@ -179,7 +179,7 @@
                 
                 <div id="sidebar" class="right width25pc text-alignr">
                     <!-- #sidebar menu & content deactivated. See cms theme foreventual reactivation -->
-                    {{include "themes/%s/sidebar.html" % response.theme}}                
+                    {{include "themes/%s/sidebar/%s.html" % (response.theme, request.application)}}                
                 </div>
                 <!-- end #sidebar -->
                 

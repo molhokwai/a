@@ -481,6 +481,7 @@ def files():
     db(db.files.id>0).update(user = auth.user.id)
     if 'del' in request.get_vars:
         db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['del'])).delete()
+        session.flash = T('File deleted')
         redirect(URL(r=request,c='default',f='files'))
     elif 'ren' in request.get_vars and request.get_vars['new'] != 'null':
         file = db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['ren'])).select()[0]
@@ -489,6 +490,7 @@ def files():
         else:
             filename = request.get_vars['new']
         db(db.files.id==file.id).update(filename=filename)
+        session.flash = T('File updated')
         redirect(URL(r=request,c='default',f='files'))
     files=db(db.files.id>0).select(orderby=db.files.filename)
     return dict(files=files)

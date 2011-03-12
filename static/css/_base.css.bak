@@ -303,6 +303,19 @@ minh0 {
     max-height: 5em;
 }
 
+.h30em, .height30em, .h30, .height30 {
+    height: 30em;
+}
+.h45em, .height45em, .h45, .height45 {
+    height: 45em;
+}
+.h49em, .height49em, .h49, .height49 {
+    height: 49em;
+}
+.h50em, .height50em, .h50, .height50 {
+    height: 50em;
+}
+
 /* POSITION, DISPLAY*/
 .display-block, .display, .show {
     display: block;
@@ -455,6 +468,15 @@ minh0 {
 .margt-07pc {
     margin-top: -0.7% !important;
 }
+.margt1pc {
+    margin-top: 1% !important;
+}
+.margt1-2pc {
+    margin-top: 1.2% !important;
+}
+.margt1-5pc {
+    margin-top: 1.5% !important;
+}
 .margt2pc {
     margin-top: 2% !important;
 }
@@ -558,6 +580,12 @@ minh0 {
     padding-left:4%;
 }
 
+
+/*left*/
+.padr2pc {
+    padding-right:2%;
+}
+
 /*top*/
 .padt1pc {
     padding-top:1%;
@@ -587,26 +615,32 @@ minh0 {
 .bold {
     font-weight: bold;
 }
-.font-size05em, font-s05em {
+.font-size05em, .font-s05em {
     font-size: 0.5em;
 }
-.font-size06em, font-s06em {
+.font-size06em, .font-s06em {
     font-size: 0.6em;
 }
-.font-size07em, font-s07em {
+.font-size07em, .font-s07em {
     font-size: 0.7em;
 }
-.font-size08em, font-s08em {
+.font-size08em, .font-s08em {
     font-size: 0.7em;
 }
-.font-size09em, font-s09em {
+.font-size09em, .font-s09em {
     font-size: 0.9em;
 }
-.font-size095em, font-s095em {
+.font-size095em, .font-s095em {
     font-size: 0.95em;
 }
-.font-size12em, font-s12em {
+.font-size1em, .font-s1em {
+    font-size: 1em;
+}
+.font-size12em, .font-s12em {
     font-size: 1.2em;
+}
+.font-size16em, .font-s16em {
+    font-size: 1.6em;
 }
 
 .fontf-helvetica {

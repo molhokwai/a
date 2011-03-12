@@ -98,6 +98,25 @@ blockquote {
     margin-left: 10%;
 }
 
+#body #flash {
+    /* use .gradient in place in wrapper or #wrapper and remove these styles */
+    /* classical */
+    background-image: url("headerBG.png");
+    background-repeat: repeat-x;
+    background-color: orange;
+    /* gradient */
+    background-image: gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, red));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, red));
+    background-image: -moz-linear-gradient(top, transparent, red);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=transparent,endColorstr=red);
+    /* other */
+    color: #ffffff;
+    padding: 0.2% 2%;
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: center;
+}
+
 #body .right embed.media+div, #body .right embed.media {
     margin-left: 5%;
     width: 50%;

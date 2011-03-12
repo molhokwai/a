@@ -68,7 +68,7 @@
                     $(k).hide();
                 }
             }
-            $("html").animate({ scrollTop: 0 }, "slow");
+            $("html").animate({ scrollTop: 0 });
         };
     </script>    
     </head>
