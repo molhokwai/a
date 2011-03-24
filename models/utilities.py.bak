@@ -183,7 +183,7 @@ class Struct:
 # utilities
 class Utilities():
     def reverse_numeric_row_id(self, x, y):return y.id - x.id
-
+    
     def shorten_and_randomize(self, _list, nr):
         import random
         random.shuffle(_list)
@@ -210,15 +210,30 @@ class Utilities():
     def get_from_theme(self, what, name=None, theme=None):
         if not name is None:
             theme = self.get_from_app_themes(name)
-        whats = {'name':0, 'base':1, 'stylesheet':2, 'author':3}
-        return theme.split(self.theme_sep_token)[whats[what]]
-    
+            whats = {'name':0, 'base':1, 'stylesheet':2, 'author':3}
+            return theme.split(self.theme_sep_token)[whats[what]]
+        else:
+            return ''
+            
     def get_base_of_theme(self, name):
         if name in app_details.themes_base_list:
             return name
         else:
             theme_base = self.get_from_theme('base', name=name)
             return self.get_base_of_theme(theme_base)
+
+    def replace_serverside_output_values(self, _text, tag_re='\</*aservero\>'):
+        b = re.findall(re.compile('<aservero>\w*?</aservero>'), _text)
+        for c in b:
+            _text = _text.replace(c, eval(re.sub('\</*aservero\>', '', c)))
+        log_wrapped('_text', _text)
+        return _text
+
+    def posts_replace_serverside_output_values(self, _posts, tag_re='\</*aservero\>'):
+        for p in _posts:
+            p.post_text = self.replace_serverside_output_values(x.post_text)
+        return posts
+        
 
 # instance
 utilities=Utilities()

@@ -24,11 +24,12 @@ def index():
             redirect(URL(r=request, c='setup'))
     else:
       if a_convert.to_int(request.args[0]):
-          return dict(posts = db(db.posts.id == int(request.args[0])).select())
+          return dict(posts = utilities.posts_replace_serverside_output_values(db(db.posts.id == int(request.args[0])).select()))
       else:
           posts=db(db.posts.post_title == request.args[0]).select()
           if not posts:
               posts = filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0,response.posts)
+              posts = utilities.posts_replace_serverside_output_values(posts)
           return dict(posts = posts)          
       
 
@@ -39,8 +40,11 @@ def post():
     post_id = int(request.args[0])
     post = db(db.posts.id == post_id).select()[0]
     
-    if post and post.auth_requires_login and not auth.user:
-        redirect(URL(r = request, f = 'user', args = ['login']))
+    if post: 
+        if post.auth_requires_login and not auth.user:
+            redirect(URL(r = request, f = 'user', args = ['login']))
+            
+        post.post_text = utilities.replace_serverside_output_values(post.post_text)
 
     comments = db(db.comments.post_id == post_id).select(db.comments.ALL)
     comment_count = len(db(db.comments.post_id == post_id).select(db.comments.ALL))
@@ -74,11 +78,15 @@ def page():
                     post = db(db.posts.id == int(pg[2].replace('/%s/default/page/' % this_app, ''))).select()
                 if post: post = post[0]
                 
-            if post and post.auth_requires_login and not auth.user:
-                redirect(URL(r = request, f = 'user', args = ['login']))
+            if post:
+                if post.auth_requires_login and not auth.user:
+                    redirect(URL(r = request, f = 'user', args = ['login']))
             
-            nake=(request.args[len(request.args)-1]=='nake'
-                 or post.post_text.find('<!-- nake page -->')>=0)
+                nake=(request.args[len(request.args)-1]=='nake'
+                     or post.post_text.find('<!-- nake page -->')>=0)
+            
+                post.post_text = utilities.replace_serverside_output_values(post.post_text)
+
         
             return dict(post = post, nake  = nake)
         else:
@@ -116,7 +124,7 @@ def category():
         filter(fp,posts)
 
         response.sidebar_note = T("You are currently browsing the archives for the %(cat_name)s category.",dict(cat_name=cat_name))
-        return dict(posts = posts)
+        return dict(posts = utilities.posts_replace_serverside_output_values(posts))
     except:
         redirect(URL(r = request,f = 'index'))
 

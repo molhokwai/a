@@ -189,6 +189,7 @@
 'ff0000_home': 'ff0000_home',
 'file': 'file',
 'file uploaded': 'file uploaded',
+'financial_situation': 'financial_situation',
 'gallery': 'gallery',
 'help': 'help',
 'hide all': 'hide all',

@@ -1,0 +1,461 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py'
+p4
+sS'code'
+p5
+S'# coding: utf8\n\n#########################################################################\n## APPLICATION DETAILS, COMMON\'Z & UTILITIES\n#########################################################################\n\np_help_k=T(\'%(app)s_help\', dict(app=request.application))\np_home_k=T(\'%(app)s_home\', dict(app=request.application))\nclass AppDetails():\n    name = T("\'a\' cm/dms"), \n    title = T("molhokwai.net - \'a\' cm/dms"), \n    keywords = T("blog, weblog, journal, web, log, web2py, pypress, cms, dms, simple, lightweight, straight-forward, direct, programming, programmer"),\n    description = T("molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct")\n    themes_base_list = app_themes_base_list\n    init_app_config = {\n        \'pages\' : {\n            \'help_k\' : T(\'%(app)s_help\', dict(app=request.application)),\n            \'home_k\' : T(\'%(app)s_home\', dict(app=request.application)),                                \n            p_help_k : """\n                Dbl Ctrl to access <i>command line</i> <small>(css-ly removed outline makes cursor faintly visible in chrome, but it\'s there)</small>\n                <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                Add links to pages to access the pages from the command line\n                --------------------------------------------------------------------------------------------<br/>\n                login <br/>\n                logout <br/>\n                add <br/>\n                edit <br/>\n                delete <br/>\n                submit <br/>\n                pages <br/>\n                links <br/>\n                root <br/>\n                help <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                idem, translated in available languages\n            """,\n            p_home_k : """\n                <b>Command line interface<br/>\n                &nbsp;&nbsp;&nbsp;&nbsp;<small>command based human machine interface basic cms</small>...\n                <br/>\n                <br/>\n                Dbl Ctrl to access <i>command line</i> <small>(css-ly removed outline makes cursor faintly visible in chrome, but it\'s there)</small><br/>\n                &nbsp;&nbsp;&nbsp;&nbsp;<small>*<b>eventually</b>, if the page has elligible primary content, search falls back on <img src="http://www.google.com/uds/css/small-logo.png" alt="Google(reg)"> search \n                if no <i>internally found</i> response</small>.<br/>\n                --------------------------------------------------------------------------------------------\n                <br/>\n                <br/>\n                login <br/>\n                logout <br/>\n                add <br/>\n                edit <br/>\n                delete <br/>\n                submit <br/>\n                pages <br/>\n                links <br/>\n                root <br/>\n                help <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                Add links to pages to access them from the command line<br/>\n                --------------------------------------------------------------------------------------------<br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                <br/>\n                --------------------------------------------------------------------------------------------<br/>\n                idem, translated in available languages            \n            """,\n            \'acknowledgements\' : """\n                <ul>\n                  <li><a href="http://www.web2py.org">web2py</a></li>\n                  <li><a href="http://code.google.com/appengine">google app engine</a></li>\n                  <li><a href="http://python.org">python</a></li>\n                  <li><a href="http://jquery.org">jquery</a></li>\n                  <li><a href="http://www.google.be/search?sourceid=chrome&amp;ie=UTF-8&amp;q=pypress">pypress</a></li>\n                  <li><a href="http://www.google.be/search?sourceid=chrome&amp;ie=UTF-8&amp;q=pypress#sclient=psy&amp;hl=nl&amp;source=hp&amp;q=acknowledgements:everything+up+to+now&amp;aq=f&amp;aqi=&amp;aql=&amp;oq=&amp;gs_rfai=&amp;pbx=1&amp;psj=1&amp;fp=1eb96132f70894e9">...</a> </li>\n                </ul>\n                <br>\n                <p class="text-alignr font-size09em italic width60pc">(if you find there is missing acknowledgedment, an e-mail to <a href="mailto:admin@molhokwai.net" title="[GMCP] Compose a new mail to admin@molhokwai.net" \n                onclick="window.open(\'https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=admin@molhokwai.net\',\'Compose new message\',\'width=640,height=480\');return false" rel="noreferrer">admin@molhokwai.net</a> \n                is more than welcome)"</p>                \n            """\n        }\n    }\napp_details=AppDetails()\nif app_config and app_config.APP_METAS:\n    if len(app_config.APP_METAS)>0: app_details.name=app_config.APP_METAS[0]\n    if len(app_config.APP_METAS)>1: app_details.title=app_config.APP_METAS[1]\n    if len(app_config.APP_METAS)>2: app_details.keywords=app_config.APP_METAS[2]\n    if len(app_config.APP_METAS)>3: app_details.description=app_config.APP_METAS[3]\n        \nclass aConvert():\n    def to_int(self, value):\n        """Attention: Eventually returns 0 which \'equals\' the False ValueError return"""\n        try:\n            return int(value)\n        except ValueError:\n            return False\na_convert=aConvert()\n\n# session manager\nclass SessionManager():\n    @property\n    def default_page(self):\n        return \'/%s/company/index\' % this_app\n\n    def company_id(self,value=None):\n        if not value is None:\n            session.company_id=value\n        if session.company_id:\n            args={ \'icon_url\' : db(db.companies.id==session.company_id).select()[0].icon_url }\n            company=Struct(**args)\n        return session.company_id\n        \n    def user_is_in_company(self, company_id=None):\n        ## TODO: method in company management class, and this session_manager calling it...\n        if company_id is None:\n            company_id=self.company_id()\n        if not auth.user: \n            return False\n        else:\n            res=db(db.companies.user==auth.user.id).select()\n            return len(res)>0\n# instance\nsession_manager=SessionManager()\n\n# common\nclass Common():\n    """def get_small_icon_url(self, icon_url):\n        _segs=icon_url.split(\'.\')\n        _ext=_segs[len(_segs)-1]\n        return icon_url.replace(\'.%s\' % _ext,\'_small.%s\' % _ext) \n    """    \n    def get_shortened_text(self, _text, _max):\n        if len(_text)>_max:\n            return \'%s...\' % _text[:(_max-3)]\n        else:\n            return _text\n                            \n    def redirect(self, url):\n        """in case of redirection to an inner frame"""\n        inner_frames_args=[\'page-box\', \'side-box\', \'frame-box\', \'is_iframe\']\n        for ifa in inner_frames_args:\n            if url.lower().find(ifa.lower())>0:\n                redirect(session_manager.default_page)\n                break        \n        redirect(url)\n\n    def get_embed(self, provider, media_key, width=425, height=344):\n        embed=None\n        if provider==\'youtube\':\n            embed=\'    <object width="%(width)i" height="%(height)i">\'\n            embed+=\'      <param name="movie" value="http://www.youtube.com/v/%(media_key)s?fs=1"></param>\'\n            embed+=\'      <param name="allowFullScreen" value="true"></param>\'\n            embed+=\'      <param name="allowScriptAccess" value="always"></param>\'\n            embed+=\'      <embed src="http://www.youtube.com/v/%(media_key)s?fs=1"\'\n            embed+=\'      type="application/x-shockwave-flash"\'\n            embed+=\'      allowfullscreen="true"\'\n            embed+=\'      allowscriptaccess="always"\'\n            embed+=\'      width="%(width)i" height="%(height)i">\'\n            embed+=\'      </embed>\'\n            embed+=\'   </object>\'\n        return embed % {\'width\':width, \'height\':height, \'media_key\':media_key}\n        \n#instance\ncommon=Common()\n\n# utilities\nclass Struct:\n    def __init__(self, **entries): \n        self.__dict__.update(entries)\n\n# utilities\nclass Utilities():\n    def reverse_numeric_row_id(self, x, y):return y.id - x.id\n    \n    def shorten_and_randomize(self, _list, nr):\n        import random\n        random.shuffle(_list)\n        if len(_list)>nr:\n            return _list[:nr]\n        else:\n            return _list        \n\n    def set_cookie(self, name, value):\n        response.cookies[name] = value\n        response.cookies[name][\'expires\'] = 365 * 24 * 3600\n        response.cookies[name][\'path\'] = \'/\'\n\n    def get_cookie(self, name):\n        if request.cookies.has_key(name):\n            return request.cookies[name]\n\n    theme_sep_token = \'#:#\'\n    def get_from_app_themes(self, name):\n        theme = filter(lambda x: x.split(self.theme_sep_token)[0] == name, app_config.APP_THEMES)\n        if theme and len(theme)>0:\n            return theme[0]\n    \n    def get_from_theme(self, what, name=None, theme=None):\n        if not name is None:\n            theme = self.get_from_app_themes(name)\n            whats = {\'name\':0, \'base\':1, \'stylesheet\':2, \'author\':3}\n            return theme.split(self.theme_sep_token)[whats[what]]\n        else:\n            return \'\'\n            \n    def get_base_of_theme(self, name):\n        if name in app_details.themes_base_list:\n            return name\n        else:\n            theme_base = self.get_from_theme(\'base\', name=name)\n            return self.get_base_of_theme(theme_base)\n\n    def replace_serverside_output_values(self, _text, tag_re=\'\\</*aservero\\>\'):\n        b = re.findall(re.compile(\'<aservero>\\w*?</aservero>\'), a)\n\tfor c in b:\n\t    _text = _text.replace(c, eval(re.sub(\'\\</*aservero\\>\', \'\', c)))\n        return _text\n\n    def posts_replace_serverside_output_values(self, _posts, tag_re=\'\\</*aservero\\>\'):\n        return map(lambda x: x.post_text = self.replace_serverside_output_values(x.post_text), _posts)    \n\t\t\n\n# instance\nutilities=Utilities()\n\n########################\n## Print, Log Wrapper\n########################\n\ndef print_wrapped(_name, _value):\n    print \'-------| %s : %s\' % (repr(_name), repr(_value))\n\ndef log_wrapped(_name, _value):\n    if request.env.web2py_runtime_gae:\n        import logging\n        logging.info(\'-------| %s : %s\' % (repr(_name), repr(_value)))\n    else:\n        print_wrapped(_name, _value)\n        \n#########################################################################\n## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting\n#########################################################################\nexpressions={\n  \'url_find\' : [\n"([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\\\.)[-A-Za-z0-9\\\\.]+)(:[0-9]*)?/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\'\\\\.}>\\\\),\\\\\\"]",\n"([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\\\.)[-A-Za-z0-9\\\\.]+)(:[0-9]*)?",\n"(~/|/|\\\\./)([-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]|\\\\\\\\)+",\n"\'\\\\<((mailto:)|)[-A-Za-z0-9\\\\.]+@[-A-Za-z0-9\\\\.]+"\n  ],\n  \'rel_url_and_end_tags_find\' : ["[0-9]{0,1}/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\'\\\\.}>\\\\),\\\\\\"]"]\n}\n\nimport re\nurl_finders = [\nre.compile(expressions[\'url_find\'][0]),\nre.compile(expressions[\'url_find\'][1]),\nre.compile(expressions[\'url_find\'][2]),\nre.compile(expressions[\'url_find\'][3]),\n]\nrel_url_and_end_tags_finders = [\nre.compile(expressions[\'rel_url_and_end_tags_find\'][0]),\n]\n'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__getslice__'
+p11
+S"<method-wrapper '__getslice__' of exceptions.SyntaxError object at 0x94aa844>"
+p12
+sS'text'
+p13
+S"'return map(lambda x: x.post_text = self.replace_serverside_output_values(x.post_text), _posts)    \\n'"
+p14
+sS'__str__'
+p15
+S"<method-wrapper '__str__' of exceptions.SyntaxError object at 0x94aa844>"
+p16
+sS'__reduce__'
+p17
+S'<built-in method __reduce__ of exceptions.SyntaxError object at 0x94aa844>'
+p18
+sS'__dict__'
+p19
+S'{}'
+p20
+sS'__init__'
+p21
+S"<method-wrapper '__init__' of exceptions.SyntaxError object at 0x94aa844>"
+p22
+sS'__setattr__'
+p23
+S"<method-wrapper '__setattr__' of exceptions.SyntaxError object at 0x94aa844>"
+p24
+sS'__reduce_ex__'
+p25
+S'<built-in method __reduce_ex__ of exceptions.SyntaxError object at 0x94aa844>'
+p26
+sS'__new__'
+p27
+S'<built-in method __new__ of type object at 0x8239bc0>'
+p28
+sS'__class__'
+p29
+S"<type 'exceptions.SyntaxError'>"
+p30
+sS'filename'
+p31
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py'"
+p32
+sS'lineno'
+p33
+S'232'
+p34
+sS'msg'
+p35
+S"'lambda cannot contain assignment'"
+p36
+sS'__doc__'
+p37
+S"'Invalid syntax.'"
+p38
+sS'__getitem__'
+p39
+S"<method-wrapper '__getitem__' of exceptions.SyntaxError object at 0x94aa844>"
+p40
+sS'__setstate__'
+p41
+S'<built-in method __setstate__ of exceptions.SyntaxError object at 0x94aa844>'
+p42
+sS'__getattribute__'
+p43
+S"<method-wrapper '__getattribute__' of exceptions.SyntaxError object at 0x94aa844>"
+p44
+sS'print_file_and_line'
+p45
+S'None'
+p46
+sS'args'
+p47
+S"('lambda cannot contain assignment', ('/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py', 232, None, 'return map(lambda x: x.post_text = self.replace_serverside_output_values(x.post_text), _posts)    \\n'))"
+p48
+sS'offset'
+p49
+S'None'
+p50
+sS'__delattr__'
+p51
+S"<method-wrapper '__delattr__' of exceptions.SyntaxError object at 0x94aa844>"
+p52
+sS'__repr__'
+p53
+S"<method-wrapper '__repr__' of exceptions.SyntaxError object at 0x94aa844>"
+p54
+sS'__hash__'
+p55
+S"<method-wrapper '__hash__' of exceptions.SyntaxError object at 0x94aa844>"
+p56
+ssS'evalue'
+p57
+S'lambda cannot contain assignment (utilities.py, line 232)'
+p58
+sS'request'
+p59
+(dp60
+S'function'
+p61
+S"'error'"
+p62
+sS'body'
+p63
+S'<cStringIO.StringO object at 0x977b200>'
+p64
+sS'wsgi'
+p65
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p66
+sS'extension'
+p67
+S"'html'"
+p68
+sS'vars'
+p69
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-24.13-2...l': '/a/default/error', 'requested_uri': 'None'}>"
+p70
+sS'cid'
+p71
+S'None'
+p72
+sS'url'
+p73
+S'<gluon.html.XML object at 0x977b5ec>'
+p74
+sS'raw_extension'
+p75
+S'None'
+p76
+sg47
+S'[]'
+p77
+sS'controller'
+p78
+S"'default'"
+p79
+sS'cookies'
+p80
+S"<SimpleCookie: blogger_languages='fr' session_id...-0340c181-1497-409d-a032-a22b92ec97af' theme='0'>"
+p81
+sS'application'
+p82
+S"'a'"
+p83
+sS'ajax'
+p84
+S'False'
+p85
+sS'client'
+p86
+S"'127.0.0.1'"
+p87
+sS'env'
+p88
+S"<Storage {'wsgi_multithread': True, 'http_accept...put': <socket._fileobject object at 0xb777c144>}>"
+p89
+sS'raw_args'
+p90
+S'None'
+p91
+sS'get_vars'
+p92
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-24.13-2...l': '/a/default/error', 'requested_uri': 'None'}>"
+p93
+sS'folder'
+p94
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p95
+sS'now'
+p96
+S'datetime.datetime(2011, 3, 24, 13, 20, 1, 812856)'
+p97
+sS'post_vars'
+p98
+S'<Storage {}>'
+p99
+ssS'frames'
+p100
+(lp101
+(dp102
+S'file'
+p103
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p104
+sS'dump'
+p105
+(dp106
+S'code'
+p107
+S'"# coding: utf8\\n\\n################################...(expressions[\'rel_url_and_end_tags_find\'][0]),\\n]\\n"'
+p108
+sS'layer'
+p109
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py'"
+p110
+sS'global compile2'
+p111
+S'<function compile2 at 0x8fe8454>'
+p112
+sS'ccode'
+p113
+S'undefined'
+p114
+ssS'lnum'
+p115
+I186
+sS'lines'
+p116
+(dp117
+I181
+S''
+sI182
+S'    try:'
+p118
+sI183
+S'        if type(code) == types.CodeType:'
+p119
+sI184
+S'            ccode = code'
+p120
+sI185
+S'        else:'
+p121
+sI186
+S'            ccode = compile2(code,layer)'
+p122
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p123
+sI189
+S'    except HTTP:'
+p124
+sI190
+S'        raise'
+p125
+ssS'call'
+p126
+S'(code="# coding: utf8\\n\\n################################...(expressions[\'rel_url_and_end_tags_find\'][0]),\\n]\\n", environment={\'A\': <class \'gluon.html.A\'>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, \'CRYPT\': <class \'gluon.validators.CRYPT\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py\')'
+p127
+sS'func'
+p128
+S'restricted'
+p129
+sa(dp130
+g103
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p131
+sg105
+(dp132
+S'builtincompile'
+p133
+S'<built-in function compile>'
+p134
+sS'code'
+p135
+S'"# coding: utf8\\n\\n################################...(expressions[\'rel_url_and_end_tags_find\'][0]),\\n]\\n"'
+p136
+sS'code.rstrip'
+p137
+S'<built-in method rstrip of str object at 0x9b9db80>'
+p138
+sS').replace'
+p139
+g114
+sS'layer'
+p140
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py'"
+p141
+ssg115
+I173
+sg116
+(dp142
+I168
+S''
+sI169
+S'def compile2(code,layer):'
+p143
+sI170
+S'    """'
+p144
+sI171
+S"    The +'\\n' is necessary else compile fails when code ends in a comment."
+p145
+sI172
+S'    """'
+p146
+sI173
+S"    return compile(code.rstrip().replace('\\r\\n','\\n')+'\\n', layer, 'exec')"
+p147
+sI174
+S''
+sI175
+S"def restricted(code, environment={}, layer='Unknown'):"
+p148
+sI176
+S'    """'
+p149
+sI177
+S'    runs code in environment and returns the output. if an exception occurs'
+p150
+ssg126
+S'(code="# coding: utf8\\n\\n################################...(expressions[\'rel_url_and_end_tags_find\'][0]),\\n]\\n", layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py\')'
+p151
+sg128
+S'compile2'
+p152
+sasS'pyver'
+p153
+S'Python 2.5.1: /usr/local/bin/python'
+p154
+sS'session'
+p155
+(dp156
+S'user_authorization_done'
+p157
+S'True'
+p158
+sS'flash'
+p159
+S'None'
+p160
+sS'auth'
+p161
+S'None'
+p162
+sS'_language'
+p163
+S"'en'"
+p164
+sS'authorized'
+p165
+g158
+sS'_formkey[posts_create]'
+p166
+S"'eb2d7b0c-6a41-47e6-8daa-02694f8304fc'"
+p167
+sS'_formkey[posts_49]'
+p168
+S"'6774d896-912a-4114-a7ee-52b856c1ff09'"
+p169
+ssS'etype'
+p170
+S"<type 'exceptions.SyntaxError'>"
+p171
+sS'date'
+p172
+S'Thu Mar 24 13:20:01 2011'
+p173
+sS'response'
+p174
+(dp175
+S'status'
+p176
+S'200'
+p177
+sg63
+S'<cStringIO.StringO object at 0x9629980>'
+p178
+sg80
+S"<SimpleCookie: session_id_a='127.0.0.1-437cd698-e06a-4e6d-8bbe-f7a6c1eb0813'>"
+p179
+sS'_vars'
+p180
+S'None'
+p181
+sS'session_file'
+p182
+S"<open file '/home/herve/development/workspaces/m...4e6d-8bbe-f7a6c1eb0813', mode 'rb+' at 0x9416068>"
+p183
+sS'flash'
+p184
+S"''"
+p185
+sS'_custom_rollback'
+p186
+S'None'
+p187
+sS'session_id'
+p188
+S"'127.0.0.1-437cd698-e06a-4e6d-8bbe-f7a6c1eb0813'"
+p189
+sS'headers'
+p190
+S"<Storage {'Expires': 'Thu, 24 Mar 2011 12:20:01 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p191
+sS'meta'
+p192
+S'<Storage {}>'
+p193
+sS'session_filename'
+p194
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-437cd698-e06a-4e6d-8bbe-f7a6c1eb0813'"
+p195
+sS'postprocessing'
+p196
+S'[]'
+p197
+sS'menu'
+p198
+S'[]'
+p199
+sS'_view_environment'
+p200
+S"{'A': <class 'gluon.html.A'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, 'CRYPT': <class 'gluon.validators.CRYPT'>, 'DAL': <class 'gluon.dal.DAL'>, ...}"
+p201
+sS'session_id_name'
+p202
+S"'session_id_a'"
+p203
+sS'_custom_commit'
+p204
+S'None'
+p205
+sS'_caller'
+p206
+S'<function <lambda> at 0x9780a04>'
+p207
+sS'files'
+p208
+S'[]'
+p209
+sS'view'
+p210
+S"'default/error.html'"
+p211
+ssS'locals'
+p212
+(dp213
+g3
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py'"
+p214
+sg5
+S'"# coding: utf8\\n\\n################################...(expressions[\'rel_url_and_end_tags_find\'][0]),\\n]\\n"'
+p215
+sssS'traceback'
+p216
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 186, in restricted\n    ccode = compile2(code,layer)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 173, in compile2\n    return compile(code.rstrip().replace(\'\\r\\n\',\'\\n\')+\'\\n\', layer, \'exec\')\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/utilities.py", line 232\n    return map(lambda x: x.post_text = self.replace_serverside_output_values(x.post_text), _posts)\nSyntaxError: lambda cannot contain assignment\n'
+p217
+s.
