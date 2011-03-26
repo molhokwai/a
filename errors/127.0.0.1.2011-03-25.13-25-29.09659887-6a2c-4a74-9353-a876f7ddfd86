@@ -1,0 +1,197 @@
+(dp1
+S'output'
+p2
+S'Unable to open included view file: /home/herve/development/workspaces/molhokwai.net/web/applications/a/views/themes/ff0000/sidebar/cms.html'
+p3
+sS'layer'
+p4
+S"'themes/%s/layout.html' % response.theme"
+p5
+sS'code'
+p6
+S'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{=T.accepted_language or \'en\'}}">\n    <head>\n    <title>{{=response.title or request.application}}</title>\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\n    <meta name="keywords" content="{{=response.keywords}}" />\n    <meta name="description" content="{{=response.description}}" />\n    <meta name="google-site-verification" content="2TmmFn8eNL7GNZuDtORTZ89uxj5fmTtuwqQLqv8webc" /><!-- old: r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8 -->\n    <!-- include required CSS files, further most first -->\n    <!-- include requires CSS files\n    {{response.files.append(URL(request.application,\'static\',\'jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css\'))}}\n    -->\n    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />\n    <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />\n    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />\n    {{if response.child_theme and response.theme_stylesheet:}}\n        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />\n    {{pass}}\n    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/style.css" type="text/css" media="screen" />\n    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />\n    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />\n    <!-- include requires CSS files\n    {{\n      ## TODO: why is this not working?\n      response.files.append(URL(request.application,\'static\',\'style.css\'))\n    }}\n    -->\n    {{include \'web2py_ajax.html\'}}\n    <script type="text/javascript">\n      <!-- /* this adds sfhover class to menu li items to make IE6 work */ jQuery(document).ready(function(){jQuery(\'li.web2py-menu-expand\').hover(function ()     {jQuery(this).addClass(\'sfhover\');},function () {jQuery(this).removeClass(\'sfhover\');});});//-->\n    </script>\n    <script type="text/javascript">\n      var server={\n          request : {\n              application : \'{{=(tentative_app if tentative_app else this_app)}}\'\n          },\n          pages : []\n      };\n    </script>\n    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>\n    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>\n    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>\n    <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>\n    <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\n    <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>\n    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>\n    <script type="text/javascript">\n        if ({{=str(refresh_page).lower()}}){\n            window.location.reload();\n        }\n        $(document).ready(function(){\n            $(\'#google_translate_element\').hide();\n            $(\'#cse-search-form\').hide();\n            $(\'#cli_web\').hide(\'slow\');\n        });\n        \n        var huTi=null;\n        var toggleUtilities=function(a){\n            var selectors={\n                \'#google_translate_element\' : \'.goog-te-combo\',\n                \'#cse-search-form\' : \'.gsc-input\',\n                \'#cli_web\' : \'#_cmd\'\n            };\n            \n            for(k in selectors){\n                if(a.href.indexOf(k)>=0 && !$(k).is(\':visible\')){\n                    $(k).show();\n                    huTi = setTimeout(\'$("\'+selectors[k]+\'").focus();clearTiemout(huTi);\', 200);\n                }\n                else{\n                    $(k).hide();\n                }\n            }\n            $("html").animate({ scrollTop: 0 });\n        };\n    </script>    \n    </head>\n    <body>\n        <div id="top-bar">\n            <a href="#google_translate_element" onclick="toggleUtilities(this);" class="float-left">{{=T(\'translation\')}} | </a>\n            <a href="#cse-search-form" onclick="toggleUtilities(this);" class="float-left"> {{=T(\'search (google)\')}} | </a>\n            <a href="#cli_web" onclick="toggleUtilities(this);" class="float-left"> <em>{{=T(\'command line\')}} | </em></a>\n            \n            <span id="user-menu">\n             {{ if \'auth\' in globals():}}\n               {{if not auth.user:}} \n                 <a>]</a> {{=A(T(\'login\'),_href=URL(r=request,c=\'default\',f=\'user/login\'))}} <a>[</a>\n               {{else:}}\n                 {{=auth.user.display_name}} \n                 {{=A(T(\'logout\'),_href=URL(r=request,c=\'default\',f=\'user/logout\'))}} |\n               {{pass}}\n             {{pass}}\n            </span> \n            <!-- end #user-menu -->\n            \n            <div class="clear"></div>\n                    \n            <div id="utilities" class="padt2pc">\n            \n              <div id="google_translate_element"></div>\n              <script>\n                function googleTranslateElementInit() {\n                  new google.translate.TranslateElement({\n                    pageLanguage: \'{{=current_language[:2]}}\'\n                  }, \'google_translate_element\');\n                }\n              </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     \n              <!-- end #google_translate_element-->    \n            \n              <div class="clear"></div>\n              \n              <div id="cli_web">\n                <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">\n                    <input type="text" id="_cmd" name="_cmd" />\n                    {{if session.cli_web_flash:}}<font class="flash small">{{=XML(session.cli_web_flash)}}{{ session.cli_web_flash=False }}</font>{{pass}}\n                </form>\n              </div>\n              <!-- end #cli_web -->\n            \n              <div id="cse-search-form">Loading</div>\n              <script src="http://www.google.com/jsapi" type="text/javascript"></script>\n              <script type="text/javascript">\n                google.load(\'search\', \'1\', {language : \'{{=current_language[:2]}}\'});\n                google.setOnLoadCallback(function() {\n                  var customSearchControl = new google.search.CustomSearchControl(\'014007428035866690530:qpoerqfcidu\');\n                  customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);\n                  var options = new google.search.DrawOptions();\n                  options.setSearchFormRoot(\'cse-search-form\');\n              \n                  options.setAutoComplete(true);\n                  customSearchControl.draw(\'cse\', options);\n                }, true);\n              </script>\n              <!-- end #cse-search-form -->\n            \n            </div>\n            <!-- end #utilities -->\n            \n        </div>\n        <!-- end #top-bar-->\n        \n        <div class="clear"></div>\n            \n        <div id="wrapper" class="width60pc">\n            \n            <div id="header" class="padtb1pc">\n                <h1 class="font-s2em padl2pc left">Paradigm Shift</h1>\n                <h2 class="font-s095em padl2pc left margt1pc"> | </h2>\n                <h2 class="font-s095em padl2pc left margt1-2pc">Individual Freedom. Collective Responsibility.</h2>\n    \n                <div class="clear"></div>\n            </div>\n    \n            <!-- #menu-tabs deactivated. See cms theme for eventual reactivation -->\n            <!--div id="menu-tabs"></div -->\n            <!--div class="clear"></div -->\n            <!-- end #menu-tabs -->\n    \n            <div id="body" class="height50em">\n                \n                <div class="left width70pc padl2pc">\n                    <blockquote class="width60pc margt5pc">\n                        " Words are precious. Use each one of them wisely "\n                    </blockquote>\n\n                    {{if response.flash:}}\n                        <div id="flash">{{=XML(response.flash)}}</div>\n                    {{pass}}\n                            \n                    <div id="content" class="margt10pc">\n                        {{include}}\n                    </div>\n                    <!-- end #body #content -->\n\n                </div>\n                <!-- end #body .left -->\n                \n                <div class="left height49em margt1pc">\n                    &nbsp;\n                </div>\n                <!-- end #body .left+.left -->\n                \n                <div id="sidebar" class="right width25pc text-alignr">\n                    <div id="sidebar-content">\n                      <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->\n                      {{include "themes/%s/sidebar/%s.html"%(response.theme, tentative_app)}}\n                    </div>\n                    <!-- end #sidebar-content -->\n                </div>\n                <!-- end #sidebar -->\n                \n            </div>\n            <!-- end #body -->\n    \n            <div class="clear"></div>\n            \n            <div id="footer" class="text-alignc font-s06em">\n                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS/Javascript/Python - webX.0 | contact: {{=A(T(\'admin@molhokwai.net\'), __href=\'mailto:admin@molhokwai.net\')}}\n                    - on PyPress, a {{=A(T(\'web2py\'), _target="_blank", _href=\'http://www.web2py.org\')}} powered site\n                      on {{=A(T(\'google app engine\'), _target="_blank", _href=\'http://code.google.com/appengine\')}}\n                      |  {{=A(T(\'sidebar\'), _href=\'javascript:return false;\',  _onclick=\'$("#sidebar-content").toggle();\')}}\n                  </p>\n            </div>\n            <!-- end #footer -->\n                \n        </div>\n        <!-- end #wrapper -->\n\n        <script type="text/javascript" id="tracking_src">\n            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\n            document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));\n        </script>\n        <script type="text/javascript" id="tracking_process">\n            try {\n                var pageTracker = _gat._getTracker("UA-5101967-1");\n                pageTracker._initData();\n                pageTracker._trackPageview();\n            }\n            catch(e) {\n                if (console) try{console.log(e);}catch(e){}\n            }\n        </script>\n        <!-- end #tracking -->\n            \n        </body>\n</html>\n'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__hash__'
+p12
+S"<method-wrapper '__hash__' of exceptions.IOError object at 0x8b3523c>"
+p13
+sS'__setattr__'
+p14
+S"<method-wrapper '__setattr__' of exceptions.IOError object at 0x8b3523c>"
+p15
+sS'__reduce_ex__'
+p16
+S'<built-in method __reduce_ex__ of exceptions.IOError object at 0x8b3523c>'
+p17
+sS'__getslice__'
+p18
+S"<method-wrapper '__getslice__' of exceptions.IOError object at 0x8b3523c>"
+p19
+sS'__getitem__'
+p20
+S"<method-wrapper '__getitem__' of exceptions.IOError object at 0x8b3523c>"
+p21
+sS'__setstate__'
+p22
+S'<built-in method __setstate__ of exceptions.IOError object at 0x8b3523c>'
+p23
+sS'__reduce__'
+p24
+S'<built-in method __reduce__ of exceptions.IOError object at 0x8b3523c>'
+p25
+sS'__str__'
+p26
+S"<method-wrapper '__str__' of exceptions.IOError object at 0x8b3523c>"
+p27
+sS'args'
+p28
+S"(2, 'No such file or directory')"
+p29
+sS'__getattribute__'
+p30
+S"<method-wrapper '__getattribute__' of exceptions.IOError object at 0x8b3523c>"
+p31
+sS'__class__'
+p32
+S"<type 'exceptions.IOError'>"
+p33
+sS'filename'
+p34
+S"'/home/herve/development/workspaces/molhokwai.net...plications/a/views/themes/ff0000/sidebar/cms.html'"
+p35
+sS'__delattr__'
+p36
+S"<method-wrapper '__delattr__' of exceptions.IOError object at 0x8b3523c>"
+p37
+sS'strerror'
+p38
+S"'No such file or directory'"
+p39
+sS'__repr__'
+p40
+S"<method-wrapper '__repr__' of exceptions.IOError object at 0x8b3523c>"
+p41
+sS'errno'
+p42
+S'2'
+sS'__dict__'
+p43
+S'{}'
+p44
+sS'__doc__'
+p45
+S"'I/O operation failed.'"
+p46
+sS'__init__'
+p47
+S"<method-wrapper '__init__' of exceptions.IOError object at 0x8b3523c>"
+p48
+sS'__new__'
+p49
+S'<built-in method __new__ of type object at 0x82395c0>'
+p50
+ssS'evalue'
+p51
+S"[Errno 2] No such file or directory: '/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/themes/ff0000/sidebar/cms.html'"
+p52
+sS'frames'
+p53
+(lp54
+(dp55
+S'file'
+p56
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/template.py'
+p57
+sS'dump'
+p58
+(dp59
+S'builtinopen'
+p60
+S'<built-in function open>'
+p61
+sS'fileobj'
+p62
+S'undefined'
+p63
+sS'filepath'
+p64
+S"'/home/herve/development/workspaces/molhokwai.net...plications/a/views/themes/ff0000/sidebar/cms.html'"
+p65
+ssS'lnum'
+p66
+I435
+sS'lines'
+p67
+(dp68
+I430
+S'        # Get the path of the file on the system.'
+p69
+sI431
+S'        filepath = os.path.join(self.path, filename)'
+p70
+sI432
+S''
+sI433
+S'        # Lets try to read teh text.'
+p71
+sI434
+S'        try:'
+p72
+sI435
+S"            fileobj = open(filepath, 'rb')"
+p73
+sI436
+S''
+sI437
+S'            text = fileobj.read()'
+p74
+sI438
+S''
+sI439
+S'            fileobj.close()'
+p75
+ssS'call'
+p76
+S"(self=<gluon.template.TemplateParser object at 0x8b225cc>, filename='themes/ff0000/sidebar/cms.html')"
+p77
+sS'func'
+p78
+S'_get_file_text'
+p79
+sasS'pyver'
+p80
+S'Python 2.5.1: /usr/local/bin/python'
+p81
+sS'etype'
+p82
+S"<type 'exceptions.IOError'>"
+p83
+sS'date'
+p84
+S'Fri Mar 25 13:25:29 2011'
+p85
+sS'locals'
+p86
+(dp87
+S'self'
+p88
+S'<gluon.template.TemplateParser object at 0x8b225cc>'
+p89
+sS'filepath'
+p90
+S"'/home/herve/development/workspaces/molhokwai.net...plications/a/views/themes/ff0000/sidebar/cms.html'"
+p91
+sg34
+S"'themes/ff0000/sidebar/cms.html'"
+p92
+sssS'traceback'
+p93
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/template.py", line 435, in _get_file_text\n    fileobj = open(filepath, \'rb\')\nIOError: [Errno 2] No such file or directory: \'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/themes/ff0000/sidebar/cms.html\'\n'
+p94
+s.

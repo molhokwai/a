@@ -1,0 +1,865 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/0_db.py'
+p4
+sS'code'
+p5
+S'#########################################################################\n## This scaffolding model makes your app work on Google App Engine too\n#########################################################################\n\nif request.env.web2py_runtime_gae:            # if running on Google App Engine\n    db = DAL(\'gae\')                           # connect to Google BigTable\n    session.connect(request, response, db=db) # and store sessions and tickets there\n    ### or use the following lines to store sessions in Memcache\n    # from gluon.contrib.memdb import MEMDB\n    # from google.appengine.api.memcache import Client    \n    # session.connect(request, response, db=MEMDB(Client()))\n    \n    ### cache in ram\n    from gluon.contrib.gae_memcache import MemcacheClient\n    from gluon.contrib.memdb import MEMDB\n    cache.memcache = MemcacheClient(request)\n    cache.ram = cache.disk = cache.memcache\nelse:                                         # else use a normal relational database\n    db=SQLDB("sqlite://db.db")\n\n\n#################################\n## APPLICATION CONFIG\n#################################\n\n## Administrators\nadministrators_emails=[\'molhokwai@gmail.com\', \'herve.mayou@gmail.com\']\n\n## Table app config\ndb.define_table(\'app_config\',\n    SQLField(\'APP_DETAILS\',             \'list:string\', required=True,    default=[\'<molhokwai.net-a>\', \'<v001>\'],     \n            label=T(\'App details (name, version)\')),\n    SQLField(\'RPX_API\',                 \'list:string\', required=True,    default=[\'<XXXXXXXXXXXXX>\', \'<websites.molhokwai>\'],    \n            label=T(\'Rpx api (key, sub-domain)\')),\n    SQLField(\'APP_CURRENT_LANGUAGES\',   \'list:string\', required=True,    default=[\'en\', \'he\', \'hi\', \'es\', \'fr\', \'sw\'], \n            label=T(\'Languages\')),\n    SQLField(\'APP_METAS\',               \'list:string\', required=True,    default=[\'<title>\', \'<web, utility, application, software, cms, dms>\', \'<description>\'],  \n            label=T(\'App Metas (title, keywords, description)\')),\n    SQLField(\'APP_THEMES\',               \'list:string\', required=True,    default=[\'0\', \'1\', \'cms\'],  \n            label=T(\'Themes\')),\n    SQLField(\'MAIL_SETTINGS\',           \'list:string\',                   default=[\'<sender@gmail.com>\', \'<smtp.gmail.com:587>\', \'<username:password>\'],\n            label=T(\'Mail settings (sender, server, login)\')),           \n    SQLField(\'PICASA_API\',              \'list:string\',                   default=[\'<username>\', \'<password>\'],\n            label=T(\'Picasa api (username, password)\')),\n    SQLField(\'TWITTER_API\',              \'list:string\',                  default=[\'<username>\', \'<password>\', \'<hashes>\'],\n            label=T(\'Twitter api (username, password, hashes -csv, filters -csv)\')),\n    SQLField(\'BLOGGER_API\',              \'list:string\',                  default=[\'<username>\', \'<password>\', \'<source>\'],\n            label=T(\'Blogger api (username, password, source)\')),\n    SQLField(\'BLOGGER_BLOGS_THEMES\',     \'list:string\',                  default=[\'<theme1:blog1,blog2,blog3...>\', \'<theme2:blog4,blog5...>\', \'<theme3:blog6...>\'],\n            label=T(\'Blogger blogs themes\')),\n    SQLField(\'BLOGGER_BLOGS_LANGUAGES\',  \'list:string\',                  default=[\'<fr:blog3,blog4,blog6...>\', \'<nl:blog1,blog1...>\', \'<en:blog5...>\'],\n            label=T(\'Blogger blogs languages\'))\n)\n\napp_themes_base_list = [\'0\', \'1\', \'cms\', \'pypress\']\napp_themes_list = app_themes_base_list\n\napp_config=db(db.app_config.id>0).select()\nif len(app_config)>0:\n    app_config=app_config[0]\n    if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:\n        app_themes_list = []\n        for i in range(len(app_config.APP_THEMES)):\n            if app_config.APP_THEMES[i].find(\':\')>0:\n                app_themes_list.append(app_config.APP_THEMES[i].split(\':\')[0])\n            else:\n                app_themes_list.append(app_config.APP_THEMES[i])\n\ndb.define_table(\'app_themes\',\n    SQLField(\'theme_name\', \'string\', required=True, label=T(\'Theme name\')),\n    SQLField(\'theme_base\', \'string\', required=True, label=T(\'Based on\')),\n    SQLField(\'theme_stylesheet_url\', \'string\', required=True, label=T(\'Stylesheet url\')),\n    SQLField(\'theme_editor\', \'string\', required=True, writable=False, label=T(\'Author/editor\'))\n)\ndb.app_themes.theme_name.requires = IS_ALPHANUMERIC()\ndb.app_themes.theme_stylesheet_url.requires = IS_URL()\ndb.app_themes.theme_base.requires = IS_IN_SET(app_themes_list)\n\n#########################################################################\n## Global convenience variables\n#########################################################################\nrefresh_page = False\n\nprotocol = \'http\'\nif request.get(\'env\')[\'server_protocol\'][:5] == \'HTTPS\': protocol=\'https\'\nglobal_site_url = \'%s://%s\' % (protocol,request.get(\'env\')[\'http_host\'])\npath_info = request.get(\'env\')[\'path_info\']\nhttp_referer = None\n\nthis_app = path_info.split(\'/\')[1]\ntentative_app = session.tentative_app\nif \'http_referer\' in request.get(\'env\'):\n    import re\n    http_referer = request.get(\'env\')[\'http_referer\']\n    m = re.match(\'%s.*\'%global_site_url, http_referer)\n    if m:\n        session.tentative_app = http_referer.replace(global_site_url, \'\').split(\'/\')[1]\nif session.tentative_app:\n    if tentative_app != session.tentative_app:\n        refresh_page = True\n    else:\n        tentative_app = session.tentative_app\nelif not tentative_app:\n    tentative_app = this_app\n    \nthis_app_url= global_site_url + \'/%s\' % this_app\n\nprint \'\'\nprint \'-----------| path_info : %s\' % path_info\nprint \'-----------| http_referer : %s\' % http_referer\nprint \'-----------| tentative_app : %s\' % tentative_app\nprint \'-----------| refresh_page : %b\' % refresh_page\n\n\n#########################################################################\n## Authentication / Authorization\n#########################################################################\nfrom gluon.tools import *\nauth=Auth(globals(),db)              # authentication/authorization\ncrud=Crud(globals(),db)              # for CRUD helpers using auth\nservice=Service(globals())           # for json, xml, jsonrpc, xmlrpc, amfrpc\n\n# mail=Mail()                                                   # mailer\n# if app_config and app_config.MAIL_SETTINGS:\n#     mail.settings.server=app_config.MAIL_SETTINGS[0]     # your SMTP server\n#     mail.settings.sender=app_config.MAIL_SETTINGS[1]     # your email\n#     mail.settings.login=app_config.MAIL_SETTINGS[2]       # your credentials or None\n# else:\n#     mail.settings.server=\'smtp.gmail.com:587\'     # your SMTP server\n#     mail.settings.sender=\'herve.m@wedo-group.com\' # your email\n#     mail.settings.login=\'username:password\'       # your credentials or None\n\nauth.settings.hmac_key=\'sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b\'\nauth.settings.table_user = db.define_table(\'auth_user\',\n    Field(\'registration_id\', length=512,\n          label=T(\'registration id\'),\n          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,\'auth_user.registration_id\')],\n          readable=False),\n    Field(\'display_name\', length=512,\n          label=T(\'display name\'),\n          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,\'auth_user.display_name\')]),\n    Field(\'email\', length=512,default=\'\',\n          label=T(\'email\'),\n          requires = [IS_EMAIL(),IS_NOT_IN_DB(db,\'auth_user.email\')]),\n    Field(\'is_admin\', \'boolean\',default=False),\n    Field(\'is_anonymous\', \'boolean\',default=True),\n    Field(\'registration_key\'),\n    Field(\'first_name\'),\n    Field(\'last_name\')\n)\nauth.define_tables()                 # creates all specified & needed tables\n\n# auth.settings.mailer=mail          # for user email verification\n# auth.settings.registration_requires_verification = True\n# auth.settings.registration_requires_approval = True\n# auth.messages.verify_email = \'Click on the link http://\'+request.env.http_host+URL(r=request,c=\'default\',f=\'user\',args=[\'verify_email\'])+\'/%(key)s to verify your email\'\n# auth.settings.reset_password_requires_verification = True\n# auth.messages.reset_password = \'Click on the link http://\'+request.env.http_host+URL(r=request,c=\'default\',f=\'user\',args=[\'reset_password\'])+\'/%(key)s to reset your password\'\n\n## OpenID, Facebook, MySpace, Twitter, Linkedin, etc. registration\nprotocol=\'http\'\nif request.get(\'env\')[\'server_protocol\'][:5]==\'HTTPS\':protocol=\'https\'\n\nfrom gluon.contrib.login_methods.rpx_account import RPXAccount\nauth.settings.actions_disabled=[\'register\',\'change_password\',\'request_reset_password\']\nif app_config and app_config.RPX_API:\n    auth.settings.login_form = RPXAccount(request, api_key=app_config.RPX_API[0],\n        domain=app_config.RPX_API[1],\n        url = "%s/default/user/login" % this_app_url)\nelse:\n    auth.settings.login_form = RPXAccount(request, api_key=\'33becd821e0f24f16bdb8da14c1723987d6487a9\',\n        domain=\'websites-molhokwai\',\n        url = "%s/default/user/login" % this_app_url)\n\n############\n## Language\n############\ncurrent_language=\'en\'\nif app_config and app_config.APP_CURRENT_LANGUAGES:\n    T.current_languages=app_config.APP_CURRENT_LANGUAGES\n    current_language=app_config.APP_CURRENT_LANGUAGES[0]\nelse:\n    T.current_languages=[\'en\',\'fr\']\n\nif request.vars._language:\n    session._language=request.vars._language\n\nif session._language:\n    current_language = session._language\nelse:\n    if T.http_accept_language:\n        current_language=T.http_accept_language\n        \nif len(current_language)>2:\n    current_language = current_language[:2]\nT.force(\'l-l\'.replace(\'l\',current_language))\n\nif not session._language:\n    session._language = current_language\n\nimport datetime\n\n## Table posts\n## Fields:\n## ------\n##    post_text_TCode: To enter a translation code and fill in the translation texts in a way compliant with\n##        the built-in translation mechanism (T).\n##        ***Only one of the post_text_TCode and the post_text fields is necessary.***\n##        The system first checks the *post_text_TCode* field and if not filled in, falls back to the *post_text* field\n##    is_translated: if the translation (whether for the post_text, or the post_text_TCode) is done in all the languages \n##        available in the application). To be manually set once the translation in all languages for the post/page is done.\ndb.define_table(\'posts\',\n    SQLField(\'post_title\', required=True),\n    SQLField(\'post_text\', \'text\'),\n    SQLField(\'post_text_TCode\', \'string\',  writable=True),\n    SQLField(\'post_time\', \'datetime\', default=datetime.datetime.today()),\n    SQLField(\'post_type\', required=True),\n    SQLField(\'post_category\', required=True, default=-1),\n    SQLField(\'show_in_menu\',  \'boolean\', required=True, default=False),\n    SQLField(\'is_translated\', \'boolean\', required=True, default=False),\n    SQLField(\'application\', \'string\', default=request.application),\n    SQLField(\'post_posts\', \'list:string\'),\n    SQLField(\'auth_requires_login\', \'boolean\'),\n    SQLField(\'post_attributes_json\', \'text\', required=True, \n            default="""{\n                "content_is" : {\n                    "original" : false\n                }\n            }""")\n    )\n\ndb.define_table(\'comments\',\n    SQLField(\'post_id\', db.posts, required=True),\n    SQLField(\'comment_author\'),\n    SQLField(\'comment_author_email\', required=True),\n    SQLField(\'comment_author_website\'),\n    SQLField(\'comment_text\', \'text\', required=True),\n    SQLField(\'comment_time\', \'datetime\', required=True, default=datetime.datetime.today()))\n\ndb.define_table(\'categories\',\n    SQLField(\'category_name\', required=True))\n\n##db.define_table(\'posts_categories\',\n##    SQLField(\'category\', db.categories, required=True),\n##    SQLField(\'post\', db.posts, required=True))\n    \ndb.define_table(\'links\',\n    SQLField(\'link_title\', required=True),\n    SQLField(\'link_url\', required=True))\n\ndb.posts.post_type.requires = IS_IN_SET([\'post\', \'page\'])\ndb.posts.post_category.requires = IS_IN_DB(db, \'categories.id\', \'categories.category_name\')\n\ndb.define_table(\'files\',\n    SQLField(\'file\',\'upload\', required=True, autodelete=True),\n    SQLField(\'filename\'),\n    SQLField(\'user\', required=True, readable=False, writable=False)\n)\ndb.files.filename.requires = IS_NOT_IN_DB(db, \'files.filename\')\n\n\npost_labels = {\n    \'post_title\':\'Title\',\n    \'post_text\':\'Post\',\n    \'post_text_TCode\':\'Translation code (code & language texts must be set in the translation files)\',\n    \'post_time\':\'Post Date\',\n    \'post_type\':\'Type\',\n    \'post_category\':\'Category\',\n    \'show_in_menu\':\'Show in menu\'\n}\n\ncomment_labels = {\n    \'comment_author\':\'Name\',\n    \'comment_author_email\':\'Email\',\n    \'comment_author_website\':\'Website\',\n    \'comment_text\':\'Comment\',\n    \'post_id\':\'Post ID\'\n}\n\nlink_labels = {\n    \'link_title\':\'Name\',\n    \'link_url\':\'URL\'\n}\n\ncat_labels = {\n    \'category_name\':\'Name\'\n}\n\nfile_labels = {\n    \'file\':\'File\',\n    \'filename\':\'Enter file name\'\n}\n'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__hash__'
+p11
+S"<method-wrapper '__hash__' of exceptions.ValueError object at 0x89bbdcc>"
+p12
+sS'__setattr__'
+p13
+S"<method-wrapper '__setattr__' of exceptions.ValueError object at 0x89bbdcc>"
+p14
+sS'__reduce_ex__'
+p15
+S'<built-in method __reduce_ex__ of exceptions.ValueError object at 0x89bbdcc>'
+p16
+sS'__getslice__'
+p17
+S"<method-wrapper '__getslice__' of exceptions.ValueError object at 0x89bbdcc>"
+p18
+sS'__getitem__'
+p19
+S"<method-wrapper '__getitem__' of exceptions.ValueError object at 0x89bbdcc>"
+p20
+sS'__setstate__'
+p21
+S'<built-in method __setstate__ of exceptions.ValueError object at 0x89bbdcc>'
+p22
+sS'__reduce__'
+p23
+S'<built-in method __reduce__ of exceptions.ValueError object at 0x89bbdcc>'
+p24
+sS'__str__'
+p25
+S"<method-wrapper '__str__' of exceptions.ValueError object at 0x89bbdcc>"
+p26
+sS'args'
+p27
+S'("unsupported format character \'b\' (0x62) at index 29",)'
+p28
+sS'__getattribute__'
+p29
+S"<method-wrapper '__getattribute__' of exceptions.ValueError object at 0x89bbdcc>"
+p30
+sS'__class__'
+p31
+S"<type 'exceptions.ValueError'>"
+p32
+sS'__delattr__'
+p33
+S"<method-wrapper '__delattr__' of exceptions.ValueError object at 0x89bbdcc>"
+p34
+sS'__repr__'
+p35
+S"<method-wrapper '__repr__' of exceptions.ValueError object at 0x89bbdcc>"
+p36
+sS'__dict__'
+p37
+S'{}'
+p38
+sS'__doc__'
+p39
+S"'Inappropriate argument value (of correct type).'"
+p40
+sS'__init__'
+p41
+S"<method-wrapper '__init__' of exceptions.ValueError object at 0x89bbdcc>"
+p42
+sS'__new__'
+p43
+S'<built-in method __new__ of type object at 0x823a040>'
+p44
+ssS'evalue'
+p45
+S"unsupported format character 'b' (0x62) at index 29"
+p46
+sS'request'
+p47
+(dp48
+S'function'
+p49
+S"'error'"
+p50
+sS'body'
+p51
+S'<cStringIO.StringO object at 0x89bcce0>'
+p52
+sS'wsgi'
+p53
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p54
+sS'extension'
+p55
+S"'html'"
+p56
+sS'vars'
+p57
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-25.13-2...l': '/a/default/error', 'requested_uri': 'None'}>"
+p58
+sS'cid'
+p59
+S'None'
+p60
+sS'url'
+p61
+S'<gluon.html.XML object at 0x89bc32c>'
+p62
+sS'raw_extension'
+p63
+S'None'
+p64
+sg27
+S'[]'
+p65
+sS'controller'
+p66
+S"'default'"
+p67
+sS'cookies'
+p68
+S"<SimpleCookie: blogger_languages='fr' session_id...60c0-2cfe-4286-b685-ae791a760077' theme='ff0000'>"
+p69
+sS'application'
+p70
+S"'a'"
+p71
+sS'ajax'
+p72
+S'False'
+p73
+sS'client'
+p74
+S"'127.0.0.1'"
+p75
+sS'env'
+p76
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x890abc4>}>"
+p77
+sS'raw_args'
+p78
+S'None'
+p79
+sS'get_vars'
+p80
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-25.13-2...l': '/a/default/error', 'requested_uri': 'None'}>"
+p81
+sS'folder'
+p82
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p83
+sS'now'
+p84
+S'datetime.datetime(2011, 3, 25, 13, 22, 57, 435141)'
+p85
+sS'post_vars'
+p86
+S'<Storage {}>'
+p87
+ssS'frames'
+p88
+(lp89
+(dp90
+S'file'
+p91
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p92
+sS'dump'
+p93
+(dp94
+S'environment'
+p95
+S"{'A': <class 'gluon.html.A'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, 'CRYPT': <class 'gluon.validators.CRYPT'>, 'DAL': <class 'gluon.dal.DAL'>, ...}"
+p96
+sS'ccode'
+p97
+S'<code object <module> at 0x8af6188, file "/home/...i.net/web/applications/a/models/0_db.py", line 5>'
+p98
+ssS'lnum'
+p99
+I188
+sS'lines'
+p100
+(dp101
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p102
+sI183
+S'        if type(code) == types.CodeType:'
+p103
+sI184
+S'            ccode = code'
+p104
+sI185
+S'        else:'
+p105
+sI186
+S'            ccode = compile2(code,layer)'
+p106
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p107
+sI189
+S'    except HTTP:'
+p108
+sI190
+S'        raise'
+p109
+sI191
+S'    except Exception:'
+p110
+ssS'call'
+p111
+S'(code="################################################...file\':\'File\',\\n    \'filename\':\'Enter file name\'\\n}\\n", environment={\'A\': <class \'gluon.html.A\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, \'CRYPT\': <class \'gluon.validators.CRYPT\'>, \'DAL\': <class \'gluon.dal.DAL\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/0_db.py\')'
+p112
+sS'func'
+p113
+S'restricted'
+p114
+sa(dp115
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/0_db.py'
+p116
+sg93
+(dp117
+S'refresh_page'
+p118
+g73
+ssg99
+I112
+sg100
+(dp119
+I107
+S''
+sI108
+S"print ''"
+p120
+sI109
+S"print '-----------| path_info : %s' % path_info"
+p121
+sI110
+S"print '-----------| http_referer : %s' % http_referer"
+p122
+sI111
+S"print '-----------| tentative_app : %s' % tentative_app"
+p123
+sI112
+S"print '-----------| refresh_page : %b' % refresh_page"
+p124
+sI113
+S''
+sI114
+S''
+sI115
+S'#########################################################################'
+p125
+sI116
+S'## Authentication / Authorization'
+p126
+ssg111
+S'()'
+p127
+sg113
+S'<module>'
+p128
+sasS'pyver'
+p129
+S'Python 2.5.1: /usr/local/bin/python'
+p130
+sS'session'
+p131
+(dp132
+S'_language'
+p133
+S"'en'"
+p134
+sS'tentative_app'
+p135
+S"'cms'"
+p136
+sS'auth'
+p137
+S'None'
+p138
+ssS'etype'
+p139
+S"<type 'exceptions.ValueError'>"
+p140
+sS'date'
+p141
+S'Fri Mar 25 13:22:57 2011'
+p142
+sS'response'
+p143
+(dp144
+S'status'
+p145
+S'200'
+p146
+sg51
+S'<cStringIO.StringO object at 0x89cc640>'
+p147
+sg68
+S"<SimpleCookie: session_id_a='127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'>"
+p148
+sS'_vars'
+p149
+S'None'
+p150
+sS'session_file'
+p151
+S"<open file '/home/herve/development/workspaces/m...4c9d-bb7f-dfdc633fc264', mode 'rb+' at 0x8af60f8>"
+p152
+sS'flash'
+p153
+S"''"
+p154
+sS'_custom_rollback'
+p155
+S'None'
+p156
+sS'session_id'
+p157
+S"'127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'"
+p158
+sS'headers'
+p159
+S"<Storage {'Expires': 'Fri, 25 Mar 2011 12:22:57 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p160
+sS'meta'
+p161
+S'<Storage {}>'
+p162
+sS'session_filename'
+p163
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'"
+p164
+sS'postprocessing'
+p165
+S'[]'
+p166
+sS'menu'
+p167
+S'[]'
+p168
+sS'_view_environment'
+p169
+S"{'A': <class 'gluon.html.A'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, 'CRYPT': <class 'gluon.validators.CRYPT'>, 'DAL': <class 'gluon.dal.DAL'>, ...}"
+p170
+sS'session_id_name'
+p171
+S"'session_id_a'"
+p172
+sS'_custom_commit'
+p173
+S'None'
+p174
+sS'_caller'
+p175
+S'<function <lambda> at 0x8b1495c>'
+p176
+sS'files'
+p177
+S'[]'
+p178
+sS'view'
+p179
+S"'default/error.html'"
+p180
+ssS'locals'
+p181
+(dp182
+S'protocol'
+p183
+S"'http'"
+p184
+sS'OBJECT'
+p185
+S"<class 'gluon.html.OBJECT'>"
+p186
+sS'SQLDB'
+p187
+S"<class 'gluon.dal.DAL'>"
+p188
+sg131
+S"<Storage {'_language': 'en', 'tentative_app': 'cms', 'auth': None}>"
+p189
+sS'LINK'
+p190
+S"<class 'gluon.html.LINK'>"
+p191
+sS'BR'
+p192
+S"<class 'gluon.html.BR'>"
+p193
+sS'local_import'
+p194
+S'<function <lambda> at 0x8b0e614>'
+p195
+sS'OPTGROUP'
+p196
+S"<class 'gluon.html.OPTGROUP'>"
+p197
+sS'PRE'
+p198
+S"<class 'gluon.html.PRE'>"
+p199
+sS'IS_INT_IN_RANGE'
+p200
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p201
+sS'IS_LOWER'
+p202
+S"<class 'gluon.validators.IS_LOWER'>"
+p203
+sS'IS_STRONG'
+p204
+S"<class 'gluon.validators.IS_STRONG'>"
+p205
+sS'cache'
+p206
+S'<gluon.cache.Cache object at 0x89bbb4c>'
+p207
+sS'IS_IN_DB'
+p208
+S"<class 'gluon.validators.IS_IN_DB'>"
+p209
+sS'TAG'
+p210
+S'<gluon.html.__TAG__ object at 0x868944c>'
+p211
+sS'SQLField'
+p212
+S"<class 'gluon.dal.Field'>"
+p213
+sS'BODY'
+p214
+S"<class 'gluon.html.BODY'>"
+p215
+sS'IS_DATE_IN_RANGE'
+p216
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p217
+sS'IFRAME'
+p218
+S"<class 'gluon.html.IFRAME'>"
+p219
+sS'URL'
+p220
+S'<function _URL at 0x8b14e64>'
+p221
+sS'db'
+p222
+S"<DAL {'_lastsql': 'SELECT  app_config.id, app_co...app_themes'], '_migrate': True, '_pool_size': 0}>"
+p223
+sS'P'
+S"<class 'gluon.html.P'>"
+p224
+sS'TFOOT'
+p225
+S"<class 'gluon.html.TFOOT'>"
+p226
+sS'XHTML'
+p227
+S"<class 'gluon.html.XHTML'>"
+p228
+sS'app_themes_base_list'
+p229
+S"['0', '1', 'cms', 'pypress']"
+p230
+sS'ON'
+p231
+S'True'
+p232
+sS'OL'
+p233
+S"<class 'gluon.html.OL'>"
+p234
+sS'TEXTAREA'
+p235
+S"<class 'gluon.html.TEXTAREA'>"
+p236
+sS'MENU'
+p237
+S"<class 'gluon.html.MENU'>"
+p238
+sS'EM'
+p239
+S"<class 'gluon.html.EM'>"
+p240
+sS'CODE'
+p241
+S"<class 'gluon.html.CODE'>"
+p242
+sS'HTTP'
+p243
+S"<class 'gluon.http.HTTP'>"
+p244
+sS'HR'
+p245
+S"<class 'gluon.html.HR'>"
+p246
+sS'IS_DATETIME'
+p247
+S"<class 'gluon.validators.IS_DATETIME'>"
+p248
+sS'STYLE'
+p249
+S"<class 'gluon.html.STYLE'>"
+p250
+sS'LABEL'
+p251
+S"<class 'gluon.html.LABEL'>"
+p252
+sS'CLEANUP'
+p253
+S"<class 'gluon.validators.CLEANUP'>"
+p254
+sS'SELECT'
+p255
+S"<class 'gluon.html.SELECT'>"
+p256
+sS'CENTER'
+p257
+S"<class 'gluon.html.CENTER'>"
+p258
+sS'__builtins__'
+p259
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, 'Exception': <type 'exceptions.Exception'>, 'False': False, ...}"
+p260
+sS'IS_LIST_OF'
+p261
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p262
+sS'app_themes_list'
+p263
+S"['0', '1', 'cms', 'pypress', 'test#', 'test1#']"
+p264
+sS'SQLFORM'
+p265
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p266
+sS'LOAD'
+p267
+S'<gluon.compileapp.LoadFactory object at 0x89bb74c>'
+p268
+sS'redirect'
+p269
+S'<function redirect at 0x848110c>'
+p270
+sS'tentative_app'
+p271
+S"'cms'"
+p272
+sS'FIELDSET'
+p273
+S"<class 'gluon.html.FIELDSET'>"
+p274
+sS'IS_EQUAL_TO'
+p275
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p276
+sS'embed64'
+p277
+S'<function embed64 at 0x868a95c>'
+p278
+sS'INPUT'
+p279
+S"<class 'gluon.html.INPUT'>"
+p280
+sS'EMBED'
+p281
+S"<class 'gluon.html.EMBED'>"
+p282
+sS'FORM'
+p283
+S"<class 'gluon.html.FORM'>"
+p284
+sS'H2'
+p285
+S"<class 'gluon.html.H2'>"
+p286
+sS'H3'
+p287
+S"<class 'gluon.html.H3'>"
+p288
+sS'H1'
+p289
+S"<class 'gluon.html.H1'>"
+p290
+sS'H6'
+p291
+S"<class 'gluon.html.H6'>"
+p292
+sS'H4'
+p293
+S"<class 'gluon.html.H4'>"
+p294
+sS'H5'
+p295
+S"<class 'gluon.html.H5'>"
+p296
+sS'UL'
+p297
+S"<class 'gluon.html.UL'>"
+p298
+sS'IS_UPPER'
+p299
+S"<class 'gluon.validators.IS_UPPER'>"
+p300
+sS'xmlescape'
+p301
+S'<function xmlescape at 0x868a374>'
+p302
+sS'IS_TIME'
+p303
+S"<class 'gluon.validators.IS_TIME'>"
+p304
+sS'OPTION'
+p305
+S"<class 'gluon.html.OPTION'>"
+p306
+sS'TITLE'
+p307
+S"<class 'gluon.html.TITLE'>"
+p308
+sS'CRYPT'
+p309
+S"<class 'gluon.validators.CRYPT'>"
+p310
+sS'administrators_emails'
+p311
+S"['molhokwai@gmail.com', 'herve.mayou@gmail.com']"
+p312
+sS'IS_EMPTY_OR'
+p313
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p314
+sS'MARKMIN'
+p315
+S"<class 'gluon.html.MARKMIN'>"
+p316
+sS'this_app'
+p317
+S"'a'"
+p318
+sS'SCRIPT'
+p319
+S"<class 'gluon.html.SCRIPT'>"
+p320
+sS'TABLE'
+p321
+S"<class 'gluon.html.TABLE'>"
+p322
+sS'IS_IPV4'
+p323
+S"<class 'gluon.validators.IS_IPV4'>"
+p324
+sS'IS_LENGTH'
+p325
+S"<class 'gluon.validators.IS_LENGTH'>"
+p326
+sS'XML'
+p327
+S"<class 'gluon.html.XML'>"
+p328
+sS'B'
+S"<class 'gluon.html.B'>"
+p329
+sS'IMG'
+p330
+S"<class 'gluon.html.IMG'>"
+p331
+sS'SQLTABLE'
+p332
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p333
+sS'IS_MATCH'
+p334
+S"<class 'gluon.validators.IS_MATCH'>"
+p335
+sS'IS_ALPHANUMERIC'
+p336
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p337
+sS'SPAN'
+p338
+S"<class 'gluon.html.SPAN'>"
+p339
+sS'IS_SLUG'
+p340
+S"<class 'gluon.validators.IS_SLUG'>"
+p341
+sS'META'
+p342
+S"<class 'gluon.html.META'>"
+p343
+sS'IS_DATE'
+p344
+S"<class 'gluon.validators.IS_DATE'>"
+p345
+sS'IS_EMAIL'
+p346
+S"<class 'gluon.validators.IS_EMAIL'>"
+p347
+sS'refresh_page'
+p348
+g73
+sS'IS_NOT_EMPTY'
+p349
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p350
+sS'IS_FLOAT_IN_RANGE'
+p351
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p352
+sS'BEAUTIFY'
+p353
+S"<class 'gluon.html.BEAUTIFY'>"
+p354
+sS'TBODY'
+p355
+S"<class 'gluon.html.TBODY'>"
+p356
+sS'Field'
+p357
+S"<class 'gluon.dal.Field'>"
+p358
+sS'DIV'
+p359
+S"<class 'gluon.html.DIV'>"
+p360
+sS'LEGEND'
+p361
+S"<class 'gluon.html.LEGEND'>"
+p362
+sS'global_site_url'
+p363
+S"'http://localhost:8001'"
+p364
+sS'http_referer'
+p365
+S'None'
+p366
+sS'DAL'
+p367
+S"<class 'gluon.dal.DAL'>"
+p368
+sS'TT'
+p369
+S"<class 'gluon.html.TT'>"
+p370
+sS'TR'
+p371
+S"<class 'gluon.html.TR'>"
+p372
+sS'this_app_url'
+p373
+S"'http://localhost:8001/a'"
+p374
+sS'LI'
+p375
+S"<class 'gluon.html.LI'>"
+p376
+sS'TH'
+p377
+S"<class 'gluon.html.TH'>"
+p378
+sS'TD'
+p379
+S"<class 'gluon.html.TD'>"
+p380
+sS'IS_URL'
+p381
+S"<class 'gluon.validators.IS_URL'>"
+p382
+sS'A'
+S"<class 'gluon.html.A'>"
+p383
+sS'HEAD'
+p384
+S"<class 'gluon.html.HEAD'>"
+p385
+sS'IS_DATETIME_IN_RANGE'
+p386
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p387
+sS'HTML'
+p388
+S"<class 'gluon.html.HTML'>"
+p389
+sS'IS_IMAGE'
+p390
+S"<class 'gluon.validators.IS_IMAGE'>"
+p391
+sS'I'
+S"<class 'gluon.html.I'>"
+p392
+sS'IS_NOT_IN_DB'
+p393
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p394
+sS'app_config'
+p395
+S'<Row {\'APP_METAS\': ["\'a\' cm/dms", "molhokwai.net...elete_record\': <function <lambda> at 0x8b14f0c>}>'
+p396
+sS'path_info'
+p397
+S"'/a/default/error'"
+p398
+sg143
+S"<Storage {'status': 200, 'body': <cStringIO.Stri...t': None, 'files': [], '_custom_rollback': None}>"
+p399
+sS'THEAD'
+p400
+S"<class 'gluon.html.THEAD'>"
+p401
+sS'IS_NULL_OR'
+p402
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p403
+sS'i'
+S'5'
+sg47
+S"<Storage {'function': 'error', 'body': <cStringI... 13, 22, 57, 435141), 'post_vars': <Storage {}>}>"
+p404
+sS'IS_EXPR'
+p405
+S"<class 'gluon.validators.IS_EXPR'>"
+p406
+sS'IS_IN_SET'
+p407
+S"<class 'gluon.validators.IS_IN_SET'>"
+p408
+sS'IS_UPLOAD_FILENAME'
+p409
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p410
+sS'IS_DECIMAL_IN_RANGE'
+p411
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p412
+sS'T'
+S'<gluon.languages.translator object at 0x89bbf0c>'
+p413
+sssS'traceback'
+p414
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/models/0_db.py", line 112, in <module>\n    print \'-----------| refresh_page : %b\' % refresh_page\nValueError: unsupported format character \'b\' (0x62) at index 29\n'
+p415
+s.

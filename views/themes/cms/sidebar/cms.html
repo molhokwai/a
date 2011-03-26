@@ -1,0 +1,81 @@
+<ul>
+                  <li>                          
+                      <h2 class="widgettitle">{{=T('Tags(categories)')}}
+                          {{if response.categories:}}
+                              {{if session.authorized:}}
+                                  <span style="font-size: .8em; font-weight: normal;">
+                                      [<a href="/{{=request.application}}/default/manage/category">{{=T('manage')}}</a>]
+                                  </span>
+                              {{pass}}
+                          {{pass}}
+                      </h2>
+                      <ul>
+                          <li><a href="/{{=request.application}}/default/index/posts">{{=T('view all')}}</a></li>
+                          {{for _name,_count,_link in response.categories:}}
+                              <li><a href="{{=_link}}">{{=_name}}</a> ({{=_count}})</li>
+                          {{pass}}
+                      </ul>                   
+                  </li>
+                  <!-- end sidebar categories -->
+                  
+                  {{if response.links:}}
+                      <li>
+                          <h2 class="widgettitle">
+                              {{=T('Links')}}
+                              {{if session.authorized:}}
+                                  <span style="font-size: .8em; font-weight: normal;">
+                                      [<a href="/{{=request.application}}/default/manage/link">{{=T('manage')}}</a>]
+                                  </span>
+                              {{pass}}
+                          </h2>
+                          <ul>
+                              {{for _name,_link,_id in utilities.shorten_and_randomize(response.links, 5):}}
+                                  <li>
+                                      <a target="_blank" href="{{=_link}}">{{=_name}}</a>
+                                  </li>
+                              {{pass}}
+                          </ul>                       
+                      </li>
+                  {{pass}}
+                  <!-- end sidebar links -->
+
+                  {{if response.pages:}}
+                      <li class="pages">
+                          <h2 class="widgettitle">
+                              {{=T('Pages')}}
+                              <span style="font-size: .8em; font-weight: normal;">
+                                  [<a href="/{{=request.application}}/default/pages">{{=T('view all')}}</a>]
+                              </span>
+                          </h2>
+                          <ul>
+                              {{for _name,_active,_link in utilities.shorten_and_randomize(response.pages, 10):}}
+                                  <li>
+                                      .<a href="{{=_link}}">{{=T(_name)}}</a>
+                                  </li>
+                              {{pass}}
+                          </ul>                       
+                      </li>
+                      <div class="clear"></div>
+                      <br/>
+                  {{pass}}
+                  <!-- end sidebar links -->
+                      
+                  {{if session.authorized:}}
+                      <li>
+                          <h2>{{=T('Mini Admin')}}</h2>
+                          <ul>
+                              <li><a href="/{{=request.application}}/default/add/page">{{=T('add page')}}</a></li>
+                              <li><a href="/{{=request.application}}/default/add/post">{{=T('add post')}}</a></li>
+                              <li><a href="/{{=request.application}}/default/manage/category/add">{{=T('add category')}}</a></li>
+                          </ul>
+                      </li>
+                  {{pass}}
+                  <!-- -end mini admin -->
+
+                  {{if response.sidebar_note:}}
+                      <li>
+                          <p>{{=response.sidebar_note}}</p>
+                      </li>   
+                  {{pass}}
+                  <!-- end sidebar_note -->
+              </ul>

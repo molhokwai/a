@@ -29,25 +29,25 @@
 <div class="media-box width80pc">
     <a class="media" href="/a/default/file/a.mp4">Mayou Nkensa Hervé, Tuesday the 1st of May, around 08:57&#39;07&#39;&#39;</a>
     
-    <h1>About Us - </h1>
+    <h1>{{=XML(T('About Us'))}} - </h1>
     <a target="_blank" href="#">...</a> | 
     
-    <h1>Current Projects -</h1>
+    <h1>{{=XML(T('Current Projects'))}} -</h1>
     <div class="text-alignl">
-        <a target="_blank" href="https://github.com/molhokwai/a">no projects yet</a>
+        <a target="_blank" href="https://github.com/molhokwai/a">{{=XML(T('no projects yet'))}}</a>
     </div>
     
-    <h1>Book(s) -</h1>
+    <h1>{{=XML(T('Book(s)'))}} -</h1>
     <div class="text-alignl">
-        <a target="_blank" href="#">Implementing Change</a> | 
-        <a target="_blank" href="#">Aux Oeuvreurs (French)</a>
+        <a target="_blank" href="{{=XML(T('implementing_change_book_link'))}}">{{=XML(T('Implementing Change'))}}</a> | <br/>
+        <a target="_blank" href="#">{{=XML(T('Aux Oeuvreurs (French)'))}}</a>
     </div>
     
-    <h1>Contact -</h1>
+    <h1>{{=XML(T('Contact'))}} -</h1>
     <div class="text-alignl">
         <a href="callto:+3248937151">+32 489 33 71 51</a> | 
         <a href="mailto:herve.mayou@gmail.com">herve.mayou@gmail.com</a> | 
-        <br/><a onclick="onChatClick(this)" href="#iframe-chat">voice, chat: herve.mayou (+)</a>
+        <br/><a onclick="onChatClick(this)" href="#iframe-chat">{{=XML(T('voice, chat'))}}: herve.mayou (+)</a>
         <br/>
         <iframe name="iframe-chat"></iframe>
     </div>

@@ -79,12 +79,38 @@ db.app_themes.theme_base.requires = IS_IN_SET(app_themes_list)
 #########################################################################
 ## Global convenience variables
 #########################################################################
-protocol='http'
-if request.get('env')['server_protocol'][:5]=='HTTPS':protocol='https'
-global_site_url='%s://%s' % (protocol,request.get('env')['http_host'])
 
-this_app=request.application
+protocol = 'http'
+if request.get('env')['server_protocol'][:5] == 'HTTPS': protocol='https'
+global_site_url = '%s://%s' % (protocol,request.get('env')['http_host'])
+path_info = request.get('env')['path_info']
+http_referer = None
+
+this_app = path_info.split('/')[1]
+tentative_app = session.tentative_app
+if 'http_referer' in request.get('env'):
+    import re
+    http_referer = request.get('env')['http_referer']
+    m = re.match('%s.*'%global_site_url, http_referer)
+    if m:
+        session.tentative_app = http_referer.replace(global_site_url, '').split('/')[1]
+if session.tentative_app:
+    if tentative_app != session.tentative_app:
+        response.refresh = True
+    else:
+        tentative_app = session.tentative_app
+elif not tentative_app:
+    tentative_app = this_app
+
 this_app_url= global_site_url + '/%s' % this_app
+
+print ''
+print '-----------| path_info : %s' % path_info
+print '-----------| http_referer : %s' % http_referer
+print '-----------| tentative_app : %s' % tentative_app
+print '-----------| session.tentative_app : %s' % session.tentative_app
+print '-----------| refresh_page : %s' % str(refresh_page).lower()
+
 
 #########################################################################
 ## Authentication / Authorization
@@ -226,8 +252,8 @@ db.posts.post_type.requires = IS_IN_SET(['post', 'page'])
 db.posts.post_category.requires = IS_IN_DB(db, 'categories.id', 'categories.category_name')
 
 db.define_table('files',
-    SQLField('file','upload', required=True),
-    SQLField('filename', required=True),
+    SQLField('file','upload', required=True, autodelete=True),
+    SQLField('filename'),
     SQLField('user', required=True, readable=False, writable=False)
 )
 db.files.filename.requires = IS_NOT_IN_DB(db, 'files.filename')

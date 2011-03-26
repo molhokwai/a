@@ -26,18 +26,23 @@
     <script type="text/javascript">
       var server={
           request : {
-              application : '{{=this_app}}'
+              application : '{{=tentative_app}}'
           },
           pages : []
       };
     </script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
     <script type="text/javascript">
+      /*if ({ { =str(refresh_page).lower() } }){
+          window.location.reload();
+      }*/
+      
       $(document).ready(function(){
           var browser_not=true;
           try { 
@@ -87,9 +92,21 @@
       </div>
       <!-- end #content -->
 
+      <div id="sidebar" class="right width30pc text-alignr">
+        <div id="sidebar-content" class="display-none">
+          <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
+          {{include "themes/%s/sidebar/%s.html"%(response.theme, tentative_app)}}
+        </div>
+        <!-- end #sidebar-content -->
+      </div>
+      <!-- end #sidebar -->
+
       <div id="utility" class="clear">&nbsp;</div>
 
-      <div id="footer">{{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}</div>
+      <div id="footer">
+          {{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}
+          {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+      </div>
         
     </div>
     <!-- end #wrapper -->

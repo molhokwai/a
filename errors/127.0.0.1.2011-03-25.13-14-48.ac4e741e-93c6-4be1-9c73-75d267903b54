@@ -1,0 +1,1134 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'
+p4
+sS'code'
+p5
+S'response.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="\', escape=False)\nresponse.write(T.accepted_language or \'en\')\nresponse.write(\'">\\n    <head>\\n    <title>\', escape=False)\nresponse.write(response.title or request.application)\nresponse.write(\'</title>\\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\\n    <meta name="keywords" content="\', escape=False)\nresponse.write(response.keywords)\nresponse.write(\'" />\\n    <meta name="description" content="\', escape=False)\nresponse.write(response.description)\nresponse.write(\'" />\\n    <meta name="google-site-verification" content="2TmmFn8eNL7GNZuDtORTZ89uxj5fmTtuwqQLqv8webc" /><!-- old: r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8 -->\\n    <!-- include required CSS files, further most first -->\\n    <!-- include requires CSS files\\n    \', escape=False)\nresponse.files.append(URL(request.application,\'static\',\'jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css\'))\nresponse.write(\'\\n    -->\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/themes/\', escape=False)\nresponse.write(response.theme)\nresponse.write(\'/base.css" type="text/css" media="screen" />\\n    \', escape=False)\nif response.child_theme and response.theme_stylesheet:\n    response.write(\'\\n        <link rel="stylesheet" href="\', escape=False)\n    response.write(response.theme_stylesheet)\n    response.write(\'" media="screen" />\\n    \', escape=False)\n    pass\nresponse.write(\'\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/themes/\', escape=False)\nresponse.write(response.theme)\nresponse.write(\'/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />\\n    <!-- include requires CSS files\\n    \', escape=False)\n## TODO: why is this not working?\nresponse.files.append(URL(request.application,\'static\',\'style.css\'))\nresponse.write(\'\\n    -->\\n    \', escape=False)\nresponse.write(\'<script type="text/javascript">\\n<!--\\n/*\\nWritten by Massimo Di Pierro.\\n\\nThis is a minimalistic AJAX for web2py, for more sophisticated stuff\\nyou should use Scriptacolous or some other AJAX toolkit. Anyway...\\n\\nTo use web2py_ajax.html just make sure you include \\\'web2py_ajax.html\\\'\\nin your layout.html. This provides four functions:\\n\\npopup(url)\\ncollapse(id)\\nfade(id,value) // try value= +0.1 or -0.1\\najax(url,sources,taget) \\n// will send sources[i].value to url and dispaly result in target\\n*/\\n\\nfunction popup(url) {\\n  newwindow=window.open(url,\\\'name\\\',\\\'height=400,width=600\\\');\\n  if (window.focus) {newwindow.focus()}\\n  return false;\\n}\\n\\nfunction collapse(id) {\\n   if(this.document.getElementById(id).style.display=="none")\\n   (this.document.getElementById(id).style.display="block") ;\\n   else (this.document.getElementById(id).style.display="none") ;\\n}\\n\\nfunction fade(id,value) {\\n  var object=document.getElementById(id);\\n  if(value<0 && !object.style.opacity) {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity=1;\\n  }\\n  if(value>0 && object.style.opacity>=1) object.style.opacity=1;\\n  else if(value<0 && object.style.opacity<=0) {\\n     this.document.getElementById(id).style.display="none";\\n     object.style.opacity=0;\\n  }\\n  else {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity-=-value;\\n     setTimeout(function(){fade(id,value);},100);\\n     return false;\\n  }\\n  return true;\\n}\\n\\nfunction ajax(url,sources,target) {\\n  var req = null; \\n  var ctarget=document.getElementById(target);\\n  window.status="connecting...";\\n  if(window.XMLHttpRequest)\\n     req = new XMLHttpRequest(); \\n  else if (window.ActiveXObject)\\n     req  = new ActiveXObject("Microsoft.XMLHTTP");\\n  req.onreadystatechange = function() {\\n     window.status="waiting...";\\n     if(req.readyState == 4)\\n       if(req.status == 200) {\\n          window.status=\\\'Ajax Done!\\\'\\n          try { \\n             ctarget.innerHTML=req.responseText; \\n             try {ctarget.scrollTop=ctarget.scrollHeight-ctarget.clientHeight;}\\n             catch(err) {}\\n          } catch(err) { ctarget.value=req.responseText; }\\n       } else alert("AJAX Error: " + req.status);\\n  }\\n  var query=""\\n  for(i=0; i<sources.length; i++) {\\n     if(i>0) query=query+"&";\\n     query=query+encodeURIComponent(sources[i])+"="+encodeURIComponent(document.getElementById(sources[i]).value);\\n  }\\n  req.open("POST",url,true); \\n  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); \\n  req.send(query); \\n} \\n//-->\\n</script>\', escape=False)\nresponse.write(\'\\n    <script type="text/javascript">\\n      <!-- /* this adds sfhover class to menu li items to make IE6 work */ jQuery(document).ready(function(){jQuery(\\\'li.web2py-menu-expand\\\').hover(function ()     {jQuery(this).addClass(\\\'sfhover\\\');},function () {jQuery(this).removeClass(\\\'sfhover\\\');});});//-->\\n    </script>\\n    <script type="text/javascript">\\n      var server={\\n          request : {\\n              application : \\\'\', escape=False)\nresponse.write((tentative_app if tentative_app else this_app))\nresponse.write(\'\\\'\\n          },\\n          pages : []\\n      };\\n    </script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/net.molhokwai/molhokwai.common.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/jquery/jquery-1.4.2.min.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/jquery/add-ons.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/jquery.markitup.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/custom/script.js"></script>\\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/google/search_init.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/jquery/add-ons.js"></script>\\n    <script type="text/javascript">\\n        if (\', escape=False)\nresponse.write(refresh.page.lower())\nresponse.write(\'){\\n            window.location.reload();\\n        }\\n        $(document).ready(function(){\\n            $(\\\'#google_translate_element\\\').hide();\\n            $(\\\'#cse-search-form\\\').hide();\\n            $(\\\'#cli_web\\\').hide(\\\'slow\\\');\\n        });\\n        \\n        var huTi=null;\\n        var toggleUtilities=function(a){\\n            var selectors={\\n                \\\'#google_translate_element\\\' : \\\'.goog-te-combo\\\',\\n                \\\'#cse-search-form\\\' : \\\'.gsc-input\\\',\\n                \\\'#cli_web\\\' : \\\'#_cmd\\\'\\n            };\\n            \\n            for(k in selectors){\\n                if(a.href.indexOf(k)>=0 && !$(k).is(\\\':visible\\\')){\\n                    $(k).show();\\n                    huTi = setTimeout(\\\'$("\\\'+selectors[k]+\\\'").focus();clearTiemout(huTi);\\\', 200);\\n                }\\n                else{\\n                    $(k).hide();\\n                }\\n            }\\n            $("html").animate({ scrollTop: 0 });\\n        };\\n    </script>    \\n    </head>\\n    <body>\\n        <div id="top-bar">\\n            <a href="#google_translate_element" onclick="toggleUtilities(this);" class="float-left">\', escape=False)\nresponse.write(T(\'translation\'))\nresponse.write(\' | </a>\\n            <a href="#cse-search-form" onclick="toggleUtilities(this);" class="float-left"> \', escape=False)\nresponse.write(T(\'search (google)\'))\nresponse.write(\' | </a>\\n            <a href="#cli_web" onclick="toggleUtilities(this);" class="float-left"> <em>\', escape=False)\nresponse.write(T(\'command line\'))\nresponse.write(\' | </em></a>\\n            \\n            <span id="user-menu">\\n             \', escape=False)\nif \'auth\' in globals():\n    response.write(\'\\n               \', escape=False)\n    if not auth.user:\n        response.write(\' \\n                 <a>]</a> \', escape=False)\n        response.write(A(T(\'login\'),_href=URL(r=request,c=\'default\',f=\'user/login\')))\n        response.write(\' <a>[</a>\\n               \', escape=False)\n    else:\n        response.write(\'\\n                 \', escape=False)\n        response.write(auth.user.display_name)\n        response.write(\' \\n                 \', escape=False)\n        response.write(A(T(\'logout\'),_href=URL(r=request,c=\'default\',f=\'user/logout\')))\n        response.write(\' |\\n               \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n            </span> \\n            <!-- end #user-menu -->\\n            \\n            <div class="clear"></div>\\n                    \\n            <div id="utilities" class="padt2pc">\\n            \\n              <div id="google_translate_element"></div>\\n              <script>\\n                function googleTranslateElementInit() {\\n                  new google.translate.TranslateElement({\\n                    pageLanguage: \\\'\', escape=False)\nresponse.write(current_language[:2])\nresponse.write(\'\\\'\\n                  }, \\\'google_translate_element\\\');\\n                }\\n              </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     \\n              <!-- end #google_translate_element-->    \\n            \\n              <div class="clear"></div>\\n              \\n              <div id="cli_web">\\n                <form action="/lcs/cli_web/_do" method="post" onsubmit="return on_cli_web_submit();">\\n                    <input type="text" id="_cmd" name="_cmd" />\\n                    \', escape=False)\nif session.cli_web_flash:\n    response.write(\'<font class="flash small">\', escape=False)\n    response.write(XML(session.cli_web_flash))\n    session.cli_web_flash=False\n    response.write(\'</font>\', escape=False)\n    pass\nresponse.write(\'\\n                </form>\\n              </div>\\n              <!-- end #cli_web -->\\n            \\n              <div id="cse-search-form">Loading</div>\\n              <script src="http://www.google.com/jsapi" type="text/javascript"></script>\\n              <script type="text/javascript">\\n                google.load(\\\'search\\\', \\\'1\\\', {language : \\\'\', escape=False)\nresponse.write(current_language[:2])\nresponse.write(\'\\\'});\\n                google.setOnLoadCallback(function() {\\n                  var customSearchControl = new google.search.CustomSearchControl(\\\'014007428035866690530:qpoerqfcidu\\\');\\n                  customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);\\n                  var options = new google.search.DrawOptions();\\n                  options.setSearchFormRoot(\\\'cse-search-form\\\');\\n              \\n                  options.setAutoComplete(true);\\n                  customSearchControl.draw(\\\'cse\\\', options);\\n                }, true);\\n              </script>\\n              <!-- end #cse-search-form -->\\n            \\n            </div>\\n            <!-- end #utilities -->\\n            \\n        </div>\\n        <!-- end #top-bar-->\\n        \\n        <div class="clear"></div>\\n            \\n        <div id="wrapper" class="width60pc">\\n            \\n            <div id="header" class="padtb1pc">\\n                <h1 class="font-s2em padl2pc left">Paradigm Shift</h1>\\n                <h2 class="font-s095em padl2pc left margt1pc"> | </h2>\\n                <h2 class="font-s095em padl2pc left margt1-2pc">Individual Freedom. Collective Responsibility.</h2>\\n    \\n                <div class="clear"></div>\\n            </div>\\n    \\n            <!-- #menu-tabs deactivated. See cms theme for eventual reactivation -->\\n            <!--div id="menu-tabs"></div -->\\n            <!--div class="clear"></div -->\\n            <!-- end #menu-tabs -->\\n    \\n            <div id="body" class="height50em">\\n                \\n                <div class="left width70pc padl2pc">\\n                    <blockquote class="width60pc margt5pc">\\n                        " Words are precious. Use each one of them wisely "\\n                    </blockquote>\\n\\n                    \', escape=False)\nif response.flash:\n    response.write(\'\\n                        <div id="flash">\', escape=False)\n    response.write(XML(response.flash))\n    response.write(\'</div>\\n                    \', escape=False)\n    pass\nresponse.write(\'\\n                            \\n                    <div id="content" class="margt10pc">\\n                        \', escape=False)\nresponse.write(\'\\n\\n<BLOCKQUOTE>Erreur<BR/>\\n    \', escape=False)\nif ticket:\n    response.write(\'<b>Erreur interne</b>, ticket: <a href="/admin/default/ticket/\', escape=False)\n    response.write(ticket)\n    response.write(\'" target="_blank">\', escape=False)\n    response.write(ticket)\n    response.write(\'</a><br/>\', escape=False)\n    pass\nresponse.write(\'\\n    \', escape=False)\nif code==\'400\':\n    response.write(\'<b>Page non trouv\\xc3\\xa9e</b>, la page est introuvable...<br/>\\n    \', escape=False)\nelse:\n    if code==\'403\':\n        response.write(\'<b>Non autoris\\xc3\\xa9</b>, hummmm... besoin de permissions suppl\\xc3\\xa9mentaires, ou ceci serait-il une erreur?<br/>\\n    \', escape=False)\n    else:\n        if code==\'500\':\n            response.write(\'<b>Erreur serveur</b>, il s&#39;est pass\\xc3\\xa9 quelque chose d&#39;anormal...<br/>\', escape=False)\n            pass\n        pass\n    pass\nresponse.write(\'\\n    \', escape=False)\nif requested_uri:\n    response.write(\'<b>Requ\\xc3\\xaate (uri)</b>: \', escape=False)\n    response.write(requested_uri)\n    pass\nresponse.write(\'\\n    \', escape=False)\nif err!=\'\':\n    response.write(\'<b>Erreur</b>: \', escape=False)\n    response.write(err)\n    pass\nresponse.write(\'\\n</BLOCKQUOTE>\\n<BR>\\n<BR>\\n<BLOCKQUOTE>Error<BR/>\\n    \', escape=False)\nif ticket:\n    response.write(\'<b>Internal error</b>, ticket: <a href="/admin/default/ticket/\', escape=False)\n    response.write(ticket)\n    response.write(\'" target="_blank">\', escape=False)\n    response.write(ticket)\n    response.write(\'</a>\', escape=False)\n    pass\nresponse.write(\'<br/>\\n    \', escape=False)\nif code==\'400\':\n    response.write(\'<b>Page Not Found</b>, the page is nowhere to be found...\\n    \', escape=False)\nelse:\n    if code==\'403\':\n        response.write(\'<b>Permission denied</b>, hummmm... need extra permissions, or do we have an error here?\\n    \', escape=False)\n    else:\n        if code==\'500\':\n            response.write(\'<b>Server error</b>, something baaad happened...\', escape=False)\n            pass\n        pass\n    pass\nresponse.write(\'<br/>\\n    \', escape=False)\nif requested_uri:\n    response.write(\'<b>Requested Uri</b>: \', escape=False)\n    response.write(requested_uri)\n    pass\nresponse.write(\'\\n    \', escape=False)\nif err!=\'\':\n    response.write(\'<b>Error</b>: \', escape=False)\n    response.write(err)\n    pass\nresponse.write(\'\\n</BLOCKQUOTE>\\n\', escape=False)\nresponse.write(\'\\n                    </div>\\n                    <!-- end #body #content -->\\n\\n                </div>\\n                <!-- end #body .left -->\\n                \\n                <div class="left height49em margt1pc">\\n                    &nbsp;\\n                </div>\\n                <!-- end #body .left+.left -->\\n                \\n                <div id="sidebar" class="right width25pc text-alignr">\\n                    <div id="sidebar-content">\\n                      <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->\\n                      \', escape=False)\nresponse.write(\'<script type="text/javascript" src="/a/static/components/jquery/jquery.media.js"></script>\\n<script type="text/javascript">\\n    $(document).ready(function(){\\n        $.fn.media.defaults.attrs = { \\\'class\\\' : \\\'media\\\', \\\'bgColor\\\' : \\\'#000000\\\' };\\n        $(\\\'.media\\\').media();\\n    });\\n    \\n    var onChatClick = function(el){\\n        var p_m_u = [\\\'+\\\',\\\'-\\\', \\\'http://talkgadget.google.com/talkgadget/popout\\\'];\\n        if ($(el).html().indexOf(\\\'(-)\\\')>0){\\n            p_m_u = [\\\'-\\\',\\\'+\\\', \\\'\\\'];\\n        }\\n        $(\\\'iframe[name="iframe-chat"]\\\').animate({\\n            height: p_m_u[0]+\\\'=10em\\\',\\n          }, 1500, function(){\\n              for(var i=0;i<p_m_u.length;i++){\\n                  if (p_m_u[i] == \\\'+\\\'){\\n                      $(el).html($(el).html().replace(\\\'(\\\'+p_m_u[0]+\\\')\\\',\\\'(\\\'+p_m_u[1]+\\\')\\\'));\\n                  }\\n                  else if (p_m_u[i] == \\\'-\\\'){\\n                      $(\\\'iframe[name="iframe-chat"]\\\')[0].src = p_m_u[2];\\n                  }\\n              }\\n              $("html").animate({ scrollTop: $(document).height() }, "slow");\\n          });\\n    }\\n</script>\\n\\n<div class="media-box width80pc">\\n    <a class="media" href="/a/default/file/a.mp4">Mayou Nkensa Herv\\xc3\\xa9, Tuesday the 1st of May, around 08:57&#39;07&#39;&#39;</a>\\n        \\n    <h1>\', escape=False)\nresponse.write(XML(T(\'Professional - Profile, CV\')))\nresponse.write(\' -</h1>\\n    <a target="_blank" href="https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyNmQyNDYwOWMtNWE2MC00N2M3LWFiMjQtMGE4NjE1ZmQyODNl">\', escape=False)\nresponse.write(T(\'Light/Short\'))\nresponse.write(\'</a> | \\n    <a target="_blank" href="https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B39Sj9mqtvSyMmRjZGZhNWQtODRmOC00MTE5LWExZDktYjA2MWU1NjhhZDY2" target="_blank">\', escape=False)\nresponse.write(T(\'Extended/Long\'))\nresponse.write(\'</a>\\n    \\n    <h1>\', escape=False)\nresponse.write(XML(T(\'Current Projects\')))\nresponse.write(\' -</h1>\\n    <div class="text-alignl">\\n        <a target="_blank" href="https://github.com/molhokwai/a">\\\'a\\\' cms/dms</a> | \\n        <a target="_blank" href="https://github.com/molhokwai/web-x0">web-x0 development</a> | \\n        <a target="_blank" href="https://github.com/molhokwai/ai">ai learning (nn, ga)</a> | \\n        <a target="_blank" href="https://github.com/molhokwai/jQuery.gaussianTextFx">jQuery.gaussianTextFx</a>\\n    </div>\\n    \\n    <h1>\', escape=False)\nresponse.write(XML(T(\'Books\')))\nresponse.write(\' -</h1>\\n    <div class="text-alignl">\\n        <a target="_blank" href="http://www.edifree.fr/doc/4311">\', escape=False)\nresponse.write(XML(T(\'Aux Oeuvreurs (French)\')))\nresponse.write(\'</a>\\n    </div>\\n    \\n    <h1>\', escape=False)\nresponse.write(XML(T(\'Contact\')))\nresponse.write(\' -</h1>\\n    <div class="text-alignl">\\n        <a href="callto:+3248937151">+32 489 33 71 51</a> | \\n        <a href="mailto:herve.mayou@gmail.com">herve.mayou@gmail.com</a> | \\n        <br/><a onclick="onChatClick(this)" href="#iframe-chat">\', escape=False)\nresponse.write(XML(T(\'voice, chat\')))\nresponse.write(\': herve.mayou (+)</a>\\n        <br/>\\n        <iframe name="iframe-chat"></iframe>\\n    </div>\\n    </object -->\\n</div>\\n\', escape=False)\nresponse.write(\'\\n                    </div>\\n                    <!-- end #sidebar-content -->\\n                </div>\\n                <!-- end #sidebar -->\\n                \\n            </div>\\n            <!-- end #body -->\\n    \\n            <div class="clear"></div>\\n            \\n            <div id="footer" class="text-alignc font-s06em">\\n                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS/Javascript/Python - webX.0 | contact: \', escape=False)\nresponse.write(A(T(\'admin@molhokwai.net\'), __href=\'mailto:admin@molhokwai.net\'))\nresponse.write(\'\\n                    - on PyPress, a \', escape=False)\nresponse.write(A(T(\'web2py\'), _target="_blank", _href=\'http://www.web2py.org\'))\nresponse.write(\' powered site\\n                      on \', escape=False)\nresponse.write(A(T(\'google app engine\'), _target="_blank", _href=\'http://code.google.com/appengine\'))\nresponse.write(\'\\n                      |  \', escape=False)\nresponse.write(A(T(\'sidebar\'), _href=\'javascript:return false;\',  _onclick=\'$("#sidebar-content").toggle();\'))\nresponse.write(\'\\n                  </p>\\n            </div>\\n            <!-- end #footer -->\\n                \\n        </div>\\n        <!-- end #wrapper -->\\n\\n        <script type="text/javascript" id="tracking_src">\\n            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\\n            document.write(unescape("%3Cscript src=\\\'" + gaJsHost + "google-analytics.com/ga.js\\\' type=\\\'text/javascript\\\'%3E%3C/script%3E"));\\n        </script>\\n        <script type="text/javascript" id="tracking_process">\\n            try {\\n                var pageTracker = _gat._getTracker("UA-5101967-1");\\n                pageTracker._initData();\\n                pageTracker._trackPageview();\\n            }\\n            catch(e) {\\n                if (console) try{console.log(e);}catch(e){}\\n            }\\n        </script>\\n        <!-- end #tracking -->\\n            \\n        </body>\\n</html>\\n\', escape=False)'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__hash__'
+p11
+S"<method-wrapper '__hash__' of exceptions.NameError object at 0xa02064c>"
+p12
+sS'__setattr__'
+p13
+S"<method-wrapper '__setattr__' of exceptions.NameError object at 0xa02064c>"
+p14
+sS'__reduce_ex__'
+p15
+S'<built-in method __reduce_ex__ of exceptions.NameError object at 0xa02064c>'
+p16
+sS'__getslice__'
+p17
+S"<method-wrapper '__getslice__' of exceptions.NameError object at 0xa02064c>"
+p18
+sS'__getitem__'
+p19
+S"<method-wrapper '__getitem__' of exceptions.NameError object at 0xa02064c>"
+p20
+sS'__setstate__'
+p21
+S'<built-in method __setstate__ of exceptions.NameError object at 0xa02064c>'
+p22
+sS'__reduce__'
+p23
+S'<built-in method __reduce__ of exceptions.NameError object at 0xa02064c>'
+p24
+sS'__str__'
+p25
+S"<method-wrapper '__str__' of exceptions.NameError object at 0xa02064c>"
+p26
+sS'args'
+p27
+S'("name \'refresh\' is not defined",)'
+p28
+sS'__getattribute__'
+p29
+S"<method-wrapper '__getattribute__' of exceptions.NameError object at 0xa02064c>"
+p30
+sS'__class__'
+p31
+S"<type 'exceptions.NameError'>"
+p32
+sS'__delattr__'
+p33
+S"<method-wrapper '__delattr__' of exceptions.NameError object at 0xa02064c>"
+p34
+sS'__repr__'
+p35
+S"<method-wrapper '__repr__' of exceptions.NameError object at 0xa02064c>"
+p36
+sS'__dict__'
+p37
+S'{}'
+p38
+sS'__doc__'
+p39
+S"'Name not found globally.'"
+p40
+sS'__init__'
+p41
+S"<method-wrapper '__init__' of exceptions.NameError object at 0xa02064c>"
+p42
+sS'__new__'
+p43
+S'<built-in method __new__ of type object at 0x8239980>'
+p44
+ssS'evalue'
+p45
+S"name 'refresh' is not defined"
+p46
+sS'request'
+p47
+(dp48
+S'function'
+p49
+S"'error'"
+p50
+sS'body'
+p51
+S'<cStringIO.StringO object at 0xa15b560>'
+p52
+sS'wsgi'
+p53
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p54
+sS'extension'
+p55
+S"'html'"
+p56
+sS'vars'
+p57
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-25.13-1...l': '/a/default/error', 'requested_uri': 'None'}>"
+p58
+sS'cid'
+p59
+S'None'
+p60
+sS'url'
+p61
+S'<gluon.html.XML object at 0xa15bf4c>'
+p62
+sS'raw_extension'
+p63
+S'None'
+p64
+sg27
+S'[]'
+p65
+sS'controller'
+p66
+S"'default'"
+p67
+sS'cookies'
+p68
+S"<SimpleCookie: blogger_languages='fr' session_id...60c0-2cfe-4286-b685-ae791a760077' theme='ff0000'>"
+p69
+sS'application'
+p70
+S"'a'"
+p71
+sS'ajax'
+p72
+S'False'
+p73
+sS'client'
+p74
+S"'127.0.0.1'"
+p75
+sS'env'
+p76
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0xa0c0ca4>}>"
+p77
+sS'raw_args'
+p78
+S'None'
+p79
+sS'get_vars'
+p80
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-25.13-1...l': '/a/default/error', 'requested_uri': 'None'}>"
+p81
+sS'folder'
+p82
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p83
+sS'now'
+p84
+S'datetime.datetime(2011, 3, 25, 13, 14, 48, 305221)'
+p85
+sS'post_vars'
+p86
+S'<Storage {}>'
+p87
+ssS'frames'
+p88
+(lp89
+(dp90
+S'file'
+p91
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p92
+sS'dump'
+p93
+(dp94
+S'environment'
+p95
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0xa323e9c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p96
+sS'ccode'
+p97
+S'<code object <module> at 0xa143c80, file "/home/...applications/a/views/default/error.html", line 1>'
+p98
+ssS'lnum'
+p99
+I188
+sS'lines'
+p100
+(dp101
+I192
+S'        # XXX Show exception in Wing IDE if running in debugger'
+p102
+sI183
+S'        if type(code) == types.CodeType:'
+p103
+sI184
+S'            ccode = code'
+p104
+sI185
+S'        else:'
+p105
+sI186
+S'            ccode = compile2(code,layer)'
+p106
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p107
+sI189
+S'    except HTTP:'
+p108
+sI190
+S'        raise'
+p109
+sI191
+S'    except Exception:'
+p110
+ssS'call'
+p111
+S'(code=\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...     \\\\n        </body>\\\\n</html>\\\\n\\\', escape=False)\', environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0xa323e9c>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html\')'
+p112
+sS'func'
+p113
+S'restricted'
+p114
+sa(dp115
+g91
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'
+p116
+sg93
+(dp117
+sg99
+I53
+sg100
+(dp118
+I44
+S'response.write(\'/static/components/jquery/add-ons.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)'
+p119
+sI45
+S'response.write(this_app)'
+p120
+sI46
+S'response.write(\'/static/components/markitup/jquery.markitup.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)'
+p121
+sI47
+S'response.write(this_app)'
+p122
+sI48
+S'response.write(\'/static/custom/script.js"></script>\\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\\n    <script type="text/javascript" src="/\', escape=False)'
+p123
+sI49
+S'response.write(this_app)'
+p124
+sI50
+S'response.write(\'/static/components/google/search_init.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)'
+p125
+sI51
+S'response.write(this_app)'
+p126
+sI52
+S'response.write(\'/static/components/jquery/add-ons.js"></script>\\n    <script type="text/javascript">\\n        if (\', escape=False)'
+p127
+sI53
+S'response.write(refresh.page.lower())'
+p128
+sI54
+S'response.write(\'){\\n            window.location.reload();\\n        }\\n        $(document).ready(function(){\\n            $(\\\'#google_translate_element\\\').hide();\\n            $(\\\'#cse-search-form\\\').hide();\\n            $(\\\'#cli_web\\\').hide(\\\'slow\\\');\\n        });\\n        \\n        var huTi=null;\\n        var toggleUtilities=function(a){\\n            var selectors={\\n                \\\'#google_translate_element\\\' : \\\'.goog-te-combo\\\',\\n                \\\'#cse-search-form\\\' : \\\'.gsc-input\\\',\\n                \\\'#cli_web\\\' : \\\'#_cmd\\\'\\n            };\\n            \\n            for(k in selectors){\\n                if(a.href.indexOf(k)>=0 && !$(k).is(\\\':visible\\\')){\\n                    $(k).show();\\n                    huTi = setTimeout(\\\'$("\\\'+selectors[k]+\\\'").focus();clearTiemout(huTi);\\\', 200);\\n                }\\n                else{\\n                    $(k).hide();\\n                }\\n            }\\n            $("html").animate({ scrollTop: 0 });\\n        };\\n    </script>    \\n    </head>\\n    <body>\\n        <div id="top-bar">\\n            <a href="#google_translate_element" onclick="toggleUtilities(this);" class="float-left">\', escape=False)'
+p129
+sI55
+S"response.write(T('translation'))"
+p130
+sI56
+S'response.write(\' | </a>\\n            <a href="#cse-search-form" onclick="toggleUtilities(this);" class="float-left"> \', escape=False)'
+p131
+sI57
+S"response.write(T('search (google)'))"
+p132
+sI58
+S'response.write(\' | </a>\\n            <a href="#cli_web" onclick="toggleUtilities(this);" class="float-left"> <em>\', escape=False)'
+p133
+sI59
+S"response.write(T('command line'))"
+p134
+sI60
+S'response.write(\' | </em></a>\\n            \\n            <span id="user-menu">\\n             \', escape=False)'
+p135
+sI61
+S"if 'auth' in globals():"
+p136
+sI62
+S"    response.write('\\n               ', escape=False)"
+p137
+sI63
+S'    if not auth.user:'
+p138
+ssg111
+S'()'
+p139
+sg113
+S'<module>'
+p140
+sasS'pyver'
+p141
+S'Python 2.5.1: /usr/local/bin/python'
+p142
+sS'session'
+p143
+(dp144
+S'_language'
+p145
+S"'en'"
+p146
+sS'tentative_app'
+p147
+S"'ff0000'"
+p148
+sS'auth'
+p149
+S'None'
+p150
+ssS'etype'
+p151
+S"<type 'exceptions.NameError'>"
+p152
+sS'date'
+p153
+S'Fri Mar 25 13:14:48 2011'
+p154
+sS'response'
+p155
+(dp156
+S'_vars'
+p157
+S"{'code': '500', 'err': '', 'requested_uri': None, 'ticket': 'a/127.0.0.1.2011-03-25.13-14-48.1e1b65ee-d894-4c7c-9a88-142fe48a0825'}"
+p158
+sg68
+S"<SimpleCookie: session_id_a='127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'>"
+p159
+sS'links'
+p160
+S"[['web2py', 'http://www.web2py.com', 1], ['Python', 'http://www.python.org', 2], ['DePaul CTI', 'http://www.cs.depaul.edu', 3], ['DePaul University', 'http://www.depaul.edu', 5], ['downloads', '/a/default/page/32', 15], ['media / picasa / gallery', '/a/media/picasa/gallery', 16], ['manage media / manage picasa albums / manage photos', '/a/media/picasa/albums', 17], ['setup, application initialization', '/a/setup', 18], ['twitter', '/a/media/social/twitter', 19]]"
+p161
+sS'posts'
+p162
+S'<gluon.dal.Rows object at 0xa46956c>'
+p163
+sS'themes'
+p164
+S"['0', '1', 'cms', 'pypress', 'test#:#0#:#http://localhost/css/base.css#:#molhokwai@gmail.com', 'test1#:#0#:#http://localhost/css/base1.css#:#herve.mayou@gmail.com']"
+p165
+sS'theme_stylesheet'
+p166
+S'None'
+p167
+sS'meta'
+p168
+S'<Storage {}>'
+p169
+sS'_view_environment'
+p170
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0xa323e9c>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p171
+sS'keywords'
+p172
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p173
+sS'files'
+p174
+S'[<gluon.html.XML object at 0xa020bac>, <gluon.html.XML object at 0xa020d0c>]'
+p175
+sS'last_posts'
+p176
+S"[['jqpuzzle', datetime.datetime(2011, 3, 24, 9, 22, 45), <gluon.html.XML object at 0xa13e36c>], ['financial_situation', datetime.datetime(2011, 3, 16, 9, 30), <gluon.html.XML object at 0xa13e38c>], ['b_home', datetime.datetime(2011, 3, 12, 19, 25, 5), <gluon.html.XML object at 0xa13e24c>], ['b_help', datetime.datetime(2011, 3, 12, 19, 25, 5), <gluon.html.XML object at 0xa13e18c>], ['ff0000_home', datetime.datetime(2011, 3, 3, 13, 36, 32), <gluon.html.XML object at 0xa13e22c>]]"
+p177
+sS'title'
+p178
+S'"molhokwai.net - \'a\' cm/dms"'
+p179
+sS'home_page'
+p180
+S"<Row {'post_text_TCode': 'page_id_24', 'post_att...elete_record': <function <lambda> at 0xa13cbfc>}>"
+p181
+sS'menu'
+p182
+S"[['home', False, '/a/default/page/16']]"
+p183
+sS'flash'
+p184
+S"''"
+p185
+sS'theme'
+p186
+S"'ff0000'"
+p187
+sS'session_id_name'
+p188
+S"'session_id_a'"
+p189
+sS'_custom_commit'
+p190
+S'None'
+p191
+sS'session_filename'
+p192
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'"
+p193
+sg51
+S'<cStringIO.StringO object at 0xa0103e0>'
+p194
+sS'description'
+p195
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p196
+sS'session_file'
+p197
+S"<open file '/home/herve/development/workspaces/m...4c9d-bb7f-dfdc633fc264', mode 'rb+' at 0xa143f50>"
+p198
+sS'_caller'
+p199
+S'<function <lambda> at 0xa15ce2c>'
+p200
+sS'_custom_rollback'
+p201
+S'None'
+p202
+sS'pages'
+p203
+S"[['beliefs', False, '/a/default/page/15'], ['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18'], ['SMS', False, '/a/default/page/21'], ['', False, '/a/default/page/23'], ['a_home', False, '/a/default/page/24'], ['a_help', False, '/a/default/page/26'], ['help', False, '/a/default/page/27'], ['a_home', False, '/a/default/page/29'], ['siblos', False, '/a/default/page/30'], ['dev', False, '/a/default/page/31'], ['downloads', False, '/a/default/page/32'], ['themes', False, '/a/default/page/35'], ['acknowledgements', False, '/a/default/page/37'], ['test', False, '/a/default/page/38'], ['financial_situation', False, '/a/default/page/46'], ['jqpuzzle', False, '/a/default/page/49']]"
+p204
+sS'categories'
+p205
+S"[['misc', 2, '/a/default/category/misc'], ['message', 1, '/a/default/category/message']]"
+p206
+sS'name'
+p207
+S'"\'a\' cm/dms"'
+p208
+sS'auth_users'
+p209
+S'<gluon.dal.Rows object at 0xa33ac4c>'
+p210
+sS'help_page'
+p211
+S"<Row {'post_text_TCode': 'page_id_26', 'post_att...elete_record': <function <lambda> at 0xa13cc6c>}>"
+p212
+sS'session_id'
+p213
+S"'127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'"
+p214
+sS'headers'
+p215
+S"<Storage {'Expires': 'Fri, 25 Mar 2011 12:14:48 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p216
+sS'status'
+p217
+S'200'
+p218
+sS'postprocessing'
+p219
+S'[]'
+p220
+sS'base_theme'
+p221
+S'None'
+p222
+sS'view'
+p223
+S"'default/error.html'"
+p224
+ssS'locals'
+p225
+(dp226
+g5
+S"'500'"
+p227
+sS'protocol'
+p228
+S"'http'"
+p229
+sS'app_details'
+p230
+S'<__builtin__.AppDetails instance at 0xa305e8c>'
+p231
+sS'Service'
+p232
+S"<class 'gluon.tools.Service'>"
+p233
+sS'OBJECT'
+p234
+S"<class 'gluon.html.OBJECT'>"
+p235
+sS'SQLDB'
+p236
+S"<class 'gluon.dal.DAL'>"
+p237
+sg143
+S"<Storage {'_language': 'en', 'tentative_app': 'ff0000', 'auth': None}>"
+p238
+sS'LINK'
+p239
+S"<class 'gluon.html.LINK'>"
+p240
+sS'BR'
+p241
+S"<class 'gluon.html.BR'>"
+p242
+sS'local_import'
+p243
+S'<function <lambda> at 0xa15c534>'
+p244
+sS'OPTGROUP'
+p245
+S"<class 'gluon.html.OPTGROUP'>"
+p246
+sS'expressions'
+p247
+S'{\'rel_url_and_end_tags_find\': [\'[0-9]{0,1}/[-A-Za-z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\\\'\\\\.}>\\\\),\\\\"]\'], \'url_find\': [\'([0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}|...z0-9_\\\\$\\\\.\\\\+\\\\!\\\\*\\\\(\\\\),;:@&=\\\\?/~\\\\#\\\\%]*[^]\\\'\\\\.}>\\\\),\\\\"]\', r\'([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}|...ww|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+)(:[0-9]*)?\', r\'(~/|/|\\./)([-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]|\\\\)+\', r"\'\\<((mailto:)|)[-A-Za-z0-9\\.]+@[-A-Za-z0-9\\.]+"]}'
+p248
+sS'SessionManager'
+p249
+S'<class __builtin__.SessionManager at 0xa323f8c>'
+p250
+sS'link_labels'
+p251
+S"{'link_title': 'Name', 'link_url': 'URL'}"
+p252
+sS'PRE'
+p253
+S"<class 'gluon.html.PRE'>"
+p254
+sS'IS_INT_IN_RANGE'
+p255
+S"<class 'gluon.validators.IS_INT_IN_RANGE'>"
+p256
+sS'IS_LOWER'
+p257
+S"<class 'gluon.validators.IS_LOWER'>"
+p258
+sS'IS_STRONG'
+p259
+S"<class 'gluon.validators.IS_STRONG'>"
+p260
+sS'p_home_k'
+p261
+S"<lazyT '%(app)s_home'>"
+p262
+sS'Recaptcha'
+p263
+S"<class 'gluon.tools.Recaptcha'>"
+p264
+sS'cache'
+p265
+S'<gluon.cache.Cache object at 0xa15bf2c>'
+p266
+sS'IS_IN_DB'
+p267
+S"<class 'gluon.validators.IS_IN_DB'>"
+p268
+sS'TAG'
+p269
+S'<gluon.html.__TAG__ object at 0x996e44c>'
+p270
+sS'SQLField'
+p271
+S"<class 'gluon.dal.Field'>"
+p272
+sS'BODY'
+p273
+S"<class 'gluon.html.BODY'>"
+p274
+sS'IS_DATE_IN_RANGE'
+p275
+S"<class 'gluon.validators.IS_DATE_IN_RANGE'>"
+p276
+sS'TH'
+p277
+S"<class 'gluon.html.TH'>"
+p278
+sS'URL'
+p279
+S'<function _URL at 0xa15cfb4>'
+p280
+sS'db'
+p281
+S"<DAL {'auth_event': <Table {'origin': <gluon.dal..., 'id': <gluon.dal.Field object at 0xa164bec>}>}>"
+p282
+sS'auth'
+p283
+S'<gluon.tools.Auth object at 0xa16446c>'
+p284
+sS'P'
+S"<class 'gluon.html.P'>"
+p285
+sS'TFOOT'
+p286
+S"<class 'gluon.html.TFOOT'>"
+p287
+sS'ticket'
+p288
+S"'a/127.0.0.1.2011-03-25.13-14-48.1e1b65ee-d894-4c7c-9a88-142fe48a0825'"
+p289
+sS'datetime'
+p290
+S"<module 'datetime' from '/usr/local/lib/python2.5/lib-dynload/datetime.so'>"
+p291
+sS'app_themes_base_list'
+p292
+S"['0', '1', 'cms', 'pypress']"
+p293
+sS'ON'
+p294
+S'True'
+p295
+sS'OL'
+p296
+S"<class 'gluon.html.OL'>"
+p297
+sS'TEXTAREA'
+p298
+S"<class 'gluon.html.TEXTAREA'>"
+p299
+sS'MENU'
+p300
+S"<class 'gluon.html.MENU'>"
+p301
+sS'common'
+p302
+S'<__builtin__.Common instance at 0xa305eec>'
+p303
+sS'a_convert'
+p304
+S'<__builtin__.aConvert instance at 0xa305eac>'
+p305
+sS'EM'
+p306
+S"<class 'gluon.html.EM'>"
+p307
+sS'CODE'
+p308
+S"<class 'gluon.html.CODE'>"
+p309
+sS'HTTP'
+p310
+S"<class 'gluon.http.HTTP'>"
+p311
+sS'url_finders'
+p312
+S'[<_sre.SRE_Pattern object at 0x9c70280>, <_sre.SRE_Pattern object at 0x9c170c8>, <_sre.SRE_Pattern object at 0x9c951b0>, <_sre.SRE_Pattern object at 0x9c222f0>]'
+p313
+sS'log_wrapped'
+p314
+S'<function log_wrapped at 0xa30d3e4>'
+p315
+sS'HR'
+p316
+S"<class 'gluon.html.HR'>"
+p317
+sS'comment_labels'
+p318
+S"{'comment_author': 'Name', 'comment_author_email': 'Email', 'comment_author_website': 'Website', 'comment_text': 'Comment', 'post_id': 'Post ID'}"
+p319
+sS'IS_DATETIME'
+p320
+S"<class 'gluon.validators.IS_DATETIME'>"
+p321
+sS'HEAD'
+p322
+S"<class 'gluon.html.HEAD'>"
+p323
+sS'LABEL'
+p324
+S"<class 'gluon.html.LABEL'>"
+p325
+sS'cat_labels'
+p326
+S"{'category_name': 'Name'}"
+p327
+sS'META'
+p328
+S"<class 'gluon.html.META'>"
+p329
+sS'print_wrapped'
+p330
+S'<function print_wrapped at 0xa16de2c>'
+p331
+sS'SELECT'
+p332
+S"<class 'gluon.html.SELECT'>"
+p333
+sS'CENTER'
+p334
+S"<class 'gluon.html.CENTER'>"
+p335
+sS'prettydate'
+p336
+S'<function prettydate at 0x9c313ac>'
+p337
+sS'Crud'
+p338
+S"<class 'gluon.tools.Crud'>"
+p339
+sS'Utilities'
+p340
+S'<class __builtin__.Utilities at 0xa31002c>'
+p341
+sS'Auth'
+p342
+S"<class 'gluon.tools.Auth'>"
+p343
+sS'IS_EQUAL_TO'
+p344
+S"<class 'gluon.validators.IS_EQUAL_TO'>"
+p345
+sS'IS_LIST_OF'
+p346
+S"<class 'gluon.validators.IS_LIST_OF'>"
+p347
+sS'app_themes_list'
+p348
+S"['0', '1', 'cms', 'pypress', 'test#', 'test1#']"
+p349
+sS'SQLFORM'
+p350
+S"<class 'gluon.sqlhtml.SQLFORM'>"
+p351
+sS'file_labels'
+p352
+S"{'file': 'File', 'filename': 'Enter file name'}"
+p353
+sS'LOAD'
+p354
+S'<gluon.compileapp.LoadFactory object at 0xa15beac>'
+p355
+sS'redirect'
+p356
+S'<function redirect at 0x976610c>'
+p357
+sS'tentative_app'
+p358
+S"'ff0000'"
+p359
+sS'FIELDSET'
+p360
+S"<class 'gluon.html.FIELDSET'>"
+p361
+sS'__builtins__'
+p362
+S"{'ArithmeticError': <type 'exceptions.ArithmeticError'>, 'AssertionError': <type 'exceptions.AssertionError'>, 'AttributeError': <type 'exceptions.AttributeError'>, 'BaseException': <type 'exceptions.BaseException'>, 'DeprecationWarning': <type 'exceptions.DeprecationWarning'>, 'EOFError': <type 'exceptions.EOFError'>, 'Ellipsis': Ellipsis, 'EnvironmentError': <type 'exceptions.EnvironmentError'>, 'Exception': <type 'exceptions.Exception'>, 'False': False, ...}"
+p363
+sS'embed64'
+p364
+S'<function embed64 at 0x996f95c>'
+p365
+sS'INPUT'
+p366
+S"<class 'gluon.html.INPUT'>"
+p367
+sS'EMBED'
+p368
+S"<class 'gluon.html.EMBED'>"
+p369
+sS'IS_IMAGE'
+p370
+S"<class 'gluon.validators.IS_IMAGE'>"
+p371
+sS'H2'
+p372
+S"<class 'gluon.html.H2'>"
+p373
+sS'H3'
+p374
+S"<class 'gluon.html.H3'>"
+p375
+sS'H1'
+p376
+S"<class 'gluon.html.H1'>"
+p377
+sS'H6'
+p378
+S"<class 'gluon.html.H6'>"
+p379
+sS'H4'
+p380
+S"<class 'gluon.html.H4'>"
+p381
+sS'H5'
+p382
+S"<class 'gluon.html.H5'>"
+p383
+sS'UL'
+p384
+S"<class 'gluon.html.UL'>"
+p385
+sS'IS_UPPER'
+p386
+S"<class 'gluon.validators.IS_UPPER'>"
+p387
+sS'xmlescape'
+p388
+S'<function xmlescape at 0x996f374>'
+p389
+sS'IS_TIME'
+p390
+S"<class 'gluon.validators.IS_TIME'>"
+p391
+sS'Common'
+p392
+S'<class __builtin__.Common at 0xa323f5c>'
+p393
+sS'OPTION'
+p394
+S"<class 'gluon.html.OPTION'>"
+p395
+sS'TITLE'
+p396
+S"<class 'gluon.html.TITLE'>"
+p397
+sS'CRYPT'
+p398
+S"<class 'gluon.validators.CRYPT'>"
+p399
+sS'administrators_emails'
+p400
+S"['molhokwai@gmail.com', 'herve.mayou@gmail.com']"
+p401
+sS'IS_EMPTY_OR'
+p402
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p403
+sS'MARKMIN'
+p404
+S"<class 'gluon.html.MARKMIN'>"
+p405
+sS'current_language'
+p406
+S"'en'"
+p407
+sS'this_app'
+p408
+S"'a'"
+p409
+sS'AppDetails'
+p410
+S'<class __builtin__.AppDetails at 0xa323e9c>'
+p411
+sS'Struct'
+p412
+S'<class __builtin__.Struct at 0xa323fbc>'
+p413
+sS'service'
+p414
+S'<gluon.tools.Service object at 0xa1648ec>'
+p415
+sS'SCRIPT'
+p416
+S"<class 'gluon.html.SCRIPT'>"
+p417
+sS'geocode'
+p418
+S'<function geocode at 0x9c30d84>'
+p419
+sS'TABLE'
+p420
+S"<class 'gluon.html.TABLE'>"
+p421
+sS'IS_IPV4'
+p422
+S"<class 'gluon.validators.IS_IPV4'>"
+p423
+sS'IS_LENGTH'
+p424
+S"<class 'gluon.validators.IS_LENGTH'>"
+p425
+sS'XML'
+p426
+S"<class 'gluon.html.XML'>"
+p427
+sS'B'
+S"<class 'gluon.html.B'>"
+p428
+sS'IMG'
+p429
+S"<class 'gluon.html.IMG'>"
+p430
+sS'SQLTABLE'
+p431
+S"<class 'gluon.sqlhtml.SQLTABLE'>"
+p432
+sS'IS_MATCH'
+p433
+S"<class 'gluon.validators.IS_MATCH'>"
+p434
+sS'IS_ALPHANUMERIC'
+p435
+S"<class 'gluon.validators.IS_ALPHANUMERIC'>"
+p436
+sS'requested_uri'
+p437
+S'None'
+p438
+sS'SPAN'
+p439
+S"<class 'gluon.html.SPAN'>"
+p440
+sS'err'
+p441
+S"''"
+p442
+sS'IS_SLUG'
+p443
+S"<class 'gluon.validators.IS_SLUG'>"
+p444
+sS'CLEANUP'
+p445
+S"<class 'gluon.validators.CLEANUP'>"
+p446
+sS'XHTML'
+p447
+S"<class 'gluon.html.XHTML'>"
+p448
+sS'fetch'
+p449
+S'<function fetch at 0x9c30ca4>'
+p450
+sS'IS_DATE'
+p451
+S"<class 'gluon.validators.IS_DATE'>"
+p452
+sS'IS_EMAIL'
+p453
+S"<class 'gluon.validators.IS_EMAIL'>"
+p454
+sS'refresh_page'
+p455
+g73
+sS'IS_NOT_EMPTY'
+p456
+S"<class 'gluon.validators.IS_NOT_EMPTY'>"
+p457
+sg47
+S"<Storage {'function': 'error', 'body': <cStringI... 13, 14, 48, 305221), 'post_vars': <Storage {}>}>"
+p458
+sS'BEAUTIFY'
+p459
+S"<class 'gluon.html.BEAUTIFY'>"
+p460
+sS'TBODY'
+p461
+S"<class 'gluon.html.TBODY'>"
+p462
+sS'Field'
+p463
+S"<class 'gluon.dal.Field'>"
+p464
+sS'Mail'
+p465
+S"<class 'gluon.tools.Mail'>"
+p466
+sS'DIV'
+p467
+S"<class 'gluon.html.DIV'>"
+p468
+sS'LEGEND'
+p469
+S"<class 'gluon.html.LEGEND'>"
+p470
+sS'post_labels'
+p471
+S"{'post_category': 'Category', 'post_text': 'Post', 'post_text_TCode': 'Translation code (code & language texts must be set in the translation files)', 'post_time': 'Post Date', 'post_title': 'Title', 'post_type': 'Type', 'show_in_menu': 'Show in menu'}"
+p472
+sS'global_site_url'
+p473
+S"'http://localhost:8001'"
+p474
+sS'http_referer'
+p475
+S'None'
+p476
+sS'json_labels'
+p477
+S"{'data': <lazyT 'data'>, 'name': <lazyT 'name'>}"
+p478
+sS'DAL'
+p479
+S"<class 'gluon.dal.DAL'>"
+p480
+sS'TT'
+p481
+S"<class 'gluon.html.TT'>"
+p482
+sS'TR'
+p483
+S"<class 'gluon.html.TR'>"
+p484
+sS'this_app_url'
+p485
+S"'http://localhost:8001/a'"
+p486
+sS'LI'
+p487
+S"<class 'gluon.html.LI'>"
+p488
+sS'IFRAME'
+p489
+S"<class 'gluon.html.IFRAME'>"
+p490
+sS'TD'
+p491
+S"<class 'gluon.html.TD'>"
+p492
+sS'PluginManager'
+p493
+S"<class 'gluon.tools.PluginManager'>"
+p494
+sS'IS_URL'
+p495
+S"<class 'gluon.validators.IS_URL'>"
+p496
+sS'A'
+S"<class 'gluon.html.A'>"
+p497
+sS'STYLE'
+p498
+S"<class 'gluon.html.STYLE'>"
+p499
+sS'rel_url_and_end_tags_finders'
+p500
+S'[<_sre.SRE_Pattern object at 0x9ae9c80>]'
+p501
+sS'IS_DATETIME_IN_RANGE'
+p502
+S"<class 'gluon.validators.IS_DATETIME_IN_RANGE'>"
+p503
+sS'HTML'
+p504
+S"<class 'gluon.html.HTML'>"
+p505
+sS'FORM'
+p506
+S"<class 'gluon.html.FORM'>"
+p507
+sS'I'
+S"<class 'gluon.html.I'>"
+p508
+sS'crud'
+p509
+S'<gluon.tools.Crud object at 0xa16460c>'
+p510
+sS'utilities'
+p511
+S'<__builtin__.Utilities instance at 0xa305f0c>'
+p512
+sS'IS_NOT_IN_DB'
+p513
+S"<class 'gluon.validators.IS_NOT_IN_DB'>"
+p514
+sS'aConvert'
+p515
+S'<class __builtin__.aConvert at 0xa323ecc>'
+p516
+sS'app_config'
+p517
+S'<Row {\'APP_METAS\': ["\'a\' cm/dms", "molhokwai.net...elete_record\': <function <lambda> at 0xa16d56c>}>'
+p518
+sS'path_info'
+p519
+S"'/a/default/error'"
+p520
+sg155
+S"<Storage {'body': <cStringIO.StringO object at 0...da> at 0xa15ce2c>, 'view': 'default/error.html'}>"
+p521
+sS'THEAD'
+p522
+S"<class 'gluon.html.THEAD'>"
+p523
+sS'IS_NULL_OR'
+p524
+S"<class 'gluon.validators.IS_EMPTY_OR'>"
+p525
+sS'session_manager'
+p526
+S'<__builtin__.SessionManager instance at 0xa305ecc>'
+p527
+sS'i'
+S'5'
+sS'IS_FLOAT_IN_RANGE'
+p528
+S"<class 'gluon.validators.IS_FLOAT_IN_RANGE'>"
+p529
+sS'IS_EXPR'
+p530
+S"<class 'gluon.validators.IS_EXPR'>"
+p531
+sS'T'
+S'<gluon.languages.translator object at 0xa15bfac>'
+p532
+sS'RPXAccount'
+p533
+S"<class 'gluon.contrib.login_methods.rpx_account.RPXAccount'>"
+p534
+sS'IS_IN_SET'
+p535
+S"<class 'gluon.validators.IS_IN_SET'>"
+p536
+sS'IS_UPLOAD_FILENAME'
+p537
+S"<class 'gluon.validators.IS_UPLOAD_FILENAME'>"
+p538
+sS'p_help_k'
+p539
+S"<lazyT '%(app)s_help'>"
+p540
+sS're'
+p541
+S"<module 're' from '/usr/local/lib/python2.5/re.pyc'>"
+p542
+sS'IS_DECIMAL_IN_RANGE'
+p543
+S"<class 'gluon.validators.IS_DECIMAL_IN_RANGE'>"
+p544
+sssS'traceback'
+p545
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 188, in restricted\n    exec ccode in environment\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html", line 53, in <module>\nNameError: name \'refresh\' is not defined\n'
+p546
+s.

@@ -32,7 +32,7 @@
     <script type="text/javascript">
       var server={
           request : {
-              application : '{{=this_app}}'
+              application : '{{=(tentative_app if tentative_app else this_app)}}'
           },
           pages : []
       };
@@ -46,6 +46,9 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript">
+        if ({{=str(refresh_page).lower()}}){
+            window.location.reload();
+        }
         $(document).ready(function(){
             $('#google_translate_element').hide();
             $('#cse-search-form').hide();
@@ -179,8 +182,11 @@
                 <!-- end #body .left+.left -->
                 
                 <div id="sidebar" class="right width25pc text-alignr">
-                    <!-- #sidebar menu & content deactivated. See cms theme foreventual reactivation -->
-                    {{include "themes/%s/sidebar/%s.html" % (response.theme, request.application)}}                
+                    <div id="sidebar-content">
+                      <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
+                      {{include "themes/%s/sidebar/%s.html"%(response.theme, tentative_app)}}
+                    </div>
+                    <!-- end #sidebar-content -->
                 </div>
                 <!-- end #sidebar -->
                 
@@ -190,9 +196,10 @@
             <div class="clear"></div>
             
             <div id="footer" class="text-alignc font-s06em">
-                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS/Javascript/Python - webX.0 | contact: <a href="mailto:admin@molhokwai.net">admin@molhokwai.net</a>
-                    - on PyPress, a <a target="_blank" href="http://www.web2py.org">web2py<a> powered site
-                      on <a target="_blank" href="http://code.google.com/appengine">google app engine<a> 
+                    <p class="width80pc">@molhokwai.net 2011 - HTML/CSS/Javascript/Python - webX.0 | contact: {{=A(T('admin@molhokwai.net'), __href='mailto:admin@molhokwai.net')}}
+                    - on PyPress, a {{=A(T('web2py'), _target="_blank", _href='http://www.web2py.org')}} powered site
+                      on {{=A(T('google app engine'), _target="_blank", _href='http://code.google.com/appengine')}}
+                      |  {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
                   </p>
             </div>
             <!-- end #footer -->

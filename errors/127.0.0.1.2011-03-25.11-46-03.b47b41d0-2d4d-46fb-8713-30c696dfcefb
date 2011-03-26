@@ -1,0 +1,506 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'
+p4
+sS'code'
+p5
+S'response.write(\'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\\n<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="\', escape=False)\nresponse.write(T.accepted_language or \'en\')\nresponse.write(\'">\\n\\n  <head>\\n    <title>\', escape=False)\nif response.title:\n    response.write(response.title)\nelse:\n    response.write(URL(r=request))\n    pass\nresponse.write(\'</title>\\n\\n    <title>\', escape=False)\nresponse.write(response.title or request.application)\nresponse.write(\'</title>\\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\\n    <meta name="keywords" content="\', escape=False)\nresponse.write(response.keywords)\nresponse.write(\'" />\\n    <meta name="description" content="\', escape=False)\nresponse.write(response.description)\nresponse.write(\'" />\\n    <meta name="google-site-verification" content="r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8" />\\n    \', escape=False)\nif response.refresh:\n    response.write(XML(response.refresh))\n    pass\nresponse.write(\'\\n    \\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/_base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/base.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/css/themes/\', escape=False)\nresponse.write(response.theme)\nresponse.write(\'/base.css" type="text/css" media="screen" />\\n    \', escape=False)\nif response.child_theme and response.theme_stylesheet:\n    response.write(\'\\n        <link rel="stylesheet" href="\', escape=False)\n    response.write(response.theme_stylesheet)\n    response.write(\'" media="screen" />\\n    \', escape=False)\n    pass\nresponse.write(\'\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/style.css" type="text/css" media="screen" />\\n    <link rel="stylesheet" href="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />\\n    <style type="text/css"></style>\\n    \\n    \', escape=False)\nresponse.write(\'<script type="text/javascript">\\n<!--\\n/*\\nWritten by Massimo Di Pierro.\\n\\nThis is a minimalistic AJAX for web2py, for more sophisticated stuff\\nyou should use Scriptacolous or some other AJAX toolkit. Anyway...\\n\\nTo use web2py_ajax.html just make sure you include \\\'web2py_ajax.html\\\'\\nin your layout.html. This provides four functions:\\n\\npopup(url)\\ncollapse(id)\\nfade(id,value) // try value= +0.1 or -0.1\\najax(url,sources,taget) \\n// will send sources[i].value to url and dispaly result in target\\n*/\\n\\nfunction popup(url) {\\n  newwindow=window.open(url,\\\'name\\\',\\\'height=400,width=600\\\');\\n  if (window.focus) {newwindow.focus()}\\n  return false;\\n}\\n\\nfunction collapse(id) {\\n   if(this.document.getElementById(id).style.display=="none")\\n   (this.document.getElementById(id).style.display="block") ;\\n   else (this.document.getElementById(id).style.display="none") ;\\n}\\n\\nfunction fade(id,value) {\\n  var object=document.getElementById(id);\\n  if(value<0 && !object.style.opacity) {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity=1;\\n  }\\n  if(value>0 && object.style.opacity>=1) object.style.opacity=1;\\n  else if(value<0 && object.style.opacity<=0) {\\n     this.document.getElementById(id).style.display="none";\\n     object.style.opacity=0;\\n  }\\n  else {\\n     this.document.getElementById(id).style.display="block";\\n     object.style.opacity-=-value;\\n     setTimeout(function(){fade(id,value);},100);\\n     return false;\\n  }\\n  return true;\\n}\\n\\nfunction ajax(url,sources,target) {\\n  var req = null; \\n  var ctarget=document.getElementById(target);\\n  window.status="connecting...";\\n  if(window.XMLHttpRequest)\\n     req = new XMLHttpRequest(); \\n  else if (window.ActiveXObject)\\n     req  = new ActiveXObject("Microsoft.XMLHTTP");\\n  req.onreadystatechange = function() {\\n     window.status="waiting...";\\n     if(req.readyState == 4)\\n       if(req.status == 200) {\\n          window.status=\\\'Ajax Done!\\\'\\n          try { \\n             ctarget.innerHTML=req.responseText; \\n             try {ctarget.scrollTop=ctarget.scrollHeight-ctarget.clientHeight;}\\n             catch(err) {}\\n          } catch(err) { ctarget.value=req.responseText; }\\n       } else alert("AJAX Error: " + req.status);\\n  }\\n  var query=""\\n  for(i=0; i<sources.length; i++) {\\n     if(i>0) query=query+"&";\\n     query=query+encodeURIComponent(sources[i])+"="+encodeURIComponent(document.getElementById(sources[i]).value);\\n  }\\n  req.open("POST",url,true); \\n  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); \\n  req.send(query); \\n} \\n//-->\\n</script>\', escape=False)\nresponse.write(\'\\n\\n    <script type="text/javascript">\\n      var server={\\n          request : {\\n              application : \\\'\', escape=False)\nresponse.write((tentative_app if tentative_app else this_app))\nresponse.write(\'\\\'\\n          },\\n          pages : []\\n      };\\n    </script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/net.molhokwai/molhokwai.common.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/jquery/jquery-1.4.2.min.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/jquery/add-ons.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/markitup/jquery.markitup.js"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/custom/script.js"></script>\\n    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>\\n    <script type="text/javascript" src="/\', escape=False)\nresponse.write(this_app)\nresponse.write(\'/static/components/google/search_init.js"></script>\\n    <script type="text/javascript">\\n      $(document).ready(function(){\\n          var browser_not=true;\\n          try { \\n              browser_not=!($.browser.mozilla || $.browser.webkit); \\n          }\\n          catch(e) {} \\n          if (browser_not){\\n              $(\\\'#content\\\').append(\\\'<div class="text-alignc margt5pc"><em>\', escape=False)\nresponse.write(T("(Graphical design not tested (corrected) on this browser...)"))\nresponse.write(\'</em></div>\\\');\\n          }\\n      });      \\n    </script>\\n\\n  </head>\\n\\n  <body>\\n\\n    <div id="wrapper" class="margt2pc  width60pc">\\n\\n      <div id="user-menu" class="right">\\n         \', escape=False)\nif \'auth\' in globals():\n    response.write(\'\\n           \', escape=False)\n    if not auth.user:\n        response.write(\' \\n             \', escape=False)\n        response.write(A(T(\'login\'),_href=URL(r=request,c=\'default\',f=\'user/login\')))\n        response.write(\'\\n           \', escape=False)\n    else:\n        response.write(\'\\n             <!-- \', escape=False)\n        response.write(auth.user.display_name)\n        response.write(\' -->\\n             \', escape=False)\n        response.write(A(T(\'logout\'),_href=URL(r=request,c=\'default\',f=\'user/logout\')))\n        response.write(\' | \\n           \', escape=False)\n        pass\n    response.write(\'\\n         \', escape=False)\n    pass\nresponse.write(\'\\n      </div>\\n      <!-- end #user-menu -->\\n\\n      <div id="cli_web" class="left margt2pc  width100pc">\\n        <form onsubmit="return false;">\\n            <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>\\n            <font id="_cmd_msg" class="flash small">\\n                \', escape=False)\nif session.cli_web_flash:\n    response.write(session.cli_web_flash)\n    session.cli_web_flash=False\n    pass\nresponse.write(\'\\n                \', escape=False)\nflash = session.flash if session.flash else response.flash\nresponse.write(\'\\n                \', escape=False)\nif flash:\n    response.write(XML(flash))\n    pass\nresponse.write(\'\\n            </font>\\n            <input type="hidden" id="_cmd_history_cur" value="-1"/>\\n        </form>\\n      </div>\\n      <!-- end #cli_web -->\\n    \\n      <div id="content" class="padl3pc left margt5pc width100pc">\\n        <div id="searchcontrol"></div>\\n        \', escape=False)\nresponse.write(\'\\n\\n<BLOCKQUOTE>Erreur<BR/>\\n    \', escape=False)\nif ticket:\n    response.write(\'<b>Erreur interne</b>, ticket: <a href="/admin/default/ticket/\', escape=False)\n    response.write(ticket)\n    response.write(\'" target="_blank">\', escape=False)\n    response.write(ticket)\n    response.write(\'</a><br/>\', escape=False)\n    pass\nresponse.write(\'\\n    \', escape=False)\nif code==\'400\':\n    response.write(\'<b>Page non trouv\\xc3\\xa9e</b>, la page est introuvable...<br/>\\n    \', escape=False)\nelse:\n    if code==\'403\':\n        response.write(\'<b>Non autoris\\xc3\\xa9</b>, hummmm... besoin de permissions suppl\\xc3\\xa9mentaires, ou ceci serait-il une erreur?<br/>\\n    \', escape=False)\n    else:\n        if code==\'500\':\n            response.write(\'<b>Erreur serveur</b>, il s&#39;est pass\\xc3\\xa9 quelque chose d&#39;anormal...<br/>\', escape=False)\n            pass\n        pass\n    pass\nresponse.write(\'\\n    \', escape=False)\nif requested_uri:\n    response.write(\'<b>Requ\\xc3\\xaate (uri)</b>: \', escape=False)\n    response.write(requested_uri)\n    pass\nresponse.write(\'\\n    \', escape=False)\nif err!=\'\':\n    response.write(\'<b>Erreur</b>: \', escape=False)\n    response.write(err)\n    pass\nresponse.write(\'\\n</BLOCKQUOTE>\\n<BR>\\n<BR>\\n<BLOCKQUOTE>Error<BR/>\\n    \', escape=False)\nif ticket:\n    response.write(\'<b>Internal error</b>, ticket: <a href="/admin/default/ticket/\', escape=False)\n    response.write(ticket)\n    response.write(\'" target="_blank">\', escape=False)\n    response.write(ticket)\n    response.write(\'</a>\', escape=False)\n    pass\nresponse.write(\'<br/>\\n    \', escape=False)\nif code==\'400\':\n    response.write(\'<b>Page Not Found</b>, the page is nowhere to be found...\\n    \', escape=False)\nelse:\n    if code==\'403\':\n        response.write(\'<b>Permission denied</b>, hummmm... need extra permissions, or do we have an error here?\\n    \', escape=False)\n    else:\n        if code==\'500\':\n            response.write(\'<b>Server error</b>, something baaad happened...\', escape=False)\n            pass\n        pass\n    pass\nresponse.write(\'<br/>\\n    \', escape=False)\nif requested_uri:\n    response.write(\'<b>Requested Uri</b>: \', escape=False)\n    response.write(requested_uri)\n    pass\nresponse.write(\'\\n    \', escape=False)\nif err!=\'\':\n    response.write(\'<b>Error</b>: \', escape=False)\n    response.write(err)\n    pass\nresponse.write(\'\\n</BLOCKQUOTE>\\n\', escape=False)\nresponse.write(\'\\n      </div>\\n      <!-- end #content -->\\n\\n      <div id="sidebar" class="right width30pc text-alignr">\\n        <div id="sidebar-content" class="display-none">\\n          <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->\\n          \', escape=False)\ntry:\n    include "themes/%s/sidebar/%s.html" % (response.theme, tentative_app)\nexcept Exception, ex:\n    include "themes/%s/sidebar/%s.html" % (response.theme, this_app)\n    log_wrapped(\'tentative_app error\', ex)\n    response.write(\'\\n        </div>\\n        <!-- end #sidebar-content -->\\n      </div>\\n      <!-- end #sidebar -->\\n\\n      <div id="utility" class="clear">&nbsp;</div>\\n\\n      <div id="footer">\', escape=False)\n    response.write(A(T(\'acknowledgements\'), _href=URL( r=request, c=\'default\', f=\'page\', args=[\'acknowledgements\'])))\n    response.write(\'</div>\\n        \\n    </div>\\n    <!-- end #wrapper -->\\n\\n    <div id="tracking">\\n        <script type="text/javascript" id="tracking_src">\\n            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");\\n            document.write(unescape("%3Cscript src=\\\'" + gaJsHost + "google-analytics.com/ga.js\\\' type=\\\'text/javascript\\\'%3E%3C/script%3E"));\\n        </script>\\n        <script type="text/javascript" id="tracking_process">\\n            try {\\n                var pageTracker = _gat._getTracker("UA-5101967-1");\\n                pageTracker._initData();\\n                pageTracker._trackPageview();\\n            }\\n            catch(e) {\\n                if (console) try{console.log(e);}catch(e){}\\n            }\\n        </script>\\n    </div>    \\n    <!-- end #tracking -->\\n\\n    <div id="links">\\n             \', escape=False)\n    response.write(A(T(\'add page/post\'),_href=URL(r=request,c=\'default\',f=\'add/page\'), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    _post=None\n    try: _post=post\nexcept Exception, ex: pass\nresponse.write(\'\\n             \', escape=False)\nif _post:\n    response.write(\'\\n                 \', escape=False)\n    if _post.post_type==\'page\':\n        response.write(\'\\n                     \', escape=False)\n        response.write(A(T(\'edit page/post ?\'),_href=URL(r=request,c=\'default\',f=\'edit/page/%i\' % _post.id), _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n    else:\n        response.write(\'\\n                     \', escape=False)\n        response.write(A(T(\'edit page/post ?\'),_href=URL(r=request,c=\'default\',f=\'edit/post/%i\' % _post.id), _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \', escape=False)\nif response.home_page:\n    response.write(\'\\n                 \', escape=False)\n    response.write(A(T(\'root\'),_href=URL(r=request,c=\'default\',f=\'page/%i\' % response.home_page.id), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \', escape=False)\nif response.help_page:\n    response.write(\'\\n                 \', escape=False)\n    response.write(A(T(\'help\'),_href=URL(r=request,c=\'default\',f=\'page/%i\' % response.help_page.id), _class=\'color-transparent\'))\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \\n             \', escape=False)\nresponse.write(A(T(\'links\'),_href=URL(r=request,c=\'default\',f=\'manage/link\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\nif response.links:\n    response.write(\'\\n                 \', escape=False)\n    for _name,_link,_id in response.links:\n        response.write(\'\\n                         \', escape=False)\n        response.write(A(T(_name),_href=_link, _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n             \\n             \', escape=False)\nresponse.write(A(T(\'pages\'),_href=URL(r=request,c=\'default\',f=\'pages\'), _class=\'color-transparent\'))\nresponse.write(\'\\n             \', escape=False)\nif response.pages:\n    response.write(\'\\n                 \', escape=False)\n    for _title,_false,_link in response.links:\n        response.write(\'\\n                         \', escape=False)\n        response.write(A(T(_title),_href=_link, _class=\'color-transparent\'))\n        response.write(\'\\n                 \', escape=False)\n        pass\n    response.write(\'\\n             \', escape=False)\n    pass\nresponse.write(\'\\n    </div>\\n    <!-- end #links -->\\n  \\n  </body>\\n</html>\\n\', escape=False)'
+p6
+sS'snapshot'
+p7
+(dp8
+S'exception'
+p9
+(dp10
+S'__getslice__'
+p11
+S"<method-wrapper '__getslice__' of exceptions.SyntaxError object at 0x9c03d84>"
+p12
+sS'text'
+p13
+S'\'    include "themes/%s/sidebar/%s.html" % (response.theme, tentative_app)\\n\''
+p14
+sS'__str__'
+p15
+S"<method-wrapper '__str__' of exceptions.SyntaxError object at 0x9c03d84>"
+p16
+sS'__reduce__'
+p17
+S'<built-in method __reduce__ of exceptions.SyntaxError object at 0x9c03d84>'
+p18
+sS'__dict__'
+p19
+S'{}'
+p20
+sS'__init__'
+p21
+S"<method-wrapper '__init__' of exceptions.SyntaxError object at 0x9c03d84>"
+p22
+sS'__setattr__'
+p23
+S"<method-wrapper '__setattr__' of exceptions.SyntaxError object at 0x9c03d84>"
+p24
+sS'__reduce_ex__'
+p25
+S'<built-in method __reduce_ex__ of exceptions.SyntaxError object at 0x9c03d84>'
+p26
+sS'__new__'
+p27
+S'<built-in method __new__ of type object at 0x8239bc0>'
+p28
+sS'__class__'
+p29
+S"<type 'exceptions.SyntaxError'>"
+p30
+sS'filename'
+p31
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'"
+p32
+sS'lineno'
+p33
+S'146'
+p34
+sS'msg'
+p35
+S"'invalid syntax'"
+p36
+sS'__doc__'
+p37
+S"'Invalid syntax.'"
+p38
+sS'__getitem__'
+p39
+S"<method-wrapper '__getitem__' of exceptions.SyntaxError object at 0x9c03d84>"
+p40
+sS'__setstate__'
+p41
+S'<built-in method __setstate__ of exceptions.SyntaxError object at 0x9c03d84>'
+p42
+sS'__getattribute__'
+p43
+S"<method-wrapper '__getattribute__' of exceptions.SyntaxError object at 0x9c03d84>"
+p44
+sS'print_file_and_line'
+p45
+S'None'
+p46
+sS'args'
+p47
+S'(\'invalid syntax\', (\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html\', 146, 39, \'    include "themes/%s/sidebar/%s.html" % (response.theme, tentative_app)\\n\'))'
+p48
+sS'offset'
+p49
+S'39'
+p50
+sS'__delattr__'
+p51
+S"<method-wrapper '__delattr__' of exceptions.SyntaxError object at 0x9c03d84>"
+p52
+sS'__repr__'
+p53
+S"<method-wrapper '__repr__' of exceptions.SyntaxError object at 0x9c03d84>"
+p54
+sS'__hash__'
+p55
+S"<method-wrapper '__hash__' of exceptions.SyntaxError object at 0x9c03d84>"
+p56
+ssS'evalue'
+p57
+S'invalid syntax (error.html, line 146)'
+p58
+sS'request'
+p59
+(dp60
+S'function'
+p61
+S"'error'"
+p62
+sS'body'
+p63
+S'<cStringIO.StringO object at 0x9d59060>'
+p64
+sS'wsgi'
+p65
+S"<Storage {'start_response': <function <lambda> a...ING': 'gzip,deflate', 'HTTP_KEEP_ALIVE': '115'}}>"
+p66
+sS'extension'
+p67
+S"'html'"
+p68
+sS'vars'
+p69
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-25.11-4...l': '/a/default/error', 'requested_uri': 'None'}>"
+p70
+sS'cid'
+p71
+S'None'
+p72
+sS'url'
+p73
+S'<gluon.html.XML object at 0x9d591ac>'
+p74
+sS'raw_extension'
+p75
+S'None'
+p76
+sg47
+S'[]'
+p77
+sS'controller'
+p78
+S"'default'"
+p79
+sS'cookies'
+p80
+S"<SimpleCookie: blogger_languages='fr' session_id...-986760c0-2cfe-4286-b685-ae791a760077' theme='1'>"
+p81
+sS'application'
+p82
+S"'a'"
+p83
+sS'ajax'
+p84
+S'False'
+p85
+sS'client'
+p86
+S"'127.0.0.1'"
+p87
+sS'env'
+p88
+S"<Storage {'wsgi_multithread': True, 'http_accept...nput': <socket._fileobject object at 0x9cd01ec>}>"
+p89
+sS'raw_args'
+p90
+S'None'
+p91
+sS'get_vars'
+p92
+S"<Storage {'ticket': 'a/127.0.0.1.2011-03-25.11-4...l': '/a/default/error', 'requested_uri': 'None'}>"
+p93
+sS'folder'
+p94
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/'"
+p95
+sS'now'
+p96
+S'datetime.datetime(2011, 3, 25, 11, 46, 3, 533674)'
+p97
+sS'post_vars'
+p98
+S'<Storage {}>'
+p99
+ssS'frames'
+p100
+(lp101
+(dp102
+S'file'
+p103
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p104
+sS'dump'
+p105
+(dp106
+S'code'
+p107
+S'\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\''
+p108
+sS'layer'
+p109
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'"
+p110
+sS'global compile2'
+p111
+S'<function compile2 at 0x95db534>'
+p112
+sS'ccode'
+p113
+S'undefined'
+p114
+ssS'lnum'
+p115
+I186
+sS'lines'
+p116
+(dp117
+I181
+S''
+sI182
+S'    try:'
+p118
+sI183
+S'        if type(code) == types.CodeType:'
+p119
+sI184
+S'            ccode = code'
+p120
+sI185
+S'        else:'
+p121
+sI186
+S'            ccode = compile2(code,layer)'
+p122
+sI187
+S''
+sI188
+S'        exec ccode in environment'
+p123
+sI189
+S'    except HTTP:'
+p124
+sI190
+S'        raise'
+p125
+ssS'call'
+p126
+S'(code=\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\', environment={\'A\': <class \'gluon.html.A\'>, \'AppDetails\': <class __builtin__.AppDetails at 0x9a5f6bc>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'CENTER\': <class \'gluon.html.CENTER\'>, \'CLEANUP\': <class \'gluon.validators.CLEANUP\'>, \'CODE\': <class \'gluon.html.CODE\'>, ...}, layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html\')'
+p127
+sS'func'
+p128
+S'restricted'
+p129
+sa(dp130
+g103
+S'/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py'
+p131
+sg105
+(dp132
+S'builtincompile'
+p133
+S'<built-in function compile>'
+p134
+sS'code'
+p135
+S'\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\''
+p136
+sS'code.rstrip'
+p137
+S'<built-in method rstrip of str object at 0x9fc6868>'
+p138
+sS').replace'
+p139
+g114
+sS'layer'
+p140
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'"
+p141
+ssg115
+I173
+sg116
+(dp142
+I168
+S''
+sI169
+S'def compile2(code,layer):'
+p143
+sI170
+S'    """'
+p144
+sI171
+S"    The +'\\n' is necessary else compile fails when code ends in a comment."
+p145
+sI172
+S'    """'
+p146
+sI173
+S"    return compile(code.rstrip().replace('\\r\\n','\\n')+'\\n', layer, 'exec')"
+p147
+sI174
+S''
+sI175
+S"def restricted(code, environment={}, layer='Unknown'):"
+p148
+sI176
+S'    """'
+p149
+sI177
+S'    runs code in environment and returns the output. if an exception occurs'
+p150
+ssg126
+S'(code=\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\', layer=\'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html\')'
+p151
+sg128
+S'compile2'
+p152
+sasS'pyver'
+p153
+S'Python 2.5.1: /usr/local/bin/python'
+p154
+sS'session'
+p155
+(dp156
+S'_language'
+p157
+S"'en'"
+p158
+sS'auth'
+p159
+S'None'
+p160
+ssS'etype'
+p161
+S"<type 'exceptions.SyntaxError'>"
+p162
+sS'date'
+p163
+S'Fri Mar 25 11:46:03 2011'
+p164
+sS'response'
+p165
+(dp166
+S'_vars'
+p167
+S"{'code': '500', 'err': '', 'requested_uri': None, 'ticket': 'a/127.0.0.1.2011-03-25.11-46-03.68952d9c-17f0-4433-8557-2b03520d53bc'}"
+p168
+sg80
+S"<SimpleCookie: session_id_a='127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'>"
+p169
+sS'links'
+p170
+S"[['web2py', 'http://www.web2py.com', 1], ['Python', 'http://www.python.org', 2], ['DePaul CTI', 'http://www.cs.depaul.edu', 3], ['DePaul University', 'http://www.depaul.edu', 5], ['downloads', '/a/default/page/32', 15], ['media / picasa / gallery', '/a/media/picasa/gallery', 16], ['manage media / manage picasa albums / manage photos', '/a/media/picasa/albums', 17], ['setup, application initialization', '/a/setup', 18], ['twitter', '/a/media/social/twitter', 19]]"
+p171
+sS'posts'
+p172
+S'<gluon.dal.Rows object at 0xa62876c>'
+p173
+sS'themes'
+p174
+S"['0', '1', 'cms', 'pypress', 'test#:#0#:#http://localhost/css/base.css#:#molhokwai@gmail.com', 'test1#:#0#:#http://localhost/css/base1.css#:#herve.mayou@gmail.com']"
+p175
+sS'theme_stylesheet'
+p176
+S'None'
+p177
+sS'meta'
+p178
+S'<Storage {}>'
+p179
+sS'_view_environment'
+p180
+S"{'A': <class 'gluon.html.A'>, 'AppDetails': <class __builtin__.AppDetails at 0x9a5f6bc>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'CENTER': <class 'gluon.html.CENTER'>, 'CLEANUP': <class 'gluon.validators.CLEANUP'>, 'CODE': <class 'gluon.html.CODE'>, ...}"
+p181
+sS'keywords'
+p182
+S"'blog, weblog, journal, web, log, web2py, pypress...straight-forward, direct, programming, programmer'"
+p183
+sS'files'
+p184
+S'[]'
+p185
+sS'last_posts'
+p186
+S"[['jqpuzzle', datetime.datetime(2011, 3, 24, 9, 22, 45), <gluon.html.XML object at 0xa49e58c>], ['financial_situation', datetime.datetime(2011, 3, 16, 9, 30), <gluon.html.XML object at 0xa49ed8c>], ['b_home', datetime.datetime(2011, 3, 12, 19, 25, 5), <gluon.html.XML object at 0xa49eb0c>], ['b_help', datetime.datetime(2011, 3, 12, 19, 25, 5), <gluon.html.XML object at 0xa49eecc>], ['ff0000_home', datetime.datetime(2011, 3, 3, 13, 36, 32), <gluon.html.XML object at 0xa49e12c>]]"
+p187
+sS'title'
+p188
+S'"molhokwai.net - \'a\' cm/dms"'
+p189
+sS'home_page'
+p190
+S"<Row {'post_text_TCode': 'page_id_24', 'post_att...elete_record': <function <lambda> at 0x9d48bfc>}>"
+p191
+sS'menu'
+p192
+S"[['home', False, '/a/default/page/16']]"
+p193
+sS'flash'
+p194
+S"''"
+p195
+sS'theme'
+p196
+S"'1'"
+p197
+sS'session_id_name'
+p198
+S"'session_id_a'"
+p199
+sS'_custom_commit'
+p200
+S'None'
+p201
+sS'session_filename'
+p202
+S"'/home/herve/development/workspaces/molhokwai.net...ns/127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'"
+p203
+sg63
+S'<cStringIO.StringO object at 0xa3c4ee0>'
+p204
+sS'description'
+p205
+S'"molhokwai.net - \'a\' cm/dms, lightweight, simple, straight & direct"'
+p206
+sS'session_file'
+p207
+S"<open file '/home/herve/development/workspaces/m...4c9d-bb7f-dfdc633fc264', mode 'rb+' at 0xa7498d8>"
+p208
+sS'_caller'
+p209
+S'<function <lambda> at 0xa4897d4>'
+p210
+sS'_custom_rollback'
+p211
+S'None'
+p212
+sS'pages'
+p213
+S"[['beliefs', False, '/a/default/page/15'], ['home', False, '/a/default/page/16'], ['community', False, '/a/default/page/18'], ['SMS', False, '/a/default/page/21'], ['', False, '/a/default/page/23'], ['a_home', False, '/a/default/page/24'], ['a_help', False, '/a/default/page/26'], ['help', False, '/a/default/page/27'], ['a_home', False, '/a/default/page/29'], ['siblos', False, '/a/default/page/30'], ['dev', False, '/a/default/page/31'], ['downloads', False, '/a/default/page/32'], ['themes', False, '/a/default/page/35'], ['acknowledgements', False, '/a/default/page/37'], ['test', False, '/a/default/page/38'], ['financial_situation', False, '/a/default/page/46'], ['jqpuzzle', False, '/a/default/page/49']]"
+p214
+sS'categories'
+p215
+S"[['misc', 2, '/a/default/category/misc'], ['message', 1, '/a/default/category/message']]"
+p216
+sS'name'
+p217
+S'"\'a\' cm/dms"'
+p218
+sS'auth_users'
+p219
+S'<gluon.dal.Rows object at 0xa5052ec>'
+p220
+sS'help_page'
+p221
+S"<Row {'post_text_TCode': 'page_id_26', 'post_att...elete_record': <function <lambda> at 0x9d4895c>}>"
+p222
+sS'session_id'
+p223
+S"'127.0.0.1-d0b66a24-6381-4c9d-bb7f-dfdc633fc264'"
+p224
+sS'headers'
+p225
+S"<Storage {'Expires': 'Fri, 25 Mar 2011 10:46:03 ...he, must-revalidate, post-check=0, pre-check=0'}>"
+p226
+sS'status'
+p227
+S'200'
+p228
+sS'postprocessing'
+p229
+S'[]'
+p230
+sS'base_theme'
+p231
+S'None'
+p232
+sS'view'
+p233
+S"'default/error.html'"
+p234
+ssS'locals'
+p235
+(dp236
+g3
+S"'/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html'"
+p237
+sg5
+S'\'response.write(\\\'<!DOCTYPE html PUBLIC "-//W3C//D...nks -->\\\\n  \\\\n  </body>\\\\n</html>\\\\n\\\', escape=False)\''
+p238
+sssS'traceback'
+p239
+S'Traceback (most recent call last):\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 186, in restricted\n    ccode = compile2(code,layer)\n  File "/home/herve/development/workspaces/molhokwai.net/web/gluon/restricted.py", line 173, in compile2\n    return compile(code.rstrip().replace(\'\\r\\n\',\'\\n\')+\'\\n\', layer, \'exec\')\n  File "/home/herve/development/workspaces/molhokwai.net/web/applications/a/views/default/error.html", line 146\n    include "themes/%s/sidebar/%s.html" % (response.theme, tentative_app)\n                                      ^\nSyntaxError: invalid syntax\n'
+p240
+s.

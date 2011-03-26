@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{=T.accepted_language or 'en'}}">
+
+  <head>
+    <title>{{if response.title:}}{{=response.title}}{{else:}}{{=URL(r=request)}}{{pass}}</title>
+
+    <title>{{=response.title or request.application}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content="{{=response.keywords}}" />
+    <meta name="description" content="{{=response.description}}" />
+    <meta name="google-site-verification" content="r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8" />
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
+    
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+    {{if response.child_theme and response.theme_stylesheet:}}
+        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+    {{pass}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
+    <style type="text/css"></style>
+    
+    {{include 'web2py_ajax.html'}}
+
+    <script type="text/javascript">
+      var server={
+          request : {
+              application : '{{=(tentative_app if tentative_app else this_app)}}'
+          },
+          pages : []
+      };
+    </script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          var browser_not=true;
+          try { 
+              browser_not=!($.browser.mozilla || $.browser.webkit); 
+          }
+          catch(e) {} 
+          if (browser_not){
+              $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
+          }
+      });      
+    </script>
+
+  </head>
+
+  <body>
+
+    <div id="wrapper" class="margt2pc  width60pc">
+
+      <div id="user-menu" class="right">
+         {{ if 'auth' in globals():}}
+           {{if not auth.user:}} 
+             {{=A(T('login'),_href=URL(r=request,c='default',f='user/login'))}}
+           {{else:}}
+             <!-- {{=auth.user.display_name}} -->
+             {{=A(T('logout'),_href=URL(r=request,c='default',f='user/logout'))}} | 
+           {{pass}}
+         {{pass}}
+      </div>
+      <!-- end #user-menu -->
+
+      <div id="cli_web" class="left margt2pc  width100pc">
+        <form onsubmit="return false;">
+            <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>
+            <font id="_cmd_msg" class="flash small">
+                {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
+                {{flash = session.flash if session.flash else response.flash}}
+                {{if flash:}}{{=XML(flash)}}{{pass}}
+            </font>
+            <input type="hidden" id="_cmd_history_cur" value="-1"/>
+        </form>
+      </div>
+      <!-- end #cli_web -->
+    
+      <div id="content" class="padl3pc left margt5pc width100pc">
+        <div id="searchcontrol"></div>
+        {{include}}
+      </div>
+      <!-- end #content -->
+
+      <div id="sidebar" class="right width30pc text-alignr">
+        <div id="sidebar-content" class="display-none">
+          <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
+          {{include "themes/%s/sidebar/%s.html" % (response.theme, this_app)}}
+        </div>
+        <!-- end #sidebar-content -->
+      </div>
+      <!-- end #sidebar -->
+
+      <div id="utility" class="clear">&nbsp;</div>
+
+      <div id="footer">{{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}</div>
+        
+    </div>
+    <!-- end #wrapper -->
+
+    <div id="tracking">
+        <script type="text/javascript" id="tracking_src">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript" id="tracking_process">
+            try {
+                var pageTracker = _gat._getTracker("UA-5101967-1");
+                pageTracker._initData();
+                pageTracker._trackPageview();
+            }
+            catch(e) {
+                if (console) try{console.log(e);}catch(e){}
+            }
+        </script>
+    </div>    
+    <!-- end #tracking -->
+
+    <div id="links">
+             {{=A(T('add page/post'),_href=URL(r=request,c='default',f='add/page'), _class='color-transparent')}}
+             {{
+                 _post=None
+                 try: _post=post
+                 except Exception, ex: pass
+             }}
+             {{if _post:}}
+                 {{if _post.post_type=='page':}}
+                     {{=A(T('edit page/post ?'),_href=URL(r=request,c='default',f='edit/page/%i' % _post.id), _class='color-transparent')}}
+                 {{else:}}
+                     {{=A(T('edit page/post ?'),_href=URL(r=request,c='default',f='edit/post/%i' % _post.id), _class='color-transparent')}}
+                 {{pass}}
+             {{pass}}
+             {{if response.home_page:}}
+                 {{=A(T('root'),_href=URL(r=request,c='default',f='page/%i' % response.home_page.id), _class='color-transparent')}}
+             {{pass}}
+             {{if response.help_page:}}
+                 {{=A(T('help'),_href=URL(r=request,c='default',f='page/%i' % response.help_page.id), _class='color-transparent')}}
+             {{pass}}
+             
+             {{=A(T('links'),_href=URL(r=request,c='default',f='manage/link'), _class='color-transparent')}}
+             {{if response.links:}}
+                 {{for _name,_link,_id in response.links:}}
+                         {{=A(T(_name),_href=_link, _class='color-transparent')}}
+                 {{pass}}
+             {{pass}}
+             
+             {{=A(T('pages'),_href=URL(r=request,c='default',f='pages'), _class='color-transparent')}}
+             {{if response.pages:}}
+                 {{for _title,_false,_link in response.links:}}
+                         {{=A(T(_title),_href=_link, _class='color-transparent')}}
+                 {{pass}}
+             {{pass}}
+    </div>
+    <!-- end #links -->
+  
+  </body>
+</html>
