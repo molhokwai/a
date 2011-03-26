@@ -88,6 +88,7 @@ path_info = request.get('env')['path_info']
 http_referer = None
 
 this_app = path_info.split('/')[1]
+this_app_url= global_site_url + '/%s' % this_app
 tentative_app = session.tentative_app
 if 'http_referer' in request.get('env'):
     import re
@@ -97,20 +98,14 @@ if 'http_referer' in request.get('env'):
         session.tentative_app = http_referer.replace(global_site_url, '').split('/')[1]
 if session.tentative_app:
     if tentative_app != session.tentative_app:
+        try: cache.ram.flush_all()
+        except Exception, ex: pass
         refresh_page = True
     else:
         tentative_app = session.tentative_app
 elif not tentative_app:
     tentative_app = this_app
 
-this_app_url= global_site_url + '/%s' % this_app
-
-print ''
-print '-----------| path_info : %s' % path_info
-print '-----------| http_referer : %s' % http_referer
-print '-----------| tentative_app : %s' % tentative_app
-print '-----------| session.tentative_app : %s' % session.tentative_app
-print '-----------| refresh_page : %s' % str(refresh_page).lower()
 
 
 #########################################################################

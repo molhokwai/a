@@ -106,6 +106,8 @@
       <div id="footer">
           {{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}
           {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+          {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
+          {{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}
       </div>
         
     </div>

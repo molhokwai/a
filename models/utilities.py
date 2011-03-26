@@ -237,6 +237,7 @@ class Utilities():
 # instance
 utilities=Utilities()
 
+
 ########################
 ## Print, Log Wrapper
 ########################
@@ -251,6 +252,13 @@ def log_wrapped(_name, _value):
     else:
         print_wrapped(_name, _value)
         
+
+########################
+## Application Objects 
+########################
+app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped,'utilities':utilities,'tentative_app':tentative_app})
+
+
 #########################################################################
 ## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting
 #########################################################################

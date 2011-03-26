@@ -200,6 +200,8 @@
                     - on PyPress, a {{=A(T('web2py'), _target="_blank", _href='http://www.web2py.org')}} powered site
                       on {{=A(T('google app engine'), _target="_blank", _href='http://code.google.com/appengine')}}
                       |  {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+                      |  {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
+                      |  {{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}
                   </p>
             </div>
             <!-- end #footer -->

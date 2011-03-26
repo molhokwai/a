@@ -204,7 +204,9 @@
                     <div class="clear"></div>
                   </div>
                   <!-- end #molhokwai-addthis -->
-             <br/>| {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+                  | {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+                  | {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
+                  | {{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}
           </div>
           <!-- end #footer -->
 
