@@ -248,21 +248,16 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     response.links = items
     
     # Theme
-    response.themes=app_details.themes_base_list
-    if app_config and app_config.APP_THEMES:
-        response.themes=app_config.APP_THEMES
+    response.themes=utilities.get_themes_names(themes_list=app_details.themes_list)
         
+    response.theme = '0'
     if request.vars.theme:
         response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
-    
-    response.theme = '0'
-    if app_objects.tentative_app in response.themes:
-        response.theme = app_objects.tentative_app
-
-    if request.vars.theme:
-        response.theme = request.vars.theme
+        response.theme = utilities.get_from_theme('name', theme_sstruct=request.vars.theme) \
+			 if request.vars.theme.find('#:#')>0 else request.vars.theme 
+	log_wrapped('response.theme', response.theme)
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 
@@ -273,9 +268,12 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     if base_theme != response.theme:
         response.child_theme = response.theme
         response.theme = base_theme
-        response.theme_stylesheet = utilities.get_from_theme('stylesheet', name=response.child_theme)
+        response.theme_stylesheet = utilities.get_from_theme('stylesheet', theme_name=response.child_theme)
+        response.theme_sidebar = utilities.get_from_theme('sidebar', theme_name=response.child_theme)
+    else:
+        response.theme_sidebar = utilities.get_from_theme('sidebar', theme_name=response.theme)
 
-    if response.theme is None:
-        response.theme = '0'
+    if request.vars.theme_sidebar:
+        response.theme_sidebar = request.vars.theme_sidebar
 
     return page_helper, post_helper

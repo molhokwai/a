@@ -3,10 +3,9 @@
 ###################################
 try:
     exec('from applications.%s.modules import common' % this_app)
-    app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped,'utilities':utilities})
     page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
-    log_wrapped('Er', ex)
+    log_wrapped('Er (%s/controllers/default.py:9' % this_app, ex)
 
 
 ###################################
@@ -24,11 +23,12 @@ def index():
             redirect(URL(r=request, c='setup'))
     else:
       if a_convert.to_int(request.args[0]):
-          return dict(posts = db(db.posts.id == int(request.args[0])).select())
+          return dict(posts = utilities.posts_replace_serverside_output_values(db(db.posts.id == int(request.args[0])).select()))
       else:
           posts=db(db.posts.post_title == request.args[0]).select()
           if not posts:
               posts = filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0,response.posts)
+              posts = utilities.posts_replace_serverside_output_values(posts)
           return dict(posts = posts)          
       
 
@@ -39,8 +39,11 @@ def post():
     post_id = int(request.args[0])
     post = db(db.posts.id == post_id).select()[0]
     
-    if post and post.auth_requires_login and not auth.user:
-        redirect(URL(r = request, f = 'user', args = ['login']))
+    if post: 
+        if post.auth_requires_login and not auth.user:
+            redirect(URL(r = request, f = 'user', args = ['login']))
+            
+        post.post_text = utilities.replace_serverside_output_values(post.post_text)
 
     comments = db(db.comments.post_id == post_id).select(db.comments.ALL)
     comment_count = len(db(db.comments.post_id == post_id).select(db.comments.ALL))
@@ -74,11 +77,15 @@ def page():
                     post = db(db.posts.id == int(pg[2].replace('/%s/default/page/' % this_app, ''))).select()
                 if post: post = post[0]
                 
-            if post and post.auth_requires_login and not auth.user:
-                redirect(URL(r = request, f = 'user', args = ['login']))
+            if post:
+                if post.auth_requires_login and not auth.user:
+                    redirect(URL(r = request, f = 'user', args = ['login']))
             
-            nake=(request.args[len(request.args)-1]=='nake'
-                 or post.post_text.find('<!-- nake page -->')>=0)
+                nake=(request.args[len(request.args)-1]=='nake'
+                     or post.post_text.find('<!-- nake page -->')>=0)
+            
+                post.post_text = utilities.replace_serverside_output_values(post.post_text)
+
         
             return dict(post = post, nake  = nake)
         else:
@@ -116,7 +123,7 @@ def category():
         filter(fp,posts)
 
         response.sidebar_note = T("You are currently browsing the archives for the %(cat_name)s category.",dict(cat_name=cat_name))
-        return dict(posts = posts)
+        return dict(posts = utilities.posts_replace_serverside_output_values(posts))
     except:
         redirect(URL(r = request,f = 'index'))
 
@@ -466,8 +473,9 @@ def error():
 
 @auth.requires_login()
 def upload():
+    """ original code from http://www.google.be/search?sourceid=chrome&ie=UTF-8&q=host2py """
     form=SQLFORM(db.files, fields=['file'])
-    if request.vars.file:
+    if 'file' in request.post_vars:
         form.vars.filename = request.vars.file.filename
         form.vars.user = auth.user.id
     if form.accepts(request.vars): 
@@ -476,8 +484,11 @@ def upload():
 
 @auth.requires_login()
 def files():
+    """ original code from http://www.google.be/search?sourceid=chrome&ie=UTF-8&q=host2py """
+    db(db.files.id>0).update(user = auth.user.id)
     if 'del' in request.get_vars:
         db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['del'])).delete()
+        session.flash = T('File deleted')
         redirect(URL(r=request,c='default',f='files'))
     elif 'ren' in request.get_vars and request.get_vars['new'] != 'null':
         file = db((db.files.user==auth.user.id)&(db.files.id==request.get_vars['ren'])).select()[0]
@@ -486,11 +497,13 @@ def files():
         else:
             filename = request.get_vars['new']
         db(db.files.id==file.id).update(filename=filename)
+        session.flash = T('File updated')
         redirect(URL(r=request,c='default',f='files'))
     files=db(db.files.id>0).select(orderby=db.files.filename)
     return dict(files=files)
 
 def file():
+    """ original code from http://www.google.be/search?sourceid=chrome&ie=UTF-8&q=host2py """
     file = db(db.files.filename==request.args[0]).select()
     if len(file) > 0:
         request.args[0] = file[0].file

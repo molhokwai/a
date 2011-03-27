@@ -27,6 +27,7 @@ else:                                         # else use a normal relational dat
 administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com']
 
 ## Table app config
+app_themes_base_list = ['name:0#:#sidebar:a', 'name:1#:#sidebar:a', 'name:cms#:#sidebar:cms']
 db.define_table('app_config',
     SQLField('APP_DETAILS',             'list:string', required=True,    default=['<molhokwai.net-a>', '<v001>'],     
             label=T('App details (name, version)')),
@@ -36,7 +37,7 @@ db.define_table('app_config',
             label=T('Languages')),
     SQLField('APP_METAS',               'list:string', required=True,    default=['<title>', '<web, utility, application, software, cms, dms>', '<description>'],  
             label=T('App Metas (title, keywords, description)')),
-    SQLField('APP_THEMES',               'list:string', required=True,    default=['0', '1', 'cms'],  
+    SQLField('APP_THEMES',               'list:string', required=True,    default=app_themes_base_list,
             label=T('Themes')),
     SQLField('MAIL_SETTINGS',           'list:string',                   default=['<sender@gmail.com>', '<smtp.gmail.com:587>', '<username:password>'],
             label=T('Mail settings (sender, server, login)')),           
@@ -52,19 +53,13 @@ db.define_table('app_config',
             label=T('Blogger blogs languages'))
 )
 
-app_themes_base_list = ['0', '1', 'cms', 'pypress']
 app_themes_list = app_themes_base_list
 
 app_config=db(db.app_config.id>0).select()
 if len(app_config)>0:
     app_config=app_config[0]
     if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:
-        app_themes_list = []
-        for i in range(len(app_config.APP_THEMES)):
-            if app_config.APP_THEMES[i].find(':')>0:
-                app_themes_list.append(app_config.APP_THEMES[i].split(':')[0])
-            else:
-                app_themes_list.append(app_config.APP_THEMES[i])
+        app_themes_list = app_config.APP_THEMES
 
 db.define_table('app_themes',
     SQLField('theme_name', 'string', required=True, label=T('Theme name')),

@@ -259,6 +259,8 @@
 'replies': 'replies',
 'reply': 'reply',
 'root': 'root',
+'save/load default values': 'save/load default values',
+'save/load from json data file upload': 'save/load from json data file upload',
 'search (google)': 'search (google)',
 'setup, application initialization': 'setup, application initialization',
 'setup/configuration': 'setup/configuration',

@@ -12,6 +12,7 @@ class AppDetails():
     keywords = T("blog, weblog, journal, web, log, web2py, pypress, cms, dms, simple, lightweight, straight-forward, direct, programming, programmer"),
     description = T("molhokwai.net - 'a' cm/dms, lightweight, simple, straight & direct")
     themes_base_list = app_themes_base_list
+    themes_list = app_themes_list
     init_app_config = {
         'pages' : {
             'help_k' : T('%(app)s_help', dict(app=request.application)),
@@ -200,33 +201,46 @@ class Utilities():
     def get_cookie(self, name):
         if request.cookies.has_key(name):
             return request.cookies[name]
-
     theme_sep_token = '#:#'
-    def get_from_app_themes(self, name):
-        theme = filter(lambda x: x.split(self.theme_sep_token)[0] == name, app_config.APP_THEMES)
-        if theme and len(theme)>0:
-            return theme[0]
+
+    @staticmethod
+    def themes_by_what_what_filter(by_what, what, _themes=app_details.themes_list):
+        return filter(lambda x: x.find('%s:%s' % (by_what, what))>=0, _themes) 
+
+    @staticmethod
+    def theme_by_what_what_filter(what, theme_sstruct):
+        return filter(lambda x: x.find(what)==0, theme_sstruct.split(utilities.theme_sep_token))[0].split(':')[1]
+
+    def get_themes_names(self, themes_list=app_details.themes_list):
+        return map(lambda x: utilities.get_from_theme('name', theme_sstruct=x), themes_list)
     
-    def get_from_theme(self, what, name=None, theme=None):
-        if not name is None:
-            theme = self.get_from_app_themes(name)
-            whats = {'name':0, 'base':1, 'stylesheet':2, 'author':3}
-            return theme.split(self.theme_sep_token)[whats[what]]
+    def get_from_app_themes(self, by_what, what_what):
+        return utilities.themes_by_what_what_filter(by_what, what_what)[O] 
+    
+    def get_from_theme(self, what, what_what=None, theme_name=None, theme_sstruct=None):
+        if theme_sstruct is None:
+            if not what_what is None:
+                theme_sstruct = self.get_from_app_themes(what, what_what)
+            elif not theme_name is None:
+                theme_sstruct = self.get_from_app_themes('name', theme_name) 
+            
+        if not theme_sstruct is None:
+            return utilities.theme_by_what_what_filter(what, theme_sstruct)
         else:
-            return ''
+            raise(Exception(T("""(models.utilies.py:Utilities.get_from_theme: one of these optional 
+                                    parameters is required: theme_sstruct, what_what, theme_name""")))
             
     def get_base_of_theme(self, name):
-        if name in app_details.themes_base_list:
+        if name in self.get_themes_names(themes_list=app_details.themes_base_list):
             return name
         else:
-            theme_base = self.get_from_theme('base', name=name)
+            theme_base = self.get_from_theme('base', theme_name=name)
             return self.get_base_of_theme(theme_base)
 
     def replace_serverside_output_values(self, _text, tag_re='\</*aservero\>'):
         b = re.findall(re.compile('<aservero>\w*?</aservero>'), _text)
         for c in b:
             _text = _text.replace(c, eval(re.sub('\</*aservero\>', '', c)))
-        log_wrapped('_text', _text)
         return _text
 
     def posts_replace_serverside_output_values(self, _posts, tag_re='\</*aservero\>'):
@@ -237,6 +251,7 @@ class Utilities():
 
 # instance
 utilities=Utilities()
+
 
 ########################
 ## Print, Log Wrapper
@@ -252,6 +267,13 @@ def log_wrapped(_name, _value):
     else:
         print_wrapped(_name, _value)
         
+
+########################
+## Application Objects 
+########################
+app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped,'utilities':utilities,'tentative_app':tentative_app})
+
+
 #########################################################################
 ## from : http://bytes.com/topic/python/answers/592479-regex-url-extracting
 #########################################################################
