@@ -215,7 +215,11 @@ class Utilities():
         return map(lambda x: utilities.get_from_theme('name', theme_sstruct=x), themes_list)
     
     def get_from_app_themes(self, by_what, what_what):
-        return utilities.themes_by_what_what_filter(by_what, what_what)[O] 
+        _theme = utilities.themes_by_what_what_filter(by_what, what_what)
+        if _theme:
+            return _theme
+        else:
+            return utilities.themes_by_what_what_filter(by_what, 'a')[0] 
     
     def get_from_theme(self, what, what_what=None, theme_name=None, theme_sstruct=None):
         if theme_sstruct is None:

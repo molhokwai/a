@@ -59,9 +59,9 @@ def app_init(request, response, session, cache, T, db, app_objects):
                     show_in_menu=True
                 )
         initial_links={
-            'media / picasa / gallery'                           : '/%s/media/picasa/gallery' % request.application,
-            'manage media / manage picasa albums / manage photos': '/%s/media/picasa/albums' % request.application,
-            'setup, application initialization'                  : '/%s/setup' % request.application
+            'media / picasa / gallery'                           : '/%s/media/picasa/gallery' % app_objects.tentative_app,
+            'manage media / manage picasa albums / manage photos': '/%s/media/picasa/albums' % app_objects.tentative_app,
+            'setup, application initialization'                  : '/%s/setup' % app_objects.tentative_app
         }
         for link_title in initial_links:
             if not db(db.links.link_title==link_title).select():
@@ -97,7 +97,7 @@ def user_authorization(request, response, session, cache, T, db, auth):
                                         display_name=display_name,email=auth.user.email))
     session.authorized=auth.user.is_admin
 
-def home_page(response, page_helper, _pages, request, T):
+def home_page(response, page_helper, _pages, request, T, app_objects):
     """gets the home page, if one created.
         Convention over configuration: Home page is the one with title T('%s_home' % request.application),
         The corresponding eventual language translation of 'home'.
@@ -105,17 +105,15 @@ def home_page(response, page_helper, _pages, request, T):
         TODO: as proprty in a configuration framework (see if pypress4gae offers home/index page
         configuration, and if so eventually switch to it)
     """
-    if response.menu:
-        page_helper._title=T('%s_home' % request.application)
-        return filter(page_helper.get_page_by_title,_pages)
+    page_helper._title=T('%s_home' % app_objects.tentative_app)
+    return filter(page_helper.get_page_by_title,_pages)
 
-def help_page(response, page_helper, _pages, request, T):
+def help_page(response, page_helper, _pages, request, T, app_objects):
     """Gets the help page, if one created
         See home_page
     """
-    if response.menu:
-        page_helper._title=T('%s_help' % request.application)
-        return filter(page_helper.get_page_by_title,_pages)
+    page_helper._title=T('%s_help' % app_objects.tentative_app)
+    return filter(page_helper.get_page_by_title,_pages)
 
 
 ###################################
@@ -127,6 +125,13 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     log_wrapped = app_objects.log_wrapped
     utilities = app_objects.utilities
 
+    # cache clear
+    if 'clear_cache' in request.vars:
+        try: 
+            cache.ram.flush_all()
+            log_wrapped('cache.ram.flush_all()', 'done....')
+        except Exception, ex: pass
+    
     if not response.auth_users:
         response.auth_users=db().select(db.auth_user.ALL)
     
@@ -153,7 +158,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     _pages = []
     try:
         _pages = db((db.posts.post_type == 'page') &
-                    ((db.posts.application == request.application) | 
+                    ((db.posts.application == app_objects.tentative_app) | 
                     (db.posts.application == None))
                     ).select(db.posts.ALL)
     except Exception, ex:
@@ -162,7 +167,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     items=[]
     menu_items = []
     for page in _pages:
-        item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':request.application, 'id':page.id}]
+        item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':app_objects.tentative_app, 'id':page.id}]
         items.append(item)
         if page.show_in_menu and len(menu_items)<10:
           menu_items.append(item)
@@ -186,11 +191,11 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     post_helper=PageHelper()
     
     # home page
-    _home_page=home_page(response, page_helper, _pages, request, T)
+    _home_page=home_page(response, page_helper, _pages, request, T, app_objects)
     response.home_page=_home_page[0] if (_home_page and len(_home_page)>0) else None
 
     # help page
-    _help_page=help_page(response, page_helper, _pages, request, T)
+    _help_page=help_page(response, page_helper, _pages, request, T, app_objects)
     response.help_page=_help_page[0] if (_help_page and len(_help_page)>0) else None
         
     # This returns all the categories and their post count
@@ -202,7 +207,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             count = len(db(
                            (db.posts.post_type == 'post') & 
                            (db.posts.post_category == cat.id) &
-                           ((db.posts.application == request.application) | 
+                           ((db.posts.application == app_objects.tentative_app) | 
                            (db.posts.application == None))
                            ).select(db.posts.ALL)) #,orderby=~db.posts.post_time
         except Exception, ex:
@@ -211,7 +216,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
                            (db.posts.post_category == cat.id)
                            ).select(db.posts.ALL)) #,orderby=~db.posts.post_time
         if count > 0:
-            item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':request.application, 'name':cat.category_name}]
+            item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':app_objects.tentative_app, 'name':cat.category_name}]
             items.append(item)
     response.categories = items
 
@@ -219,17 +224,19 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     last_posts = sorted(response.posts, key=lambda x: x.post_time, reverse=True)
     l_p_limit = 5
     items = []
-    for i in range(l_p_limit):
+    i=0
+    while i<l_p_limit and last_posts and i<len(last_posts):
         post = last_posts[i]
-        #item = [post.post_title, post.post_time, '/%(app)s/default/post/%(id)s' % {'app':request.application, 'id':post.id}]
+        #item = [post.post_title, post.post_time, '/%(app)s/default/post/%(id)s' % {'app':app_objects.tentative_app, 'id':post.id}]
         item = [post.post_title, post.post_time, URL(r = request, f = 'post/%d' % post.id)]
         items.append(item)
+        i+=1
     response.last_posts = items
         
     # This returns all the links
     links = []
     try :
-        links = db(((db.links.application == request.application) | 
+        links = db(((db.links.application == app_objects.tentative_app) | 
                     (db.links.application == None))
                   ).select(db.links.ALL)
     except:
@@ -241,33 +248,32 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     response.links = items
     
     # Theme
-    response.themes=app_details.themes_base_list
-    if app_config and app_config.APP_THEMES:
-        response.themes=app_config.APP_THEMES
+    response.themes=utilities.get_themes_names(themes_list=app_details.themes_list)
         
+    response.theme = '0'
     if request.vars.theme:
         response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
-    
-    response.theme = '0'
-    if request.application in response.themes:
-        response.theme = request.application
-
-    if request.vars.theme:
-        response.theme = request.vars.theme
+        response.theme = utilities.get_from_theme('name', theme_sstruct=request.vars.theme) \
+             if request.vars.theme.find('#:#')>0 else request.vars.theme 
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 
     response.base_theme = None
+    response.child_theme = response.theme
     response.theme_stylesheet = None
     base_theme = utilities.get_base_of_theme(response.theme)
-
+    log_wrapped('base_theme', base_theme)
     if base_theme != response.theme:
         response.child_theme = response.theme
         response.theme = base_theme
-        log_wrapped('3', 3)
-        response.theme_stylesheet = utilities.get_from_theme('stylesheet', name=response.child_theme)
-        log_wrapped('4', 4)
+        response.theme_stylesheet = utilities.get_from_theme('stylesheet', theme_name=response.child_theme)
+        response.theme_sidebar = utilities.get_from_theme('sidebar', theme_name=response.child_theme)
+    else:
+        response.theme_sidebar = utilities.get_from_theme('sidebar', theme_name=response.theme)
+
+    if request.vars.theme_sidebar:
+        response.theme_sidebar = request.vars.theme_sidebar
 
     return page_helper, post_helper

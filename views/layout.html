@@ -13,6 +13,10 @@
     
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+	<!-- -VIEWS/LAYOUT.HTML  -VIEWS/THEMES/0/LAYOUT.HTML -VIEWS/THEMES/1/LAYOUT.HTML -->
+	<!-- THEME: {{=response.theme}} -->
+	<!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+	<!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
     {{if response.child_theme and response.theme_stylesheet:}}
         <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
@@ -58,7 +62,6 @@
   </head>
 
   <body>
-
     <div id="wrapper" class="margt2pc  width60pc">
 
       <div id="user-menu" class="right">
@@ -107,7 +110,7 @@
           {{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}
           {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
           {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
-          {{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}
+          {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}}
       </div>
         
     </div>

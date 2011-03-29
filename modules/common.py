@@ -131,7 +131,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             cache.ram.flush_all()
             log_wrapped('cache.ram.flush_all()', 'done....')
         except Exception, ex: pass
-	
+    
     if not response.auth_users:
         response.auth_users=db().select(db.auth_user.ALL)
     
@@ -252,20 +252,22 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
         
     response.theme = '0'
     if request.vars.theme:
-        response.cookies['theme'] = request.vars.theme
+        if request.vars.theme.find(app_details.theme_sep_token)>0: 
+            response.cookies['theme'] = utilities.get_from_theme('name', theme_sstruct=request.vars.theme)
+        else:
+            response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
-        response.theme = utilities.get_from_theme('name', theme_sstruct=request.vars.theme) \
-			 if request.vars.theme.find('#:#')>0 else request.vars.theme 
-	log_wrapped('response.theme', response.theme)
+        response.theme = response.cookies['theme'].value
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 
     response.base_theme = None
+    response.child_theme = response.theme
     response.theme_stylesheet = None
     base_theme = utilities.get_base_of_theme(response.theme)
 
-    if base_theme != response.theme:
+    if base_theme and base_theme != response.theme:
         response.child_theme = response.theme
         response.theme = base_theme
         response.theme_stylesheet = utilities.get_from_theme('stylesheet', theme_name=response.child_theme)

@@ -12,7 +12,11 @@
     -->
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
-    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+        <!-- -VIEWS/THEMES/CMS/LAYOUT.HTML  -->
+        <!-- THEME: {{=response.theme}} -->
+        <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+        <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
+      <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
     {{if response.child_theme and response.theme_stylesheet:}}
         <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
     {{pass}}
@@ -166,7 +170,7 @@
           <div id="content">
 
             <div id="contextual-nav"><!-- (sidebar) --> 
-                <div id="sidebar-content">
+                <div id="sidebar-content display-none">
                   <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
                   {{include "sidebars/%s.html"%(response.theme_sidebar)}}
                 </div>
@@ -206,7 +210,7 @@
                   <!-- end #molhokwai-addthis -->
                   | {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
                   | {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
-                  | {{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}
+                  | {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}}
           </div>
           <!-- end #footer -->
 

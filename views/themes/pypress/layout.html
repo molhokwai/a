@@ -8,6 +8,10 @@
         
         <title>{{if response.title:}}{{=response.title}}{{else:}}{{=URL(r=request)}}{{pass}}</title>
 
+        <!-- -VIEWS/THEMES/PYPRESS/LAYOUT.HTML  -VIEWS/THEMES/WORDPRESS/LAYOUT.HTML  -->
+        <!-- THEME: {{=response.theme}} -->
+        <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+        <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
         <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
         {{if response.child_theme and response.theme_stylesheet:}}
             <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
@@ -93,7 +97,7 @@
             <div id="footer" style="height: 63px;">
                 <p>
                     Powered by <a href="http://www.web2py.com">web2py</a> (TM) created by Massimo Di Pierro &copy; 2007, 2008
-                    | {{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}
+                    | {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}} 
                     | {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
                 </p>
             </div>

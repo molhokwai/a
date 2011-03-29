@@ -13,6 +13,7 @@ class AppDetails():
     description = T("molhokwai.net - 'a' cm/dms, lightweight, simple, straight & direct")
     themes_base_list = app_themes_base_list
     themes_list = app_themes_list
+    theme_sep_token = app_theme_sep_token
     init_app_config = {
         'pages' : {
             'help_k' : T('%(app)s_help', dict(app=request.application)),
@@ -201,7 +202,6 @@ class Utilities():
     def get_cookie(self, name):
         if request.cookies.has_key(name):
             return request.cookies[name]
-    theme_sep_token = '#:#'
 
     @staticmethod
     def themes_by_what_what_filter(by_what, what, _themes=app_details.themes_list):
@@ -209,7 +209,10 @@ class Utilities():
 
     @staticmethod
     def theme_by_what_what_filter(what, theme_sstruct):
-        return filter(lambda x: x.find(what)==0, theme_sstruct.split(utilities.theme_sep_token))[0].split(':')[1]
+        l = filter(lambda x: x.find(what)==0, theme_sstruct.split(app_details.theme_sep_token))
+        if len(l)>0:
+            return l[0].split(':')[1]
+		
 
     def get_themes_names(self, themes_list=app_details.themes_list):
         return map(lambda x: utilities.get_from_theme('name', theme_sstruct=x), themes_list)
@@ -218,6 +221,10 @@ class Utilities():
         return utilities.themes_by_what_what_filter(by_what, what_what)[0] 
     
     def get_from_theme(self, what, what_what=None, theme_name=None, theme_sstruct=None):
+        # fix for legacy code lost somewhere
+        if what_what and what_what.find(':')>0 : what_what = what_what.split(':')[1]
+        if theme_name and theme_name.find(':')>0 : theme_name = theme_name.split(':')[1]
+
         if theme_sstruct is None:
             if not what_what is None:
                 theme_sstruct = self.get_from_app_themes(what, what_what)
@@ -226,7 +233,7 @@ class Utilities():
             
         if not theme_sstruct is None:
             return utilities.theme_by_what_what_filter(what, theme_sstruct)
-        else:
+        elif what_what is None and theme_name is None:
             raise(Exception(T("""(models.utilies.py:Utilities.get_from_theme: one of these optional 
                                     parameters is required: theme_sstruct, what_what, theme_name""")))
             

@@ -1,7 +1,6 @@
 {{if not nake:}}
-    {{extend 'themes/%s/layout.html' % (response.theme if response.theme else '0')}}
+    {{extend 'themes/%s/layout.html' % response.theme}}
 {{pass}}
-
 <div class="page">
     {{if post:}}
         {{if post.is_translated:}}

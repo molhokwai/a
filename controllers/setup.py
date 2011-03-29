@@ -19,12 +19,15 @@ def index():
         auth.user.is_admin=True
         for _email in administrators_emails:
             db(db.auth_user.email==_email).update(is_admin=True)    
+
+        form=SQLFORM(db.app_config)
         form1=FORM(
             SPAN(T('save/load from json data file upload')),
             INPUT(_type='file', _name='file', _value='(upload json data file)'),
             INPUT(_type='submit', _value=T('save/load default values')),
             _class='margb2pc'
         )
+
         ace = db(db.app_config.id>0)
         if form1.accepts(request.vars, session):
             ac=Struct(**eval(request.vars.file.file.getvalue()))
@@ -57,11 +60,13 @@ def index():
                     RPX_API=ac.RPX_API,
                     TWITTER_API=ac.TWITTER_API
                 )
-            response.flash=T('Default values saved and loaded')
-        else:
+            session.flash=T('Default values saved and loaded')
+            redirect(URL(r=request, c='setup'))
+
+        elif ace.select():
             ace = ace.select()[0]
-            
-        form=SQLFORM(db.app_config, ace)
+            form=SQLFORM(db.app_config, ace)           
+
         if form.accepts(request.vars, session):
             session.flash=T('Application setup/configuration done')
             redirect(URL(r=request, c='default'))
