@@ -334,6 +334,9 @@ minh0 {
   position: absolute;
 }
 
+.overflow-hidden, .scroll-none {
+  overflow: hidden;
+}
 .background-posy10pc {
  background-position: 0 10% !important;
 }

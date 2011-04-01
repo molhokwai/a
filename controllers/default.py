@@ -12,6 +12,10 @@ except Exception, ex:
 ## CONTROLLER FUNCTIONS
 ###################################
 
+# The rpc service call function
+def service_call():
+    return service()
+
 # The main page
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
@@ -510,18 +514,22 @@ def file():
         return response.download(request,db)
     else:
         return
-
+        
 def json():
     area=request.args[0]    
     return response.json({
         'status' : 1,
         'message' : 'done',
-        'result' : {
-            'pages' : lambda x: db(db.posts.post_type=='page').select(),
-            'themes' : lambda x: app_config.APP_THEMES
-        }.get(request.args[0], None)(request.args[0])
+        'result' : get_app_objects(area)
     })
     
+@service.jsonrpc
+def get_app_objects(what):
+    return {
+        'pages' : lambda x: db(db.posts.post_type=='page').select(),
+        'themes' : lambda x: app_config.APP_THEMES
+    }.get(what, None)(what)
+
 def user():
     """
     exposes:

@@ -110,6 +110,10 @@ class aConvert():
             return False
 a_convert=aConvert()
 
+# service (for CSV, XML, JSON, XMLRPC, JSONRPC, AMF)
+from gluon.tools import Service
+service = Service(globals())
+
 # session manager
 class SessionManager():
     @property
@@ -212,7 +216,7 @@ class Utilities():
         l = filter(lambda x: x.find(what)==0, theme_sstruct.split(app_details.theme_sep_token))
         if len(l)>0:
             return l[0].split(':')[1]
-		
+        
 
     def get_themes_names(self, themes_list=app_details.themes_list):
         return map(lambda x: utilities.get_from_theme('name', theme_sstruct=x), themes_list)

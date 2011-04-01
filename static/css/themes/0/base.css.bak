@@ -15,7 +15,7 @@ body {
 
 #sidebar {
     font-size: 0.85em;
-    margin-right: -32%;
+    margin-right: -33%;
     margin-top: 4%;
     min-height: 30em;
 }
@@ -44,6 +44,9 @@ a:link {
 a:visited {
     color: rgb(240, 235, 235);
     border-bottom:0.0008em solid rgb(160,160,160);
+}
+a:hover, a:active {
+    text-style: italic;
 }
 
 #sidebar a {
@@ -100,4 +103,21 @@ iframe[name='photo_frame'] {
     font-style: italic;
     border-top: 1px dotted #010000;
     margin: 2% 0;
+}
+
+.button, .link {
+  background-color: transparent;
+  color: #FFFAFA;
+}
+.select {
+  max-width: 60%;
+}
+.p {
+   color: rgb(255, 250, 250)
+}
+
+
+/* GWT */
+.errordialog {
+  color: #FFFAFA;
 }

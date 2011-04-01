@@ -104,3 +104,14 @@ iframe[name='photo_frame'] {
     border-top: 1px dotted #010000;
     margin: 2% 0;
 }
+
+.button, .link, .p, .grid, .errordialog {
+  /* .errordialog: gwt */
+  color: #FFFAFA
+}
+.button, .link {
+  background-color: transparent;
+}
+.select {
+  max-width: 60%;
+}

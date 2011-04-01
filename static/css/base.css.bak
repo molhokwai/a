@@ -64,6 +64,7 @@ user-menu {
 iframe {
     margin:auto;
     display:block;
+    padding: 0 5%;
 }
 
 a {
@@ -73,6 +74,9 @@ a:hover, a:active {
     font-style: italic;
 }
 
+img, input[type='image'] {
+    margin: auto;
+}
 
 /* WEB2PY ELEMENTS */
 .flash {
@@ -93,4 +97,33 @@ a:hover, a:active {
 
 iframe[name='photo_frame'] {
     overflow: hidden;
+}
+
+.button, .link {
+  border : none;
+  cursor : pointer;
+}
+.button {
+  font-size: 0.9em;
+  text-transform: lowercase;
+}
+.link {
+  font-size: 0.8em;
+}
+.button:hover, .link:hover {
+  font-style: italic;
+}
+.p {
+  display:block;
+  padding-right: 5%;
+}
+.p:first-letter, div.p:first-letter {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.grid tr td {
+  font-weight: bold;
+}
+.grid tr+tr td {
+  font-weight: normal;
 }
