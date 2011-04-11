@@ -6,14 +6,17 @@
     <meta name="keywords" content="{{=response.keywords}}" />
     <meta name="description" content="{{=response.description}}" />
     <meta name="google-site-verification" content="2TmmFn8eNL7GNZuDtORTZ89uxj5fmTtuwqQLqv8webc" /><!-- old: r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8 -->
-    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
     <!-- include required CSS files, further most first -->
     <!-- include requires CSS files
     {{response.files.append(URL(request.application,'static','jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css'))}}
     -->
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="http://www.google.com/cse/style/look/minimalist.css" type="text/css" />
-    <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+        <!-- -VIEWS/THEMES/FF0000/LAYOUT.HTML  -->
+        <!-- THEME: {{=response.theme}} -->
+        <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+        <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
+      <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
     {{if response.child_theme and response.theme_stylesheet:}}
         <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
     {{pass}}
@@ -39,6 +42,7 @@
       };
     </script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
@@ -54,6 +58,8 @@
             $('#google_translate_element').hide();
             $('#cse-search-form').hide();
             $('#cli_web').hide('slow');
+            
+            molhokwai.util.google_trans.set_languages();
         });
         
         var huTi=null;
@@ -107,6 +113,7 @@
                   }, 'google_translate_element');
                 }
               </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     
+              <script type="text/javascript" src="/{{=this_app}}/static/custom/add-ons/google_translate.js"></script>
               <!-- end #google_translate_element-->    
             
               <div class="clear"></div>
@@ -185,7 +192,7 @@
                 <div id="sidebar" class="right width25pc text-alignr">
                     <div id="sidebar-content">
                       <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
-                      {{include "themes/%s/sidebar/%s.html"%(response.theme, tentative_app)}}
+                      {{include "sidebars/%s.html"%(response.theme_sidebar)}}
                     </div>
                     <!-- end #sidebar-content -->
                 </div>
@@ -201,6 +208,8 @@
                     - on PyPress, a {{=A(T('web2py'), _target="_blank", _href='http://www.web2py.org')}} powered site
                       on {{=A(T('google app engine'), _target="_blank", _href='http://code.google.com/appengine')}}
                       |  {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+                      |  {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
+                      |  {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}} 
                   </p>
             </div>
             <!-- end #footer -->

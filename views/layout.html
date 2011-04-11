@@ -13,10 +13,10 @@
     
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
-	<!-- -VIEWS/LAYOUT.HTML  -VIEWS/THEMES/0/LAYOUT.HTML -VIEWS/THEMES/1/LAYOUT.HTML -->
-	<!-- THEME: {{=response.theme}} -->
-	<!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
-	<!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
+    <!-- -VIEWS/LAYOUT.HTML  -VIEWS/THEMES/0/LAYOUT.HTML -VIEWS/THEMES/1/LAYOUT.HTML -->
+    <!-- THEME: {{=response.theme}} -->
+    <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+    <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
     {{if response.child_theme and response.theme_stylesheet:}}
         <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
@@ -32,10 +32,16 @@
           request : {
               application : '{{=tentative_app}}'
           },
-          pages : []
+          pages : [],
+      };
+      var utilities = {
+          google_translate : {
+              languages : []
+          }
       };
     </script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
@@ -56,6 +62,7 @@
           if (browser_not){
               $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
           }
+          $('#google_translate_element').hide();
       });      
     </script>
 
@@ -88,6 +95,22 @@
         </form>
       </div>
       <!-- end #cli_web -->
+
+      <div class="clear"></div>
+      
+      <div id="utilities">
+          <div id="google_translate_element"></div>
+          <script>
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: '{{=current_language[:2]}}'
+              }, 'google_translate_element');
+            }
+          </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+          {{=A(T('translate'), _href="javascript:return false;", _onclick="$('#google_translate_element').toggle();", _class="color-transparent", _target='_blank')}}
+          <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/add-ons/google_translate.js"></script>
+          <!-- end #google_translate_element-->          
+      </div>
     
       <div id="content" class="padl3pc left margt5pc width100pc">
         <div id="searchcontrol"></div>
@@ -104,7 +127,7 @@
       </div>
       <!-- end #sidebar -->
 
-      <div id="utility" class="clear">&nbsp;</div>
+      <div class="clear"></div>
 
       <div id="footer">
           {{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}
