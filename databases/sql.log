@@ -196,3 +196,5 @@ CREATE TABLE app_themes(
 success!
 timestamp: 2011-03-03T16:31:18.382362
 ALTER TABLE files ADD user CHAR(512);
+timestamp: 2011-04-19T10:03:31.674001
+ALTER TABLE app_config ADD app_security_details TEXT;
