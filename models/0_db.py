@@ -33,6 +33,8 @@ app_themes_base_list = ['name:0%(tsk)ssidebar:a'%dict(tsk=app_theme_sep_token), 
 db.define_table('app_config',
     SQLField('APP_DETAILS',             'list:string', required=True,    default=['<molhokwai.net-a>', '<v001>'],     
             label=T('App details (name, version)')),
+    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
+            label=T('App security details (login mechanism)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
     SQLField('APP_CURRENT_LANGUAGES',   'list:string', required=True,    default=['en', 'he', 'hi', 'es', 'fr', 'sw'], 
@@ -62,6 +64,8 @@ if len(app_config)>0:
     app_config=app_config[0]
     if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:
         app_themes_list = app_config.APP_THEMES
+else:
+    app_config = None
 
 db.define_table('app_themes',
     SQLField('theme_name', 'string', required=True, label=T('Theme name')),
@@ -113,42 +117,48 @@ auth=Auth(globals(),db)              # authentication/authorization
 crud=Crud(globals(),db)              # for CRUD helpers using auth
 service=Service(globals())           # for json, xml, jsonrpc, xmlrpc, amfrpc
 
-# mail=Mail()                                                   # mailer
-# if app_config and app_config.MAIL_SETTINGS:
-#     mail.settings.server=app_config.MAIL_SETTINGS[0]     # your SMTP server
-#     mail.settings.sender=app_config.MAIL_SETTINGS[1]     # your email
-#     mail.settings.login=app_config.MAIL_SETTINGS[2]       # your credentials or None
-# else:
-#     mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-#     mail.settings.sender='herve.m@wedo-group.com' # your email
-#     mail.settings.login='username:password'       # your credentials or None
+mail=Mail()                                                   # mailer
+if app_config and app_config.MAIL_SETTINGS:
+	mail.settings.server=app_config.MAIL_SETTINGS[0]     # your SMTP server
+	mail.settings.sender=app_config.MAIL_SETTINGS[1]     # your email
+	mail.settings.login=app_config.MAIL_SETTINGS[2]       # your credentials or None
+else:
+	if request.env.web2py_runtime_gae:            # if running on Google App Engine
+		mail.settings.server='gae'     # your SMTP server
+		mail.settings.login=None       # your credentials or None
+	else:	
+		mail.settings.server='smtp.gmail.com:587'     # your SMTP server
+		mail.settings.login='molhokwai@gmail.com:jamiroquai8'       # your credentials or None
+	mail.settings.sender='molhokwai@gmail.com'    # your email
 
-auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
-auth.settings.table_user = db.define_table('auth_user',
-    Field('registration_id', length=512,
-          label=T('registration id'),
-          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
-          readable=False),
-    Field('display_name', length=512,
-          label=T('display name'),
-          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
-    Field('email', length=512,default='',
-          label=T('email'),
-          requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
-    Field('is_admin', 'boolean',default=False),
-    Field('is_anonymous', 'boolean',default=True),
-    Field('registration_key'),
-    Field('first_name'),
-    Field('last_name')
-)
+if app_config and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
+	auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
+	auth.settings.table_user = db.define_table('auth_user',
+		Field('registration_id', length=512,
+			  label=T('registration id'),
+			  requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
+			  readable=False),
+		Field('display_name', length=512,
+			  label=T('display name'),
+			  requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
+		Field('email', length=512,default='',
+			  label=T('email'),
+			  requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
+		Field('is_admin', 'boolean',default=False),
+		Field('is_anonymous', 'boolean',default=True),
+		Field('registration_key'),
+		Field('first_name'),
+		Field('last_name')
+	)
 auth.define_tables()                 # creates all specified & needed tables
 
-# auth.settings.mailer=mail          # for user email verification
-# auth.settings.registration_requires_verification = True
-# auth.settings.registration_requires_approval = True
-# auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
-# auth.settings.reset_password_requires_verification = True
-# auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
+auth.settings.mailer = mail                    # for user email verification
+if app_config and app_config.APP_SECURITY_DETAILS[0].lower() == 'usr_psw':
+	auth.settings.registration_requires_verification = False
+	auth.settings.registration_requires_approval = False
+	auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
+	auth.settings.reset_password_requires_verification = True
+	auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
 
 ## OpenID, Facebook, MySpace, Twitter, Linkedin, etc. registration
 protocol='http'

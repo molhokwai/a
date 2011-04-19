@@ -546,8 +546,8 @@ def user():
     """
     if request.args[0]=='logout':
         session.user_authorization_done=False
-    if auth.user and request.vars.next:
-        redirect(request.vars.next)
+    if auth.user and request.vars._next:
+        redirect(request.vars._next)
     return dict(form=auth())
 
 

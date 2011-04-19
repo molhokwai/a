@@ -24,7 +24,7 @@ def index():
         form1=FORM(
             SPAN(T('save/load from json data file upload')),
             INPUT(_type='file', _name='file', _value='(upload json data file)'),
-            INPUT(_type='submit', _value=T('save/load default values')),
+            INPUT(_type='submit', _value=T('upload, save/load')),
             _class='margb2pc'
         )
 
