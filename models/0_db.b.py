@@ -121,9 +121,9 @@ service=Service(globals())           # for json, xml, jsonrpc, xmlrpc, amfrpc
 # else:
 #     mail.settings.server='smtp.gmail.com:587'     # your SMTP server
 #     mail.settings.sender='herve.m@wedo-group.com' # your email
-#     mail.settings.login='username:password'       # your credentials or None
+#     mail.settings.login='xxxxxxxxxxxxxxxxxxx'       # your credentials or None
 
-auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
+auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 auth.settings.table_user = db.define_table('auth_user',
     Field('registration_id', length=512,
           label=T('registration id'),
@@ -161,7 +161,7 @@ if app_config and app_config.RPX_API:
         domain=app_config.RPX_API[1],
         url = "%s/default/user/login" % this_app_url)
 else:
-    auth.settings.login_form = RPXAccount(request, api_key='33becd821e0f24f16bdb8da14c1723987d6487a9',
+    auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         domain='websites-molhokwai',
         url = "%s/default/user/login" % this_app_url)
 
