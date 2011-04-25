@@ -340,10 +340,25 @@ var on_cli_web_submit=function(){
     /* history */
     set_cmd_history($('#_cmd').val());
     var cmd_msg = '';
-
+    var output = '';
+    var rv = false;
+    
+    /* >>(command) for direct server call */
+    if ($('#_cmd').val().substring(0,2)=='>>'){
+        $.getJSON(
+            $('#_cmd').val().replace(' ','/'),
+            function(json){
+                var status = json.status;
+                output = json.output
+                cmd_msg = json.message + ' ('+json.result+')';
+                rv = true;            
+            }
+        );
+    }
+    
     /* >(command) for direct server call */
     if ($('#_cmd').val().substring(0,1)=='>'){
-        return true;
+        /* nothing yet */
     }
     
     /* quick fix */
@@ -352,7 +367,7 @@ var on_cli_web_submit=function(){
     /* FIRST: RAW EVAL ATTEMPT */
     try {
         /* raw eval */
-        var rv=caught_eval($('#_cmd').val());
+        rv=caught_eval($('#_cmd').val());
         
         /* added 'punctuation' eval */
         if (rv==cec_rv){

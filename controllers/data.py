@@ -1,4 +1,8 @@
 # coding: utf8
+def index():
+    area = request.args[0]
+    return dict(form=crud(), edit_title=area)
+    
 
 @auth.requires_login()
 def create():

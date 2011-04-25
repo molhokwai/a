@@ -1,11 +1,12 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################
+
 try:
     exec('from applications.%s.modules import common' % this_app)
     page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
-    log_wrapped('Er (%s/controllers/default.py:9' % this_app, ex)
+    log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
 
 
 ###################################
@@ -20,6 +21,13 @@ def service_call():
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
+    if request_handler.instructions and len(request_handler.instructions)>0:
+        return response.json({
+            'status' : 1,
+            'message' : T('done'),
+            'result' : request_handler.instructions
+        })
+
     if len(request.args)==0:
         if response.home_page:
             redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
@@ -610,9 +618,7 @@ def download():
 
 @auth.requires_login()
 def do_stuff():
-    log_wrapped('1', 1)
     if request.args[0] in ['posts_app', 'links_app']:
-        log_wrapped('2', 2)
         instance=db.posts if request.args[0]=='posts_app' else db.links
         _ids=request.args[1].split(',')
         log_wrapped('_ids', _ids)

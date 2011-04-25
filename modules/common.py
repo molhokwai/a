@@ -1,11 +1,13 @@
 #!/usr/bin/env python 
 # coding: utf8 
+from types import *
 from gluon.html import *
 from gluon.http import *
 from gluon.validators import *
 from gluon.sqlhtml import *
 # request, response, session, cache, T, db(s) 
 # must be passed and cannot be imported!
+
 
 ###################################
 ## CLASSES
@@ -120,6 +122,7 @@ def help_page(response, page_helper, _pages, request, T, app_objects):
 ## CONTROLLER INIT
 ###################################    
 def controller_init(request, response, session, cache, T, db, auth, app_objects):
+
     app_details = app_objects.details
     app_config = app_objects.config
     log_wrapped = app_objects.log_wrapped

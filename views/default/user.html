@@ -3,7 +3,14 @@
 <!-- h1>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h1 -->
 
 ............................................................................................
-
+{{if request.args(0)=='login' and app_details.login_mechanism[0] == 'rpx':}}
+	{{=P(A(T('Is is this secure?'), 
+		_href="javascript:return false;",
+		_onclick="$('#secure_msg').overlay('%s')" % XML(T('<p>Absolutely. ......</p><h2>The advantages</h2><p>If implemented everywhere: one time login for <strong>all sites</strong>, no need to remember more than one password</p>'))),
+		_class="text-alignc")
+	}}
+{{pass}}
+<div id="secure_msg"></div>
 {{=form}}
 {{if request.args(0)=='login':}}
     {{if not 'register' in auth.settings.actions_disabled:}}

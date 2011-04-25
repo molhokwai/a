@@ -1,11 +1,13 @@
 #!/usr/bin/env python 
 # coding: utf8 
+from types import *
 from gluon.html import *
 from gluon.http import *
 from gluon.validators import *
 from gluon.sqlhtml import *
 # request, response, session, cache, T, db(s) 
 # must be passed and cannot be imported!
+
 
 ###################################
 ## CLASSES
@@ -120,10 +122,24 @@ def help_page(response, page_helper, _pages, request, T, app_objects):
 ## CONTROLLER INIT
 ###################################    
 def controller_init(request, response, session, cache, T, db, auth, app_objects):
+
     app_details = app_objects.details
     app_config = app_objects.config
     log_wrapped = app_objects.log_wrapped
     utilities = app_objects.utilities
+
+    ###################################
+    ## REQUEST HANDLER... HANDLING
+    ###################################    
+    try:
+        # request handler proxy
+        request_handler = app_objects.RequestHandler(
+                            request, response, session, cache, T, db, auth, app_objects)
+        if len(request_handler.instructions):
+            request_handler.execute()
+            return 'request_handler', request_handler.instructions
+    except Exception, ex:
+        log_wrapped('Request Handler Handling Error (%s/modules/common/controller_init/line:143)' % this_app, ex)
 
     # cache clear
     if 'clear_cache' in request.vars:
@@ -252,11 +268,13 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
         
     response.theme = '0'
     if request.vars.theme:
-        response.cookies['theme'] = request.vars.theme
+        if request.vars.theme.find(app_details.theme_sep_token)>0: 
+            response.cookies['theme'] = utilities.get_from_theme('name', theme_sstruct=request.vars.theme)
+        else:
+            response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
-        response.theme = utilities.get_from_theme('name', theme_sstruct=request.vars.theme) \
-             if request.vars.theme.find('#:#')>0 else request.vars.theme 
+        response.theme = response.cookies['theme'].value
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 
@@ -264,8 +282,8 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     response.child_theme = response.theme
     response.theme_stylesheet = None
     base_theme = utilities.get_base_of_theme(response.theme)
-    log_wrapped('base_theme', base_theme)
-    if base_theme != response.theme:
+
+    if base_theme and base_theme != response.theme:
         response.child_theme = response.theme
         response.theme = base_theme
         response.theme_stylesheet = utilities.get_from_theme('stylesheet', theme_name=response.child_theme)

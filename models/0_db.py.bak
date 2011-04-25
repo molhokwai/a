@@ -24,19 +24,46 @@ else:                                         # else use a normal relational dat
 #################################
 
 ## Administrators
-administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com']
+administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com', 'herve.m@molhokwai.net']
 
 ## Table app config
+app_theme_sep_token = '-:-'
+app_themes_base_list = ['name:0%(tsk)ssidebar:a'%dict(tsk=app_theme_sep_token), 'name:1%(tsk)ssidebar:a'%dict(tsk=app_theme_sep_token), 
+            'name:cms%(tsk)ssidebar:cms'%dict(tsk=app_theme_sep_token), 'name:ff0000%(tsk)ssidebar:ff0000'%dict(tsk=app_theme_sep_token), 'name:pypress%(tsk)ssidebar:pypress'%dict(tsk=app_theme_sep_token)]
+app_modules_config = {
+    'request_handling' : {
+        'instruction' : {
+            'keywords'  : {
+                'action' : {
+                    'create' : [T('create'), T('add'), T('read'), T('select')],
+                    'read' : [T('read'), T('view'), T('show'), T('display'), T('select')],
+                    'update' : [T('edit'), T('modify'), T('update'), T('change')],
+                    'delete' : [T('delete'), T('remove'), T('suppress')]
+                },
+                'object' : {
+                    'group' : [T('pages'), T('site'), T('site-section')],
+                    'page' : [T('page'), T('view'), T('template')],
+                    'block' : [T('block'), T('page-section'), T('container')],
+                    'element' : [T('element'), T('control')]
+                }
+            }
+        }
+    }
+}
 db.define_table('app_config',
     SQLField('APP_DETAILS',             'list:string', required=True,    default=['<molhokwai.net-a>', '<v001>'],     
             label=T('App details (name, version)')),
+    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
+            label=T('App security details (login mechanism)')),
+    SQLField('APP_MODULES_DETAILS',             'list:string', required=True,    default=[str(app_modules_config)],
+            label=T('App modules details (request_handling proxy, ...)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
     SQLField('APP_CURRENT_LANGUAGES',   'list:string', required=True,    default=['en', 'he', 'hi', 'es', 'fr', 'sw'], 
             label=T('Languages')),
     SQLField('APP_METAS',               'list:string', required=True,    default=['<title>', '<web, utility, application, software, cms, dms>', '<description>'],  
             label=T('App Metas (title, keywords, description)')),
-    SQLField('APP_THEMES',               'list:string', required=True,    default=['0', '1', 'cms'],  
+    SQLField('APP_THEMES',               'list:string', required=True,    default=app_themes_base_list,
             label=T('Themes')),
     SQLField('MAIL_SETTINGS',           'list:string',                   default=['<sender@gmail.com>', '<smtp.gmail.com:587>', '<username:password>'],
             label=T('Mail settings (sender, server, login)')),           
@@ -52,19 +79,15 @@ db.define_table('app_config',
             label=T('Blogger blogs languages'))
 )
 
-app_themes_base_list = ['0', '1', 'cms', 'pypress']
 app_themes_list = app_themes_base_list
 
 app_config=db(db.app_config.id>0).select()
 if len(app_config)>0:
     app_config=app_config[0]
     if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:
-        app_themes_list = []
-        for i in range(len(app_config.APP_THEMES)):
-            if app_config.APP_THEMES[i].find(':')>0:
-                app_themes_list.append(app_config.APP_THEMES[i].split(':')[0])
-            else:
-                app_themes_list.append(app_config.APP_THEMES[i])
+        app_themes_list = app_config.APP_THEMES
+else:
+    app_config = None
 
 db.define_table('app_themes',
     SQLField('theme_name', 'string', required=True, label=T('Theme name')),
@@ -79,6 +102,7 @@ db.app_themes.theme_base.requires = IS_IN_SET(app_themes_list)
 #########################################################################
 ## Global convenience variables
 #########################################################################
+refresh_page = False
 
 protocol = 'http'
 if request.get('env')['server_protocol'][:5] == 'HTTPS': protocol='https'
@@ -87,6 +111,7 @@ path_info = request.get('env')['path_info']
 http_referer = None
 
 this_app = path_info.split('/')[1]
+this_app_url= global_site_url + '/%s' % this_app
 tentative_app = session.tentative_app
 if 'http_referer' in request.get('env'):
     import re
@@ -96,20 +121,14 @@ if 'http_referer' in request.get('env'):
         session.tentative_app = http_referer.replace(global_site_url, '').split('/')[1]
 if session.tentative_app:
     if tentative_app != session.tentative_app:
-        response.refresh = True
+        try: cache.ram.flush_all()
+        except Exception, ex: pass
+        refresh_page = True
     else:
         tentative_app = session.tentative_app
 elif not tentative_app:
     tentative_app = this_app
 
-this_app_url= global_site_url + '/%s' % this_app
-
-print ''
-print '-----------| path_info : %s' % path_info
-print '-----------| http_referer : %s' % http_referer
-print '-----------| tentative_app : %s' % tentative_app
-print '-----------| session.tentative_app : %s' % session.tentative_app
-print '-----------| refresh_page : %s' % str(refresh_page).lower()
 
 
 #########################################################################
@@ -120,57 +139,88 @@ auth=Auth(globals(),db)              # authentication/authorization
 crud=Crud(globals(),db)              # for CRUD helpers using auth
 service=Service(globals())           # for json, xml, jsonrpc, xmlrpc, amfrpc
 
-# mail=Mail()                                                   # mailer
-# if app_config and app_config.MAIL_SETTINGS:
-#     mail.settings.server=app_config.MAIL_SETTINGS[0]     # your SMTP server
-#     mail.settings.sender=app_config.MAIL_SETTINGS[1]     # your email
-#     mail.settings.login=app_config.MAIL_SETTINGS[2]       # your credentials or None
-# else:
-#     mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-#     mail.settings.sender='herve.m@wedo-group.com' # your email
-#     mail.settings.login='username:password'       # your credentials or None
+mail=Mail()                                                   # mailer
+if app_config and app_config.MAIL_SETTINGS:
+    mail.settings.server=app_config.MAIL_SETTINGS[0]     # your SMTP server
+    mail.settings.sender=app_config.MAIL_SETTINGS[1]     # your email
+    mail.settings.login=app_config.MAIL_SETTINGS[2]       # your credentials or None
+else:
+    if request.env.web2py_runtime_gae:            # if running on Google App Engine
+        mail.settings.server='gae'     # your SMTP server
+        mail.settings.login=None       # your credentials or None
+    else:   
+        mail.settings.server='smtp.gmail.com:587'     # your SMTP server
+        mail.settings.login='molhokwai@gmail.com:jamiroquai8'       # your credentials or None
+        mail.settings.sender='molhokwai@gmail.com'    # your email
 
 auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
-auth.settings.table_user = db.define_table('auth_user',
-    Field('registration_id', length=512,
-          label=T('registration id'),
-          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
-          readable=False),
-    Field('display_name', length=512,
-          label=T('display name'),
-          requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
-    Field('email', length=512,default='',
-          label=T('email'),
-          requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
-    Field('is_admin', 'boolean',default=False),
-    Field('is_anonymous', 'boolean',default=True),
-    Field('registration_key'),
-    Field('first_name'),
-    Field('last_name')
-)
+if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
+    auth.settings.table_user = db.define_table('auth_user',
+        Field('registration_id', length=512,
+              label=T('registration id'),
+              requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
+              readable=False),
+        Field('display_name', length=512,
+              label=T('display name'),
+              requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
+        Field('email', length=512,default='',
+              label=T('email'),
+              requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
+            Field('password', label=T('password')),
+        Field('is_admin', 'boolean',default=False),
+        Field('is_anonymous', 'boolean',default=True),
+        Field('registration_key'),
+        Field('first_name'),
+        Field('last_name')
+    )
+else:
+    auth.settings.table_user = db.define_table('auth_user',
+        # this field is here for identical auth_table structure for
+        # the different login mechanisms
+        Field('registration_id', length=512,
+              label=T('registration id'),
+              readable=False),
+            Field('display_name', length=512,
+                      label=T('display name'),
+                      requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
+            Field('email', length=512,default='',
+                      label=T('email'),
+                      requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
+            Field('password', label=T('password')),
+            Field('is_admin', 'boolean',default=False,readable=False, writable=False),
+            Field('is_anonymous', 'boolean',default=True,readable=False, writable=False),
+            Field('registration_key', readable=False, writable=False),
+            Field('first_name'),
+            Field('last_name')
+    )   
+
+
 auth.define_tables()                 # creates all specified & needed tables
 
-# auth.settings.mailer=mail          # for user email verification
-# auth.settings.registration_requires_verification = True
-# auth.settings.registration_requires_approval = True
-# auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
-# auth.settings.reset_password_requires_verification = True
-# auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
+
+auth.settings.mailer = mail                    # for user email verification
+if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'usr_psw':
+    auth.settings.registration_requires_verification = False
+    auth.settings.registration_requires_approval = False
+    auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
+    auth.settings.reset_password_requires_verification = True
+    auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
 
 ## OpenID, Facebook, MySpace, Twitter, Linkedin, etc. registration
 protocol='http'
 if request.get('env')['server_protocol'][:5]=='HTTPS':protocol='https'
 
-from gluon.contrib.login_methods.rpx_account import RPXAccount
-auth.settings.actions_disabled=['register','change_password','request_reset_password']
-if app_config and app_config.RPX_API:
-    auth.settings.login_form = RPXAccount(request, api_key=app_config.RPX_API[0],
-        domain=app_config.RPX_API[1],
-        url = "%s/default/user/login" % this_app_url)
-else:
-    auth.settings.login_form = RPXAccount(request, api_key='33becd821e0f24f16bdb8da14c1723987d6487a9',
-        domain='websites-molhokwai',
-        url = "%s/default/user/login" % this_app_url)
+if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
+    from gluon.contrib.login_methods.rpx_account import RPXAccount
+    auth.settings.actions_disabled=['register','change_password','request_reset_password']
+    if app_config and app_config.RPX_API:
+        auth.settings.login_form = RPXAccount(request, api_key=app_config.RPX_API[0],
+            domain=app_config.RPX_API[1],
+            url = "%s/default/user/login" % this_app_url)
+    else:
+        auth.settings.login_form = RPXAccount(request, api_key='33becd821e0f24f16bdb8da14c1723987d6487a9',
+            domain='websites-molhokwai',
+            url = "%s/default/user/login" % this_app_url)
 
 ############
 ## Language

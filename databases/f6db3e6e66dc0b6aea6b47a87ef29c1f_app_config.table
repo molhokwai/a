@@ -31,7 +31,7 @@ sS'id'
 p16
 S'INTEGER PRIMARY KEY AUTOINCREMENT'
 p17
-sS'mail_settings_sender'
+sS'name'
 p18
 S'CHAR(512)'
 p19
@@ -39,7 +39,7 @@ sS'twitter_api'
 p20
 S'TEXT'
 p21
-sS'name'
+sS'mail_settings_sender'
 p22
 S'CHAR(512)'
 p23
@@ -83,4 +83,8 @@ sS'blogger_api'
 p42
 S'TEXT'
 p43
+sS'app_modules_details'
+p44
+S'TEXT'
+p45
 s.

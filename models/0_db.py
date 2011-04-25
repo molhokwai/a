@@ -29,12 +29,34 @@ administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com', 'herve.m@
 ## Table app config
 app_theme_sep_token = '-:-'
 app_themes_base_list = ['name:0%(tsk)ssidebar:a'%dict(tsk=app_theme_sep_token), 'name:1%(tsk)ssidebar:a'%dict(tsk=app_theme_sep_token), 
-			'name:cms%(tsk)ssidebar:cms'%dict(tsk=app_theme_sep_token), 'name:ff0000%(tsk)ssidebar:ff0000'%dict(tsk=app_theme_sep_token), 'name:pypress%(tsk)ssidebar:pypress'%dict(tsk=app_theme_sep_token)]
+            'name:cms%(tsk)ssidebar:cms'%dict(tsk=app_theme_sep_token), 'name:ff0000%(tsk)ssidebar:ff0000'%dict(tsk=app_theme_sep_token), 'name:pypress%(tsk)ssidebar:pypress'%dict(tsk=app_theme_sep_token)]
+app_modules_config = {
+    'request_handling' : {
+        'instruction' : {
+            'keywords'  : {
+                'action' : {
+                    'create' : [T('create'), T('add'), T('read'), T('select')],
+                    'read' : [T('read'), T('view'), T('show'), T('display'), T('select')],
+                    'update' : [T('edit'), T('modify'), T('update'), T('change')],
+                    'delete' : [T('delete'), T('remove'), T('suppress')]
+                },
+                'object' : {
+                    'group' : [T('pages'), T('site'), T('site-section')],
+                    'page' : [T('page'), T('view'), T('template')],
+                    'block' : [T('block'), T('page-section'), T('container')],
+                    'element' : [T('element'), T('control')]
+                }
+            }
+        }
+    }
+}
 db.define_table('app_config',
     SQLField('APP_DETAILS',             'list:string', required=True,    default=['<molhokwai.net-a>', '<v001>'],     
             label=T('App details (name, version)')),
     SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
             label=T('App security details (login mechanism)')),
+    SQLField('APP_MODULES_DETAILS',             'list:string', required=True,    default=[str(app_modules_config)],
+            label=T('App modules details (request_handling proxy, ...)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
     SQLField('APP_CURRENT_LANGUAGES',   'list:string', required=True,    default=['en', 'he', 'hi', 'es', 'fr', 'sw'], 
@@ -124,36 +146,40 @@ if app_config and app_config.MAIL_SETTINGS:
     mail.settings.login=app_config.MAIL_SETTINGS[2]       # your credentials or None
 else:
     if request.env.web2py_runtime_gae:            # if running on Google App Engine
-	mail.settings.server='gae'     # your SMTP server
-	mail.settings.login=None       # your credentials or None
-    else:	
-	mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-	mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'       # your credentials or None
-    mail.settings.sender='molhokwai@gmail.com'    # your email
+        mail.settings.server='gae'     # your SMTP server
+        mail.settings.login=None       # your credentials or None
+    else:   
+        mail.settings.server='smtp.gmail.com:587'     # your SMTP server
+        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'       # your credentials or None
+        mail.settings.sender='molhokwai@gmail.com'    # your email
 
 auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
     auth.settings.table_user = db.define_table('auth_user',
-	    Field('registration_id', length=512,
-		      label=T('registration id'),
-		      requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
-		      readable=False),
-	    Field('display_name', length=512,
-		      label=T('display name'),
-		      requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
-	    Field('email', length=512,default='',
-		      label=T('email'),
-		      requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
-	    Field('is_admin', 'boolean',default=False),
-	    Field('is_anonymous', 'boolean',default=True),
-	    Field('registration_key'),
-	    Field('first_name'),
-	    Field('last_name')
+        Field('registration_id', length=512,
+              label=T('registration id'),
+              requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
+              readable=False),
+        Field('display_name', length=512,
+              label=T('display name'),
+              requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
+        Field('email', length=512,default='',
+              label=T('email'),
+              requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
+            Field('password', label=T('password')),
+        Field('is_admin', 'boolean',default=False),
+        Field('is_anonymous', 'boolean',default=True),
+        Field('registration_key'),
+        Field('first_name'),
+        Field('last_name')
     )
 else:
     auth.settings.table_user = db.define_table('auth_user',
-            Field('first_name'),
-            Field('last_name'),
+        # this field is here for identical auth_table structure for
+        # the different login mechanisms
+        Field('registration_id', length=512,
+              label=T('registration id'),
+              readable=False),
             Field('display_name', length=512,
                       label=T('display name'),
                       requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
@@ -163,7 +189,9 @@ else:
             Field('password', label=T('password')),
             Field('is_admin', 'boolean',default=False,readable=False, writable=False),
             Field('is_anonymous', 'boolean',default=True,readable=False, writable=False),
-            Field('registration_key', readable=False, writable=False)
+            Field('registration_key', readable=False, writable=False),
+            Field('first_name'),
+            Field('last_name')
     )   
 
 
@@ -172,11 +200,11 @@ auth.define_tables()                 # creates all specified & needed tables
 
 auth.settings.mailer = mail                    # for user email verification
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'usr_psw':
-	auth.settings.registration_requires_verification = False
-	auth.settings.registration_requires_approval = False
-	auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
-	auth.settings.reset_password_requires_verification = True
-	auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
+    auth.settings.registration_requires_verification = False
+    auth.settings.registration_requires_approval = False
+    auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
+    auth.settings.reset_password_requires_verification = True
+    auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
 
 ## OpenID, Facebook, MySpace, Twitter, Linkedin, etc. registration
 protocol='http'
@@ -186,13 +214,13 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
     from gluon.contrib.login_methods.rpx_account import RPXAccount
     auth.settings.actions_disabled=['register','change_password','request_reset_password']
     if app_config and app_config.RPX_API:
-	auth.settings.login_form = RPXAccount(request, api_key=app_config.RPX_API[0],
-	    domain=app_config.RPX_API[1],
-	    url = "%s/default/user/login" % this_app_url)
+        auth.settings.login_form = RPXAccount(request, api_key=app_config.RPX_API[0],
+            domain=app_config.RPX_API[1],
+            url = "%s/default/user/login" % this_app_url)
     else:
-	auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-	    domain='websites-molhokwai',
-	    url = "%s/default/user/login" % this_app_url)
+        auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            domain='websites-molhokwai',
+            url = "%s/default/user/login" % this_app_url)
 
 ############
 ## Language

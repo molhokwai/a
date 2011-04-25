@@ -1,4 +1,5 @@
 # coding: utf8
+from types import *
 
 #########################################################################
 ## APPLICATION DETAILS, COMMON'Z & UTILITIES
@@ -14,6 +15,7 @@ class AppDetails():
     themes_base_list = app_themes_base_list
     themes_list = app_themes_list
     theme_sep_token = app_theme_sep_token
+    login_mechanism = app_config.APP_SECURITY_DETAILS if app_config and app_config.APP_SECURITY_DETAILS else 'usr_psw'
     init_app_config = {
         'pages' : {
             'help_k' : T('%(app)s_help', dict(app=request.application)),
@@ -186,8 +188,33 @@ class Struct:
     def __init__(self, **entries): 
         self.__dict__.update(entries)
 
-# utilities
+class obj_walk:
+    @staticmethod
+    def to_value(_obj, keys_indexes):
+        """Example of Pattern: 
+            {
+             'a':
+                [{'x' : []}, {'y' : ''}, {'z' : {}}...]
+           }
+        """
+        _val = _obj
+        for i in range(len(keys_indexes)):
+            if ((type(keys_indexes[i]) == IntType and type(_val) == ListType)
+              or type(_val) == DictType):
+                    _val = _val[keys_indexes[i]]
+            else:
+                _val = None
+        return _val
+        
+class dict_walk:
+    @staticmethod
+    def to_value(_dict, keys):
+        return obj_walk.to_value(_dict, keys)
+        
 class Utilities():
+    obj_walk = obj_walk()
+    dict_walk = dict_walk()
+    
     def reverse_numeric_row_id(self, x, y):return y.id - x.id
     
     def shorten_and_randomize(self, _list, nr):
@@ -207,6 +234,7 @@ class Utilities():
         if request.cookies.has_key(name):
             return request.cookies[name]
 
+    ## THEMES
     @staticmethod
     def themes_by_what_what_filter(by_what, what, _themes=app_details.themes_list):
         return filter(lambda x: x.find('%s:%s' % (by_what, what))>=0, _themes) 
@@ -248,6 +276,7 @@ class Utilities():
             theme_base = self.get_from_theme('base', theme_name=name)
             return self.get_base_of_theme(theme_base)
 
+    ## SERVER SIDE OUTPUT
     def replace_serverside_output_values(self, _text, tag_re='\</*aservero\>'):
         b = re.findall(re.compile('<aservero>\w*?</aservero>'), _text)
         for c in b:
@@ -257,9 +286,32 @@ class Utilities():
     def posts_replace_serverside_output_values(self, _posts, tag_re='\</*aservero\>'):
         for p in _posts:
             p.post_text = self.replace_serverside_output_values(x.post_text)
-        return posts
-        
+        return _posts
 
+    ## REQUEST HANDLING
+    def instructions_filter(self, instructions_type_name, module_config):
+        return filter(lambda x: x[1]!=x[2] and not self.is_action(x, module_config), instructions_type_name)
+
+    def instruction_type_subject(self, section, module_config):
+        """
+           Expects the module config list/dict format (see: app_modules_config)
+            Returns:
+                ['action'|'object'|'data'],section
+        """
+        for typ in ['action', 'object']:
+            d = self.obj_walk.to_value(module_config, ['instruction', 'keywords', typ])
+            for key in d:
+                if section in d[key]:
+                    return typ,key
+        return 'data',section
+
+    def is_object(self,instruction_type_name,module_config):
+        return instruction_type_name[0] in ('object')
+        
+    def is_action(self,instruction_type_name,module_config):
+        return (instruction_type_name[0] in ('action')
+                or instruction_type_name[2] 
+                    in self.obj_walk.to_value(module_config, ['instruction', 'keywords', 'action']))
 # instance
 utilities=Utilities()
 
@@ -282,7 +334,10 @@ def log_wrapped(_name, _value):
 ########################
 ## Application Objects 
 ########################
-app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped,'utilities':utilities,'tentative_app':tentative_app})
+exec('from applications.%s.modules import request_handler' % this_app)
+app_objects=Struct(**{'details':app_details, 'config':app_config, 'log_wrapped':log_wrapped,
+                      'utilities':utilities, 'tentative_app':tentative_app, 'http_referer':http_referer,
+                      'RequestHandler' : request_handler.RequestHandler, 'app_modules_config' : app_modules_config})
 
 
 #########################################################################

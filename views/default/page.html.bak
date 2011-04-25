@@ -1,9 +1,8 @@
 {{if not nake:}}
     {{extend 'themes/%s/layout.html' % response.theme}}
 {{pass}}
-
 <div class="page">
-
+    HELLOOOOOOO!!!
     {{if post:}}
         {{if post.is_translated:}}
             {{include "utilities/language_choice_bar.html"}}
@@ -18,7 +17,7 @@
         
         {{if post.post_posts:}}
             {{Pr=P(T('related entries:'))}}
-            {{for p in posts:}}
+            {{for p in post.post_posts:}}
                 {{Pr.append(A(T(p.post_title), _href=URL(r=request, f='post', args=[p.id])))}}
             {{pass}}
             {{=Pr}}
