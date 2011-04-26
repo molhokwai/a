@@ -55,10 +55,15 @@ class RequestHandler:
         if _request is None: _request = self.request
         
         """
-            Mathematical Simplification:
-                Type 'data' required so:
+            'Mathematical', Logic Simplification:
+                Type 'data' required, so:
                     Make array though split by type 'data':
                     And parse each instruction into instructions array                    
+                Thought: If Type 'data' made to not be required
+							If array elements are not of number 2 or 3:
+							- first elements until action or until last before data
+							  are to be fetched in context (last corr. element
+							  or current element)
         """
         module_config = self.modules_config['request_handling']
         _sections = _request.args

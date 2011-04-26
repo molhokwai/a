@@ -21,13 +21,6 @@ def service_call():
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
-    if request_handler.instructions and len(request_handler.instructions)>0:
-        return response.json({
-            'status' : 1,
-            'message' : T('done'),
-            'result' : request_handler.instructions
-        })
-
     if len(request.args)==0:
         if response.home_page:
             redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))

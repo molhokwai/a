@@ -26,6 +26,16 @@ def handle():
             'result' : requestHandler.instructions
         })
     else:
+		args = request.args
+		c = args[0]
+		f = None
+		if len(args)>2:
+			redirect(URL(r=request, c=args[0], f=args[1], 
+				args=[args[i] for i in range(2,len(args))], vars=request.vars))
+		else:
+			redirect(URL(r=request, c=args[0], 
+				args=[args[i] for i in range(1,len(args))], vars=request.vars))
+
         return response.json({
             'status' : 0,
             'message' : 'not done',
