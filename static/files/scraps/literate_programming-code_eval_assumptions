@@ -1,0 +1,14 @@
+Web pages creation module added to cli web:
+    make all possible combinations of potentially naïve working assumptions with arguments taken from the command line: 
+		- eval("arg1 arg2 arg3;")
+		- eval("arg1.arg2.arg3;")
+		- eval("arg1(arg2, arg3);")
+		- eval("arg1(arg2, arg3);")
+		- eval("arg1(arg2).arg3;")
+		- eval("arg1(arg2).arg3();")
+		- eval("arg1.arg2(arg3);")
+		- eval("arg1.arg2(arg3);")
+		- eval("arg1.arg2.arg3();")
+		- eval("$(arg1).arg2($arg3")
+
+You get the point... it's ajust about assuming that it is possible that the args list is executable in a different combincation, with eventual language adjustements, thus that the <em>answer</em> to the args list is <em>self contained</em>.

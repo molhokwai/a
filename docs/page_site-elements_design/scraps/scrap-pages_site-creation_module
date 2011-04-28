@@ -1,0 +1,31 @@
+Web pages creation module added to cli web:
+    >/create/page/[title] (title: allow regular expression '\...')
+    >/delete/page/[title]
+    >/edit/page/[title]|[id]
+    >/create/block/left|right|center|left-top|left-bottom|right-top|right-bottom/page/[title]|[id] (use numbers in the background to have unlimited choices) - (Block => -specific-Element: mathematical element)
+    >/edit/block/[title]|[id]/page/[title]|[id].....
+    >/add/page/[title]|[id]/group/add/[title]|[id] (Group: mathematical ensemble) - (add # create)
+    >/add/page/[title]|[id]/pages/[title]|[id] (Pages => Group)
+    >/add/block/[title]|[id]/page/[title]|[id]/pages/[title]|[id]/....
+    >/add/block/[title]|[id]/pages/[title]|[id]/...
+    >/add/block/[title]|[id]/element/[title]|[id]/[text]|add/element/...
+    >/add/block/[title]|[id]/add/page/[title]|[id]/pages/[title]|[id]/....
+    >/add/block/[title]|[id]/add/pages/[title]|[id]/...
+    >/add/block/[title]|[id]/add/element/[title]|[id]/[text]|add/element/...
+
+Site => Pages
+Section => Block
+Domain => Site
+Pages !=> Page (!: Il existe au moins un...)
+Instructions in Instructions work like |ing (piping)
+
+Thoughts:
+	- creating a page with a regular expression would logically put the ne page in same sites as pages matching the regular expression, and create a site which's name would be that regular expression and put the page in it.
+	  Each action (adding to each site, creating a site) requiring confirmation.
+
+Use pyjs for generation
+Save generated as configuration
+Add Full Security/Access Option, down to Element.
+Translation for commands in all Google Translate available languages
+When done: explore way to traduce this purely mathematically (using pyjs combined with gwt2d/gwt3d, with according bridges to translate to xml/html and json, then further without using gwt2d/3d, strictly with mathematics -unless gwt2d/3d offers 'mathematical' api) 
+*****Java to python****
