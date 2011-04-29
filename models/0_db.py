@@ -24,7 +24,7 @@ else:                                         # else use a normal relational dat
 #################################
 
 ## Administrators
-administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com', 'herve.m@molhokwai.net']
+administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com', 'herve.m@molhokwai.net', 'herve.mayou@ymail.com', 'herve.mayou@yahoo.com']
 
 ## Table app config
 app_theme_sep_token = '-:-'
@@ -151,10 +151,10 @@ else:
         mail.settings.login=None       # your credentials or None
     else:   
         mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'       # your credentials or None
+        mail.settings.login='molhokwai@gmail.com:jamiroquai8'       # your credentials or None
         mail.settings.sender='molhokwai@gmail.com'    # your email
 
-auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
     auth.settings.table_user = db.define_table('auth_user',
         Field('registration_id', length=512,
@@ -219,7 +219,7 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
             domain=app_config.RPX_API[1],
             url = "%s/default/user/login" % this_app_url)
     else:
-        auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        auth.settings.login_form = RPXAccount(request, api_key='33becd821e0f24f16bdb8da14c1723987d6487a9',
             domain='websites-molhokwai',
             url = "%s/default/user/login" % this_app_url)
 
