@@ -32,9 +32,27 @@ With:
 
 
 - List Potential Partner(s)
+	- Checkbox: Uncheck the box if this is not a match
+
 - Else: 
 	- Checkbox: Alert me by e-mail within [Number] 
 	   minutes
 	- Checkbox: Alert me by sms within [Number] 
 	   minutes
+
+-----------------------------------------------------
+Machine Learning
+-----------------------------------------------------
+- Process:
+	All words match*: 
+		Return 'match', (nr of words)
+	If at least n word match*:
+		Return 'potential', (nr of words match
+		*('n letters # in each allowed)
+
+- Train Neural Network.
+	From users' feedbacks (user clicks on n potential 
+		partners' links):
+	Neural Network 'takes over' when more than 99%
+	certainty  reached: 
 

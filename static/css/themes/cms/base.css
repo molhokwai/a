@@ -14,7 +14,7 @@
 }
 body {
   /* classical */
-  background-image: url('/cms/static/images/mainBG.png');
+  background-image: url('/a/static/images/mainBG.png');
   background-repeat: repeat-x;
   background-color: #7db9e8;
 }
@@ -48,7 +48,7 @@ body {
   font-size: 0.9em;
   font-weight: bolder;
   background-color:#3A70E2;
-  background-image:url("/cms/static/images/Nav.png");
+  background-image:url("/a/static/images/Nav.png");
   background-repeat:repeat-x;
   display:none;
 }
@@ -65,21 +65,21 @@ body {
         ############
 
     -- preferred --
-  background-image: url('/cms/static/images/mainContainerBG.png');
+  background-image: url('/a/static/images/mainContainerBG.png');
   background-repeat:repeat-x;
   background-color: #5c92f4;
 
     -- as main container --
-  background-image: url('/cms/static/images/BG.png');
+  background-image: url('/a/static/images/BG.png');
   background-repeat: repeat-x;
   background-color: #7db9e8;
 
     -- latest, current --
-  background-image: url('/cms/static/images/BG.png');
+  background-image: url('/a/static/images/BG.png');
   background-repeat: repeat-x;
   background-color: #2f5288;
   ***************************************************************/
-  background-image: url('/cms/static/images/BG.png');
+  background-image: url('/a/static/images/BG.png');
   background-repeat: repeat-x;
   background-color: #2f5288;
 }
@@ -443,11 +443,11 @@ u {
         See #container for other alternatives ('as main container', 'latest, current')
 
     -- preferred --
-  background-image: url('/cms/static/images/SideBG.png');
+  background-image: url('/a/static/images/SideBG.png');
   background-repeat:repeat-x;
   background-color: #7db9e8;
   ***************************************************************/
-  background-image: url('/cms/static/images/BG.png');
+  background-image: url('/a/static/images/BG.png');
   background-repeat: repeat-x;
   background-color: #2f5288;
 }
@@ -510,7 +510,7 @@ ol li, #contextual-nav ul ol li {
 
 #menu-tabs ul {
   margin-bottom: -0.4%;
-  background-image: url('/cms/static/images/Nav.png');
+  background-image: url('/a/static/images/Nav.png');
   background-repeat: repeat-x;
   border-top: 1px solid #565656;
   border-left: 1px solid #565656;
@@ -524,13 +524,13 @@ ol li, #contextual-nav ul ol li {
 #menu-tabs ul li {
   float: left;
   padding: 4px 15px;
-  background-image: url('/cms/static/images/Nav.png');
+  background-image: url('/a/static/images/Nav.png');
   background-repeat: repeat-x;
   -moz-border-radius:5px;
   -webkit-border-radius:5px;
 }
 #menu-tabs ul li:hover, #menu-tabs ul li:active {
-  background-image: url('/cms/static/images/Navover.png');
+  background-image: url('/a/static/images/Navover.png');
   background-repeat: repeat-x;
 }
 

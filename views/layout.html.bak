@@ -13,6 +13,10 @@
     
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <!-- -VIEWS/LAYOUT.HTML  -VIEWS/THEMES/0/LAYOUT.HTML -VIEWS/THEMES/1/LAYOUT.HTML -->
+    <!-- THEME: {{=response.theme}} -->
+    <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+    <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
     {{if response.child_theme and response.theme_stylesheet:}}
         <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
@@ -28,16 +32,40 @@
           request : {
               application : '{{=this_app}}'
           },
-          pages : []
+          pages : [],
+      };
+      var utilities = {
+          google_translate : {
+              languages : []
+          }
       };
     </script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
     <script type="text/javascript">
+      if ({{=str(refresh_page).lower()}}){
+          window.location.reload();
+      }
+      
+      /* theme first display fix */
+      var urlParams = window.location.search.split('&');
+      var newUrlParams = [];
+      for(var i=0;i<urlParams.length;i++){
+          var indTh = urlParams[i].indexOf('theme=');
+          if(indTh!=1){
+              newUrlParams.push(urlParams[i]);
+          }
+      }
+      for(var i=0;i<newUrlParams.length;i++){
+          alert(newUrlParams[i]);
+      }
+      
       $(document).ready(function(){
           var browser_not=true;
           try { 
@@ -47,13 +75,13 @@
           if (browser_not){
               $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
           }
+          $('#google_translate_element').hide();
       });      
     </script>
 
   </head>
 
   <body>
-
     <div id="wrapper" class="margt2pc  width60pc">
 
       <div id="user-menu" class="right">
@@ -74,12 +102,28 @@
             <font id="_cmd_msg" class="flash small">
                 {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
                 {{flash = session.flash if session.flash else response.flash}}
-                {{if flash:}}{{=flash}}{{pass}}
+                {{if flash:}}{{=XML(flash)}}{{pass}}
             </font>
             <input type="hidden" id="_cmd_history_cur" value="-1"/>
         </form>
       </div>
       <!-- end #cli_web -->
+
+      <div class="clear"></div>
+      
+      <div id="utilities">
+          <div id="google_translate_element"></div>
+          <script>
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: '{{=current_language[:2]}}'
+              }, 'google_translate_element');
+            }
+          </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+          {{=A(T('translate'), _href="javascript:return false;", _onclick="$('#google_translate_element').toggle();", _class="color-transparent", _target='_blank')}}
+          <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/add-ons/google_translate.js"></script>
+          <!-- end #google_translate_element-->          
+      </div>
     
       <div id="content" class="padl3pc left margt5pc width100pc">
         <div id="searchcontrol"></div>
@@ -87,9 +131,23 @@
       </div>
       <!-- end #content -->
 
-      <div id="utility" class="clear">&nbsp;</div>
+      <div id="sidebar" class="right width30pc text-alignr">
+        <div id="sidebar-content" class="display-none">
+          <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
+          {{include "sidebars/%s.html"%(response.theme_sidebar)}}
+        </div>
+        <!-- end #sidebar-content -->
+      </div>
+      <!-- end #sidebar -->
 
-      <div id="footer">{{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}</div>
+      <div class="clear"></div>
+
+      <div id="footer">
+          {{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}
+          {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+          {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
+          {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}}
+      </div>
         
     </div>
     <!-- end #wrapper -->
@@ -114,11 +172,12 @@
 
     <div id="links">
              {{=A(T('add page/post'),_href=URL(r=request,c='default',f='add/page'), _class='color-transparent')}}
-             {{
-                 _post=None
-                 try: _post=post
-                 except Exception, ex: pass
-             }}
+             {{_post=None}}
+             {{try:}}
+                 {{_post=post}}
+             {{except:}}
+                 <!-- post is None -->
+             {{pass}}
              {{if _post:}}
                  {{if _post.post_type=='page':}}
                      {{=A(T('edit page/post ?'),_href=URL(r=request,c='default',f='edit/page/%i' % _post.id), _class='color-transparent')}}

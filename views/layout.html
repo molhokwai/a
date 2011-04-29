@@ -30,7 +30,7 @@
     <script type="text/javascript">
       var server={
           request : {
-              application : '{{=tentative_app}}'
+              application : '{{=this_app}}'
           },
           pages : [],
       };
@@ -52,7 +52,7 @@
       if ({{=str(refresh_page).lower()}}){
           window.location.reload();
       }
-      
+            
       $(document).ready(function(){
           var browser_not=true;
           try { 
@@ -63,7 +63,7 @@
               $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
           }
           $('#google_translate_element').hide();
-      });      
+      });
     </script>
 
   </head>
@@ -159,11 +159,12 @@
 
     <div id="links">
              {{=A(T('add page/post'),_href=URL(r=request,c='default',f='add/page'), _class='color-transparent')}}
-             {{
-                 _post=None
-                 try: _post=post
-                 except Exception, ex: pass
-             }}
+             {{_post=None}}
+             {{try:}}
+                 {{_post=post}}
+             {{except:}}
+                 <!-- post is None -->
+             {{pass}}
              {{if _post:}}
                  {{if _post.post_type=='page':}}
                      {{=A(T('edit page/post ?'),_href=URL(r=request,c='default',f='edit/page/%i' % _post.id), _class='color-transparent')}}

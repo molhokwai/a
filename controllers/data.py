@@ -23,3 +23,7 @@ def read():
         return dict(_json = _json)
     except Exception, ex:
         return str(ex)
+
+def fetch():
+    from gluon.tools import fetch
+    return fetch(request.vars.url, headers = {'Cache-Control' : request.vars.cache_control, 'Pragma' : request.vars.pragma})

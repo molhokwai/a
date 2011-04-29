@@ -1,17 +1,13 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################
-try:
-    exec('from applications.%s.modules import request_handler as request_handler_module' % this_app)
-    request_handler = request_handler_module.handle_request(request, response, session, cache, T, db, auth, app_objects)
 
-    if not instruction_results or not len(instruction_results)>0:
-        exec('from applications.%s.modules import common' % this_app)
-        page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
+try:
+    exec('from applications.%s.modules import common' % this_app)
+    page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
     log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
-
-
+    
 ###################################
 ## CONTROLLER FUNCTIONS
 ###################################
@@ -24,13 +20,6 @@ def service_call():
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
-    if request_handler.instructions and len(request_handler.instructions)>0:
-        return response.json({
-            'status' : 1,
-            'message' : T('done'),
-            'result' : request_handler.instructions
-        })
-
     if len(request.args)==0:
         if response.home_page:
             redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
@@ -100,7 +89,6 @@ def page():
                      or post.post_text.find('<!-- nake page -->')>=0)
             
                 post.post_text = utilities.replace_serverside_output_values(post.post_text)
-
         
             return dict(post = post, nake  = nake)
         else:
@@ -557,8 +545,15 @@ def user():
     """
     if request.args[0]=='logout':
         session.user_authorization_done=False
-    if auth.user and request.vars._next:
-        redirect(request.vars._next)
+
+    session._next = request.vars._next
+    if auth.user:
+        _next = request.vars._next
+        if session._next:
+            _next = session._next
+            del session._next
+        if _next:
+            redirect(_next)
     return dict(form=auth())
 
 

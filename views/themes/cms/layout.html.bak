@@ -36,7 +36,7 @@
     <script type="text/javascript">
       var server={
           request : {
-              application : '{{=(tentative_app if tentative_app else this_app)}}'
+              application : '{{=this_app}}'
           },
           pages : []
       };
@@ -57,8 +57,6 @@
             $('#google_translate_element').hide();
             $('#cse-search-form').hide();
             $('#cli_web').hide('slow');
-            
-            molhokwai.util.google_trans.set_languages();
         });
         
         var huTi=null;

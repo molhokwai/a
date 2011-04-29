@@ -124,7 +124,7 @@ body {
 }
 
 .page .statement div.float-left span.content-text{
-    margin-top:5%;
+    margin-top:-3%;
 }
 
 .note {

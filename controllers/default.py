@@ -7,8 +7,7 @@ try:
     page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
     log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
-
-
+    
 ###################################
 ## CONTROLLER FUNCTIONS
 ###################################
@@ -90,7 +89,6 @@ def page():
                      or post.post_text.find('<!-- nake page -->')>=0)
             
                 post.post_text = utilities.replace_serverside_output_values(post.post_text)
-
         
             return dict(post = post, nake  = nake)
         else:
@@ -547,8 +545,15 @@ def user():
     """
     if request.args[0]=='logout':
         session.user_authorization_done=False
-    if auth.user and request.vars._next:
-        redirect(request.vars._next)
+
+    session._next = request.vars._next
+    if auth.user:
+        _next = request.vars._next
+        if session._next:
+            _next = session._next
+            del session._next
+        if _next:
+            redirect(_next)
     return dict(form=auth())
 
 

@@ -1,8 +1,7 @@
 {{if not nake:}}
     {{extend 'themes/%s/layout.html' % response.theme}}
-{{pass}}
+{{ pass }}
 <div class="page">
-    HELLOOOOOOO!!!
     {{if post:}}
         {{if post.is_translated:}}
             {{include "utilities/language_choice_bar.html"}}
@@ -28,5 +27,4 @@
     {{else:}}
         {{=T('No entry found...')}}
     {{pass}}
-    
 </div>

@@ -337,7 +337,8 @@ def log_wrapped(_name, _value):
 exec('from applications.%s.modules import request_handler' % this_app)
 app_objects=Struct(**{'details':app_details, 'config':app_config, 'log_wrapped':log_wrapped,
                       'utilities':utilities, 'tentative_app':tentative_app, 'http_referer':http_referer,
-                      'RequestHandler' : request_handler.RequestHandler, 'app_modules_config' : app_modules_config})
+                      'RequestHandler' : request_handler.RequestHandler, 'app_modules_config' : app_modules_config,
+                      'global_site_url' : global_site_url, 'path_info' : path_info, 'full_url' : full_url})
 
 
 #########################################################################

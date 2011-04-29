@@ -55,8 +55,6 @@ db.define_table('app_config',
             label=T('App details (name, version)')),
     SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
             label=T('App security details (login mechanism)')),
-    SQLField('APP_MODULES_DETAILS',             'list:string', required=True,    default=[str(app_modules_config)],
-            label=T('App modules details (request_handling proxy, ...)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
     SQLField('APP_CURRENT_LANGUAGES',   'list:string', required=True,    default=['en', 'he', 'hi', 'es', 'fr', 'sw'], 
@@ -76,7 +74,9 @@ db.define_table('app_config',
     SQLField('BLOGGER_BLOGS_THEMES',     'list:string',                  default=['<theme1:blog1,blog2,blog3...>', '<theme2:blog4,blog5...>', '<theme3:blog6...>'],
             label=T('Blogger blogs themes')),
     SQLField('BLOGGER_BLOGS_LANGUAGES',  'list:string',                  default=['<fr:blog3,blog4,blog6...>', '<nl:blog1,blog1...>', '<en:blog5...>'],
-            label=T('Blogger blogs languages'))
+            label=T('Blogger blogs languages')),
+    SQLField('APP_MODULES_DETAILS',             'text',         required=True,    default=str(app_modules_config),
+            label=T('App modules details (request_handling proxy, ...)'))
 )
 
 app_themes_list = app_themes_base_list
@@ -108,6 +108,7 @@ protocol = 'http'
 if request.get('env')['server_protocol'][:5] == 'HTTPS': protocol='https'
 global_site_url = '%s://%s' % (protocol,request.get('env')['http_host'])
 path_info = request.get('env')['path_info']
+full_url = '%s%s' % (global_site_url, path_info)
 http_referer = None
 
 this_app = path_info.split('/')[1]

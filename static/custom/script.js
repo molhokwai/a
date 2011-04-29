@@ -1,13 +1,29 @@
-/* html form */
-/*      <form onsubmit="return false;">
-            <input type="text" id="_cmd" name="_cmd" class="width30pc"/>
-            <font id="_cmd_msg" class="flash small">
-                {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
-                {{if session.flash:}}{{=session.flash}}{{pass}}
-            </font>
-            <input type="hidden" id="_cmd_history_cur" value="-1"/>
-        </form>
-*/
+/* method executed on page load, through:
+    .../components/net.molhokwai/molhokwai.common.js */
+var onPageLoad = function(){
+  /* theme first display fix */
+  var doRedirect = false;
+  var urlParams = window.location.search.split('&');
+  var newUrlParams = [];
+  for(var i=0;i<urlParams.length;i++){
+      var indTh = urlParams[i].indexOf('theme=');
+      if(indTh!=1){
+          newUrlParams.push(urlParams[i]);
+      }
+      else {
+          doRedirect = true;
+      }
+  }
+  if (doRedirect){
+      var url = window.location.pathname;
+      for(var i=0;i<newUrlParams.length;i++){
+          if (i==0){ url+='?'; }
+          else{ url+='&'; }
+          url += newUrlParams[i];
+      }
+      window.location = url;
+  }
+}
 
 /* configuration & settings */
 settings={

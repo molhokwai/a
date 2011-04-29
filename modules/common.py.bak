@@ -128,19 +128,6 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     log_wrapped = app_objects.log_wrapped
     utilities = app_objects.utilities
 
-    ###################################
-    ## REQUEST HANDLER... HANDLING
-    ###################################    
-    try:
-        # request handler proxy
-        request_handler = app_objects.RequestHandler(
-                            request, response, session, cache, T, db, auth, app_objects)
-        if len(request_handler.instructions):
-            request_handler.execute()
-            return 'request_handler', request_handler.instructions
-    except Exception, ex:
-        log_wrapped('Request Handler Handling Error (%s/modules/common/controller_init/line:143)' % this_app, ex)
-
     # cache clear
     if 'clear_cache' in request.vars:
         try: 
@@ -274,7 +261,13 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
-        response.theme = response.cookies['theme'].value
+        response.theme = response.cookies['theme'].value        
+        try:
+            from gluon.tools import fetch
+            t=cache.ram('time',fetch('%s%s/%s/data' % (app_objects.global_site_url, app_objects.path_info, request.application)),time_expire=1)
+        except Exception, ex:
+            log_wrapped('Exception in modules/common.py:+/-270', ex)
+            
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 

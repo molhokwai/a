@@ -307,10 +307,11 @@ class Utilities():
 
     def is_object(self,instruction_type_name,module_config):
         return instruction_type_name[0] in ('object')
+        
     def is_action(self,instruction_type_name,module_config):
         return (instruction_type_name[0] in ('action')
-                or instruction_type_name[0] 
-                    in self.obj_walk.to_value(module_config, ['instruction', 'keywords', typ]))
+                or instruction_type_name[2] 
+                    in self.obj_walk.to_value(module_config, ['instruction', 'keywords', 'action']))
 # instance
 utilities=Utilities()
 
@@ -336,7 +337,8 @@ def log_wrapped(_name, _value):
 exec('from applications.%s.modules import request_handler' % this_app)
 app_objects=Struct(**{'details':app_details, 'config':app_config, 'log_wrapped':log_wrapped,
                       'utilities':utilities, 'tentative_app':tentative_app, 'http_referer':http_referer,
-                      'RequestHandler' : request_handler.RequestHandler, 'app_modules_config' : app_modules_config})
+                      'RequestHandler' : request_handler.RequestHandler, 'app_modules_config' : app_modules_config},
+                      'global_site_url' : global_site_url, 'path_info' : path_info, 'full_url' : full_url})
 
 
 #########################################################################

@@ -36,7 +36,7 @@
     <script type="text/javascript">
       var server={
           request : {
-              application : '{{=(tentative_app if tentative_app else this_app)}}'
+              application : '{{=this_app}}'
           },
           pages : []
       };
@@ -111,7 +111,7 @@
                   }, 'google_translate_element');
                 }
               </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     
-              <script type="text/javascript" src="/{{=this_app}}/static/custom/add-ons/google_translate.js"></script>
+              <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/add-ons/google_translate.js"></script>
               <!-- end #google_translate_element-->    
             
               <div class="clear"></div>

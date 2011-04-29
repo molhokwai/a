@@ -262,6 +262,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
         response.theme = response.cookies['theme'].value
+            
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 
