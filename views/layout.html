@@ -151,7 +151,7 @@
                 pageTracker._trackPageview();
             }
             catch(e) {
-                if (console) try{console.log(e);}catch(e){}
+                try{if(console)console.log(e);}catch(e){}
             }
         </script>
     </div>    
