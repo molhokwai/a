@@ -200,3 +200,14 @@ timestamp: 2011-04-19T10:03:31.674001
 ALTER TABLE app_config ADD app_security_details TEXT;
 timestamp: 2011-04-25T17:53:23.550487
 ALTER TABLE app_config ADD app_modules_details TEXT;
+timestamp: 2011-05-02T20:51:46.284761
+ALTER TABLE posts ADD post_child CHAR(512);
+timestamp: 2011-05-02T20:51:46.402778
+CREATE TABLE posts_categories(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category INTEGER REFERENCES categories(id) ON DELETE CASCADE,
+    post INTEGER REFERENCES posts(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-05-03T21:23:08.584558
+ALTER TABLE posts ADD post_parent CHAR(512);

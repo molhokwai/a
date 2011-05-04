@@ -1,0 +1,66 @@
+* {
+    max-width: 1400px;
+}
+
+body {
+    font-family: "Arial";
+    font-size: 14px;
+}
+
+blockquote {
+    text-align: center;
+    font-style: italic;
+    padding: 3% 4%;
+}
+
+#top-bar, #wrapper {
+    margin: auto;    
+    min-width: 600px;
+    width: 80%;
+}
+
+#top-bar {
+    min-height: 5em;
+}
+
+#logo {
+}
+
+#menu-tabs, #cli_web {
+}
+#menu-tabs ul li {
+    list-style-type: none;
+    float: left;
+}
+
+#wrapper #user-menu {
+}
+
+h2.nav {
+    display:none;
+}
+
+#wrapper #container {
+    border-top: 1px solid #ABABAB;
+}
+
+#wrapper #container #content {
+    min-height: 50em;
+}
+
+#wrapper #container #content .left, #wrapper #container #content .right {
+    width: 45%;
+    padding: 2%;
+}
+
+#wrapper #container #content .left+.left {
+    border-left: 2px solid #ABABAB;
+    min-height: 40em;
+    width: 8%;
+}
+
+#footer {
+    margin-top: 2%;
+    border-top: 1px solid #ABABAB;
+    font-size: 0.8em;
+}

@@ -129,7 +129,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     utilities = app_objects.utilities
 
     # cache clear
-    if 'clear_cache' in request.vars:
+    if 'clear_cache' in request.vars and auth.user and auth.user.is_admin:
         try: 
             cache.ram.flush_all()
             log_wrapped('cache.ram.flush_all()', 'done....')
@@ -166,11 +166,32 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
                     ).select(db.posts.ALL)
     except Exception, ex:
         _pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
-        
+
+    is_page_request = request.function in ['page', 'post']
+    pg_name = None
+    pg_id = None
+    pg_id_name=None if not len(request.args)>0 else request.args[0]
+    if pg_id_name and app_objects.a_convert.to_int(pg_id_name):
+        pg_id_name = pg_id = app_objects.a_convert.to_int(pg_id_name)
+
+    if is_page_request:
+        if type(pg_id_name) == IntType:
+            pg_name = filter(lambda x: x.id == pg_id_name, _pages)
+            if len(pg_name)>0:
+                pg_id = pg_name[0].id
+                pg_name = pg_name[0].post_title
+            else:
+                pg_name = db(db.posts.id == pg_id_name).select()
+                if pg_name:
+                    pg_id = pg_name[0].id
+                    pg_name = pg_name[0].post_title
+
     items=[]
     menu_items = []
     for page in _pages:
-        item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':app_objects.tentative_app, 'id':page.id}]
+        item = [page.post_title, 
+                is_page_request and ((page.id == pg_id_name) or (page.post_title == pg_id_name)), # or (pg_id_name and pg_id_n_is_string and page.post_title.find(pg_id_name)==0)
+                '/%(app)s/default/page/%(pg_name)s' % {'app':app_objects.tentative_app, 'pg_name':page.post_title}]
         items.append(item)
         if page.show_in_menu and len(menu_items)<10:
           menu_items.append(item)
@@ -261,19 +282,14 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             response.cookies['theme'] = request.vars.theme
         response.cookies['theme']['expires'] = 365 * 24 * 3600
         response.cookies['theme']['path'] = '/'
-        response.theme = response.cookies['theme'].value        
-        try:
-            from gluon.tools import fetch
-            t=cache.ram('time',fetch('%s%s/%s/data' % (app_objects.global_site_url, app_objects.path_info, request.application)),time_expire=1)
-        except Exception, ex:
-            log_wrapped('Exception in modules/common.py:+/-270', ex)
+        response.theme = response.cookies['theme'].value
             
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
 
     response.base_theme = None
     response.child_theme = response.theme
-    response.theme_stylesheet = None
+    response.theme_stylesheet = None    
     base_theme = utilities.get_base_of_theme(response.theme)
 
     if base_theme and base_theme != response.theme:
@@ -286,5 +302,16 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
 
     if request.vars.theme_sidebar:
         response.theme_sidebar = request.vars.theme_sidebar
+
+    # Navigation & history
+    if not session.nav_history:
+        session.nav_history = []
+    if is_page_request and pg_name:
+        if len(session.nav_history)>2:
+            session.nav_history = session.nav_history[1:]
+        if pg_id:
+            pg_h = utilities.get_page_hierarchy(pg_id)
+            if not pg_h in session.nav_history:
+                session.nav_history.append(pg_h)
 
     return page_helper, post_helper

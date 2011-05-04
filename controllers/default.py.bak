@@ -161,7 +161,7 @@ def add():
         elif area == "page":
             db.posts.post_type.default = 'page'
             page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application',
-                                                    'show_in_menu', 'is_translated'], 
+                                                    'post_parent', 'show_in_menu', 'is_translated'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                     _id='post_attributes_content_is_original', value=''))
@@ -198,7 +198,10 @@ def edit():
     p_a_c_i_o_val=None
     try:
         area = request.args[0]
-        id = int(request.args[1])
+        if a_convert.to_int(request.args[1]):
+            id = int(request.args[1])
+        
+        id = int()
         this_item = db(db.posts.id == id).select()[0]
     except Exception, ex:
         session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))
@@ -232,7 +235,7 @@ def edit():
     elif area == 'page':
         this_item = db(db.posts.id == id).select()[0]
         edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
-                                                            'is_translated', 'show_in_menu'], 
+                                                            'post_parent', 'is_translated', 'show_in_menu'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                  _id='post_attributes_content_is_original', value=p_a_c_i_o_val))
@@ -626,5 +629,12 @@ def do_stuff():
             except Exception, ex:
                 pass
         session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
+    
+    redirect(URL(r = request,f = 'index'))
+
+def do_stuff_i():
+    if request.args[0] in ['set_login_mechanism']:
+        db(db.app_config.id>0).update(APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','))
+        session.flash=T('login mechanism updated.')
     
     redirect(URL(r = request,f = 'index'))

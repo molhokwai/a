@@ -1,0 +1,19 @@
+-	AN AS-IS INDEX.HTML PAGE
+	.	Just as given
+-	THE LAYOUT.HTML PAGE
+	.	With Dynamic, Page Dependent 'Sidebar'
+-	THE MENU
+	.	Dynamic Expanding Menu JQuery
+-	THE NAV HISTORY BAR
+	.	...
+-	THE PAGES
+	.	As in Document
+		.	News & Update: "This is where the news & update..."
+		.	Contact: 
+				Adress: Lange Elzenstraat,
+						2018 Antwerpen
+				...
+-	THE FORMS
+	.	Contact Form
+	.	Agreement Form
+

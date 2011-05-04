@@ -24,7 +24,7 @@ else:                                         # else use a normal relational dat
 #################################
 
 ## Administrators
-administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com', 'herve.m@molhokwai.net']
+administrators_emails=['molhokwai@gmail.com', 'herve.mayou@gmail.com', 'herve.m@molhokwai.net', 'herve.mayou@ymail.com', 'herve.mayou@yahoo.com']
 
 ## Table app config
 app_theme_sep_token = '-:-'
@@ -108,7 +108,7 @@ protocol = 'http'
 if request.get('env')['server_protocol'][:5] == 'HTTPS': protocol='https'
 global_site_url = '%s://%s' % (protocol,request.get('env')['http_host'])
 path_info = request.get('env')['path_info']
-full_url = '%s/%s' % (global_site_url, path_info)
+full_url = '%s%s' % (global_site_url, path_info)
 http_referer = None
 
 this_app = path_info.split('/')[1]
@@ -179,8 +179,7 @@ else:
         # this field is here for identical auth_table structure for
         # the different login mechanisms
         Field('registration_id', length=512,
-              label=T('registration id'),
-              readable=False),
+              label=T('registration id'), readable=False, writable=False),
             Field('display_name', length=512,
                       label=T('display name'),
                       requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
@@ -260,6 +259,9 @@ import datetime
 ##        The system first checks the *post_text_TCode* field and if not filled in, falls back to the *post_text* field
 ##    is_translated: if the translation (whether for the post_text, or the post_text_TCode) is done in all the languages 
 ##        available in the application). To be manually set once the translation in all languages for the post/page is done.
+db.define_table('categories',
+    SQLField('category_name', required=True))
+
 db.define_table('posts',
     SQLField('post_title', required=True),
     SQLField('post_text', 'text'),
@@ -267,6 +269,7 @@ db.define_table('posts',
     SQLField('post_time', 'datetime', default=datetime.datetime.today()),
     SQLField('post_type', required=True),
     SQLField('post_category', required=True, default=-1),
+    SQLField('post_parent', required=False, default=-1),
     SQLField('show_in_menu',  'boolean', required=True, default=False),
     SQLField('is_translated', 'boolean', required=True, default=False),
     SQLField('application', 'string', default=request.application),
@@ -279,6 +282,9 @@ db.define_table('posts',
                 }
             }""")
     )
+db.posts.post_type.requires = IS_IN_SET(['post', 'page'])
+db.posts.post_category.requires = IS_IN_DB(db, 'categories.id', 'categories.category_name')
+db.posts.post_parent.requires = IS_IN_DB(db, 'posts.id', 'posts.post_title')
 
 db.define_table('comments',
     SQLField('post_id', db.posts, required=True),
@@ -288,19 +294,13 @@ db.define_table('comments',
     SQLField('comment_text', 'text', required=True),
     SQLField('comment_time', 'datetime', required=True, default=datetime.datetime.today()))
 
-db.define_table('categories',
-    SQLField('category_name', required=True))
-
-##db.define_table('posts_categories',
-##    SQLField('category', db.categories, required=True),
-##    SQLField('post', db.posts, required=True))
+db.define_table('posts_categories',
+    SQLField('category', db.categories, required=True),
+    SQLField('post', db.posts, required=True))
     
 db.define_table('links',
     SQLField('link_title', required=True),
     SQLField('link_url', required=True))
-
-db.posts.post_type.requires = IS_IN_SET(['post', 'page'])
-db.posts.post_category.requires = IS_IN_DB(db, 'categories.id', 'categories.category_name')
 
 db.define_table('files',
     SQLField('file','upload', required=True, autodelete=True),

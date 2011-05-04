@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{=T.accepted_language or 'en'}}">
+    <head>
+        <title>{{=response.title or request.application}}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="keywords" content="{{=response.keywords}}" />
+        <meta name="description" content="{{=response.description}}" />
+        <meta name="google-site-verification" content="2TmmFn8eNL7GNZuDtORTZ89uxj5fmTtuwqQLqv8webc" /><!-- old: r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8 -->
+        <!-- include required CSS files, further most first -->
+        <!-- include requires CSS files
+        {{response.files.append(URL(request.application,'static','jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css'))}}
+        -->
+        <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
+        <!-- -VIEWS/THEMES/CMS/LAYOUT.HTML  -->
+        <!-- THEME: {{=response.theme}} -->
+        <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+        <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
+        <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
+        <!--[if IE 6]>
+            <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/iecss.css" type="text/css" media="screen" />
+        <![endif]-->
+        {{if response.child_theme and response.theme_stylesheet:}}
+            <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+        {{pass}}
+        <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
+        <!-- include requires CSS files
+        {{
+          ## TODO: why is this not working?
+          response.files.append(URL(request.application,'static','style.css'))
+        }}
+        -->
+        {{include 'web2py_ajax.html'}}
+        <script type="text/javascript">
+          <!-- /* this adds sfhover class to menu li items to make IE6 work */ jQuery(document).ready(function(){jQuery('li.web2py-menu-expand').hover(function ()     {jQuery(this).addClass('sfhover');},function () {jQuery(this).removeClass('sfhover');});});//-->
+        </script>
+        <script type="text/javascript">
+          var server={
+              request : {
+                  application : '{{=this_app}}'
+              },
+              pages : []
+          };
+        </script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
+        <script type="text/javascript">
+            if ({{=str(refresh_page).lower()}}){
+                window.location.reload();
+            }
+        </script>    
+    </head>
+    <body>
+        <div id="main_container">
+        
+            <div id="header">
+                <div id="logo"><a href="index.html"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/logo.png" alt="" width="186" height="88" title="" border="0" /></a></div>
+                <div id="menu">
+                    {{if response.menu:}}
+                        <ul>
+                            {{for _name,_active,_link in response.menu:}}
+                                 <li><a href="{{=_link}}" {{if _active:}}class="current"{{pass}}>{{=T(_name)}}</a></li>
+                                 <li class="divider"></li>
+                            {{pass}}
+                        </ul>
+                    {{pass}}
+
+                    <div class="search_box">
+                        <input type="text" name="search" class="search" value="search"/>
+                        <input type="image" src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/go.gif" class="search_bt" />
+                    </div>
+                </div>
+                <!-- end #menu -->
+                
+            </div>
+            <!-- end #header -->
+        
+            <div id="main_content">
+                    <div class="left_content">
+                        <div class="title">Welcome to <span>colorex</span></div>
+                        <p class="blue">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                        laboris nisi ut aliquip.   
+                        </p>
+        
+                        <p>
+                            <img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/pic1.gif" alt="" title="" class="left_img"/>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+                            aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur,  dolore eu fugiat nulla pariatur
+                        </p>
+        
+                        <div class="read_more">
+                            <a href="#">read more</a>
+                        </div>
+        
+                        <div class="title">Main <span>services</span></div>
+                        
+                        <div class="services_box">
+                            <img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/icon_services.gif" alt="" title="" class="icon" />
+                            <p class="services">
+                                <span class="blue">Lorem ipsum dolor sit amet</span><br />
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua labore et dolore magna aliqua labore et dolore magna aliqua. Ut enim ad 
+                                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                            </p>
+                        </div>
+        
+                        <div class="services_box">
+                            <img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/icon_services.gif" alt="" title="" class="icon" />
+                            <p class="services">
+                                <span class="blue">Lorem ipsum dolor sit amet</span><br />
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua labore et dolore magna aliqua labore et dolore magna aliqua. Ut enim ad 
+                                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                            </p>
+                        </div>            
+                    </div>
+                    <!--end .left_content-->
+        
+                    <div class="right_content">
+                        <div class="title">Latest <span>projects</span></div>
+                        <div class="latest_projects">
+                            <a href="#"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/p1.gif" alt="" title="" class="img_border" /></a>
+                            <a href="#"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/p2.gif" alt="" title="" class="img_border" /></a>
+                            <a href="#"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/p5.gif" alt="" title="" class="img_border" /></a>
+                            <a href="#"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/p4.gif" alt="" title="" class="img_border" /></a>
+                            <a href="#"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/p3.gif" alt="" title="" class="img_border" /></a>
+                            <a href="#"><img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/p6.gif" alt="" title="" class="img_border" /></a>
+                        </div>
+        
+                        <div class="title">News &amp; <span>updates</span></div>
+                        <p class="news">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+                            aliquip.   
+                        </p>
+        
+                        <div class="read_more">
+                            <a href="#">read more</a>
+                        </div>   
+        
+                        <p class="news">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+                            aliquip.   
+                        </p>
+        
+                        <div class="read_more">
+                            <a href="#">read more</a>
+                        </div>                  
+        
+                        <p class="news">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+                            aliquip.   
+                        </p>
+        
+                        <div class="read_more">
+                            <a href="#">read more</a>
+                        </div>                  
+                    </div>
+                    <!--end .right_content-->
+        
+                     <div class="clear"></div>       
+            </div>
+            <!--end #main_content -->           
+        
+            <div id="footer">
+                <div class="copyright">
+                    &copy;Copyright Hervé Mayou, 2011 . All Rights Reserved
+                </div>
+        
+                <div class="footer_links">
+                  {{=XML(' / '.join(   map(
+                                      lambda p_h_l: ':'.join( 
+                                              map(lambda x: A(T(x.replace('_', ' ')), _href="/%s/default/page/%s" % (this_app, x)).xml(), p_h_l)  
+                                      ) ,session.nav_history)
+                                ))}}
+                </div>
+        
+                <div class="footer_logo">
+                    <img src="/{{=this_app}}/static/css/themes/{{=response.theme}}/images/footer_logo.png" alt="" title="" width="88" height="30"/>
+                </div>
+            </div>
+            <!-- end #footer -->             
+        </div>
+        <!-- end #main_container -->
+        
+        <script type="text/javascript" id="tracking_src">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript" id="tracking_process">
+            try {
+                var pageTracker = _gat._getTracker("UA-5101967-1");
+                pageTracker._initData();
+                pageTracker._trackPageview();
+            }
+            catch(e) {
+                if (console) try{console.log(e);}catch(e){}
+            }
+        </script>
+        <!-- end #tracking -->
+    </body>    
+</html>
