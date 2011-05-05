@@ -306,7 +306,6 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     # Navigation & history
     if not session.nav_history:
         session.nav_history = []
-    log_wrapped('is_page_request', is_page_request)
     if is_page_request and pg_name:
         if len(session.nav_history)>2:
             session.nav_history = session.nav_history[1:]
