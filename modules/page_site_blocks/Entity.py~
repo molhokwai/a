@@ -1,4 +1,4 @@
-from Type import *
+from types import *
 
 class Entity():
 
@@ -15,7 +15,7 @@ class Entity():
 
     """
 	
-    def fetch(self, query)
+    def fetch(self, query):
         """
 		- Executes the query object
 		- Returns a List of Entity objects with attributes populated from fetched entities         

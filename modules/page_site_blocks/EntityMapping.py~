@@ -24,12 +24,12 @@ class EntityMapping():
     imageUrl = None
     mapping = None
 
-	def setContent(self, value):
-		self.content = value
-	def setUrl(self, value):
-		self.url = value
-	def setImageUrl(self, value):
-		self.imageUrl = value
+    def setContent(self, value):
+        self.content = value
+    def setUrl(self, value):
+        self.url = value
+    def setImageUrl(self, value):
+        self.imageUrl = value
 
     def __init__(self, entity, mapping=None):
         """

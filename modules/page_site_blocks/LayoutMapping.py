@@ -20,8 +20,8 @@ class LayoutMapping():
 
     container = None
     title = None
-	summary = None
+    summary = None
     content = None
-	_list = {'container' : '', 'content' : ''}
+    _list = {'container' : '', 'content' : ''}
 
 

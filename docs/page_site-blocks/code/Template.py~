@@ -28,12 +28,6 @@ class Template(object):
     _blocks = None
     @property
     def blocks():
-        """
-        Property, returning the blocks from the entityBlocks Attribute, keeping the x,y list coordinates.
-
-        @return  :
-        @author
-        """
         if not self._blocks:
             self._blocks = []
             for x in range(len(self.entityBlocks)):

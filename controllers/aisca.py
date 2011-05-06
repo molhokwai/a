@@ -13,4 +13,7 @@ except Exception, ex:
 ###################################
 
 def index():
-  return dict()
+    homePage = HomePage()
+    homePage.populateEntityBlocks()
+    
+    return dict(entityBlocks = homePage.entityBlocks, blocks = homePage.blocks)

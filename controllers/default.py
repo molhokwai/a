@@ -127,7 +127,8 @@ def category():
 
         response.sidebar_note = T("You are currently browsing the archives for the %(cat_name)s category.",dict(cat_name=cat_name))
         return dict(posts = utilities.posts_replace_serverside_output_values(posts))
-    except:
+    except Exception, ex:
+        log_wrapped('Error in /%s/default/category' % this_app, ex)
         redirect(URL(r = request,f = 'index'))
 
 @auth.requires_login()
@@ -138,7 +139,8 @@ def add():
         if area == "post":
             db.posts.post_type.default = 'post'
             page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application', 
-                                                    'post_category', 'is_translated', 'auth_requires_login'], 
+                                                    'post_category', 'is_translated', 'auth_requires_login',
+                                                    'post_attributes_json'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', 
                                     _name='post_attributes_content_is_original', 
@@ -216,7 +218,8 @@ def edit():
     
     if area == 'post':
         edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
-                                                            'post_category', 'is_translated', 'auth_requires_login'], 
+                                                            'post_category', 'is_translated', 'auth_requires_login',
+                                                            'post_attributes_json'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                 _id='post_attributes_content_is_original', value=p_a_c_i_o_val))
@@ -227,7 +230,8 @@ def edit():
                 session.flash = T("Post deleted.")
                 redirect(URL(r = request,f = 'index/posts'))
             else:    
-                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                from gluon.contrib import simplejson
+                _json=simplejson.loads(request.vars.post_attributes_json)
                 db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
                 session.flash = T("Post updated.")
                 redirect(URL(r = request,f = 'post/%s' %id))
@@ -247,6 +251,8 @@ def edit():
                 redirect(URL(r = request,f = 'pages'))
             else:
                 try:
+                    from gluon.contrib import simplejson
+                    _json=simplejson.loads(request.vars.post_attributes_json)
                     _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
                     db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
                     session.flash = T("Page updated.")

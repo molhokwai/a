@@ -9,12 +9,16 @@ class PageBase (Template):
     :author:
 	"""
 
-	""" ATTRIBUTES
+    """ ATTRIBUTES
 
+    blocks  (protected)
+        Implementation of the Parent's (Template) abstract attribute, 
+		for a global site default Base Page
     entityBlocks  (protected)
         Implementation of the Parent's (Template) abstract attribute, 
 		for a global site default Base Page
     """
+    blocks = None
     entityBlocks = None
 
 

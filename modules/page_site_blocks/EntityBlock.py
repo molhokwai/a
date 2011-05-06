@@ -1,6 +1,3 @@
-from Entity import *
-from BlockBase import *
-
 class EntityBlock(object):
 
     """
@@ -15,14 +12,13 @@ class EntityBlock(object):
     entities  (public)
     block  (public)
     query  (public)
-		(Sql string | Else)
+        (Sql string | Else)
 
     """
-	entities = None
-	block = None
-	query = None
+    entities = None
+    block = None
+    query = None
 
     def __init__(self, **kwargs):
         if kwargs:
             self.__dict__.update(kwargs)
-

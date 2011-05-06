@@ -12,6 +12,8 @@ class HomePage (PageBase):
 
     """ ATTRIBUTES
 
+    blocks  (protected)
+		Optional Implementation of the Parent's (Template) abstract attribute
     entityBlocks  (protected)
 		Optional Implementation of the Parent's (Template) abstract attribute
     """

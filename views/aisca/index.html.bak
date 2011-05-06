@@ -84,9 +84,9 @@
             <div id="main_content">
                     
                     <div class="left_content">
-                        {{="XML(blocks[0][0].layoutOutput())"}}
+                        {{=XML(blocks[0][0].layoutOutput())}}
                         
-                        <div class="title">Welcome to <span>colorex</span></div>
+                        <!-- div class="title">Welcome to <span>colorex</span></div>
                         <p class="blue">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
                         laboris nisi ut aliquip.   
                         </p>
@@ -99,7 +99,7 @@
         
                         <div class="read_more">
                             <a href="#">read more</a>
-                        </div>
+                        </div -->
 
                         {{="XML(blocks[0][1].layoutOutput())"}}
         
@@ -142,8 +142,8 @@
         
                         <div class="title">News &amp; <span>updates</span></div>
                         <p class="news">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
-                            aliquip.   
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                            nisi ut aliquip.   
                         </p>
         
                         <div class="read_more">

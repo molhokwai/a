@@ -22,7 +22,4 @@ class EntityBlock(object):
 	block = None
 	query = None
 
-    def __init__(self, **kwargs):
-        if kwargs:
-            self.__dict__.update(kwargs)
 

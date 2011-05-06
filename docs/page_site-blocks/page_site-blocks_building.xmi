@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI verified="false" xmi.version="1.2" timestamp="2011-05-05T17:49:43" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
+<XMI verified="false" xmi.version="1.2" timestamp="2011-05-06T18:25:12" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
@@ -15,6 +15,7 @@
     <UML:Stereotype visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="datatype" name="datatype" />
     <UML:Stereotype visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="interface" name="interface" />
     <UML:Stereotype visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="enum" name="enum" />
+    <UML:Stereotype visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="struct" name="struct" />
     <UML:Model stereotype="folder" visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Logical View" name="Logical View" >
      <UML:Namespace.ownedElement>
       <UML:Package stereotype="folder" visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Datatypes" name="Datatypes" >
@@ -39,24 +40,24 @@
       </UML:Package>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="true" isLeaf="false" isRoot="false" xmi.id="5rkiWjWUu2bT" name="Template" >
        <UML:Classifier.feature>
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="kkRUSvBwO3wx" type="Lj5yZKFRFP2T" name="blocks" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="Acsf8kTLiE7v" type="DJOcXHGIsUnA" name="menu" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="8itipZdzBUcH" type="E5cuHhqV1C5Y" name="footer" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="TJrJncSuLJcA" type="sD71hjIwmsq4" name="container" />
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="BwEnkRgV1RGt" type="kR2gcOlnRXFN" comment="Abstract attribute to be implemented in child Page &#xa;Mapping by type:&#xa; - Entity type (Post, NewsUpdate, Service...)&#xa; - Block by coordinates :&#xa;       ([0,0] -left top,   [0,1]  -left borrom, &#xa;         [1,0] -right top, [1,1] -right bottom )" name="entityBlocks" />
-        <UML:Operation visibility="protected" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u1jTHQMHDxLv" name="blocksOutput" >
+        <UML:Attribute visibility="private" isSpecification="false" xmi.id="2SbLdZkUOxiI" type="cF5u5hHAJ92z" comment="Property, returning the blocks from the entityBlocks Attribute, keeping the x,y list coordinates." name="blocks" />
+        <UML:Operation visibility="protected" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u1jTHQMHDxLv" comment="        Method not used in classical MVC frameworks, as View is self contained, with header, footer, container... and calls/invokes Controllers' objects atomically for the corresponding sections'/portions'/blocks' outputs.&#xa;" name="blocksOutput" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="8Nz1TvhNwOqC" type="Lj5yZKFRFP2T" />
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="FX4SrZS5POJg" type="kR2gcOlnRXFN" value="" comment="Uses the class's entityBlocks attribute unless optional entityBlocks parameter given" name="opt entityBlocks" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation visibility="protected" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="agsKZUFvAc6B" comment="Method used in getBlocks to get corresponding entities" name="populateEntityBlocks" >
+        <UML:Operation visibility="protected" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="agsKZUFvAc6B" comment="Method used to get and assign the entities for each entityBlock" name="populateEntityBlocks" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="QGMd9UDEfKTr" type="M5D3oTxaKmcs" />
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="zEqyGHUjDEWD" type="kR2gcOlnRXFN" value="" comment="Uses the class's entityBlocks attribute unless optional entityBlocks parameter given" name="opt entityBlocks" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="hAugIZWgqqHz" comment="Method using blocksOutput method, and doing footer, header, container... output" name="output" />
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="hAugIZWgqqHz" comment="Method using blocksOutput method, and doing footer, header, container... output&#xa;      Method not used in classical MVC frameworks, as View is self contained, with header, footer, container... and calls/invokes Controllers' objects atomically for the corresponding sections'/portions'/blocks' outputs.&#xa;" name="output" />
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="U71ATMi1IEnn" name="contruction Page" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="yg7Mee87W9K8" type="kR2gcOlnRXFN" value="" name="entityBlocks" />
@@ -66,7 +67,6 @@
       </UML:Class>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Lj5yZKFRFP2T" name="BlockBase" >
        <UML:Classifier.feature>
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="PoJLlAT6ia4C" type="91GLLJC70CVh" comment="Location coordinates:&#xa;       ([0,0] -left top,   [0,1]  -left borrom, &#xa;         [1,0] -right top, [1,1] -right bottom )" name="coordinates" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="vubgX1aqLAyB" type="WhS4Uq38mU7h" comment="EntityMapping.mapping object (dictionary) required if Entity attributes does not directy map to LayoutMapping placehoders" name="entityMappings" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="RO0oCHAxRb19" type="B3J0LqsgkBN6" name="layoutMapping" />
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="yYILSnrxH45d" comment="Generic method:&#xa;- Using reflection to match Entity relevant attributes to corresponding block layoutMapping placeholders&#xa;            Using optional entityMapping.mapping Object (dictionary, given if Entity mapping &#xa;            does not match LayoutMapping)&#xa;&#xa;- Executing replacements (looping through entities) and returning output&#xa;&#xa;In MVC pattern: Output is variable assignment in Controller and actual html building output in View." name="layoutOutput" >
@@ -76,7 +76,6 @@
         </UML:Operation>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="RtcPyrLbs9Uu" comment="Coordinates passed by the Page @construction" name="construction BlockBase" >
          <UML:BehavioralFeature.parameter>
-          <UML:Parameter visibility="private" isSpecification="false" xmi.id="6YQ0yKPbym7Q" type="91GLLJC70CVh" value="" name="coordinates" />
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="TKaIptw88kfB" type="WhS4Uq38mU7h" value="" name="opt entityMappings" />
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="KjHQbF42XfLN" type="B3J0LqsgkBN6" value="" name="opt layoutMappings" />
          </UML:BehavioralFeature.parameter>
@@ -85,15 +84,14 @@
       </UML:Class>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="DJOcXHGIsUnA" name="Menu" />
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="E5cuHhqV1C5Y" name="Footer" />
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="sD71hjIwmsq4" name="Container" />
+      <UML:Class stereotype="struct" visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="sD71hjIwmsq4" comment="Simple string structure with opening:closing tags and content placeholder..." name="Container" />
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="M5D3oTxaKmcs" name="Entity" >
        <UML:Classifier.feature>
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="vVeqXsoiGuYl" type="t2wfz3DgSfsb" name="**attr" />
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="E4dRSrRz85X2" name="fetch" >
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="E4dRSrRz85X2" comment="- Executes the query object&#xa;- Returns a List of Entity objects with attributes populated from fetched entities." name="fetch" >
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="j1Yvzi55wlAq" type="M5D3oTxaKmcs" />
-          <UML:Parameter visibility="private" isSpecification="false" xmi.id="Cvjx5iVJn9kD" type="h2lvZmXUOvqb" value="" name="type" />
-          <UML:Parameter visibility="private" isSpecification="false" xmi.id="A6Fg6ugqqGaN" type="t2wfz3DgSfsb" value="" name="key" />
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="BknFUgvUTsN7" type="t2wfz3DgSfsb" value="" comment="Executable query object" name="query" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
        </UML:Classifier.feature>
@@ -102,8 +100,12 @@
        <UML:Classifier.feature>
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="I7TT4b0rxpNH" type="M5D3oTxaKmcs" name="entities" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="IWg9d5PdB2ad" type="Lj5yZKFRFP2T" name="block" />
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="xMvhb0sGbSFI" type="t2wfz3DgSfsb" comment="Reference to corresponding Block attribute (block&lt;T>.layoutMapping.title, block&lt;T>.layoutMapping.content...)" name="blockLayoutMapping" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="f5rmRWQXbvgw" type="t2wfz3DgSfsb" comment="(Sql string | Else)" name="query" />
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="J6lhCJ7J0XLV" comment="Optional Keyword Arguments to set the classes' attributes" name="construction EntityBlock" >
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="ZWoFUrniDa7p" type="t2wfz3DgSfsb" value="" name="opt **kwargs" />
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Jly9cfhvIH5c" name="PageBase" >
@@ -111,7 +113,6 @@
         <UML:Generalization xmi.idref="bDYU12ssqeqD" />
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="DEHr5CxWjrsl" type="cF5u5hHAJ92z" comment="Implementation of the Parent's (Template) abstract attribute, for a global site default Base Page.&#xa;" name="blocks" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="nK0Ij7OYGjhV" type="kR2gcOlnRXFN" comment="Implementation of the Parent's (Template) abstract attribute, for a global site default Base Page?&#xa;" name="entityBlocks" />
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="gg895ChhLeW8" comment="The construction method of the page passes the  page's implemented entityBlocks attribute to the Template base class construction, or the optional entityBlocks Parameter, if present." name="construction Page" >
          <UML:BehavioralFeature.parameter>
@@ -123,20 +124,23 @@
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="Jly9cfhvIH5c" xmi.id="bDYU12ssqeqD" parent="5rkiWjWUu2bT" name="" />
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="B3J0LqsgkBN6" comment="Attributes title &amp; string:&#xa;    - String (xml/html...) with placeholders for entity mapping" name="LayoutMapping" >
        <UML:Classifier.feature>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="43cLuZREAZB1" type="mLkuyQgvYZdf" name="container" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="dyR1wFBDP7ez" type="mLkuyQgvYZdf" name="title" />
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="3aGFDr2naItE" type="mLkuyQgvYZdf" name="summary" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="8lAC48Vs19cA" type="mLkuyQgvYZdf" name="content" />
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="oKKdirVA0dhJ" type="t2wfz3DgSfsb" comment="{container : string, content :string}" name="_list" />
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="WhS4Uq38mU7h" name="EntityMapping" >
        <UML:Classifier.feature>
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="JqUnVurzkt5V" type="M5D3oTxaKmcs" name="entity" />
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="Ev3EzBQ6sVX2" type="mLkuyQgvYZdf" comment="Block specifies this parameter" name="optional url" />
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="Nv4yCHiFBufZ" type="mLkuyQgvYZdf" comment="Block specifies or builds this parameter" name="content" />
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="9nehSLGjqMkf" type="t2wfz3DgSfsb" comment="Object (dictionary) required if Entity mapping does not match LayoutMapping" name="opt mapping" />
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="kJSJUBnvuK0r" name="construction EntityMapping" >
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="Ev3EzBQ6sVX2" type="mLkuyQgvYZdf" comment="Block specifies this parameter" name="opt url" />
+        <UML:Attribute visibility="private" isSpecification="false" xmi.id="vipz2LiA854c" type="mLkuyQgvYZdf" name="opt imageUrl" />
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="9nehSLGjqMkf" type="t2wfz3DgSfsb" comment="Object (dictionary) required if Entity mapping does not match LayoutMapping&#xa;key : the LayoutMapping attribute, value: the entity corresponding attribute&#xa;" name="opt mapping" />
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="kJSJUBnvuK0r" comment="If mapping object provided, attributes are appended to object accordingly" name="construction EntityMapping" >
          <UML:BehavioralFeature.parameter>
-          <UML:Parameter visibility="private" isSpecification="false" xmi.id="L3td6zq07rUX" type="mLkuyQgvYZdf" value="" name="opt url" />
-          <UML:Parameter visibility="private" isSpecification="false" xmi.id="ytjACfTwUgi6" type="mLkuyQgvYZdf" value="" name="opt content" />
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="abX5BbS7HH4I" type="M5D3oTxaKmcs" value="" name="entity" />
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="RuNLXTKLRPCv" type="t2wfz3DgSfsb" value="" name="opt mapping" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
@@ -147,7 +151,6 @@
         <UML:Generalization xmi.idref="7up3Xt2IYgNc" />
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
-        <UML:Attribute visibility="public" isSpecification="false" xmi.id="s6B1PHqdhIdz" type="cF5u5hHAJ92z" comment="Optional Implementation of the Parent's (Template) abstract attribute." name="blocks" />
         <UML:Attribute visibility="protected" isSpecification="false" xmi.id="g59deLOfnIph" type="kR2gcOlnRXFN" comment="Optional Implementation of the Parent's (Template) abstract attribute." name="entityBlocks" />
        </UML:Classifier.feature>
       </UML:Class>
@@ -158,7 +161,7 @@
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
         <UML:Attribute visibility="public" isSpecification="false" xmi.id="1Rc21fQYNojA" type="WhS4Uq38mU7h" comment="Required Implementation of the parent BaseBlock class's attribute.&#xa;&#xa;EntityMapping.mapping object (dictionary) required if Entity attributes does not directy map to LayoutMapping placehoders" name="entityMappings" />
-        <UML:Attribute visibility="private" isSpecification="false" xmi.id="Q8yExtb9dfTM" type="B3J0LqsgkBN6" comment="Required Implementation of the parent BaseBlock class's attribute.&#xa;&#xa;" name="layoutMappings" />
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="Q8yExtb9dfTM" type="B3J0LqsgkBN6" comment="Required Implementation of the parent BaseBlock class's attribute.&#xa;&#xa;" name="layoutMapping" />
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="amoVvPe7cRMp" xmi.id="DM5w83VFdI48" parent="Lj5yZKFRFP2T" name="" />
@@ -169,102 +172,94 @@
       <diagrams>
        <diagram showopsig="1" linecolor="#ff0000" snapx="10" showattribassocs="1" snapy="10" linewidth="0" showattsig="1" showpubliconly="1" showpackage="1" showstereotype="1" name="Overview_Classes" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" canvasheight="866" canvaswidth="1280" localid="" snapcsgrid="0" showgrid="0" showops="1" usefillcolor="1" fillcolor="#ffff00" zoom="100" xmi.id="njPnuWwQl7WY" documentation="" showscope="1" snapgrid="0" showatts="1" type="1" >
         <widgets>
-         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="105" showattsigs="601" showstereotype="1" y="73" showattributes="1" font="DejaVu Sans,9,-1,5,50,0,0,0,0,0" drawascircle="0" width="289" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="5rkiWjWUu2bT" showscope="1" height="105" showopsigs="601" />
-         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="472" showattsigs="601" showstereotype="1" y="248" showattributes="1" font="DejaVu Sans,9,-1,5,75,0,0,0,0,0" width="729" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="Lj5yZKFRFP2T" showscope="1" height="90" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="390" showattsigs="601" showstereotype="1" y="446" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="198" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="kR2gcOlnRXFN" showscope="1" height="82" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="721" showattsigs="601" showstereotype="1" y="453" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="257" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="M5D3oTxaKmcs" showscope="1" height="45" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="133" showattsigs="601" showstereotype="1" y="257" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="319" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Jly9cfhvIH5c" showscope="1" height="60" showopsigs="601" />
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="105" showattsigs="601" showstereotype="1" y="73" showattributes="1" font="DejaVu Sans,9,-1,5,75,1,0,0,0,0" drawascircle="0" width="289" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="5rkiWjWUu2bT" showscope="1" height="90" showopsigs="601" />
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="472" showattsigs="601" showstereotype="1" y="248" showattributes="1" font="DejaVu Sans,9,-1,5,75,0,0,0,0,0" width="623" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="Lj5yZKFRFP2T" showscope="1" height="75" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="390" showattsigs="601" showstereotype="1" y="446" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="310" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="kR2gcOlnRXFN" showscope="1" height="75" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="721" showattsigs="601" showstereotype="1" y="453" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="197" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="M5D3oTxaKmcs" showscope="1" height="45" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="133" showattsigs="601" showstereotype="1" y="257" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="319" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Jly9cfhvIH5c" showscope="1" height="45" showopsigs="601" />
          <notewidget width="212" showstereotype="1" x="765" noteType="0" y="322" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="68" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="Web2Py: Use form with div style layout parameter to directly have modifiable entities" />
-         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="684" showattsigs="601" showstereotype="1" y="572" showattributes="1" font="DejaVu Sans,9,-1,5,50,0,0,0,0,0" width="550" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="WhS4Uq38mU7h" showscope="1" height="90" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="124" showattsigs="601" showstereotype="1" y="540" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="106" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Cfzo9wCSIAyi" showscope="1" height="37" showopsigs="601" />
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="684" showattsigs="601" showstereotype="1" y="572" showattributes="1" font="DejaVu Sans,9,-1,5,50,0,0,0,0,0" width="420" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="WhS4Uq38mU7h" showscope="1" height="90" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="124" showattsigs="601" showstereotype="1" y="540" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="83" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Cfzo9wCSIAyi" showscope="1" height="29" showopsigs="601" />
          <notewidget width="240" showstereotype="1" x="821" noteType="0" y="479" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="50" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="Web2Py: Entity is 'native' model class" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="753" showattsigs="601" showstereotype="1" y="100" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="217" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="amoVvPe7cRMp" showscope="1" height="37" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="753" showattsigs="601" showstereotype="1" y="100" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="218" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="amoVvPe7cRMp" showscope="1" height="52" showopsigs="601" />
          <notewidget width="253" showstereotype="1" x="150" noteType="0" y="566" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="74" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="HOMEPAGE Example: Child of PageBase actually implementing the entityBlocks abstract attribute used in the contruction method" />
          <notewidget width="292" showstereotype="1" x="867" noteType="0" y="114" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="76" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="NEWSUPDATEBLOCK Example: Child of BaseBlock actually implementing the entityMappings &amp; layoutMapping abstract attributes." />
         </widgets>
         <messages/>
         <associations>
-         <assocwidget indexa="1" indexb="2" visibilityA="0" widgetaid="5rkiWjWUu2bT" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="kkRUSvBwO3wx" changeabilityB="900" widgetbid="Lj5yZKFRFP2T" totalcountb="4" type="510" linewidth="none" >
-          <linepath>
-           <startpoint startx="394" starty="116" />
-           <endpoint endx="527" endy="248" />
-           <point x="527" y="116" />
-          </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="479" showstereotype="1" y="227" text="blocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="56" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="JL7wSSmc7jU5" height="19" />
-         </assocwidget>
-         <assocwidget indexa="3" indexb="1" visibilityA="0" widgetaid="kR2gcOlnRXFN" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="IWg9d5PdB2ad" changeabilityB="900" widgetbid="Lj5yZKFRFP2T" totalcountb="2" type="510" linewidth="none" >
+         <assocwidget indexa="2" indexb="1" visibilityA="0" widgetaid="kR2gcOlnRXFN" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="IWg9d5PdB2ad" changeabilityB="900" widgetbid="Lj5yZKFRFP2T" totalcountb="2" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="430" starty="446" />
            <endpoint endx="472" endy="271" />
            <point x="430" y="271" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="430" showstereotype="1" y="273" text="block" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="50" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="3c1XXNNPZv4j" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="430" showstereotype="1" y="273" text="block" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="50" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="gn4Dr56IfNEA" height="19" />
          </assocwidget>
-         <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="Lj5yZKFRFP2T" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="vubgX1aqLAyB" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
+         <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="Lj5yZKFRFP2T" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="3" xmi.id="vubgX1aqLAyB" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="740" starty="268" />
            <endpoint endx="740" endy="453" />
            <point x="740" y="268" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="676" showstereotype="1" y="432" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="qoE6sDHBWO7w" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="676" showstereotype="1" y="432" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="eOZNfUwIIavk" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="kR2gcOlnRXFN" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="I7TT4b0rxpNH" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="588" starty="466" />
+           <startpoint startx="700" starty="466" />
            <endpoint endx="721" endy="466" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="666" showstereotype="1" y="468" text="entities" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="62" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="osXvb1yeb0C9" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="666" showstereotype="1" y="468" text="entities" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="62" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="JtVuzDYf0aqq" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="2" widgetaid="Jly9cfhvIH5c" linecolor="none" totalcounta="2" xmi.id="bDYU12ssqeqD" widgetbid="5rkiWjWUu2bT" totalcountb="4" type="500" linewidth="none" >
           <linepath>
            <startpoint startx="186" starty="257" />
-           <endpoint endx="186" endy="178" />
+           <endpoint endx="186" endy="163" />
           </linepath>
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="5rkiWjWUu2bT" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="BwEnkRgV1RGt" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="2" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="264" starty="178" />
+           <startpoint startx="264" starty="163" />
            <endpoint endx="390" endy="473" />
            <point x="264" y="473" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="313" showstereotype="1" y="475" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="LXYvQacEMoKE" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="313" showstereotype="1" y="475" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="dw8IHKRvg0IL" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="WhS4Uq38mU7h" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="JqUnVurzkt5V" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="780" starty="572" />
            <endpoint endx="780" endy="498" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="735" showstereotype="1" y="500" text="entity" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="53" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="1ZNVxVSmNzfw" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="735" showstereotype="1" y="500" text="entity" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="53" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="SCeinXT4QwyQ" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="2" visibilityA="0" widgetaid="Lj5yZKFRFP2T" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="vubgX1aqLAyB" changeabilityB="900" widgetbid="WhS4Uq38mU7h" totalcountb="4" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="684" starty="338" />
+           <startpoint startx="684" starty="323" />
            <endpoint endx="684" endy="572" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="581" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="ycZYcjfvEBoe" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="581" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="8U364swhm2x4" height="19" />
          </assocwidget>
-         <assocwidget indexa="3" indexb="2" visibilityA="0" widgetaid="5rkiWjWUu2bT" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="BwEnkRgV1RGt" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="4" type="510" linewidth="none" >
+         <assocwidget indexa="3" indexb="3" visibilityA="0" widgetaid="5rkiWjWUu2bT" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="BwEnkRgV1RGt" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="4" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="390" starty="178" />
+           <startpoint startx="390" starty="163" />
            <endpoint endx="390" endy="446" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="kQq6EAJDkgjf" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="MOx2OEMoQ0XB" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="Cfzo9wCSIAyi" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="g59deLOfnIph" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="2" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="230" starty="554" />
-           <endpoint endx="408" endy="528" />
+           <startpoint startx="207" starty="554" />
+           <endpoint endx="408" endy="521" />
            <point x="408" y="554" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="325" showstereotype="1" y="530" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="#" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="99PU63R2f0aF" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="325" showstereotype="1" y="523" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="#" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="X0FwwBK2fL9j" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" widgetaid="Cfzo9wCSIAyi" linecolor="none" totalcounta="2" xmi.id="7up3Xt2IYgNc" widgetbid="Jly9cfhvIH5c" totalcountb="3" type="500" linewidth="none" >
           <linepath>
            <startpoint startx="165" starty="540" />
-           <endpoint endx="165" endy="317" />
+           <endpoint endx="165" endy="302" />
           </linepath>
          </assocwidget>
-         <assocwidget indexa="1" indexb="3" widgetaid="amoVvPe7cRMp" linecolor="none" totalcounta="2" xmi.id="DM5w83VFdI48" widgetbid="Lj5yZKFRFP2T" totalcountb="4" type="500" linewidth="none" >
+         <assocwidget indexa="1" indexb="3" widgetaid="amoVvPe7cRMp" linecolor="none" totalcounta="2" xmi.id="DM5w83VFdI48" widgetbid="Lj5yZKFRFP2T" totalcountb="3" type="500" linewidth="none" >
           <linepath>
            <startpoint startx="753" starty="117" />
            <endpoint endx="705" endy="248" />
@@ -273,21 +268,21 @@
          </assocwidget>
          <assocwidget indexa="1" indexb="3" visibilityA="0" widgetaid="amoVvPe7cRMp" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="1Rc21fQYNojA" changeabilityB="900" widgetbid="WhS4Uq38mU7h" totalcountb="4" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="753" starty="137" />
+           <startpoint startx="753" starty="152" />
            <endpoint endx="753" endy="572" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="651" showstereotype="1" y="549" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="jDAxPzZ9NPDc" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="649" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="B5Oy6M0SkxT7" height="19" />
          </assocwidget>
          <assocwidget indexa="2" indexb="1" visibilityA="0" widgetaid="Jly9cfhvIH5c" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="3" xmi.id="nK0Ij7OYGjhV" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="4" type="510" linewidth="none" >
           <linepath>
-           <startpoint startx="390" starty="317" />
+           <startpoint startx="390" starty="302" />
            <endpoint endx="390" endy="446" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="ZWnHDWvKdKpj" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="9pvapSlKQzEL" height="19" />
          </assocwidget>
         </associations>
        </diagram>
-       <diagram showopsig="1" linecolor="#ff0000" snapx="10" showattribassocs="1" snapy="10" linewidth="0" showattsig="1" showpubliconly="1" showpackage="1" showstereotype="1" name="Overview_Sequence" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" canvasheight="866" canvaswidth="1487" localid="yZH8INQRyPt3" snapcsgrid="0" showgrid="0" showops="1" usefillcolor="1" fillcolor="#ffff00" zoom="100" xmi.id="3j1EOdvr1W9Y" documentation="" showscope="1" snapgrid="0" showatts="1" type="3" >
+       <diagram showopsig="1" linecolor="#ff0000" snapx="10" showattribassocs="1" snapy="10" linewidth="0" showattsig="1" showpubliconly="1" showpackage="1" showstereotype="1" name="Overview_Sequence" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" canvasheight="866" canvaswidth="1357" localid="yZH8INQRyPt3" snapcsgrid="0" showgrid="0" showops="1" usefillcolor="1" fillcolor="#ffff00" zoom="100" xmi.id="3j1EOdvr1W9Y" documentation="" showscope="1" snapgrid="0" showatts="1" type="3" >
         <widgets>
          <objectwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" usesdiagramusefillcolor="1" instancename="" x="29" decon="0" showstereotype="1" y="20" font="DejaVu Sans,9,-1,0,50,0,1,0,0,0" localid="WuaZ5tPwJmi0" width="48" isinstance="0" multipleinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="kP7RQLo3Ff2j" height="60" drawasactor="1" />
          <objectwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" usesdiagramusefillcolor="1" instancename="" x="138" decon="0" showstereotype="1" y="20" font="DejaVu Sans,9,-1,0,50,0,1,0,0,0" localid="L077JVDaNzu8" width="65" isinstance="0" multipleinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="rJm7RRIxAl0n" height="60" drawasactor="1" />
@@ -315,16 +310,16 @@
           <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="573" showstereotype="1" y="335" text=": layoutOutput() : string" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="153" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="RyBqffowJTgQ" height="19" />
          </messagewidget>
          <messagewidget linecolor="none" usesdiagramfillcolor="1" widgetbid="sQPdyaLzUul3" textid="UpEI1JktC63Z" operation="kJSJUBnvuK0r" linewidth="none" seqnum="" usesdiagramusefillcolor="1" x="936" showstereotype="1" y="199" widgetaid="UjQfHleAtbSQ" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="187" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="kJSJUBnvuK0r" height="20" sequencemessagetype="1000" >
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="941" showstereotype="1" y="180" text=": construction EntityMapping(opt url : string, opt content : string, opt mapping : object)" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="542" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="UpEI1JktC63Z" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="941" showstereotype="1" y="180" text=": construction EntityMapping(entity : Entity, opt mapping : object)" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="412" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="UpEI1JktC63Z" height="19" />
          </messagewidget>
          <messagewidget linecolor="none" usesdiagramfillcolor="1" widgetbid="LIHSf38Zsgsb" textid="PBGcSHtAB6GC" operation="E4dRSrRz85X2" linewidth="none" seqnum="" usesdiagramusefillcolor="1" x="567" showstereotype="1" y="167" widgetaid="lhwraJls3RqM" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="654" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="E4dRSrRz85X2" height="20" sequencemessagetype="1000" >
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="572" showstereotype="1" y="148" text=": fetch(type : type, key : object) : Entity" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="249" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="PBGcSHtAB6GC" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="572" showstereotype="1" y="148" text=": fetch(query : object) : Entity" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="189" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="PBGcSHtAB6GC" height="19" />
          </messagewidget>
          <messagewidget linecolor="none" usesdiagramfillcolor="1" widgetbid="WuaZ5tPwJmi0" textid="vvLxK6xWogPA" operation="show page" linewidth="none" seqnum="" usesdiagramusefillcolor="1" x="45" showstereotype="1" y="467" widgetaid="L077JVDaNzu8" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="125" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="6NME1adJRAsQ" height="32" sequencemessagetype="1000" >
           <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="75" showstereotype="1" y="448" text=": show page" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="81" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="vvLxK6xWogPA" height="19" />
          </messagewidget>
          <messagewidget linecolor="none" usesdiagramfillcolor="1" widgetbid="UjQfHleAtbSQ" textid="xgO7gUBFzCui" operation="RtcPyrLbs9Uu" linewidth="none" seqnum="" usesdiagramusefillcolor="1" x="567" showstereotype="1" y="133" widgetaid="lhwraJls3RqM" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="377" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="RtcPyrLbs9Uu" height="20" sequencemessagetype="1000" >
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="572" showstereotype="1" y="114" text=": construction BlockBase(coordinates : int, opt entityMappings : EntityMapping, opt layoutMappings : LayoutMapping)" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="721" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="xgO7gUBFzCui" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="572" showstereotype="1" y="114" text=": construction BlockBase(opt entityMappings : EntityMapping, opt layoutMappings : LayoutMapping)" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="615" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="xgO7gUBFzCui" height="19" />
          </messagewidget>
          <messagewidget linecolor="none" usesdiagramfillcolor="1" widgetbid="lhwraJls3RqM" textid="mSbxmvR4ts45" operation="gg895ChhLeW8" linewidth="none" seqnum="" usesdiagramusefillcolor="1" x="170" showstereotype="1" y="116" widgetaid="L077JVDaNzu8" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="405" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="gg895ChhLeW8" height="32" sequencemessagetype="1000" >
           <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="175" showstereotype="1" y="97" text=": construction Page(opt entityBlocks : EntityBlock)" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="" role="704" width="311" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="mSbxmvR4ts45" height="19" />
@@ -483,7 +478,7 @@
   </UML:Model>
  </XMI.content>
  <XMI.extensions xmi.extender="umbrello" >
-  <docsettings viewid="3j1EOdvr1W9Y" uniqueid="RuNLXTKLRPCv" documentation="" />
+  <docsettings viewid="3j1EOdvr1W9Y" uniqueid="2SbLdZkUOxiI" documentation="" />
   <listview>
    <listitem open="1" type="800" label="Views" >
     <listitem open="1" type="801" id="Logical View" >
@@ -491,7 +486,6 @@
      <listitem open="0" type="810" id="3j1EOdvr1W9Y" label="Overview_Sequence" />
      <listitem open="1" type="813" id="cF5u5hHAJ92z" />
      <listitem open="1" type="813" id="Lj5yZKFRFP2T" >
-      <listitem open="0" type="814" id="PoJLlAT6ia4C" />
       <listitem open="0" type="814" id="vubgX1aqLAyB" />
       <listitem open="0" type="814" id="RO0oCHAxRb19" />
       <listitem open="0" type="815" id="yYILSnrxH45d" />
@@ -505,24 +499,27 @@
      <listitem open="1" type="813" id="kR2gcOlnRXFN" >
       <listitem open="0" type="814" id="I7TT4b0rxpNH" />
       <listitem open="0" type="814" id="IWg9d5PdB2ad" />
-      <listitem open="0" type="814" id="xMvhb0sGbSFI" />
       <listitem open="1" type="814" id="f5rmRWQXbvgw" />
+      <listitem open="0" type="815" id="J6lhCJ7J0XLV" />
      </listitem>
      <listitem open="1" type="813" id="WhS4Uq38mU7h" >
       <listitem open="0" type="814" id="JqUnVurzkt5V" />
-      <listitem open="0" type="814" id="Ev3EzBQ6sVX2" />
       <listitem open="0" type="814" id="Nv4yCHiFBufZ" />
+      <listitem open="0" type="814" id="Ev3EzBQ6sVX2" />
+      <listitem open="0" type="814" id="vipz2LiA854c" />
       <listitem open="0" type="814" id="9nehSLGjqMkf" />
       <listitem open="1" type="815" id="kJSJUBnvuK0r" />
      </listitem>
      <listitem open="1" type="813" id="E5cuHhqV1C5Y" />
      <listitem open="1" type="813" id="Cfzo9wCSIAyi" >
-      <listitem open="0" type="814" id="s6B1PHqdhIdz" />
       <listitem open="1" type="814" id="g59deLOfnIph" />
      </listitem>
      <listitem open="1" type="813" id="B3J0LqsgkBN6" >
+      <listitem open="0" type="814" id="43cLuZREAZB1" />
       <listitem open="0" type="814" id="dyR1wFBDP7ez" />
+      <listitem open="0" type="814" id="3aGFDr2naItE" />
       <listitem open="0" type="814" id="8lAC48Vs19cA" />
+      <listitem open="0" type="814" id="oKKdirVA0dhJ" />
      </listitem>
      <listitem open="1" type="813" id="DJOcXHGIsUnA" />
      <listitem open="1" type="813" id="amoVvPe7cRMp" >
@@ -530,16 +527,15 @@
       <listitem open="0" type="814" id="Q8yExtb9dfTM" />
      </listitem>
      <listitem open="1" type="813" id="Jly9cfhvIH5c" >
-      <listitem open="0" type="814" id="DEHr5CxWjrsl" />
       <listitem open="1" type="814" id="nK0Ij7OYGjhV" />
       <listitem open="1" type="815" id="gg895ChhLeW8" />
      </listitem>
      <listitem open="1" type="813" id="5rkiWjWUu2bT" >
-      <listitem open="0" type="814" id="kkRUSvBwO3wx" />
       <listitem open="0" type="814" id="Acsf8kTLiE7v" />
       <listitem open="0" type="814" id="8itipZdzBUcH" />
       <listitem open="0" type="814" id="TJrJncSuLJcA" />
       <listitem open="0" type="814" id="BwEnkRgV1RGt" />
+      <listitem open="0" type="814" id="2SbLdZkUOxiI" />
       <listitem open="0" type="815" id="u1jTHQMHDxLv" />
       <listitem open="1" type="815" id="agsKZUFvAc6B" />
       <listitem open="1" type="815" id="hAugIZWgqqHz" />

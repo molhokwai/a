@@ -1,0 +1,10 @@
+# coding: utf8
+
+#########################################################################
+## PAGE SITE BLOCKS
+#########################################################################
+
+try:
+    exec('from applications.%s.modules/page_site_blocks import *' % this_app)
+except Exception, ex:
+    log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
