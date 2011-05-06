@@ -25,3 +25,6 @@ class LayoutMapping():
 	_list = {'container' : '', 'content' : ''}
 
 
+    def __init__(self, **kwargs):
+        if kwargs:
+            self.__dict__.update(kwargs)

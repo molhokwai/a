@@ -76,3 +76,4 @@ class Template(object):
                         e = entityMapping
                         e.entity = entityBlock.entities[i]
                         entityBlock.block.entityMappings.append(e)
+        print '-----entityBlock.block.entityMappings----- : %s' % repr(map(lambda x: x.entity.__dict__, entityBlock.block.entityMappings))
