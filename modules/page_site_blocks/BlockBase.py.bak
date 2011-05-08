@@ -39,17 +39,9 @@ class BlockBase:
         @return string :
         @author
         """
-        def convert_attr(attr):
-            if str(type(attr)).find('<class')>=0:
-                return attr.xml()
-            else:
-                return attr
-                
         if not self._layoutOutput:
-            self._layoutOutput = []
+            self._layoutOutput = self.layoutMapping.listOrder
             for i in range(len(self.entityMappings)):
-                self._layoutOutput.append(self.layoutMapping.listOrder)
-                
                 entity = self.entityMappings[i].entity                
                 for key in entity.__dict__:
                     e_attr = entity.__dict__.get(key)
@@ -59,13 +51,17 @@ class BlockBase:
                         l_attr_v = ''   
                         if type(e_attr) == ListType:
                             for i in range(len(e_attr)):
-                                l_attr_v += convert_attr(l_attr) % {key : e_attr[i]}
+                                l_attr_v += l_attr.xml() % {key : e_attr[i]}
+
+                        elif type(e_attr) == DictType:
+                            l_attr_v += l_attr.xml() % e_attr
+
                         else:
-                            l_attr_v += convert_attr(l_attr) % e_attr
+                            print '----------------| %s  -  %s' % (type(e_attr), repr(e_attr))
+                            l_attr_v += l_attr.xml() % e_attr
 
                         self.layoutMapping.__dict__.update({key:l_attr_v})
-                        if key in self._layoutOutput[i]:
-                            self._layoutOutput[i][self._layoutOutput[i].index(key)]= l_attr_v
+                        self._layoutOutput[self._layoutOutput.index(key)]= l_attr_v
                         
-            self._layoutOutput = self.layoutMapping.container.xml() % dict(content='\n'.join(map(lambda x: '\n'.join(y), self._layoutOutput)))
+            self._layoutOutput = self.layoutMapping.container % dict(content='\n'.join(self._layoutOutput))
         return self._layoutOutput

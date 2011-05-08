@@ -15,32 +15,30 @@ try:
 except Exception, ex:
     log_wrapped('Error (%s/models/modules.py)' % this_app, ex)
 
-## Sample Layout Mapping
-standardLayoutMapping =  LayoutMapping(
-    container = "%(content)s",
-    title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
-    summary = P("%s", _class="blue"),
-    text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
-    links = DIV(A("%(text)s", _href="%(url)s"), _class="read_more"),
-    listOrder = ['title','summary','text','links']
-)
-
-class Block(BlockBase):
+class StandardBlock(BlockBase):
     entityMappings = None
     layoutMapping = None
 
     def __init__(self, entityMappings=None, layoutMapping=None):
-        self.entityMappings = [EntityMapping(type(db.posts))]
         if entityMappings:
             self.entityMappings = entityMappings
+        else:
+            self.entityMappings = [EntityMapping(type(db.posts))]
             
-        self.layoutMapping = standardLayoutMapping
         if layoutMapping:
             self.layoutMapping = layoutMapping
+        else:
+            self.layoutMapping = LayoutMapping()
+            self.layoutMapping.container = "%(content)s"
+            self.layoutMapping.title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title')
+            self.layoutMapping.summary = P("%s", _class="blue")
+            self.layoutMapping.text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s"))
+            self.layoutMapping.links = DIV(A("%(text)s", _href="%(url)s"), _class="read_more")
+            self.layoutMapping.listOrder = ['title','summary','text','links']
 
         BlockBase.__init__(self, entityMappings=entityMappings, layoutMapping=layoutMapping)
 
-class Page(Template):
+class PageBase(Template):
 
     """
      
@@ -58,7 +56,7 @@ class Page(Template):
         Implementation of the Parent's (Template) abstract attribute, 
         for a global site default Base Page
     """
-    entityBlocks = [[EntityBlock(block=Block(), query=db(db.posts.id==64))]]
+    entityBlocks = [[EntityBlock(block=StandardBlock(), query=db(db.posts.id==64))]]
 
 
     def __init__(self, entityBlocks=None):
@@ -73,3 +71,26 @@ class Page(Template):
         if entityBlocks:
             self.entityBlocks = entityBlocks
         Template.__init__(self, self.entityBlocks)
+
+
+class HomePage(PageBase):
+
+    """
+     
+
+    :version:
+    :author:
+    """
+
+    """ ATTRIBUTES
+
+    blocks  (protected)
+        Optional Implementation of the Parent's (Template) abstract attribute
+    entityBlocks  (protected)
+        Optional Implementation of the Parent's (Template) abstract attribute
+    """
+    
+    """
+    blocks = None
+    entityBlocks = None
+    """

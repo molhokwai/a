@@ -32,5 +32,7 @@ class Entity():
             e = Entity()
             e.__dict__.update(e_dicts[i])
             entities.append(e)
-        print 'ssssssssssss - %i' % len(entities)
+        print '-------| %s : %s' % (repr('entities'), repr(entities[0].text))
+        print '-------| %s : %s' % (repr('entities'), repr(entities[0].summary))
+        print '-------| %s : %s' % (repr('entities'), repr(entities[0].title))
         return entities
