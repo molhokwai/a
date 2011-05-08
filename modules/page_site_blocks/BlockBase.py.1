@@ -70,6 +70,9 @@ class BlockBase:
                             self._layoutOutput[i][self._layoutOutput[i].index(key)]= l_attr_v
                         
             self._layoutOutput = convert_attr(self.layoutMapping.container) % dict(content='\n'.join(map(lambda y: '\n'.join(y), self._layoutOutput)))
+        """
+        print '-------------|BlockBase|'
+        print self._layoutOutput
+        print
+        """
         return self._layoutOutput
-
-

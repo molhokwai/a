@@ -66,13 +66,13 @@ class Template(object):
         for x in range(len(entityBlocks)):
             for y in range(len(entityBlocks[x])):
                 entityBlock = entityBlocks[x][y]
-                entityBlock.entities = Entity.fetch(entityBlock.query)
-                entityMapping = entityBlock.block.entityMappings[0]
+                entityBlock.entities = Entity.fetch(entityBlock.query)                
                 for i in range(len(entityBlock.entities)):
+                    if not entityBlock.block.entityMappings:
+                        entityBlock.block.entityMappings = []
+                    print '-------------| len(entityBlock.block.entityMappings) : %i ' % len(entityBlock.block.entityMappings)
+                    entityMapping = EntityMapping(entityBlock.entities[i])
                     if i<len(entityBlock.block.entityMappings):
-                        entityBlock.block.entityMappings[i].entity = entityBlock.entities[i]
+                        entityBlock.block.entityMappings[i] = entityMapping
                     else:
-                        e = None
-                        e = entityMapping
-                        e.entity = entityBlock.entities[i]
-                        entityBlock.block.entityMappings.append(e)
+                        entityBlock.block.entityMappings.append(entityMapping)

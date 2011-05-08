@@ -151,10 +151,10 @@ else:
         mail.settings.login=None       # your credentials or None
     else:   
         mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'       # your credentials or None
+        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'       # your credentials or None
         mail.settings.sender='molhokwai@gmail.com'    # your email
 
-auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
     auth.settings.table_user = db.define_table('auth_user',
         Field('registration_id', length=512,
@@ -218,7 +218,7 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
             domain=app_config.RPX_API[1],
             url = "%s/default/user/login" % this_app_url)
     else:
-        auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             domain='websites-molhokwai',
             url = "%s/default/user/login" % this_app_url)
 

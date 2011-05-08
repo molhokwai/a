@@ -15,21 +15,31 @@ try:
 except Exception, ex:
     log_wrapped('Error (%s/models/modules.py)' % this_app, ex)
 
+## Sample Layout Mapping
+standardLayoutMapping =  LayoutMapping(
+    container = "%(content)s",
+    title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
+    summary = P("%s", _class="blue"),
+    text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
+    links = DIV(A("%(text)s", _href="%(url)s"), _class="read_more"),
+    listOrder = ['title','summary','text','links']
+)
 
-#########################################################################
-## SAMPLE LAYOUT MAPPING & BLOCK CONSTRUCTION
-#########################################################################
-## standardLayoutMapping =  LayoutMapping(
-##    container = "%(content)s",
-##    title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
-##    summary = P("%s", _class="blue"),
-##    text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
-##    links = DIV(A("%(text)s", _href="%(url)s"), _class="read_more"),
-##    listOrder = ['title','summary','text','links']
-##)
-##
-## block = BlockBase(layoutMapping=standardLayoutMapping)
-    
+class Block(BlockBase):
+    entityMappings = None
+    layoutMapping = None
+
+    def __init__(self, entityMappings=None, layoutMapping=None):
+        self.entityMappings = [EntityMapping(type(db.posts))]
+        if entityMappings:
+            self.entityMappings = entityMappings
+            
+        self.layoutMapping = standardLayoutMapping
+        if layoutMapping:
+            self.layoutMapping = layoutMapping
+
+        BlockBase.__init__(self, entityMappings=entityMappings, layoutMapping=layoutMapping)
+
 class Page(Template):
 
     """
@@ -41,16 +51,17 @@ class Page(Template):
 
     """ ATTRIBUTES
 
-    entityBlocks  (protected)
-        Optional Implementation of the Parent's (Template) abstract attribute, 
+    blocks  (protected)
+        Implementation of the Parent's (Template) abstract attribute, 
         for a global site default Base Page
-        Like:
-            entityBlocks = [[EntityBlock(block=Block(), query=db(db.entities.group_name=="home_main_entity"))]]
+    entityBlocks  (protected)
+        Implementation of the Parent's (Template) abstract attribute, 
+        for a global site default Base Page
     """
-    entityBlocks = []
+    entityBlocks = [[EntityBlock(block=Block(), query=db(db.posts.id==64))]]
 
 
-    def __init__(self, entityBlocks):
+    def __init__(self, entityBlocks=None):
         """
          The construction method of the page passes the  page's implemented entityBlocks
          attribute to the Template base class construction , or the optional entityBlocks 
@@ -59,7 +70,9 @@ class Page(Template):
         @return  :
         @author
         """
-        Template.__init__(self, entityBlocks)
+        if entityBlocks:
+            self.entityBlocks = entityBlocks
+        Template.__init__(self, self.entityBlocks)
 
 
 ###################################
@@ -101,7 +114,7 @@ blocks_layout_mapping = {
             image = A(IMG(_src="%(imageUrl)s", _class="img_border"), _href="%(url)s"),
             listOrder = ['image']
         ),
-     'feed_list_summary': LayoutMapping(
+     'feed_summary': LayoutMapping(
             container = DIV(DIV(("News & ", SPAN("updates")), _class='title'), 
                             "%(content)s"),
             text = P("#:#display#:#truncate#:#%s#:#210#:#['hide', '.read_more']", 

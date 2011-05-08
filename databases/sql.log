@@ -211,3 +211,30 @@ CREATE TABLE posts_categories(
 success!
 timestamp: 2011-05-03T21:23:08.584558
 ALTER TABLE posts ADD post_parent CHAR(512);
+timestamp: 2011-05-07T10:15:12.180365
+CREATE TABLE entities(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    data TEXT
+);
+success!
+timestamp: 2011-05-07T14:29:13.033924
+ALTER TABLE entities ADD group CHAR(512);
+timestamp: 2011-05-07T14:30:37.510770
+ALTER TABLE entities ADD group_name CHAR(512);
+timestamp: 2011-05-08T15:13:25.588074
+ALTER TABLE entities ADD block CHAR(512);
+timestamp: 2011-05-08T15:22:24.063764
+CREATE TABLE blocks_entities(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    entity INTEGER REFERENCES entities(id) ON DELETE CASCADE,
+    block CHAR(512)
+);
+success!
+timestamp: 2011-05-08T15:47:59.418407
+CREATE TABLE entities_blocks(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    entity INTEGER REFERENCES entities(id) ON DELETE CASCADE,
+    block CHAR(512)
+);
+success!

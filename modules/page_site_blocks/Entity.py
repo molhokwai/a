@@ -26,10 +26,11 @@ class Entity():
         @author
         """
         from gluon.contrib import simplejson
-        e_dicts = map(lambda x: simplejson.loads(x.post_attributes_json)["entity"], query.select())
+        e_dicts = map(lambda x: simplejson.loads(x.data), query.select())
         entities = []
         for i in range(len(e_dicts)):
             e = Entity()
-            e.__dict__.update(e_dicts[i])
+            e.__dict__.update(e_dicts[i]['meta'])
+            e.__dict__.update(e_dicts[i]['entity'])
             entities.append(e)
         return entities

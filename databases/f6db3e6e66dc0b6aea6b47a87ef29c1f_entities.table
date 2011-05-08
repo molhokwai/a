@@ -1,0 +1,22 @@
+(dp1
+S'block'
+p2
+S'CHAR(512)'
+p3
+sS'data'
+p4
+S'TEXT'
+p5
+sS'id'
+p6
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p7
+sS'name'
+p8
+S'CHAR(512)'
+p9
+sS'group_name'
+p10
+S'CHAR(512)'
+p11
+s.

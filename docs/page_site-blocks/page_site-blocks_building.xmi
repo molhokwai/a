@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI verified="false" xmi.version="1.2" timestamp="2011-05-06T18:25:12" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
+<XMI verified="false" xmi.version="1.2" timestamp="2011-05-08T20:26:33" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
@@ -172,16 +172,16 @@
       <diagrams>
        <diagram showopsig="1" linecolor="#ff0000" snapx="10" showattribassocs="1" snapy="10" linewidth="0" showattsig="1" showpubliconly="1" showpackage="1" showstereotype="1" name="Overview_Classes" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" canvasheight="866" canvaswidth="1280" localid="" snapcsgrid="0" showgrid="0" showops="1" usefillcolor="1" fillcolor="#ffff00" zoom="100" xmi.id="njPnuWwQl7WY" documentation="" showscope="1" snapgrid="0" showatts="1" type="1" >
         <widgets>
-         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="105" showattsigs="601" showstereotype="1" y="73" showattributes="1" font="DejaVu Sans,9,-1,5,75,1,0,0,0,0" drawascircle="0" width="289" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="5rkiWjWUu2bT" showscope="1" height="90" showopsigs="601" />
-         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="472" showattsigs="601" showstereotype="1" y="248" showattributes="1" font="DejaVu Sans,9,-1,5,75,0,0,0,0,0" width="623" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="Lj5yZKFRFP2T" showscope="1" height="75" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="390" showattsigs="601" showstereotype="1" y="446" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="310" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="kR2gcOlnRXFN" showscope="1" height="75" showopsigs="601" />
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="105" showattsigs="601" showstereotype="1" y="73" showattributes="1" font="DejaVu Sans,9,-1,5,50,0,0,0,0,0" drawascircle="0" width="289" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="5rkiWjWUu2bT" showscope="1" height="90" showopsigs="601" />
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="472" showattsigs="601" showstereotype="1" y="248" showattributes="1" font="DejaVu Sans,9,-1,5,50,0,0,0,0,0" width="623" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="Lj5yZKFRFP2T" showscope="1" height="75" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="390" showattsigs="601" showstereotype="1" y="446" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="310" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="kR2gcOlnRXFN" showscope="1" height="75" showopsigs="601" />
          <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="721" showattsigs="601" showstereotype="1" y="453" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="197" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="M5D3oTxaKmcs" showscope="1" height="45" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="133" showattsigs="601" showstereotype="1" y="257" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="319" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Jly9cfhvIH5c" showscope="1" height="45" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="133" showattsigs="601" showstereotype="1" y="257" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="319" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Jly9cfhvIH5c" showscope="1" height="45" showopsigs="601" />
          <notewidget width="212" showstereotype="1" x="765" noteType="0" y="322" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="68" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="Web2Py: Use form with div style layout parameter to directly have modifiable entities" />
          <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="none" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="1" showpackage="1" x="684" showattsigs="601" showstereotype="1" y="572" showattributes="1" font="DejaVu Sans,9,-1,5,50,0,0,0,0,0" width="420" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="WhS4Uq38mU7h" showscope="1" height="90" showopsigs="601" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="124" showattsigs="601" showstereotype="1" y="540" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="83" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Cfzo9wCSIAyi" showscope="1" height="29" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="124" showattsigs="601" showstereotype="1" y="540" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="83" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="Cfzo9wCSIAyi" showscope="1" height="29" showopsigs="601" />
          <notewidget width="240" showstereotype="1" x="821" noteType="0" y="479" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="50" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="Web2Py: Entity is 'native' model class" />
-         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="753" showattsigs="601" showstereotype="1" y="100" showattributes="1" font="DejaVu Sans,9,-1,0,75,0,0,0,0,0" width="218" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="amoVvPe7cRMp" showscope="1" height="52" showopsigs="601" />
+         <classwidget linecolor="none" usesdiagramfillcolor="1" linewidth="none" showoperations="1" usesdiagramusefillcolor="1" showpubliconly="1" showpackage="1" x="753" showattsigs="601" showstereotype="1" y="100" showattributes="1" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" width="218" isinstance="0" usefillcolor="1" fillcolor="none" xmi.id="amoVvPe7cRMp" showscope="1" height="52" showopsigs="601" />
          <notewidget width="253" showstereotype="1" x="150" noteType="0" y="566" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="74" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="HOMEPAGE Example: Child of PageBase actually implementing the entityBlocks abstract attribute used in the contruction method" />
          <notewidget width="292" showstereotype="1" x="867" noteType="0" y="114" usesdiagramusefillcolor="1" usesdiagramfillcolor="1" isinstance="0" fillcolor="none" height="76" linecolor="none" xmi.id="CrQ1bHDm5wEQ" usefillcolor="1" linewidth="none" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" text="NEWSUPDATEBLOCK Example: Child of BaseBlock actually implementing the entityMappings &amp; layoutMapping abstract attributes." />
         </widgets>
@@ -193,7 +193,7 @@
            <endpoint endx="472" endy="271" />
            <point x="430" y="271" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="430" showstereotype="1" y="273" text="block" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="50" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="gn4Dr56IfNEA" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="430" showstereotype="1" y="273" text="block" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="50" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="6F078ilbgxpx" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="Lj5yZKFRFP2T" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="3" xmi.id="vubgX1aqLAyB" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
           <linepath>
@@ -201,14 +201,14 @@
            <endpoint endx="740" endy="453" />
            <point x="740" y="268" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="676" showstereotype="1" y="432" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="eOZNfUwIIavk" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="676" showstereotype="1" y="432" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="XOGCZ13a4dvL" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="kR2gcOlnRXFN" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="I7TT4b0rxpNH" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="700" starty="466" />
            <endpoint endx="721" endy="466" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="666" showstereotype="1" y="468" text="entities" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="62" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="JtVuzDYf0aqq" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="666" showstereotype="1" y="468" text="entities" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="62" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="XhOTbqbf3cmC" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="2" widgetaid="Jly9cfhvIH5c" linecolor="none" totalcounta="2" xmi.id="bDYU12ssqeqD" widgetbid="5rkiWjWUu2bT" totalcountb="4" type="500" linewidth="none" >
           <linepath>
@@ -222,28 +222,28 @@
            <endpoint endx="390" endy="473" />
            <point x="264" y="473" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="313" showstereotype="1" y="475" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="dw8IHKRvg0IL" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="313" showstereotype="1" y="475" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="KXnySdu0zAAY" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="WhS4Uq38mU7h" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="JqUnVurzkt5V" changeabilityB="900" widgetbid="M5D3oTxaKmcs" totalcountb="2" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="780" starty="572" />
            <endpoint endx="780" endy="498" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="735" showstereotype="1" y="500" text="entity" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="53" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="SCeinXT4QwyQ" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="735" showstereotype="1" y="500" text="entity" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="53" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="BB6Eo1XKhtnI" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="2" visibilityA="0" widgetaid="Lj5yZKFRFP2T" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="vubgX1aqLAyB" changeabilityB="900" widgetbid="WhS4Uq38mU7h" totalcountb="4" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="684" starty="323" />
            <endpoint endx="684" endy="572" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="581" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="8U364swhm2x4" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="581" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="hMxlwjxHEiDe" height="19" />
          </assocwidget>
          <assocwidget indexa="3" indexb="3" visibilityA="0" widgetaid="5rkiWjWUu2bT" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="4" xmi.id="BwEnkRgV1RGt" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="4" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="390" starty="163" />
            <endpoint endx="390" endy="446" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="MOx2OEMoQ0XB" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="-" role="710" width="85" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="J7cGFmpRyvdk" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" visibilityA="0" widgetaid="Cfzo9wCSIAyi" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="2" xmi.id="g59deLOfnIph" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="2" type="510" linewidth="none" >
           <linepath>
@@ -251,7 +251,7 @@
            <endpoint endx="408" endy="521" />
            <point x="408" y="554" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="325" showstereotype="1" y="523" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="#" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="X0FwwBK2fL9j" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="325" showstereotype="1" y="523" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="#" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="v84c1pujCpU6" height="19" />
          </assocwidget>
          <assocwidget indexa="1" indexb="1" widgetaid="Cfzo9wCSIAyi" linecolor="none" totalcounta="2" xmi.id="7up3Xt2IYgNc" widgetbid="Jly9cfhvIH5c" totalcountb="3" type="500" linewidth="none" >
           <linepath>
@@ -259,7 +259,7 @@
            <endpoint endx="165" endy="302" />
           </linepath>
          </assocwidget>
-         <assocwidget indexa="1" indexb="3" widgetaid="amoVvPe7cRMp" linecolor="none" totalcounta="2" xmi.id="DM5w83VFdI48" widgetbid="Lj5yZKFRFP2T" totalcountb="3" type="500" linewidth="none" >
+         <assocwidget indexa="1" indexb="2" widgetaid="amoVvPe7cRMp" linecolor="none" totalcounta="2" xmi.id="DM5w83VFdI48" widgetbid="Lj5yZKFRFP2T" totalcountb="3" type="500" linewidth="none" >
           <linepath>
            <startpoint startx="753" starty="117" />
            <endpoint endx="705" endy="248" />
@@ -271,14 +271,14 @@
            <startpoint startx="753" starty="152" />
            <endpoint endx="753" endy="572" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="649" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="B5Oy6M0SkxT7" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="649" showstereotype="1" y="551" text="entityMappings" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="111" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="WPNi5ZMPgzfw" height="19" />
          </assocwidget>
          <assocwidget indexa="2" indexb="1" visibilityA="0" widgetaid="Jly9cfhvIH5c" visibilityB="0" linecolor="none" changeabilityA="900" totalcounta="3" xmi.id="nK0Ij7OYGjhV" changeabilityB="900" widgetbid="kR2gcOlnRXFN" totalcountb="4" type="510" linewidth="none" >
           <linepath>
            <startpoint startx="390" starty="302" />
            <endpoint endx="390" endy="446" />
           </linepath>
-          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="9pvapSlKQzEL" height="19" />
+          <floatingtext linecolor="none" usesdiagramfillcolor="1" linewidth="none" usesdiagramusefillcolor="1" x="307" showstereotype="1" y="425" text="entityBlocks" font="DejaVu Sans,9,-1,0,50,0,0,0,0,0" pretext="+" role="710" width="91" isinstance="0" posttext="" usefillcolor="1" fillcolor="none" xmi.id="jSLfOyQJ4St5" height="19" />
          </assocwidget>
         </associations>
        </diagram>

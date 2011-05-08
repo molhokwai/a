@@ -1,4 +1,22 @@
+{{extend 'themes/%s/layout.html' % response.theme}}
 
-{{extend 'layout.html'}}
-<h1>This is the data/index.html template</h1>
-{{=BEAUTIFY(response._vars)}}
+<h2>{{=edit_title}}</h2>
+
+{{=form}}
+
+{{if form2:}}
+    {{=form2_title}}
+    {{=form2}}
+{{pass}}
+
+{{=form2_list_title}}
+{{for f in form2_list:}}
+    {{=f}}
+{{pass}}
+
+{{=form3_list_title}}
+{{for f in form3_list:}}
+    {{=f}}
+{{pass}}
+
+{{=A(T('markup textareas'), _href='javascript:markup_textareas();', _class='color-transparent')}}

@@ -15,30 +15,22 @@ try:
 except Exception, ex:
     log_wrapped('Error (%s/models/modules.py)' % this_app, ex)
 
-class StandardBlock(BlockBase):
-    entityMappings = None
-    layoutMapping = None
 
-    def __init__(self, entityMappings=None, layoutMapping=None):
-        if entityMappings:
-            self.entityMappings = entityMappings
-        else:
-            self.entityMappings = [EntityMapping(type(db.posts))]
-            
-        if layoutMapping:
-            self.layoutMapping = layoutMapping
-        else:
-            self.layoutMapping = LayoutMapping()
-            self.layoutMapping.container = "%(content)s"
-            self.layoutMapping.title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title')
-            self.layoutMapping.summary = P("%s", _class="blue")
-            self.layoutMapping.text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s"))
-            self.layoutMapping.links = DIV(A("%(text)s", _href="%(url)s"), _class="read_more")
-            self.layoutMapping.listOrder = ['title','summary','text','links']
-
-        BlockBase.__init__(self, entityMappings=entityMappings, layoutMapping=layoutMapping)
-
-class PageBase(Template):
+#########################################################################
+## SAMPLE LAYOUT MAPPING & BLOCK CONSTRUCTION
+#########################################################################
+## standardLayoutMapping =  LayoutMapping(
+##    container = "%(content)s",
+##    title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
+##    summary = P("%s", _class="blue"),
+##    text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
+##    links = DIV(A("%(text)s", _href="%(url)s"), _class="read_more"),
+##    listOrder = ['title','summary','text','links']
+##)
+##
+## block = BlockBase(layoutMapping=standardLayoutMapping)
+    
+class Page(Template):
 
     """
      
@@ -49,17 +41,16 @@ class PageBase(Template):
 
     """ ATTRIBUTES
 
-    blocks  (protected)
-        Implementation of the Parent's (Template) abstract attribute, 
-        for a global site default Base Page
     entityBlocks  (protected)
-        Implementation of the Parent's (Template) abstract attribute, 
+        Optional Implementation of the Parent's (Template) abstract attribute, 
         for a global site default Base Page
+        Like:
+            entityBlocks = [[EntityBlock(block=Block(), query=db(db.entities.group_name=="home_main_entity"))]]
     """
-    entityBlocks = [[EntityBlock(block=StandardBlock(), query=db(db.posts.id==64))]]
+    entityBlocks = []
 
 
-    def __init__(self, entityBlocks=None):
+    def __init__(self, entityBlocks):
         """
          The construction method of the page passes the  page's implemented entityBlocks
          attribute to the Template base class construction , or the optional entityBlocks 
@@ -68,29 +59,58 @@ class PageBase(Template):
         @return  :
         @author
         """
-        if entityBlocks:
-            self.entityBlocks = entityBlocks
-        Template.__init__(self, self.entityBlocks)
+        Template.__init__(self, entityBlocks)
 
 
-class HomePage(PageBase):
+###################################
+## Blocks layout mapping definitions
+###################################
 
-    """
-     
-
-    :version:
-    :author:
-    """
-
-    """ ATTRIBUTES
-
-    blocks  (protected)
-        Optional Implementation of the Parent's (Template) abstract attribute
-    entityBlocks  (protected)
-        Optional Implementation of the Parent's (Template) abstract attribute
-    """
-    
-    """
-    blocks = None
-    entityBlocks = None
-    """
+blocks_layout_mapping = {
+    'entry': LayoutMapping(
+            container = DIV("%(content)s"),
+            title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
+            summary = P("#:#display#:#truncate#:#%s#:#200", _class="blue display"),
+            text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
+            listOrder = ['title','summary','text','links']
+        ),
+    'entry_summary': LayoutMapping(
+            container = DIV("%(content)s"),
+            title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
+            summary = P("#:#display#:#truncate#:#%s#:#200", _class="blue display"),
+            text = P((IMG(_src="%(imageUrl)s", _class="left_img"), 
+                        "#:#display#:#truncate#:#%(text)s#:#350#:#['hide','.read_more']"),
+                        _class="display"),
+            links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
+            listOrder = ['title','summary','text','links']
+        ),
+     'entry_list_summary': LayoutMapping(
+            container = DIV(DIV(("The ", SPAN("system")), _class='title'), 
+                            "%(content)s"),
+            text = DIV(IMG(_src="%(imageUrl)s", _class="icon"), BR(), 
+                       P((SPAN("%(title)s", _class="blue"), BR(), 
+                       "#:#display#:#truncate#:#%(text)s#:#290#:#['hide','.read_more']"), 
+                       _class="services display"),
+                 _class="services_box"),
+            links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
+            listOrder = ['text', 'links']
+        ),
+     'icon_list': LayoutMapping(
+            container = DIV(DIV(("Main ", SPAN("links")), _class='title'), 
+                            DIV("%(content)s", _class="latest_projects")),
+            image = A(IMG(_src="%(imageUrl)s", _class="img_border"), _href="%(url)s"),
+            listOrder = ['image']
+        ),
+     'feed_list_summary': LayoutMapping(
+            container = DIV(DIV(("News & ", SPAN("updates")), _class='title'), 
+                            "%(content)s"),
+            text = P("#:#display#:#truncate#:#%s#:#210#:#['hide', '.read_more']", 
+                    _class="news display"),
+            links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
+            listOrder = ['text', 'links']
+        ) 
+}
+def get_block_layout_mapping(name):
+    return blocks_layout_mapping[name]
+db.entities_blocks.block.requires = IS_IN_SET(map(lambda x: '%s(%s)' % (x[0],','.join(x[1].__dict__.keys())),
+                                        [(_name,blocks_layout_mapping[_name]) for _name in blocks_layout_mapping]))

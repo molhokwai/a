@@ -2,8 +2,6 @@
 
 <div class="left_content">
     {{=XML(blocks[0][0].layoutOutput())}}
-    
-    {{=XML(blocks[0][1].layoutOutput())}}        
 </div>
 <!--end .left_content-->
 

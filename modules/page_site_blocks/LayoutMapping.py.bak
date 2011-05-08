@@ -18,4 +18,4 @@ class LayoutMapping():
 
     """
     def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
+        self.__dict__update(kwargs)
