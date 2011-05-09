@@ -72,7 +72,7 @@ blocks_layout_mapping = {
             title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
             summary = P("#:#display#:#truncate#:#%s#:#200", _class="blue display"),
             text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
-            listOrder = ['title','summary','text','links']
+            listOrder = ['title','summary','text']
         ),
     'entry_summary': LayoutMapping(
             container = DIV("%(content)s"),

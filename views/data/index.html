@@ -1,8 +1,160 @@
 {{extend 'themes/%s/layout.html' % response.theme}}
+<style type="text/css">
+    #jsonTree span.k-level {
+        display: block;
+        padding-left: 2%;
+    }    
+</style>
+<script type="text/javascript">
+    /* Make object out of atom passed 
+       @params
+           obj : the object
+           oKe : function to make and output key representation DOM element
+           oAe : function to make and output atom (string, number) representation DOM element
+           l : level, depth, within the object
+           index : the index of the atom to add (eventual) items delimiter if >0
+           p : list, the path to the object
+    */
+    var walk = function(obj, oKe, oAe, l, index, p){
+        if (l==null){ l=-1; }
+        if (index==null){ index=0; }
+		if (p==null){ p=[]; }
+        
+        var o = [];      
+        if (typeof(obj) in {'number':'', 'string':''}){
+            if (oAe){
+                o.push(oAe(obj, l, index, p));
+            }
+            else{
+                o.push(obj);
+            }
+        }
+        else if($.isArray(obj)){
+            l++;
+            for(i in obj){
+                o.push(walk(obj[i], oKe, oAe, l, i, p.push(i)));
+            }
+        }
+        else if (typeof(obj) in {'object':''}){
+            l++;
+            var i=0;
+            for(ok in obj){
+                o.push(oKe(ok, l, i, p));
+                o.push(walk(obj[ok], oKe, oAe, l, i, p.push(ok)));
+                i++;
+            }
+        }
+        return o;
+    };
+
+    /* Make object out of atom passed 
+       @params
+           a : atom (string, number)
+           l : level, depth, within the object
+           index : the index of the atom to add (eventual) items delimiter if >0
+    */
+    var mAe = function(a, l, index){
+        var t=null;
+        if(typeof(a)=='string' && a.length<50 | (typeof(a)=='number')){
+            var t=document.createElement('input');
+            t.type='text';
+        }
+        else if(typeof(a)=='string' && a.length>=50){
+            var t=document.createElement('textarea');
+        }
+        
+        $(t).val(a);
+        t.className='a-level '+l +' '+ 'a-index '+index;
+        
+        return t;
+    };
+    /* Make json object out of atom DOM object passed 
+       @params
+           a : DOM object
+           +(See method comments above)
+    */
+    var jsonAe = function(a, l, index){
+        return json;
+    };
+    
+    /* Make object out of key passed
+       @params
+           k : (dict)key object
+           l : level, depth, within the object
+           index : the index of the atom to add (eventual) items delimiter if >0
+           index : the index of the atom to add (eventual) items delimiter if >0
+    */
+    var mKe = function(k, l, index){
+        var s=document.createElement('span');
+        
+        s.id = k+'-'+l+'-'+index;
+        $(s).html(k);
+        s.className='k-level '+l +' '+ 'k-index '+index;
+        
+        return s;
+    };
+    /* Make object out of (key) DOM object passed
+       @params
+           k : (key)DOM object
+           +(See method comments above)
+    */
+    var jsonKe = function(k, l, index){
+        return js;
+    };
+    
+    /* Flush recursive list
+       @params
+           L : list
+           ff : flush function
+           RLf : Recursive List flush    
+    */
+    var fRL = function(o,RLf){
+        if ($.isArray(o)){
+            for(i in o){
+                RLf.push(fRL(o[i],RLf));
+            }
+        }
+        else{
+            return o;
+        }
+    };
+    
+    /* Levels & Indexes display
+       @params
+           s : selector
+    */
+    var LId = function(s){
+        $(s).children().each(function(){
+            var m = $(this)[0].className.match(/level\s*(\-?\+?\d*)/);
+            if(m){
+                $(this).animate({marginLeft : '+='+Math.abs(parseInt(m[1]))*5+'%'});
+            }
+        });
+    };
+    
+    var RLf = [];
+    var jsO = {};
+    $(document).ready(function(){
+        var el = $('#entities_data');
+        jsO = $.parseJSON(el.html());        
+        var eL = walk(jsO, mKe, mAe);
+        fRL(eL, RLf);
+        for(i in RLf){
+            $('#jsonTree ').append(RLf[i]);
+        }
+        LId('#jsonTree');
+        el.hide();
+    });
+</script>
 
 <h2>{{=edit_title}}</h2>
 
 {{=form}}
+{{=DIV(_id="jsonTree", _class="width100pc")}}
+{{if html:}}
+    {{=html}}
+{{pass}}
+
 
 {{if form2:}}
     {{=form2_title}}

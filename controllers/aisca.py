@@ -50,7 +50,7 @@ def index():
 def read():
     ## Main block
     mainBlockLayoutMapping = get_block_layout_mapping('entry')
-    mainBlockQuery = db(db.entities.name == 'presenting')
+    mainBlockQuery = db(db.entities.name == request.args[0])
 
     ## Icons block
     iconsBlockLayoutMapping = get_block_layout_mapping('icon_list')

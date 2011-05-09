@@ -160,12 +160,13 @@ background:url(images/title_bg.gif) no-repeat left;
 color: #91c742;
 }
 .read_more{
+display:block;
 clear:both;
 border-top:1px #dbdbdb dashed;
 margin:5px 0 0 0;
 padding:5px 0 0 0;
 }
-.read_more a{
+.read_more a {
 display:block;
 background:url(images/x.gif) no-repeat left;
 background-position:0 3px;
@@ -354,4 +355,15 @@ width:95px;
 clear:both;
 margin:auto;
 padding:0px;
+}
+
+/* custom aisca additions */
+.f-l {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.br_f-l {
+    margin-top: 2%;
+    font-weight: bold;
+    font-size: 1.2em;
 }

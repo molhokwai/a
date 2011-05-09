@@ -195,6 +195,7 @@
 'acknowledgements': 'acknowledgements',
 'action': 'action',
 'add': 'add',
+'add another': 'add another',
 'add category': 'add category',
 'add page': 'add page',
 'add page/post': 'add page/post',

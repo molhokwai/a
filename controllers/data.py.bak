@@ -37,7 +37,7 @@ def index():
         area = request.args[0]
     html = None
         
-    form = SQLFORM(db.entities, labels = entities_labels)
+    form = None
     form2 = None
     form2_title = H2(T('Assign blocks'))
     form2_list = []
@@ -47,16 +47,21 @@ def index():
     _id = -1
 
     entities = db(db.entities.id > 0).select()
+    i=0
     for entity in entities:
+        if area == 'add' and i==0:
+            db.entities.data.default = entity.data
+            i+=1
         form3_list.append(SQLFORM(db.entities, entity, fields = ['group_name', 'name'],
                     labels = entities_labels, readonly=True, formstyle="divs"))
 
+    form = SQLFORM(db.entities, labels = entities_labels)
     if area == 'edit':
         _id = int(request.args[1])
         record = db(db.entities.id == _id).select()[0]
         form = SQLFORM(db.entities, record, 
                         labels = entities_labels, deletable=True)
-        html = P(INPUT(_type="button", _onclick='window.location=%s;'%URL(r=request, args=['add']), 
+        html = P(INPUT(_type="button", _onclick="window.location='%s';"%URL(r=request, args=['add']), 
                 _value=T('add another'), _class = 'submit'), _class='text-alignr')
         db.entities_blocks.entity.default = record
         form2 = SQLFORM(db.entities_blocks, fields = ['block'], 

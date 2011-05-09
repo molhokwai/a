@@ -70,7 +70,7 @@ class Template(object):
                 for i in range(len(entityBlock.entities)):
                     if not entityBlock.block.entityMappings:
                         entityBlock.block.entityMappings = []
-                    print '-------------| len(entityBlock.block.entityMappings) : %i ' % len(entityBlock.block.entityMappings)
+
                     entityMapping = EntityMapping(entityBlock.entities[i])
                     if i<len(entityBlock.block.entityMappings):
                         entityBlock.block.entityMappings[i] = entityMapping
