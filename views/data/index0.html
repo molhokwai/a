@@ -19,9 +19,8 @@
            l : level, depth, within the object
            p : the path to the current element
            index : the index of the atom to add (eventual) items delimiter if >0
-           eps : extra parameters dictionary
     */
-    var walk = function(obj, oKe, oAe, l, index, p, eps){
+    var walk = function(obj, oKe, oAe, l, index, p){
         if (l==null){ l=-1; }
         if (index==null){ index=0; }
         if (p==null){ p=[]; }
@@ -33,17 +32,8 @@
 			}
 
             if (oAe){
-				/*Refactoring: function get_eps(oAe|oKe, eps)*/
-				var ep = oAe.length>1 ? oAe[1]: null;
-				if(ep){
-					if(eps){
-						for(k in ep){
-							eps[k] = ep[k];
-						}
-					}
-					else { eps = ep; }
-				}
-                o.push(oAe[0](obj, l, index, p, eps));
+                o.push(oAe[0](obj, l, index, p, 
+						(oAe.length>1 ? oAe[1]: null)));
             }
             else{
                 o.push(obj);
@@ -52,42 +42,20 @@
         else {
             l++;
 			if($.isArray(obj)){
-				var ol=obj.length;
-				if(ol>1){
-					/*Refactoring: hashtable 'class' usage */
-					if(eps==null){ eps={}; }
-					eps['ol']=ol;
-				}
 				for(i in obj){
 					if(l in p){ p[l]=i; }
 					else { p.push(i); }
-					o.push(walk(obj[i], oKe, oAe, l, i, p, eps));
+					o.push(walk(obj[i], oKe, oAe, l, i, p));
 				}
 			}
 			else if (typeof(obj) in {'object':''}){
 				var i=0;
-				var ol=0;
-				for(k in obj){ ol++; };
 				for(k in obj){
 					if(l in p){ p[l]=k; }
 					else { p.push(k); }
-					/*Refactoring: function get_eps(oAe|oKe, eps)*/
-					var ep = oKe.length>1 ? oKe[1]: null;
-					if(ep){
-						if(eps){
-							for(k in ep){
-								eps[k] = ep[k];
-							}
-						}
-						else { eps = ep; }
-					}
-					if(ol>1){
-						/*Refactoring: hashtable 'class' usage */
-						if(eps==null){ eps={}; }
-						eps['ol']=ol;
-					}
-					o.push(oKe[0](k, l, i, p, eps));
-					o.push(walk(obj[k], oKe, oAe, l, i, p, eps));
+                	o.push(oKe[0](k, l, i, p, 
+							(oKe.length>1 ? oKe[1]: null)));
+					o.push(walk(obj[k], oKe, oAe, l, i, p));
 					i++;
 				}
 			}
@@ -122,7 +90,7 @@
         t.className='a-level '+l +' '+ 'a-index '+index;
 		if (eps){
 			for(k in eps){
-				if(k=='mAe_ebs'){
+				if(k=='ebs'){
 					var ebs=eps[k];
 					for(i in ebs){
 						$(t).bind(ebs[i][0], ebs[i][1]);
@@ -132,16 +100,6 @@
         }
         return t;
     };
-    /* Make object out of atom passed 
-		+(see previous method for comments)
-	*/
-	var mAjs = function(a, l, index, p, eps){
-		var ol=eps && eps.ol;
-		
-		if(index==ol-1){
-			eps.ol=null;
-		}
-	};
     
     /* Make object out of key passed
        @params
@@ -162,7 +120,7 @@
         s.className='k-level '+l +' '+ 'k-index '+index;
 		if (eps){
 			for(k in eps){
-				if(k=='mKe_ebs'){
+				if(k=='ebs'){
 					var ebs=eps[k];
 					for(i in ebs){
 						$(s).bind(ebs[i][0], ebs[i][1]);

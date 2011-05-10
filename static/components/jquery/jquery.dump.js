@@ -1,1 +1,0 @@
-/home/herve/development/workspaces/libraries/jquery/jquery.dump.js
