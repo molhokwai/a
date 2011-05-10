@@ -19,8 +19,9 @@
            l : level, depth, within the object
            p : the path to the current element
            index : the index of the atom to add (eventual) items delimiter if >0
+           eps : extra parameters dictionary
     */
-    var walk = function(obj, oKe, oAe, l, index, p){
+    var walk = function(obj, oKe, oAe, l, index, p, eps){
         if (l==null){ l=-1; }
         if (index==null){ index=0; }
         if (p==null){ p=[]; }
@@ -32,8 +33,15 @@
 			}
 
             if (oAe){
-                o.push(oAe[0](obj, l, index, p, 
-						(oAe.length>1 ? oAe[1]: null)));
+				/*Refactoring: function get_eps(oAe|oKe, eps)*/
+				var ep = oAe.length>1 ? oAe[1]: null;
+				if(eps){
+					for(k in ep){
+						eps[k] = ep[k];
+					}
+				}
+				else { eps = ep; }
+                o.push(oAe[0](obj, l, index, p, eps));
             }
             else{
                 o.push(obj);
@@ -45,7 +53,7 @@
 				for(i in obj){
 					if(l in p){ p[l]=i; }
 					else { p.push(i); }
-					o.push(walk(obj[i], oKe, oAe, l, i, p));
+					o.push(walk(obj[i], oKe, oAe, l, i, p, eps));
 				}
 			}
 			else if (typeof(obj) in {'object':''}){
@@ -53,9 +61,16 @@
 				for(k in obj){
 					if(l in p){ p[l]=k; }
 					else { p.push(k); }
-                	o.push(oKe[0](k, l, i, p, 
-							(oKe.length>1 ? oKe[1]: null)));
-					o.push(walk(obj[k], oKe, oAe, l, i, p));
+					/*Refactoring: function get_eps(oAe|oKe, eps)*/
+					var ep = oKe.length>1 ? oKe[1]: null;
+					if(eps){
+						for(k in ep){
+							eps[k] = ep[k];
+						}
+					}
+					else { eps = ep; }
+                	o.push(oKe[0](k, l, i, p, eps));
+					o.push(walk(obj[k], oKe, oAe, l, i, p, eps));
 					i++;
 				}
 			}
