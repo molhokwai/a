@@ -1,2 +1,1 @@
-var molhokwai={
-};
+/home/herve/development/workspaces/libraries/net.molhokwai/js/namespace.js
