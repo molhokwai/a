@@ -15,6 +15,7 @@ except Exception, ex:
 ## CONTROLLER FUNCTIONS
 ###################################
 
+default_entity_data = """{"meta":{"groupName":"meta.groupName","name":"meta.name","key":"meta.key"},"entity":{"text":{"text":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, dolore eu fugiat nulla pariatur","imageUrl":"/a/static/css/themes/aisca/images/pic1.gif"},"summary":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip","links":{"text":"read more","name":"home_main_welcome"},"title":{"text":"Welcome to","name":"aisca"}}}"""
 @auth.requires_login()
 def index():
     def get_parse_data(form_vars):
@@ -49,13 +50,18 @@ def index():
     entities = db(db.entities.id > 0).select()
     i=0
     for entity in entities:
+        """ Eventually
         if area == 'add' and i==0:
             db.entities.data.default = entity.data
             i+=1
+        """
         form3_list.append(SQLFORM(db.entities, entity, fields = ['group_name', 'name'],
                     labels = entities_labels, readonly=True, formstyle="divs"))
+    if area == 'add' and i==0:
+        db.entities.data.default = default_entity_data
 
-    form = SQLFORM(db.entities, labels = entities_labels)
+
+    form = SQLFORM(db.entities, labels = entities_labels)    
     if area == 'edit':
         _id = int(request.args[1])
         record = db(db.entities.id == _id).select()[0]

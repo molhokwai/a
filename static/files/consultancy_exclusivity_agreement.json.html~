@@ -1,0 +1,27 @@
+
+<span class="h1">Exclusivity Agreement</span>
+
+<span class="p"></span>
+
+<span class="p">This EXCLUSIVITY AGREEMENT (this “Agreement”), is entered into, as of {{=now}}, between {{=sale.initiator.full_name}} (the “Initiator”), and {{=(sale.(provisioner or stakeholder).full_name }}.</span>
+
+ 
+<span class="p">The parties have engaged in preliminary, non-binding discussions regarding the terms of a possible transaction between the Initiator and {{=(sale.(provisioner or stakeholder).full_name }} pursuant to which {{=(sale.(provisioner or stakeholder).full_name }} would engage in a pre-sales process involving the potential License Purchase of any Product and Service described in the annexed resource  {{=snapshot(products.description + services.description)}} for a company or organization evaluating the Product and/or Service (“The Process”). {{=snapshot(products.description + services.description)}} engages for the company or organization: Directly, as a stakeholder during  the process, or Indirectly as a provisioner of a direct contact with one or many stakeholders .</span>
+
+ 
+<span class="p">As a condition to pursuing the Transaction, {{=sale.initiator.full_name}} has requested that {{=(sale.(provisioner or stakeholder).full_name }} enter into this Agreement and {{=(sale.(provisioner or stakeholder).full_name }} is willing to do so.</span>
+
+ 
+<span class="p">NOW, THEREFORE, in consideration of the foregoing and other good and valuable consideration, and intending to be legally bound, the parties hereto agree as follows:</span>
+
+<ol> 
+<li>1. Exclusivity. {{=(sale.(provisioner or stakeholder).full_name }} agrees that he/she shall have and maintain {{=sale.initiator.full_name}} or any person explicitly given the title of representative by {{=sale.initiator.full_name}} as exclusive contact & representative person on the party of the Product and Service License provider, and that this  applies respectively to any of his/her or any of his her company's subsidiary, affiliate, partner, officer, directors, employee, agent and representative.</li>
+<li>2. Publicity. This Agreement is intended to be confidential and its existence shall not be disclosed by {{=(sale.(provisioner or stakeholder).full_name }} or {{=sale.initiator.full_name}} to any person unless required by law or the rules or regulations of the {{=location.commerce_regulation_auhority}} or unless requested by any regulatory agency; provided, however, that the foregoing shall not prohibit a party from making any such disclosure to any of the following (“Permitted Recipients”): (i) officers and directors of such party or any subsidiary, (ii) agents and advisors of such party or its subsidiaries (including legal, tax and financial advisors), (iii) applicable authorities in connection with requesting approval for the proposed Transaction, and (iv) any other person with the prior consent of the other party.</li>
+<li>3. No Agreement regarding the Process. There are no legally binding obligations among the parties relating to the Processs except those specifically set forth herein. Each party acknowledges and agrees that this Agreement expresses the parties’ interests in continuing discussions regarding the Process and is not intended to, and does not, create any legally binding obligation on any party to consummate the Process. Such an obligation will arise only upon the execution and delivery of final definitive agreements relating to the Process in form and substance satisfactory to the parties and their respective counsel.</li>
+<li>4. Non-Assignability. This Agreement shall not be assignable without the prior written consent of the non-assigning party.</li>
+<li>5. Governing Law. This Agreement shall be governed by and construed in accordance with the laws of {{=location.(region or country)}}.</li>
+<li>6. Entire Agreement. This Agreement constitutes the entire agreement between the parties with respect to the subject matter hereof and supersedes any prior oral or written agreements related thereto.</li>
+<li>7. Amendments and Waivers. Neither this Agreement nor any of the terms hereof may be terminated, amended or waived orally, but only by an instrument in writing signed by the party against which enforcement of the termination, amendment or waiver is sought.</li>
+<li>8. Termination. This Agreement will terminate upon (a) mutual agreement of termination, (b) execution by the parties of definitive agreements with respect to the Process. Notwithstanding the foregoing, in the event this Agreement is terminated, the parties hereto agree that the provisions of Sections 2 & 3 shall survive any such termination and shall continue in full force and effect.</li>
+</ol> 
+
