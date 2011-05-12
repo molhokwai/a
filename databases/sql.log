@@ -238,3 +238,5 @@ CREATE TABLE entities_blocks(
     block CHAR(512)
 );
 success!
+timestamp: 2011-05-12T16:54:08.451683
+ALTER TABLE links ADD link_parent CHAR(512);

@@ -300,7 +300,9 @@ db.define_table('posts_categories',
     
 db.define_table('links',
     SQLField('link_title', required=True),
+    SQLField('link_parent', required=False, default=-1),
     SQLField('link_url', required=True))
+db.links.link_parent.requires = IS_IN_DB(db, 'links.id', 'links.link_title')
 
 db.define_table('files',
     SQLField('file','upload', required=True, autodelete=True),

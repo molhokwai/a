@@ -55,8 +55,10 @@ def index():
             db.entities.data.default = entity.data
             i+=1
         """
-        form3_list.append(SQLFORM(db.entities, entity, fields = ['group_name', 'name'],
-                    labels = entities_labels, readonly=True, formstyle="divs"))
+        sql_form = SQLFORM(db.entities, entity, fields = ['group_name', 'name'],
+                    labels = entities_labels, readonly=True, formstyle="divs")
+        sql_form.append(A(T('edit'), _href=URL(r=request,args=['edit', entity.id])))
+        form3_list.append(sql_form)
     if area == 'add' and i==0:
         db.entities.data.default = default_entity_data
 

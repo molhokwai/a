@@ -125,10 +125,10 @@
                     &copy;Copyright Hervé Mayou, 2011 . All Rights Reserved
                 </div>
         
-                <div class="footer_links">
+                <div class="footer_links width45pc">
                   {{=XML(' / '.join(   map(
                                       lambda p_h_l: ':'.join( 
-                                              map(lambda x: A(T(x.replace('_', ' ')), _href="/%s/default/page/%s" % (this_app, x)).xml(), p_h_l)  
+                                              map(lambda x: A(T(x.replace('_', ' ')), _href="%s" % (x)).xml(), p_h_l)  
                                       ) ,session.nav_history)
                                 ))}}
                 </div>

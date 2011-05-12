@@ -1,13 +1,25 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################
-
-try:
+ 
+"""try:"""
+if True:
+    app_objects.__dict__.update({'menu_order':['a_home', 'the_system-entry', 'the_technology-entry', 'the_options-entry', 'demo request', 'contact us']})
     exec('from applications.%s.modules import common' % this_app)
     page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
-except Exception, ex:
+
+    app_objects.__dict__.update({
+        'page_helper' : page_helper,
+        'post_helper' : post_helper,
+        'home_page_link'   : common.home_page_link,
+        'help_page_link'   : common.help_page_link
+    })
+    exec('from applications.%s.modules import aisca as m_aisca' % this_app)
+    page_helper, post_helper = m_aisca.controller_init(request, response, session, cache, T, db, auth, app_objects)
+
+"""except Exception, ex:
     log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
-    
+"""    
 ###################################
 ## CONTROLLER FUNCTIONS
 ###################################

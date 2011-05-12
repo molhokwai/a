@@ -242,10 +242,17 @@ class Utilities():
     def get_page_hierarchy(self, pg_id):
         pg = db(db.posts.id == pg_id).select()[0]
         p_list = [pg.post_title]
-        if pg.post_parent>0:
-            log_wrapped('pg.post_parent', pg.post_parent)
+        if pg.post_parent>0 and pg.post_parent!=pg_id:
             p_list += self.get_page_hierarchy(pg.post_parent)
         return p_list
+
+    def get_link_hierarchy(self, l_id):
+        l = db(db.links.id == l_id).select()[0]
+        l_list = [l.link_title]
+        if l.link_parent>0 and l.link_parent!=l_id:
+            l_list += self.get_link_hierarchy(l.link_parent)
+        return l_list
+        
         
     ## THEMES
     @staticmethod
@@ -297,7 +304,7 @@ class Utilities():
 
     def posts_replace_serverside_output_values(self, _posts, tag_re='\</*aservero\>'):
         for p in _posts:
-            p.post_text = self.replace_serverside_output_values(p.post_text)
+            p.post_text = self.replace_serverside_output_values(x.post_text)
         return _posts
 
     ## REQUEST HANDLING

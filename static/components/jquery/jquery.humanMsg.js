@@ -1,1 +1,1 @@
-/home/herve/development/workspaces/libraries/jquery/humanmsg.js
+/home/herve/development/workspaces/libraries/jquery/jquery.humanMsg.js

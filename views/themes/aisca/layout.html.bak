@@ -10,6 +10,7 @@
         <!-- include requires CSS files
         {{response.files.append(URL(request.application,'static','jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css'))}}
         -->
+        {{=T('the_options-entry')}}
         {{style_base_url = '/%s/static/css/themes/%s' % (this_app, response.theme)}}
         <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
         <!-- -VIEWS/THEMES/CMS/LAYOUT.HTML  -->
@@ -76,7 +77,7 @@
                                 if(args.length>4){ cb_array=eval(args[4]); }
                                 switch(f){
                                     case 'truncate':
-                                        $(this).html($(this).html().replace('#:#'+text, text.substring(0,l)));
+                                        $(this).html($(this).html().replace('#:#'+text, text.substring(0,l)+'...'));
                                         break;
                                 }
                             }
@@ -125,10 +126,10 @@
                     &copy;Copyright Hervé Mayou, 2011 . All Rights Reserved
                 </div>
         
-                <div class="footer_links">
+                <div class="footer_links width45pc">
                   {{=XML(' / '.join(   map(
                                       lambda p_h_l: ':'.join( 
-                                              map(lambda x: A(T(x.replace('_', ' ')), _href="/%s/default/page/%s" % (this_app, x)).xml(), p_h_l)  
+                                              map(lambda x: A(T(x.replace('_', ' ')), _href="%s" % (x)).xml(), p_h_l)  
                                       ) ,session.nav_history)
                                 ))}}
                 </div>

@@ -7,8 +7,12 @@ sS'link_url'
 p4
 S'CHAR(32)'
 p5
-sS'id'
+sS'link_parent'
 p6
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
+S'CHAR(512)'
 p7
+sS'id'
+p8
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p9
 s.

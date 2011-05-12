@@ -117,6 +117,14 @@ def help_page(response, page_helper, _pages, request, T, app_objects):
     page_helper._title=T('%s_help' % app_objects.tentative_app)
     return filter(page_helper.get_page_by_title,_pages)
 
+def home_page_link(response, page_helper, _links, request, T, app_objects):
+    """Same logic as above"""
+    return filter(lambda x:x[0]=='%s_home' % app_objects.tentative_app,_links)
+
+def help_page_link(response, page_helper, _links, request, T, app_objects):
+    """Same logic as above"""
+    return filter(lambda x:x[0]=='%s_help' % app_objects.tentative_app,_links)
+
 
 ###################################
 ## CONTROLLER INIT
