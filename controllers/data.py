@@ -110,7 +110,36 @@ def index():
                 html=html, form2_list_title=form2_list_title, form2_list=form2_list, 
                 form2_title=form2_title, form2=form2,
                 form3_list=form3_list, form3_list_title=form3_list_title)
-    
+
+def entity():
+    area = 'save'
+    if len(request.args)>0:
+        area = request.args[0]
+
+    if area in ['create', 'create.json']:
+        key = int(request.vars.key)
+        record = db(db.entities.id == key).select()[0]
+        
+        from gluon.contrib import simplejson
+        data = simplejson.loads(record.data)
+        if record.group_name == 'client_contact':
+            data['entity']['text']['value'] = request.vars.message
+            name = None
+            for i in range(len(data['entity']['string'])):
+                data['entity']['string'][i]['value'] = request.vars[data['entity']['string'][i]['name']]
+                if data['entity']['string'][i]['name'] == 'name':
+                    name = data['entity']['string'][i]['value']
+        _id = db.entities.insert(
+            name = '%s:%s'%(record.name,name),
+            group_name = record.group_name,
+            data = simplejson.dumps(data)
+        )
+
+        return response.json({
+            'status' : 1,
+            'message' : 'done',
+            'result' : data
+        })
 
 @auth.requires_login()
 def create():

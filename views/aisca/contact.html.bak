@@ -1,5 +1,15 @@
 {{extend "themes/%s/layout.html" % response.theme}}
-      
+
+<script type="text/javascript">
+    var submit = function(index){
+        if(index==null){
+            $('form').submit();
+        }
+        else {
+            $('form')[index].submit();
+        }
+    };
+</script>      
 <div class="left_content">
     <!-- { { = XML(blocks[0][0].layoutOutput()) } } -->    
     <!-- { { = XML(blocks[0][1].layoutOutput()) } } -->        
@@ -7,9 +17,8 @@
 <!--end .left_content-->
 
 <div class="right_content">
-    <div class="title">{{=T('Contact')}} <span>form</span></div>
-    <form>
-        {{=form)}}
+    <form method="POST">
+        {{=XML(blocks[1][0].layoutOutput())}}
     </form>
     {{=XML(blocks[1][1].layoutOutput())}}
 </div>

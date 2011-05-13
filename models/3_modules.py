@@ -110,8 +110,9 @@ blocks_layout_mapping = {
             listOrder = ['text', 'links']
         ), 
     'form': LayoutMapping(
-            container = DIV("%(content)s"),
-            title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
+            container = DIV("%(content)s", _class="form"),
+            title = DIV("%(text)s ", SPAN("%(name)s"), DIV(_class="message display-none"), _class='title'),
+            key = INPUT(_type='hidden',  _id='key', _name='key', _value='%(value)s'), 
             string = DIV(LABEL('%(text)s'), 
                             INPUT(_type='textbox',  _id='%(id)s', _name='%(name)s', 
                             _value='%(value)s'), _class='form_row'), 
@@ -124,8 +125,8 @@ blocks_layout_mapping = {
             check = DIV(LABEL('%(text)s'), 
                             INPUT(_type='checkbox',  _id='%(id)s', _name='%(name)s', _value='%(value)s', 
                                 _checked='%(checked)s'), _class='form_row'), 
-            submit = A('%(text)s',  _id='%(id)s', _name='%(name)s', _href='%(href)s'), 
-            listOrder = ['title','string','check','select','text','submit']
+            submit = A('%(text)s',  _id='%(id)s', _name='%(name)s', _href='%(href)s', _class='send'), 
+            listOrder = ['key','title','string','check','select','text','submit']
         )
 }
 def get_block_layout_mapping(name):

@@ -48,15 +48,16 @@ class BlockBase:
             self._layoutOutput = []
 
             for i in range(len(self.entityMappings)):
-                self._layoutOutput.append([self.layoutMapping.listOrder[j] for j in range(len(self.layoutMapping.listOrder))])
-
                 entity = self.entityMappings[i].entity
+                self._layoutOutput.append([self.layoutMapping.listOrder[j] for j in range(len(self.layoutMapping.listOrder))])
+                self._layoutOutput[i] = filter(lambda x:x in entity.__dict__, self._layoutOutput[i])
+                
                 for key in entity.__dict__:
                     if key in self._layoutOutput[i]:
                         e_attr = entity.__dict__.get(key)
                         l_attr = self.layoutMapping.__dict__.get(key)
                         
-                        if l_attr:
+                        if l_attr and e_attr:
                             l_attr_v = ''   
                             if type(e_attr) == ListType:
                                 for j in range(len(e_attr)):
@@ -71,5 +72,3 @@ class BlockBase:
                         
             self._layoutOutput = convert_attr(self.layoutMapping.container) % dict(content='\n'.join(map(lambda y: '\n'.join(y), self._layoutOutput)))
         return self._layoutOutput
-
-

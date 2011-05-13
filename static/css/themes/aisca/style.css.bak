@@ -278,6 +278,20 @@ padding:15px 0 0 0;
 }
 /*-----------------------contact_form-------------------*/
 /* custom aisca additions */
+/* .form */
+.form {
+margin-left:-8%;
+min-height:20em;
+}
+/* .form .title */
+.form .title {
+margin:-1.8% 0 6%;
+}
+/* .form .message */
+.form .message {
+margin-top:20%;
+}
+/* form */
 form, #contact_form{
 width:350px;
 height:auto;
@@ -286,6 +300,10 @@ padding:20px 0 0 20px;
 .form_row{
 float:left;
 padding:7px 0 7px 0;
+}
+/* .form .form_row */
+.form .form_row {
+padding-left:5%;
 }
 label{
 width:70px;
@@ -312,7 +330,7 @@ border:1px #9cc9d3 solid;
 background-color:#DBEDF3;
 color: #000;
 }
-a.send{
+form a[name="send"], a.send{
 float:right;
 width:62px;
 height:32px;
