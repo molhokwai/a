@@ -309,7 +309,7 @@
 'page_id_1585006': 'page_id_1585006',
 'page_id_16': 'page_id_16',
 'page_id_1667002': 'page_id_1667002',
-'page_id_1675001': 'page_id_1675001',
+'page_id_1675001': '...',
 'page_id_1896006': 'page_id_1896006',
 'page_id_42': '                        <h1>- Efficiency in Simplicity</h1>                         <p>Getting what needs to be done, done. Taking on the task at hand, completing it, delivering it. And stepping to the next task.</p>                                                  <h1>- Agile Mind</h1>                         <p>There is a straight-forward way to the solution. Providing originality, creativity, out-of-the-box thinking are in place.</p>                                                  <h1>- Webx.0</h1>                         <p>Programming on the Web. That is:</p>                         <ul>                             <li>Using the plethora of tools, API\'s, systems, applications... that now enable <em>Everything</em></li>                             <li>Using them, connecting them, creating new tools, applications, systems out of them... and using these to create new tools, applications, systems... and so on*.</li>                             <li>Using the Collective Intelligence</li>                         </ul>                                                  <h1>- CV, Projects, And Other</h1>                         <p>See Sidebar <a onclick="$(\'#sidebar-content\').toggle();"     href="javascript:return false;"                                           class="bold font-s1-6em">&gt;</a> .</p>                                                  <span class="display-block margt5pc font-s07em italic margl5pc">*performance? Factoring, Caching, Clustering... and many other solutions</span>',
 'page_id_6': 'page_id_6',

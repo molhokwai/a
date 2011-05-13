@@ -51,7 +51,8 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
             
         if not n_hi in session.nav_history:
             session.nav_history.append(n_hi)
-    n_hi.reverse()
+
+    if n_hi: n_hi.reverse()
     if n_hi and len(n_hi)>1 and n_hi[0]!=n_hi[1]:
         lt_f = filter(lambda x:x[0]==n_hi[0],response.links)
         if lt_f: link_title=lt_f[0][0]

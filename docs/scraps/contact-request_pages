@@ -1,0 +1,42 @@
+
+Contact function:
+----------------
+	|contact summary entities|			|contact form|
+
+	|contact details entities|			|news and updates|
+
+
+	Contact summary entites:
+		-	Entity base: main_the-system
+		-	Layout: entity_summary_list 
+
+	Contact details entites:
+		-	Entity base: new 
+		-	Layout: new, from Colorex 
+
+	Contact form: 
+		-	Entity base: to fit layout
+		-	Layout: new, from Colorex 
+
+
+Request function:
+----------------
+    |request summary entities|          |request form|
+
+    |contact details entities|          |news and updates|
+
+    Request Form:
+        "Your details are saved au fur et à mesure"
+        -   Your Name
+        -   Your Role/Status
+            -   Executive, Officer, Manager, Consultant, Owner, Other
+        -   Your Department
+                -   Direction, Marketing, Sales, Administration, Information Management, IT, Development, Logistics, Purchase, Other
+        -   Request a Demo (check)
+            -   Preferred Date
+            -   Preferred Location
+        -   Your Request Details
+        -   "I agree to the terms of this agreement" (check)            
+
+
+

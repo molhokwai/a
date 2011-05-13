@@ -108,7 +108,25 @@ blocks_layout_mapping = {
                     _class="news display"),
             links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
             listOrder = ['text', 'links']
-        ) 
+        ), 
+    'form': LayoutMapping(
+            container = DIV("%(content)s"),
+            title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
+            string = DIV(LABEL('%(text)s'), 
+                            INPUT(_type='textbox',  _id='%(id)s', _name='%(name)s', 
+                            _value='%(value)s'), _class='form_row'), 
+            text = DIV(LABEL('%(text)s'), 
+                            TEXTAREA('%(value)s',  _id='%(id)s', _name='%(name)s', _rows='%(rows)s'),
+                            _class='form_row'),
+            select = DIV(LABEL('%(text)s'), 
+                            SELECT('%(options)s'.split(','), _id='%(id)s', _name='%(name)s', value='%(value)s'),
+                            _class='form_row'),
+            check = DIV(LABEL('%(text)s'), 
+                            INPUT(_type='checkbox',  _id='%(id)s', _name='%(name)s', _value='%(value)s', 
+                                _checked='%(checked)s'), _class='form_row'), 
+            submit = A('%(text)s',  _id='%(id)s', _name='%(name)s', _href='%(href)s'), 
+            listOrder = ['title','string','check','select','text','submit']
+        )
 }
 def get_block_layout_mapping(name):
     return blocks_layout_mapping[name]

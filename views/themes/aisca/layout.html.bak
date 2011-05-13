@@ -10,7 +10,6 @@
         <!-- include requires CSS files
         {{response.files.append(URL(request.application,'static','jquery-ui-1.8.2.custom/jquery-ui-1.8.2.custom.css'))}}
         -->
-        {{=T('the_options-entry')}}
         {{style_base_url = '/%s/static/css/themes/%s' % (this_app, response.theme)}}
         <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
         <!-- -VIEWS/THEMES/CMS/LAYOUT.HTML  -->

@@ -277,7 +277,8 @@ float:left;
 padding:15px 0 0 0;
 }
 /*-----------------------contact_form-------------------*/
-#contact_form{
+/* custom aisca additions */
+form, #contact_form{
 width:350px;
 height:auto;
 padding:20px 0 0 20px;
@@ -294,7 +295,8 @@ color:#175b6c;
 text-align:right;
 font-weight:bold;
 }
-input.contact_input{
+/* custom aisca additions */
+form input, form select, input.contact_input{
 width:185px;
 height:18px;
 float:left;
@@ -302,7 +304,7 @@ border:1px #9cc9d3 solid;
 background-color:#DBEDF3;
 color: #000;
 }
-textarea.contact_textarea{
+form textarea, textarea.contact_textarea{
 width:235px;
 height:80px;
 float:left;
@@ -310,7 +312,7 @@ border:1px #9cc9d3 solid;
 background-color:#DBEDF3;
 color: #000;
 }
-a.send{
+form a[name="send"], a.send{
 float:right;
 width:62px;
 height:32px;

@@ -3,12 +3,14 @@
     #jsonTree span.k-level {
         display: block;
         padding-left: 2%;
-    }    
+    }
 </style>
 <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/molhokwai.jsonEdit.js"></script>
+<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         jsTb('entities_data', 'jsonTree');
+        $('.wymeditor').wymeditor();
     });
 </script>
 

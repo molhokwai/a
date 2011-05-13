@@ -128,7 +128,7 @@
                 <div class="footer_links width45pc">
                   {{=XML(' / '.join(   map(
                                       lambda p_h_l: ':'.join( 
-                                              map(lambda x: A(T(x.replace('_', ' ')), _href="%s" % (x)).xml(), p_h_l)  
+                                              map(lambda x: A(T(x).replace('_', ' '), _href="%s" % (x)).xml(), p_h_l)  
                                       ) ,session.nav_history)
                                 ))}}
                 </div>

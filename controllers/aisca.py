@@ -41,7 +41,7 @@ def index():
     newsBlockLayoutMapping = get_block_layout_mapping('feed_list_summary')
     newsBlockQuery = db(db.entities.group_name == 'main_news-updates')
 
-    indexPage = Page(
+    page = Page(
         [
             [
                 EntityBlock(block=BlockBase(layoutMapping=mainBlockLayoutMapping), query=mainBlockQuery),
@@ -54,9 +54,9 @@ def index():
             ]
         ]
     )
-    indexPage.populateEntityBlocks()
+    page.populateEntityBlocks()
     
-    return dict(entityBlocks = indexPage.entityBlocks, blocks = indexPage.blocks)
+    return dict(entityBlocks = page.entityBlocks, blocks = page.blocks)
 
 
 def read():
@@ -72,7 +72,7 @@ def read():
     newsBlockLayoutMapping = get_block_layout_mapping('feed_list_summary')
     newsBlockQuery = db(db.entities.group_name == 'main_news-updates')
 
-    indexPage = Page(
+    page = Page(
         [
             [
                 EntityBlock(block=BlockBase(layoutMapping=mainBlockLayoutMapping), query=mainBlockQuery),
@@ -84,6 +84,36 @@ def read():
             ]
         ]
     )
-    indexPage.populateEntityBlocks()
+    page.populateEntityBlocks()
     
-    return dict(entityBlocks = indexPage.entityBlocks, blocks = indexPage.blocks)
+    return dict(entityBlocks = page.entityBlocks, blocks = page.blocks)
+
+
+def contact():
+    ## Main block
+    ## mainBlockLayoutMapping = get_block_layout_mapping('entry')
+    ## mainBlockQuery = db(db.entities.name == request.args[0])
+
+    ## Form block
+    formBlockLayoutMapping = get_block_layout_mapping('form')
+    formBlockQuery = db(db.entities.name == 'contact_form-entry')
+
+    ## Main block
+    newsBlockLayoutMapping = get_block_layout_mapping('feed_list_summary')
+    newsBlockQuery = db(db.entities.group_name == 'main_news-updates')
+
+    page = Page(
+        [
+            [
+                ## EntityBlock(block=BlockBase(layoutMapping=mainBlockLayoutMapping), query=mainBlockQuery),
+            ]
+            ,
+            [
+                EntityBlock(block=BlockBase(layoutMapping=formBlockLayoutMapping), query=formBlockQuery),
+                EntityBlock(block=BlockBase(layoutMapping=newsBlockLayoutMapping), query=newsBlockQuery),
+            ]
+        ]
+    )
+    page.populateEntityBlocks()
+    
+    return dict(entityBlocks = page.entityBlocks, blocks = page.blocks)

@@ -304,7 +304,7 @@ border:1px #9cc9d3 solid;
 background-color:#DBEDF3;
 color: #000;
 }
-form textarea, textarea.contact_textarea{
+form texarea, textarea.contact_textarea{
 width:235px;
 height:80px;
 float:left;

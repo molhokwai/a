@@ -625,22 +625,26 @@ def download():
 
 @auth.requires_login()
 def do_stuff():
-    if request.args[0] in ['posts_app', 'links_app']:
-        instance=db.posts if request.args[0]=='posts_app' else db.links
-        _ids=request.args[1].split(',')
-        log_wrapped('_ids', _ids)
-        for i in range(len(_ids)):
-            try:
-                db(instance.id == int(_ids[i])).update(application=request.application)
-            except Exception, ex:
-                pass
-        session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
-    
-    redirect(URL(r = request,f = 'index'))
+	if auth.user.is_admin:
+		if request.args[0] in ['posts_app', 'links_app']:
+			instance=db.posts if request.args[0]=='posts_app' else db.links
+			_ids=request.args[1].split(',')
+			log_wrapped('_ids', _ids)
+			for i in range(len(_ids)):
+				try:
+					db(instance.id == int(_ids[i])).update(application=request.application)
+				except Exception, ex:
+					pass
+			session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
 
-def do_stuff_i():
-    if request.args[0] in ['set_login_mechanism']:
-        db(db.app_config.id>0).update(APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','))
-        session.flash=T('login mechanism updated.')
-    
-    redirect(URL(r = request,f = 'index'))
+        elif request.args[0] in ['set_login_mechanism']:
+            db(db.app_config.id>0).update(
+					APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
+					RPX_API = ['b9727a23b1d6ab8d29d112eb0f95ed1368f29c1f' if i==0 else RPX_API[i] for i in range(len(RPX_API))])
+            session.flash=T('login mechanism updated.')
+	else:
+		session.flash=T('not admin')
+
+	redirect(URL(r = request,f = 'index'))
+
+

@@ -1,0 +1,11 @@
+
+{"meta":{"groupName":"client_contact_request","name":"contact_form-entity","key":21},"entity" : {
+        "string" : [
+            {"text" : "name", "id" : "name", "name" : "name", "value" : ""},
+            {"text" : "email", "id" : "email", "name" : "email", "value" : ""},
+            {"text" : "phone", "id" : "phone", "name" : "phone", "value" : ""}
+        ],
+        "text" : {"l_text" : "message", "id" : "message", "name" : "message", "rows" : 3},
+        "submit" : {"text" : "send", "id" : "send", "name" : "send", "href" : "javascript:submit();"}
+    }
+}
