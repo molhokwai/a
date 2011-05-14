@@ -91,7 +91,19 @@ blocks_layout_mapping = {
                        P((SPAN("%(title)s", _class="blue"), BR(), 
                        "#:#display#:#truncate#:#%(text)s#:#290#:#['hide','.read_more']"), 
                        _class="services display"),
-                 _class="services_box"),
+                     _class="services_box"),
+            links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
+            listOrder = ['text', 'links']
+        ),
+     ## adapted from 'entry_list_summary'
+     'contact_list_summary': LayoutMapping(
+            container = DIV(DIV(("Contact ", SPAN("us")), _class='title'),
+                            "%(content)s"),
+            text = DIV(IMG(_src="%(imageUrl)s", _class="icon"), BR(), 
+                        P((SPAN("%(title)s", _class="blue"), BR(), 
+                            "%(text)s"), 
+                            _class="department"),
+                    _class="services_box"),
             links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
             listOrder = ['text', 'links']
         ),
@@ -127,8 +139,15 @@ blocks_layout_mapping = {
                                 _checked='%(checked)s'), _class='form_row'), 
             submit = A('%(text)s',  _id='%(id)s', _name='%(name)s', _href='%(href)s', _class='send'), 
             listOrder = ['key','title','string','check','select','text','submit']
+        ),
+     'information_list': LayoutMapping(
+            container = DIV(DIV(("Contact ", SPAN("information")), _class='title'), 
+                            DIV("%(content)s", _class='informations_box')),
+            detail = DIV(SPAN("%(name)s: ", _class='blue'), "%(value)s"), 
+            listOrder = ['detail']
         )
 }
+
 def get_block_layout_mapping(name):
     return blocks_layout_mapping[name]
 db.entities_blocks.block.requires = IS_IN_SET(map(lambda x: '%s(%s)' % (x[0],','.join(x[1].__dict__.keys())),

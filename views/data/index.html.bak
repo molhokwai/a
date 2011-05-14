@@ -6,7 +6,6 @@
     }
 </style>
 <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/molhokwai.jsonEdit.js"></script>
-<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         jsTb('entities_data', 'jsonTree');
@@ -16,27 +15,30 @@
 
 <h2>{{=edit_title}}</h2>
 
-{{=form}}
-{{if html:}}
-    {{=html}}
-{{pass}}
+<div class="data">
+    {{=form}}
+    {{if html:}}
+        {{=html}}
+    {{pass}}
+    
+    
+    {{if form2:}}
+        {{=form2_title}}
+        {{=form2}}
+    {{pass}}
 
-
-{{if form2:}}
-    {{=form2_title}}
-    {{=form2}}
-{{pass}}
-
-{{=form2_list_title}}
-{{for f in form2_list:}}
-    {{=f}}
+    <div class='list'>    
+        {{=form2_list_title}}
+        {{for f in form2_list:}}
+            {{=f}}
+        {{pass}}
+    
+        {{=form3_list_title}}
+        {{for f in form3_list:}}
+            {{=f}}
+        {{pass}}
+    </div>
     <div class="clear"></div>
-{{pass}}
-
-{{=form3_list_title}}
-{{for f in form3_list:}}
-    {{=f}}
-    <div class="clear"></div>
-{{pass}}
+</div>
 
 {{=A(T('markup textareas'), _href='javascript:markup_textareas();', _class='color-transparent')}}

@@ -16,8 +16,6 @@
         {{if response.child_theme and response.theme_stylesheet:}}
             <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
         {{pass}}
-        <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
     
         <style type="text/css" media="screen">
             #page { background: url("/{{=request.application}}/static/images/themes/{{=response.theme}}/bg-ltr.jpg") repeat-y top; border: none; }
@@ -47,7 +45,7 @@
         </script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/wymeditor/jquery.wymeditor.min.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
         <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>

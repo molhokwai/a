@@ -297,6 +297,19 @@ width:350px;
 height:auto;
 padding:20px 0 0 20px;
 }
+.data form.edit, .data form.edit table {
+width:100%;
+}
+.data form.edit {
+border: 1px solid #48636B;
+}
+.data .list form {
+width:auto;
+height:auto;
+padding:2%;
+float:left;
+border: 1px solid #48636B;
+}
 .form_row{
 float:left;
 padding:7px 0 7px 0;

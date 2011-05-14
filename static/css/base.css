@@ -68,7 +68,7 @@ iframe {
 }
 
 a {
-    text-decoration:none;
+	text-decoration:none;
 }
 a:hover, a:active {
     font-style: italic;

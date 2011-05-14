@@ -334,7 +334,7 @@ minh0 {
   position: absolute;
 }
 
-overflow-hidden, scroll-none {
+.overflow-hidden, .scroll-none {
   overflow: hidden;
 }
 .background-posy10pc {
@@ -494,6 +494,18 @@ overflow-hidden, scroll-none {
 }
 .margt10pc {
     margin-top: 10% !important;
+}
+.margt20pc {
+    margin-top: 20% !important;
+}
+.margt30pc {
+    margin-top: 30% !important;
+}
+.margt40pc {
+    margin-top: 40% !important;
+}
+.margt45pc {
+    margin-top: 45% !important;
 }
 
 /*bottom*/
@@ -655,15 +667,21 @@ overflow-hidden, scroll-none {
 .fontf-helvetica {
     font-family: "Helvetica";
 }
+.font-strike {
+    /*see text styles & effects*/
+}
 p:first-letter, ul li:first-letter {
     font-weight: bold;
     font-size: 1.2em;
 }
 
-
 /* TEXT STYLES & EFFECTS */
 .text-transu {
     text-transform:uppercase;
+}
+.strike-through, .strike, .strike-font, .font-strike, .fstrike, .f-strike, .line-through, .l-through,
+.strike-text, .text-strike, .tstrike, .t-strike {
+    text-decoration: line-through !important;
 }
 
 /* ELEMENTS */

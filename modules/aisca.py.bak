@@ -52,7 +52,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
         if not n_hi in session.nav_history:
             session.nav_history.append(n_hi)
 
-	if n_hi: n_hi.reverse()
+    if n_hi: n_hi.reverse()
     if n_hi and len(n_hi)>1 and n_hi[0]!=n_hi[1]:
         lt_f = filter(lambda x:x[0]==n_hi[0],response.links)
         if lt_f: link_title=lt_f[0][0]
@@ -79,6 +79,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     # home page
     _home_page=app_objects.home_page_link(response, page_helper, response.links, request, T, app_objects)
     response.home_page=_home_page[0] if (_home_page and len(_home_page)>0) else None
+    log_wrapped('response.home_page', response.home_page)
 
     # help page
     _help_page=app_objects.help_page_link(response, page_helper, response.links, request, T, app_objects)

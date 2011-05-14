@@ -1,16 +1,6 @@
 {{extend "themes/%s/layout.html" % response.theme}}
-{{
-def layoutOutput(x,y):
-    try:
-        return XML(blocks[x][y].layoutOutput())
-    except Exception, ex:
-        ## log_wrapped('Error (%s/controllers/aisca/read)' % this_app, ex)
-        session.flash = T('Error (%s/controllers/aisca/read)')
-        redirect(URL(r=request, f='index'))
-    pass
-}}
 <div class="left_content">
-    {{=layoutOutput(0,0)}}
+    {{=XML(blocks[0][0].layoutOutput())}}
 </div>
 <!--end .left_content-->
 

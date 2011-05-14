@@ -45,7 +45,7 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/wymeditor/jquery.wymeditor.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
@@ -111,7 +111,7 @@
                   }, 'google_translate_element');
                 }
               </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>     
-              <script type="text/javascript" src="/{{=this_app}}/static/custom/add-ons/google_translate.js"></script>
+              <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/add-ons/google_translate.js"></script>
               <!-- end #google_translate_element-->    
             
               <div class="clear"></div>

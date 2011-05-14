@@ -98,15 +98,19 @@ def form():
     ## Variables
     mainBlockEntrySuffix = 'request'
     if len(request.args)>1:
-        mainBlockentrySuffix = request.args[1]        
+        mainBlockentrySuffix = request.args[1]
 
     ## Main block
-    mainBlockLayoutMapping = get_block_layout_mapping('entry')
+    mainBlockLayoutMapping = get_block_layout_mapping('contact_list_summary')
     mainBlockQuery = db(db.entities.group_name == '%s_entry_summary' % mainBlockEntrySuffix)
+
+    ## Contact info block
+    infoBlockLayoutMapping = get_block_layout_mapping('information_list')
+    infoBlockQuery = db(db.entities.group_name == '%s_info' % 'contact') # request.args[0]
 
     ## Form block
     formBlockLayoutMapping = get_block_layout_mapping('form')
-    formBlockQuery = db(db.entities.name == '%s_form-entry' % request.args[0])
+    formBlockQuery = db(db.entities.name == '%s_form-entry' % 'contact') # request.args[0]
 
     ## News block
     newsBlockLayoutMapping = get_block_layout_mapping('feed_list_summary')
@@ -116,11 +120,12 @@ def form():
         [
             [
                 EntityBlock(block=BlockBase(layoutMapping=mainBlockLayoutMapping), query=mainBlockQuery),
+                EntityBlock(block=BlockBase(layoutMapping=infoBlockLayoutMapping), query=infoBlockQuery)
             ]
             ,
             [
                 EntityBlock(block=BlockBase(layoutMapping=formBlockLayoutMapping), query=formBlockQuery),
-                EntityBlock(block=BlockBase(layoutMapping=newsBlockLayoutMapping), query=newsBlockQuery),
+                EntityBlock(block=BlockBase(layoutMapping=newsBlockLayoutMapping), query=newsBlockQuery)
             ]
         ]
     )

@@ -44,7 +44,7 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+	<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
@@ -151,7 +151,7 @@
                 pageTracker._trackPageview();
             }
             catch(e) {
-                if (console) try{console.log(e);}catch(e){}
+                try{if(console)console.log(e);}catch(e){}
             }
         </script>
     </div>    

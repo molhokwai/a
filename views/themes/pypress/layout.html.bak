@@ -8,6 +8,10 @@
         
         <title>{{if response.title:}}{{=response.title}}{{else:}}{{=URL(r=request)}}{{pass}}</title>
 
+        <!-- -VIEWS/THEMES/PYPRESS/LAYOUT.HTML  -VIEWS/THEMES/WORDPRESS/LAYOUT.HTML  -->
+        <!-- THEME: {{=response.theme}} -->
+        <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+        <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
         <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
         {{if response.child_theme and response.theme_stylesheet:}}
             <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
@@ -43,7 +47,7 @@
         </script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+        <script type="text/javascript" src="/{{=this_app}}/static/components/wymeditor/jquery.wymeditor.min.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
         <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
@@ -81,117 +85,11 @@
             </div>
 
             <div id="sidebar">
-                <ul>
-
-                    {{if response.sidebar_note:}}
-                        <li>
-                            <p>{{=response.sidebar_note}}</p>
-                        </li>   
-                    {{pass}}
-
-                    {{if response.menu:}}
-                        <li>
-                            <h2 class="widgettitle">
-                                Pages
-                                {{if session.authorized:}}
-                                    <span style="font-size: .8em; font-weight: normal;">
-                                        [<a href="{{=URL(r=request,f='manage/page')}}">manage</a>]
-                                    </span>
-                                {{pass}}
-                            </h2>
-                            <ul>
-                                {{for _name,_active,_link in response.menu:}}
-                                    <li><a href="{{=_link}}" {{if not _active:}}class="inactive"{{pass}}>{{=_name}}</a></li>
-                                {{pass}}
-                            </ul>
-                        </li>
-                    {{pass}}
-                    {{if response.last_posts:}}
-                       <li>
-                            <h2 class="widgettitle">
-                                Posts
-                                {{if session.authorized:}}
-                                    <span style="font-size: .8em; font-weight: normal;">
-                                        [<a href="{{=URL(r=request,f='manage/post')}}">manage</a>]
-                                    </span>
-                                {{pass}}
-                            </h2>
-                            <ul>
-                                {{for _name,_date,_link in response.last_posts:}}
-                                    <li><a href="{{=_link}}">{{=_name}}</a>&nbsp;{{=_date.strftime("%Y.%m.%d")}}</li>
-                                {{pass}}
-                            </ul>
-                        </li>
-                    {{pass}}
-                    {{if response.categories:}}
-                        <li>
-                            <h2 class="widgettitle">
-                                Categories
-                                {{if session.authorized:}}
-                                    <span style="font-size: .8em; font-weight: normal;">
-                                        [<a href="{{=URL(r=request,f='manage/category')}}">manage</a>]
-                                    </span>
-                                {{pass}}
-                            </h2>
-                            <ul>
-                                {{for _name,_count,_link in response.categories:}}
-                                    <li><a href="{{=_link}}">{{=_name}}</a> ({{=_count}})</li>
-                                {{pass}}
-                            </ul>                   
-                        </li>
-                    {{pass}}
-                                        
-                    {{if response.links:}}
-                        <li>
-                            <h2 class="widgettitle">
-                                Links 
-                                {{if session.authorized:}}
-                                    <span style="font-size: .8em; font-weight: normal;">
-                                        [<a href="{{=URL(r=request,f='manage/link')}}">manage</a>]
-                                    </span>
-                                {{pass}}
-                            </h2>
-                            <ul>
-                                {{for _name,_link,_id in response.links:}}
-                                    <li>
-                                        <a target="_blank" href="{{=_link}}">{{=_name}}</a>
-                                    </li>
-                                {{pass}}
-                            </ul>                       
-                        </li>
-                    {{pass}}
-
-                    {{if session.authorized:}}
-                        <li>
-                            <h2>Mini Admin</h2>
-                            <ul>
-                                <li><a href="{{=URL(r=request,f='add/page')}}">Add Page</a></li>
-                                <li><a href="{{=URL(r=request,f='add/post')}}">Add Post</a></li>
-                                <li>
-                                 {{ if 'auth' in globals():}}
-                                   {{if auth.user:}}
-                                     {{=auth.user.display_name}} |  
-                                     {{=A(T('logout'),_href=URL(r=request,c='default',f='user/logout'))}}
-                                   {{pass}}
-                                 {{pass}}
-                                </li>
-                            </ul>
-                        </li>
-                    {{else:}}
-                        <li>
-                            <h2>Meta</h2>
-                            <ul>
-                                <li>
-                                 {{ if 'auth' in globals():}}
-                                   {{if not auth.user:}} 
-                                     {{=A(T('login'),_href=URL(r=request,c='default',f='user/login'))}}
-                                   {{pass}}
-                                 {{pass}}
-                                </li>
-                            </ul>
-                        </li>
-                    {{pass}}
-                </ul>
+                <div id="sidebar-content">
+                  <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
+                  {{include "sidebars/%s.html"%(response.theme_sidebar)}}
+                </div>
+                <!-- end #sidebar-content -->
             </div>
 
             <hr />
@@ -199,6 +97,8 @@
             <div id="footer" style="height: 63px;">
                 <p>
                     Powered by <a href="http://www.web2py.com">web2py</a> (TM) created by Massimo Di Pierro &copy; 2007, 2008
+                    | {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}} 
+                    | {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
                 </p>
             </div>
             

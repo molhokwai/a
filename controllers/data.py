@@ -62,21 +62,24 @@ def index():
     if area == 'add' and i==0:
         db.entities.data.default = default_entity_data
 
-    form = SQLFORM(db.entities, labels = entities_labels)    
+    form = SQLFORM(db.entities, labels = entities_labels, _class='edit')
     if area == 'edit':
         _id = int(request.args[1])
         record = db(db.entities.id == _id).select()[0]
         form = SQLFORM(db.entities, record, 
-                        labels = entities_labels, deletable=True)
+                        labels = entities_labels, deletable=True, _class='edit')
         html = P(INPUT(_type="button", _onclick="window.location='%s';"%URL(r=request, args=['add']), 
                 _value=T('add another'), _class = 'submit'), _class='text-alignr')
+                
         db.entities_blocks.entity.default = record
         form2 = SQLFORM(db.entities_blocks, fields = ['block'], 
                         labels = entities_blocks_labels, formstyle="divs")
+                        
         entity_blocks = db(db.entities_blocks.entity == _id).select()
         for entity_block in entity_blocks:
-            form2_list.append(SQLFORM(db.entities_blocks, entity_block, fields = ['block'],
-                        labels = entities_blocks_labels, deletable=True, formstyle="divs", showid=False))
+            form2_list.append(SQLFORM(db.entities_blocks, entity_block, 
+                        fields = ['block'], labels = entities_blocks_labels, 
+                        deletable=True, formstyle="divs", showid=False))
         
     if form.accepts(request.vars, session):
         flash = T('Entity data: %(area)sed ', dict(area=area))
