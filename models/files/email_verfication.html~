@@ -1,0 +1,39 @@
+<div id="main_container">
+    <div id="header">
+        <div id="logo"><a href="index.html"><img border="0" width="66" height="88" title="" alt="" src="/a/static/css/themes/aisca/images/logo.png"></a></div>
+        <div id="menu">
+            &nbsp;                    
+        </div>
+        <!-- end #menu -->
+        
+    </div>
+    <!-- end #header -->
+
+    <div id="main_content">
+
+        <div class="left_content">
+            <div><div class="title">%(title_text)s <span>%(title_name)s</span></div>
+        <p class="display"><img src="%(host)s/a/static/css/themes/aisca/images/pic1.gif" class="left_img"><p>%(text)s</p></div>
+        <div class="read_more"><a href="%(link_url)s">read more</a></div></div>        
+        </div>    
+
+    </div>
+    <!--end #main_content -->           
+
+    <div id="footer">
+        <div class="copyright">
+            &copy;Copyright Hervé Mayou, 2011 . All Rights Reserved
+        </div>
+
+        <div class="footer_links width45pc">
+            &nbsp;
+        </div>
+
+        <div class="footer_logo">
+            <img width="32" height="30" title="" alt="" src="/a/static/css/themes/aisca/images/footer_logo.png">
+        </div>
+    </div>
+    <!-- end #footer -->             
+</div>
+<!-- end #main_container -->
+

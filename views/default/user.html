@@ -2,21 +2,32 @@
 
 <!-- h1>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h1 -->
 
-............................................................................................
 {{if request.args(0)=='login' and app_details.login_mechanism[0] == 'rpx':}}
-	{{=P(A(T('Is is this secure?'), 
-		_href="javascript:return false;",
-		_onclick="$('#secure_msg').overlay('%s')" % XML(T('<p>Absolutely. ......</p><h2>The advantages</h2><p>If implemented everywhere: one time login for <strong>all sites</strong>, no need to remember more than one password</p>'))),
-		_class="text-alignc")
-	}}
+    {{=P(A(T('Is is this secure?'), 
+        _href="javascript:return false;",
+        _onclick="$('#secure_msg').show('slow')"),
+        _class="text-alignc")
+    }}
 {{pass}}
-<div id="secure_msg"></div>
-{{=form}}
-{{if request.args(0)=='login':}}
-    {{if not 'register' in auth.settings.actions_disabled:}}
-    <br/><a href="{{=URL(r=request,args='register')}}">{{=T("register")}}</a>
+
+<div id="secure_msg" class="display-none font-s09em border-std pad2pc">
+    {{=XML(T("<p>Absolutely. ......</p><h2>The advantages</h2><h3>If available everywhere or wherever available:</h3><p>One time login for <strong>all sites</strong>, no need to remember more than one password.</p><h3>State of the art security</h3><p>Your password is created/saved on <strong>one site</strong>, and only one site. And the site (google, yahoo, facebook...) is big enough to have all the resources necessary to implement State of the Art security password management.</p><h3>More...</h3><p>Link: <a href='http://openid.net/get-an-openid/individuals/' target='_blank'>Benefits of OpenID</a></p>"))}}
+    <p class="text-alignr">{{=A(T("hide"), _href="javascript:return false;", _onclick="$('#secure_msg').hide('slow')")}}</p>
+</div>
+
+<div class="login">
+    <div class="box">
+        {{=form}}
+    </div>
+    {{if request.args(0)=='login':}}
+        <div class="rel-box borderl">
+            {{if not 'register' in auth.settings.actions_disabled:}}
+            <br/><a href="{{=URL(r=request,args='register')}}">{{=T("register")}}</a>
+            {{pass}}
+            {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+            <br/><a href="{{=URL(r=request,args='request_reset_password')}}">{{=T("lost password")}}</a>
+            {{pass}}
+        </div>
+        <div class="clear"></div>
     {{pass}}
-    {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-    <br/><a href="{{=URL(r=request,args='request_reset_password')}}">{{=T("lost password")}}</a>
-    {{pass}}
-{{pass}}
+</div>

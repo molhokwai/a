@@ -23,6 +23,7 @@ except Exception, ex:
 ## CONTROLLER FUNCTIONS
 ###################################
 
+@auth.requires_login()
 def index():
     ## Main block
     mainBlockLayoutMapping = get_block_layout_mapping('entry_summary')
@@ -57,7 +58,7 @@ def index():
     
     return dict(entityBlocks = page.entityBlocks, blocks = page.blocks)
 
-
+@auth.requires_login()
 def read():
     try:
         ## Main block
@@ -93,7 +94,7 @@ def read():
         session.flash = T('Error (%s/controllers/aisca/read)')
         redirect(URL(r=request, f='index'))
 
-
+@auth.requires_login()
 def form():
     ## Variables
     mainBlockEntrySuffix = 'request'

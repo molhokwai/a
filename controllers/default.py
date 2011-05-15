@@ -3,10 +3,11 @@
 ###################################
 
 try:
-    exec('from applications.%s.modules import common' % this_app)
+    exec('from applications.%s.modules import common' % (this_app if this_app else 'a'))
     page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
     log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
+
     
 ###################################
 ## CONTROLLER FUNCTIONS
@@ -20,7 +21,10 @@ def service_call():
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
-    if len(request.args)==0:
+    if len(request.args)==0:        
+        ## Always redirect to 'aisca' for login and  home page
+        redirect(URL(r=request, c='aisca', f='index'))
+        
         if response.home_page:
             redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
         else:
@@ -552,18 +556,22 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
-    if request.args[0]=='logout':
-        session.user_authorization_done=False
-
-    session._next = request.vars._next
-    if auth.user:
-        _next = request.vars._next
-        if session._next:
-            _next = session._next
-            del session._next
-        if _next:
-            redirect(_next)
-    return dict(form=auth())
+    try:
+        if request.args[0]=='logout':
+            session.user_authorization_done=False
+    
+        session._next = request.vars._next
+        if auth.user:
+            _next = request.vars._next
+            if session._next:
+                _next = session._next
+                del session._next
+            if _next:
+                redirect(_next)
+        return dict(form=auth())
+    except Exception, ex:
+        log_wrapped('Error (%s/controllers/default/user)' % this_app, ex)
+        redirect(URL(r=request, f='user', args=['login']))
 
 
 @auth.requires_login()
@@ -625,26 +633,24 @@ def download():
 
 @auth.requires_login()
 def do_stuff():
-	if auth.user.is_admin:
-		if request.args[0] in ['posts_app', 'links_app']:
-			instance=db.posts if request.args[0]=='posts_app' else db.links
-			_ids=request.args[1].split(',')
-			log_wrapped('_ids', _ids)
-			for i in range(len(_ids)):
-				try:
-					db(instance.id == int(_ids[i])).update(application=request.application)
-				except Exception, ex:
-					pass
-			session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
+    if auth.user.is_admin:
+        if request.args[0] in ['posts_app', 'links_app']:
+            instance=db.posts if request.args[0]=='posts_app' else db.links
+            _ids=request.args[1].split(',')
+            log_wrapped('_ids', _ids)
+            for i in range(len(_ids)):
+                try:
+                    db(instance.id == int(_ids[i])).update(application=request.application)
+                except Exception, ex:
+                    pass
+            session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
 
         elif request.args[0] in ['set_login_mechanism']:
             db(db.app_config.id>0).update(
-					APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
-					RPX_API = ['b9727a23b1d6ab8d29d112eb0f95ed1368f29c1f' if i==0 else RPX_API[i] for i in range(len(RPX_API))])
+                    APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
+                    RPX_API = ['b9727a23b1d6ab8d29d112eb0f95ed1368f29c1f' if i==0 else RPX_API[i] for i in range(len(RPX_API))])
             session.flash=T('login mechanism updated.')
-	else:
-		session.flash=T('not admin')
+    else:
+        session.flash=T('not admin')
 
-	redirect(URL(r = request,f = 'index'))
-
-
+    redirect(URL(r = request,f = 'index'))

@@ -346,7 +346,7 @@ def log_wrapped(_name, _value):
 ########################
 ## Application Objects 
 ########################
-exec('from applications.%s.modules import request_handler' % this_app)
+exec('from applications.%s.modules import request_handler' % (this_app if this_app else this_app))
 app_objects=Struct(**{'details':app_details, 'config':app_config, 'log_wrapped':log_wrapped, 
                       'special_controllers':['aisca'],
                       'utilities':utilities, 'a_convert' : a_convert, 'tentative_app':tentative_app, 

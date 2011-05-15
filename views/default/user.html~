@@ -1,9 +1,19 @@
-{{extend 'layout.html'}}
+{{extend 'themes/%s/layout.html' % response.theme}}
 
 <!-- h1>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h1 -->
 
 ............................................................................................
+{{if request.args(0)=='login' and app_details.login_mechanism[0] == 'rpx':}}
+	{{=P(A(T('Is is this secure?'), 
+		_href="javascript:return false;",
+		_onclick="$('#secure_msg').show()"),
+		_class="text-alignc")
+	}}
+{{pass}}
 
+
+
+<div id="secure_msg">{{=XML(T("<p>Absolutely. ......</p><h2>The advantages</h2><h3>If available everywhere, wherever available:</h3><p>One time login for <strong>all sites</strong>, no need to remember more than one password</p><h3>State of the art security</h3><p>Your password is created/saved on <strong>on site</strong>, and only one site. And the site (google, yahoo, facebook...) is big enough to have all the resources necessary to implement State of the Art security password management.</p><h3>More...</h3><p><a href='http://openid.net/get-an-openid/individuals/' target='_blank'>Benefits of OpenID</a></p>"))}}<p class="text-alignr">{{=T("hide")}}</p></div>
 {{=form}}
 {{if request.args(0)=='login':}}
     {{if not 'register' in auth.settings.actions_disabled:}}

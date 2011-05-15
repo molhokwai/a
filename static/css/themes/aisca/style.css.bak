@@ -91,7 +91,8 @@ list-style:none;display:inline;float:left;width:auto;padding:0px;line-height:40p
 #menu ul li.divider{
 list-style:none;float:left;width:3px;padding:0px; height:40px; background:url(images/menu_divider.gif) no-repeat center;
 }
-#menu ul li a{
+/* custom aisca addition */
+#menu ul li a, #user-menu a {
 float:left;text-decoration:none;padding:0 15px 0 15px; margin:0px 3px 0px 3px;color:#ffffff;text-align:center;
 }
 #menu ul li a:hover{
@@ -299,6 +300,8 @@ padding:20px 0 0 20px;
 }
 .data form.edit, .data form.edit table {
 width:100%;
+}
+.data form.edit {
 border: 1px solid #48636B;
 }
 .data .list form {
@@ -397,4 +400,45 @@ padding:0px;
     margin-top: 2%;
     font-weight: bold;
     font-size: 1.2em;
+}
+label[for="auth_user_remember"]{
+    float: left;
+    font-weight: normal;
+    padding: 0 5px 0 0;
+    width: auto;
+    text-align: left;
+}
+
+.login {
+    padding-bottom: 5%;
+}
+.login .box form {
+    border-right: 1px dotted #9CC9C9;
+    width: 50%;
+}
+.login .box form label {
+    width: auto;
+    text-transform: capitalize;
+}
+.login .rel-box {
+    float: right;
+    margin-right: 5%;
+}
+.login .rel-box {
+    margin-top: -10%;
+}
+.login .rel-box a {
+    background-color: #DBEDF3;
+    border: 1px solid #9CC9D3;
+    color: #000000;
+    float: left;
+    height: 18px;
+    width: 185px;
+    text-transform: capitalize;
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 5%;
+}
+#user-menu {
+    margin-top: -5%;
 }

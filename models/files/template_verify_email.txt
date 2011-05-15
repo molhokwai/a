@@ -1,0 +1,12 @@
+        --------------------------------------------------------------------------------------------------------------------------------
+        Dear, 
+        You received this email from aisca.com for verification of your email address. Click on the link below or copy and paste it 
+        in your browserto verify your email.
+        Or please ignore this message if you did not register on the site.
+        Link : %(link_url)s
+        ----------------------------------------------------------------------------------------------------------------------------
+        
+        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        %(host)s
+        _______________________________________________________
+

@@ -92,7 +92,7 @@
         <div id="main_container">
         
             <div id="header">
-                <div id="logo"><a href="index.html"><img src="{{=style_base_url}}/images/logo.png" alt="" width="66" height="88" title="" border="0" /></a></div>
+                <div id="logo"><a href="{{=URL(r=request, c='aisca', f='index')}}"><img src="{{=style_base_url}}/images/logo.png" alt="" width="66" height="88" title="" border="0" /></a></div>
                 <div id="menu">
                     {{if response.menu:}}
                         <ul>
@@ -114,6 +114,18 @@
             <!-- end #header -->
         
             <div id="main_content">
+                <div id="user-menu" class="right">
+                     {{ if 'auth' in globals():}}
+                       {{if not auth.user:}}
+                         {{=A(T('login'),_href=URL(r=request,c='default',f='user/login'))}}
+                       {{else:}}
+                         <!-- {{=auth.user.display_name}} -->
+                         {{=A(T('logout'),_href=URL(r=request,c='default',f='user/logout'))}} 
+                       {{pass}}
+                     {{pass}}
+                </div>
+                <!-- end #user-menu -->
+            
                 {{include}}
             </div>
             <!--end #main_content -->           

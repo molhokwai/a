@@ -64,7 +64,7 @@ db.define_table('app_config',
     SQLField('APP_THEMES',               'list:string', required=True,    default=app_themes_base_list,
             label=T('Themes')),
     SQLField('MAIL_SETTINGS',           'list:string',                   default=['<sender@gmail.com>', '<smtp.gmail.com:587>', '<username:password>'],
-            label=T('Mail settings (sender, server, login)')),           
+            label=T('Mail settings (server, sender, login)')),           
     SQLField('PICASA_API',              'list:string',                   default=['<username>', '<password>'],
             label=T('Picasa api (username, password)')),
     SQLField('TWITTER_API',              'list:string',                  default=['<username>', '<password>', '<hashes>'],
@@ -151,11 +151,11 @@ else:
         mail.settings.login=None       # your credentials or None
     else:   
         mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-        mail.settings.login='xxxxxxxxxxxxxxxxx'       # your credentials or None
+        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'             # your credentials or None
         mail.settings.sender='molhokwai@gmail.com'    # your email
 
-# auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+# auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
     auth.settings.table_user = db.define_table('auth_user',
         Field('registration_id', length=512,
@@ -191,21 +191,74 @@ else:
             Field('is_admin', 'boolean',default=False,readable=False, writable=False),
             Field('is_anonymous', 'boolean',default=True,readable=False, writable=False),
             Field('registration_key', readable=False, writable=False),
+            Field('reset_password_key', readable=False, writable=False),
             Field('first_name'),
             Field('last_name')
     )   
 
-
 auth.define_tables()                 # creates all specified & needed tables
 
-
+#########################################################################
+## Convenience 'files' dictionary
+#########################################################################
+templates = {
+    'verify_email' : """
+        --------------------------------------------------------------------------------------------------------------------------------
+        Dear, 
+        You received this email from aisca.com for verification of your email address. Click on the link below or copy and paste it 
+        in your browserto verify your email.
+        Or please ignore this message if you did not register on the site.
+        Link : %(link_url)s
+        ----------------------------------------------------------------------------------------------------------------------------
+        
+        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        %(host)s
+        _______________________________________________________
+    """,
+    'reset_password' : """
+        --------------------------------------------------------------------------------------------------------------------------------
+        Dear,
+        You received this email from aisca.net for a reset of your password request. Click on the link below or copy and paste it in
+        your browser to reset your password.
+        Or please ignore this message if you did not submit that request.
+        Link : %(link_url)s
+        ----------------------------------------------------------------------------------------------------------------------------
+        
+        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        %(host)s
+        _______________________________________________________
+    """
+}
 auth.settings.mailer = mail                    # for user email verification
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'usr_psw':
-    auth.settings.registration_requires_verification = False
-    auth.settings.registration_requires_approval = False
-    auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
-    auth.settings.reset_password_requires_verification = True
-    auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
+    def get_email_content(which, templates, **kwargs):
+        c=templates[which] % kwargs
+        c = c.replace('-(key)', '%(key)')
+        return c
+
+    auth.settings.registration_requires_verification = True
+    auth.settings.registration_requires_approval = True
+    ## auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
+    ## auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
+    auth.messages.verify_email = get_email_content('verify_email', templates,
+                                        host = '%s://%s' % (protocol,request.env.http_host),
+                                        link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['verify_email']))
+                                 )
+    ec = get_email_content('reset_password', templates,
+                                        host = '%s://%s' % (protocol,request.env.http_host),
+                                        link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['reset_password']))
+                                 )
+    auth.messages.reset_password = get_email_content('reset_password', templates,
+                                        host = '%s://%s' % (protocol,request.env.http_host),
+                                        link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['reset_password']))
+                                 )
+    auth.messages.registration_verifying = T('Registration needs verification')
+    auth.messages.registration_pending = T('Your email is verified. Registration is now pending approval')
+    auth.messages.email_sent = T('Email sent')
+    auth.messages.unable_to_send_email = T('Unable to send email')
+    auth.messages.email_verified = T('Email verified')
+    auth.messages.registration_successful = T('Registration successful')
+    
 
 ## OpenID, Facebook, MySpace, Twitter, Linkedin, etc. registration
 protocol='http'
@@ -219,7 +272,7 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
             domain=app_config.RPX_API[1],
             url = "%s/default/user/login" % this_app_url)
     else:
-        auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        auth.settings.login_form = RPXAccount(request, api_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             domain='websites-molhokwai',
             url = "%s/default/user/login" % this_app_url)
 
