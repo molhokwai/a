@@ -119,12 +119,11 @@ def help_page(response, page_helper, _pages, request, T, app_objects):
 
 def home_page_link(response, page_helper, _links, request, T, app_objects):
     """Same logic as above"""
-    print '-------%s' % T('%s_home' % app_objects.tentative_app)
-    return filter(lambda x:T(x[0])==T('%s_home' % app_objects.tentative_app),_links)
+    return filter(lambda x:x[0]=='%s_home' % app_objects.tentative_app,_links)
 
 def help_page_link(response, page_helper, _links, request, T, app_objects):
     """Same logic as above"""
-    return filter(lambda x:T(x[0])==T('%s_help' % app_objects.tentative_app),_links)
+    return filter(lambda x:x[0]=='%s_help' % app_objects.tentative_app,_links)
 
 
 ###################################
@@ -282,8 +281,10 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     
     # Theme
     response.themes=utilities.get_themes_names(themes_list=app_details.themes_list)
-        
+    
     response.theme = '0'
+    if request.get('env')['http_host'].find('aisca')>=0 and request.controller != 'data':
+        response.theme = 'aisca'
     if request.vars.theme:
         if request.vars.theme.find(app_details.theme_sep_token)>0: 
             response.cookies['theme'] = utilities.get_from_theme('name', theme_sstruct=request.vars.theme)

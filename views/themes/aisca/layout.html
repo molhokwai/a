@@ -54,37 +54,7 @@
             }
             
             $(document).ready(function(){
-                $('.display').each(function(){
-                    var args = $(this).html().split('#:#');
-                    var i=0;
-                    var rm=true;
-                    while(i<args.length){
-                        if(rm){
-                            args = args.splice(i);
-                            if(args[0]=='display'){ rm=false};
-                            i++;
-                        }
-                        else{
-                            var f=args[1];
-                            var text=args[2];
-                            var l=parseInt(args[3]);
-                            if(text.length>l){
-                                /* cb_array not used */
-                                var cb_array=null;
-                                if(args.length>4){ cb_array=eval(args[4]); }
-                                switch(f){
-                                    case 'truncate':
-                                        $(this).html($(this).html().replace('#:#'+text, text.substring(0,l)+'...'));
-                                        break;
-                                }
-                            }
-                            for(var j=0;j<args.length;j++){
-                                $(this).html($(this).html().replace('#:#'+args[j],''));
-                            }
-                            i=args.length;
-                        }
-                    }
-                });
+                entities.display._do();
             });
         </script>
     </head>
@@ -104,8 +74,9 @@
                     {{pass}}
 
                     <div class="search_box">
-                        <input type="text" name="search" class="search" value="search"/>
-                        <input type="image" src="{{=style_base_url}}/response.theme}}/images/go.gif" class="search_bt" />
+                        <input type="text" id="search" name="search" class="search" value="search"/>
+                        <input type="image" src="{{=style_base_url}}/images/go.gif" class="search_bt" 
+                                onclick="liveSearch.getData('{{=URL(r=request,c='data',f='entity',args=['search.html'])}}', $('#search').val())"/>
                     </div>
                 </div>
                 <!-- end #menu -->
@@ -136,11 +107,13 @@
                 </div>
         
                 <div class="footer_links width45pc">
-                  {{=XML(' / '.join(   map(
+                    {{if auth.user:}}
+                        {{=XML(' / '.join(   map(
                                       lambda p_h_l: ':'.join( 
                                               map(lambda x: A(T(x).replace('_', ' '), _href="%s" % (x)).xml(), p_h_l)  
                                       ) ,session.nav_history)
                                 ))}}
+                    {{pass}}
                 </div>
         
                 <div class="footer_logo">

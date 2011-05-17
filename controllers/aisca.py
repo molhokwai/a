@@ -97,21 +97,21 @@ def read():
 @auth.requires_login()
 def form():
     ## Variables
-    mainBlockEntrySuffix = 'request'
-    if len(request.args)>1:
-        mainBlockentrySuffix = request.args[1]
+    mainBlockEntryPrefix = 'contact'
+    if len(request.args)>0:
+        mainBlockEntryPrefix = request.args[0]
 
     ## Main block
     mainBlockLayoutMapping = get_block_layout_mapping('contact_list_summary')
-    mainBlockQuery = db(db.entities.group_name == '%s_entry_summary' % mainBlockEntrySuffix)
+    mainBlockQuery = db(db.entities.group_name == '%s_entry_summary' % mainBlockEntryPrefix)
 
     ## Contact info block
     infoBlockLayoutMapping = get_block_layout_mapping('information_list')
-    infoBlockQuery = db(db.entities.group_name == '%s_info' % 'contact') # request.args[0]
+    infoBlockQuery = db(db.entities.group_name == '%s_info' % mainBlockEntryPrefix)
 
     ## Form block
     formBlockLayoutMapping = get_block_layout_mapping('form')
-    formBlockQuery = db(db.entities.name == '%s_form-entry' % 'contact') # request.args[0]
+    formBlockQuery = db(db.entities.name == '%s_form-entry' % mainBlockEntryPrefix)
 
     ## News block
     newsBlockLayoutMapping = get_block_layout_mapping('feed_list_summary')

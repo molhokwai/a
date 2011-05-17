@@ -21,8 +21,12 @@ def service_call():
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
-    if len(request.args)==0:        
-        ## Always redirect to 'aisca' for login and  home page
+    if request.get('env')['http_host'].find('aisca')>=0:
+        if len(request.args)==0 or not auth.user:
+            redirect(URL(r=request, c='aisca', f='index'))
+        
+    if len(request.args)==0:
+        ## for aisca: redirect for login and home page
         redirect(URL(r=request, c='aisca', f='index'))
         
         if response.home_page:
@@ -650,6 +654,13 @@ def do_stuff():
                     APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
                     RPX_API = ['b9727a23b1d6ab8d29d112eb0f95ed1368f29c1f' if i==0 else RPX_API[i] for i in range(len(RPX_API))])
             session.flash=T('login mechanism updated.')
+
+        elif request.args[0] in ['update_searchable_entities']:
+            searchable_entities = request.vars.searchable_entities.split(',')
+            for i in searchable_entities:
+                db(db.entities.id==int(i)).update(
+                    searchable_through=request.vars.searchable_through.split(','))                    
+            session.flash=T('update searchable entities done.')
     else:
         session.flash=T('not admin')
 

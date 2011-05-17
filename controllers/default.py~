@@ -1,34 +1,42 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################
+
 try:
-    exec('from applications.%s.modules import common' % this_app)
-    app_objects=Struct(**{'details':app_details,'config':app_config,'log_wrapped':log_wrapped,'utilities':utilities})
+    exec('from applications.%s.modules import common' % (this_app if this_app else 'a'))
     page_helper, post_helper = common.controller_init(request, response, session, cache, T, db, auth, app_objects)
 except Exception, ex:
-    log_wrapped('Er', ex)
+    log_wrapped('Error (%s/controllers/default.py:9)' % this_app, ex)
 
-
+    
 ###################################
 ## CONTROLLER FUNCTIONS
 ###################################
+
+# The rpc service call function
+def service_call():
+    return service()
 
 # The main page
 # Shows the home page if one created (see 'home_page' function page with title)
 # Otherwise, defaults to showing the first 10 posts
 def index():
-    if len(request.args)==0:
+    if len(request.args)==0:        
+        ## Always redirect to 'aisca' for login and  home page
+        redirect(URL(r=request, c='aisca', f='index'))
+        
         if response.home_page:
             redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
         else:
             redirect(URL(r=request, c='setup'))
     else:
       if a_convert.to_int(request.args[0]):
-          return dict(posts = db(db.posts.id == int(request.args[0])).select())
+          return dict(posts = utilities.posts_replace_serverside_output_values(db(db.posts.id == int(request.args[0])).select()))
       else:
           posts=db(db.posts.post_title == request.args[0]).select()
           if not posts:
               posts = filter(lambda x: x.post_title.lower().find(request.args[0].lower())>0,response.posts)
+              posts = utilities.posts_replace_serverside_output_values(posts)
           return dict(posts = posts)          
       
 
@@ -39,8 +47,11 @@ def post():
     post_id = int(request.args[0])
     post = db(db.posts.id == post_id).select()[0]
     
-    if post and post.auth_requires_login and not auth.user:
-        redirect(URL(r = request, f = 'user', args = ['login']))
+    if post: 
+        if post.auth_requires_login and not auth.user:
+            redirect(URL(r = request, f = 'user', args = ['login']))
+            
+        post.post_text = utilities.replace_serverside_output_values(post.post_text)
 
     comments = db(db.comments.post_id == post_id).select(db.comments.ALL)
     comment_count = len(db(db.comments.post_id == post_id).select(db.comments.ALL))
@@ -74,11 +85,14 @@ def page():
                     post = db(db.posts.id == int(pg[2].replace('/%s/default/page/' % this_app, ''))).select()
                 if post: post = post[0]
                 
-            if post and post.auth_requires_login and not auth.user:
-                redirect(URL(r = request, f = 'user', args = ['login']))
+            if post:
+                if post.auth_requires_login and not auth.user:
+                    redirect(URL(r = request, f = 'user', args = ['login']))
             
-            nake=(request.args[len(request.args)-1]=='nake'
-                 or post.post_text.find('<!-- nake page -->')>=0)
+                nake=(request.args[len(request.args)-1]=='nake'
+                     or post.post_text.find('<!-- nake page -->')>=0)
+            
+                post.post_text = utilities.replace_serverside_output_values(post.post_text)
         
             return dict(post = post, nake  = nake)
         else:
@@ -116,8 +130,9 @@ def category():
         filter(fp,posts)
 
         response.sidebar_note = T("You are currently browsing the archives for the %(cat_name)s category.",dict(cat_name=cat_name))
-        return dict(posts = posts)
-    except:
+        return dict(posts = utilities.posts_replace_serverside_output_values(posts))
+    except Exception, ex:
+        log_wrapped('Error in /%s/default/category' % this_app, ex)
         redirect(URL(r = request,f = 'index'))
 
 @auth.requires_login()
@@ -128,7 +143,8 @@ def add():
         if area == "post":
             db.posts.post_type.default = 'post'
             page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application', 
-                                                    'post_category', 'is_translated', 'auth_requires_login'], 
+                                                    'post_category', 'is_translated', 'auth_requires_login',
+                                                    'post_attributes_json'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', 
                                     _name='post_attributes_content_is_original', 
@@ -151,7 +167,7 @@ def add():
         elif area == "page":
             db.posts.post_type.default = 'page'
             page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application',
-                                                    'show_in_menu', 'is_translated'], 
+                                                    'post_parent', 'show_in_menu', 'is_translated'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                     _id='post_attributes_content_is_original', value=''))
@@ -187,8 +203,11 @@ def edit():
     # p_a_c_i_o_val : page attr. content is orginal value
     p_a_c_i_o_val=None
     try:
-        area = request.args[0]
-        id = int(request.args[1])
+        area = request.args[0]        
+        if a_convert.to_int(request.args[1]):
+            id = int(request.args[1])
+        else:
+            id = db(db.posts.post_title == request.args[1]).select()[0].id
         this_item = db(db.posts.id == id).select()[0]
     except Exception, ex:
         session.flash=T("Error occured: %(err)s ", dict(err=str(ex)))
@@ -203,7 +222,8 @@ def edit():
     
     if area == 'post':
         edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
-                                                            'post_category', 'is_translated', 'auth_requires_login'], 
+                                                            'post_category', 'is_translated', 'auth_requires_login',
+                                                            'post_attributes_json'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                 _id='post_attributes_content_is_original', value=p_a_c_i_o_val))
@@ -214,7 +234,8 @@ def edit():
                 session.flash = T("Post deleted.")
                 redirect(URL(r = request,f = 'index/posts'))
             else:    
-                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                from gluon.contrib import simplejson
+                _json=simplejson.loads(request.vars.post_attributes_json)
                 db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
                 session.flash = T("Post updated.")
                 redirect(URL(r = request,f = 'post/%s' %id))
@@ -222,7 +243,7 @@ def edit():
     elif area == 'page':
         this_item = db(db.posts.id == id).select()[0]
         edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
-                                                            'is_translated', 'show_in_menu'], 
+                                                            'post_parent', 'is_translated', 'show_in_menu'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                  _id='post_attributes_content_is_original', value=p_a_c_i_o_val))
@@ -234,6 +255,8 @@ def edit():
                 redirect(URL(r = request,f = 'pages'))
             else:
                 try:
+                    from gluon.contrib import simplejson
+                    _json=simplejson.loads(request.vars.post_attributes_json)
                     _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
                     db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
                     session.flash = T("Page updated.")
@@ -503,18 +526,22 @@ def file():
         return response.download(request,db)
     else:
         return
-
+        
 def json():
     area=request.args[0]    
     return response.json({
         'status' : 1,
         'message' : 'done',
-        'result' : {
-            'pages' : lambda x: db(db.posts.post_type=='page').select(),
-            'themes' : lambda x: app_config.APP_THEMES
-        }.get(request.args[0], None)(request.args[0])
+        'result' : get_app_objects(area)
     })
     
+@service.jsonrpc
+def get_app_objects(what):
+    return {
+        'pages' : lambda x: db(db.posts.post_type=='page').select(),
+        'themes' : lambda x: app_config.APP_THEMES
+    }.get(what, None)(what)
+
 def user():
     """
     exposes:
@@ -529,11 +556,22 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
-    if request.args[0]=='logout':
-        session.user_authorization_done=False
-    if auth.user and request.vars.next:
-        redirect(request.vars.next)
-    return dict(form=auth())
+    try:
+        if request.args[0]=='logout':
+            session.user_authorization_done=False
+    
+        session._next = request.vars._next
+        if auth.user:
+            _next = request.vars._next
+            if session._next:
+                _next = session._next
+                del session._next
+            if _next:
+                redirect(_next)
+        return dict(form=auth())
+    except Exception, ex:
+        log_wrapped('Error (%s/controllers/default/user)' % this_app, ex)
+        redirect(URL(r=request, f='user', args=['login']))
 
 
 @auth.requires_login()
@@ -595,17 +633,24 @@ def download():
 
 @auth.requires_login()
 def do_stuff():
-    log_wrapped('1', 1)
-    if request.args[0] in ['posts_app', 'links_app']:
-        log_wrapped('2', 2)
-        instance=db.posts if request.args[0]=='posts_app' else db.links
-        _ids=request.args[1].split(',')
-        log_wrapped('_ids', _ids)
-        for i in range(len(_ids)):
-            try:
-                db(instance.id == int(_ids[i])).update(application=request.application)
-            except Exception, ex:
-                pass
-        session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
-    
+    if auth.user.is_admin:
+        if request.args[0] in ['posts_app', 'links_app']:
+            instance=db.posts if request.args[0]=='posts_app' else db.links
+            _ids=request.args[1].split(',')
+            log_wrapped('_ids', _ids)
+            for i in range(len(_ids)):
+                try:
+                    db(instance.id == int(_ids[i])).update(application=request.application)
+                except Exception, ex:
+                    pass
+            session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
+
+        elif request.args[0] in ['set_login_mechanism']:
+            db(db.app_config.id>0).update(
+                    APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
+                    RPX_API = ['b9727a23b1d6ab8d29d112eb0f95ed1368f29c1f' if i==0 else RPX_API[i] for i in range(len(RPX_API))])
+            session.flash=T('login mechanism updated.')
+    else:
+        session.flash=T('not admin')
+
     redirect(URL(r = request,f = 'index'))

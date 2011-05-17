@@ -143,6 +143,40 @@ def entity():
             'message' : 'done',
             'result' : data
         })
+        
+    elif area in ['search', 'search.json', 'search.html']:
+        entities = db().select(db.entities.ALL)
+        results = filter(lambda x:(
+                    x.searchable_through 
+                    and 'site' in x.searchable_through 
+                    and x.data and x.data.lower().find(request.vars.partialStr.lower())>0), entities
+        )
+
+        if area in ['search.html']:
+            ## Page/Site Entity 'machine' for Html output
+            mainBlockLayoutMapping = get_block_layout_mapping('entry_summary')
+            _ids = map(lambda x:x.id, results)
+            results = []
+            for _id in _ids:
+                mainBlockQuery = db(db.entities.id==_id)
+                page = Page(
+                    [
+                        [
+                            EntityBlock(block=BlockBase(layoutMapping=mainBlockLayoutMapping), query=mainBlockQuery),
+                        ]
+                    ]
+                )
+                page.populateEntityBlocks()
+                results.append('<div id="#id">%s</div>' % page.blocks[0][0].layoutOutput())
+        else:
+            results = map(lambda x:x.data, results)
+        return response.json({
+            'status' : 1,
+            'message' : 'done',
+            'result' : results
+        })
+        
+
 
 @auth.requires_login()
 def create():

@@ -154,7 +154,6 @@ else:
         mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'             # your credentials or None
         mail.settings.sender='molhokwai@gmail.com'    # your email
 
-# auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
     auth.settings.table_user = db.define_table('auth_user',
@@ -162,18 +161,18 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
               label=T('registration id'),
               requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.registration_id')],
               readable=False),
+        Field('first_name'),
+        Field('last_name'),
         Field('display_name', length=512,
               label=T('display name'),
               requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
         Field('email', length=512,default='',
               label=T('email'),
               requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
-            Field('password', label=T('password')),
+            Field('password', 'password', label=T('password')),
         Field('is_admin', 'boolean',default=False),
         Field('is_anonymous', 'boolean',default=True),
-        Field('registration_key'),
-        Field('first_name'),
-        Field('last_name')
+        Field('registration_key')
     )
 else:
     auth.settings.table_user = db.define_table('auth_user',
@@ -181,19 +180,19 @@ else:
         # the different login mechanisms
         Field('registration_id', length=512,
               label=T('registration id'), readable=False, writable=False),
+            Field('first_name'),
+            Field('last_name'),
             Field('display_name', length=512,
                       label=T('display name'),
                       requires = [IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'auth_user.display_name')]),
             Field('email', length=512,default='',
                       label=T('email'),
                       requires = [IS_EMAIL(),IS_NOT_IN_DB(db,'auth_user.email')]),
-            Field('password', label=T('password')),
+            Field('password', 'password', label=T('password')),
             Field('is_admin', 'boolean',default=False,readable=False, writable=False),
             Field('is_anonymous', 'boolean',default=True,readable=False, writable=False),
             Field('registration_key', readable=False, writable=False),
-            Field('reset_password_key', readable=False, writable=False),
-            Field('first_name'),
-            Field('last_name')
+            Field('reset_password_key', readable=False, writable=False)
     )   
 
 auth.define_tables()                 # creates all specified & needed tables

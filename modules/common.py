@@ -281,8 +281,10 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     
     # Theme
     response.themes=utilities.get_themes_names(themes_list=app_details.themes_list)
-        
+    
     response.theme = '0'
+    if request.get('env')['http_host'].find('aisca')>=0 and request.controller != 'data':
+        response.theme = 'aisca'
     if request.vars.theme:
         if request.vars.theme.find(app_details.theme_sep_token)>0: 
             response.cookies['theme'] = utilities.get_from_theme('name', theme_sstruct=request.vars.theme)

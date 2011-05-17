@@ -1,11 +1,13 @@
 #!/usr/bin/env python 
 # coding: utf8 
+from types import *
 from gluon.html import *
 from gluon.http import *
 from gluon.validators import *
 from gluon.sqlhtml import *
 # request, response, session, cache, T, db(s) 
 # must be passed and cannot be imported!
+
 
 ###################################
 ## CLASSES
@@ -18,10 +20,18 @@ class PageHelper():
 
 ###################################
 ## METHODS
-###################################    
-def init_app(request, response, session, cache, T, db, auth_users, app_details):
+###################################
+def app_init(request, response, session, cache, T, db, app_objects):
+    app_details = app_objects.details
+    app_config = app_objects.config
+    log_wrapped=app_objects.log_wrapped
+    utilities = app_objects.utilities
+
+    if not response.auth_users:
+        response.auth_users=db().select(db.auth_user.ALL)
+    
     """Application first run initialization"""
-    for au in auth_users:
+    for au in response.auth_users:
         if au.email=='anonymous@molhokwai.net':response.anon_user=au
     if response.anon_user is None:
         response.anon_user_id=db.auth_user.insert(
@@ -33,24 +43,27 @@ def init_app(request, response, session, cache, T, db, auth_users, app_details):
         response.anon_user=db(db.auth_user.id==response.anon_user_id).select()[0]
 
     try:
-        initial_posts={
-            'a_home'           : 'home',
-            'a_help'           : 'help',
-            'acknowledgements' : 'acknowledgements'
-        }
-        for post_title in initial_posts:
+        p_home_k=app_details.init_app_config['pages']['home_k']
+        p_help_k=app_details.init_app_config['pages']['help_k']
+        initial_posts=[
+            p_home_k,
+            p_help_k,
+            'acknowledgements'
+        ]
+        for i in range(len(initial_posts)):
+            post_title=initial_posts[i]            
             if not db(db.posts.post_title==post_title).select():
-                post_text=app_details.init_app_config['pages'][initial_posts[post_title]]
+                post_text=app_details.init_app_config['pages'][post_title]
                 db.posts.insert(
                     post_type='page',
                     post_title=post_title,
                     post_text=post_text,
                     show_in_menu=True
-                    )
+                )
         initial_links={
-            'media / picasa / gallery'                           : '/%s/media/picasa/gallery' % request.application,
-            'manage media / manage picasa albums / manage photos': '/%s/media/picasa/albums' % request.application,
-            'setup, application initialization'                  : '/%s/setup' % request.application
+            'media / picasa / gallery'                           : '/%s/media/picasa/gallery' % app_objects.tentative_app,
+            'manage media / manage picasa albums / manage photos': '/%s/media/picasa/albums' % app_objects.tentative_app,
+            'setup, application initialization'                  : '/%s/setup' % app_objects.tentative_app
         }
         for link_title in initial_links:
             if not db(db.links.link_title==link_title).select():
@@ -86,37 +99,54 @@ def user_authorization(request, response, session, cache, T, db, auth):
                                         display_name=display_name,email=auth.user.email))
     session.authorized=auth.user.is_admin
 
-def home_page(response, page_helper, _pages):
+def home_page(response, page_helper, _pages, request, T, app_objects):
     """gets the home page, if one created.
-        Convention over configuration: Home page is the one with title T('home'),
+        Convention over configuration: Home page is the one with title T('%s_home' % request.application),
         The corresponding eventual language translation of 'home'.
         
         TODO: as proprty in a configuration framework (see if pypress4gae offers home/index page
         configuration, and if so eventually switch to it)
     """
-    if response.menu:
-        page_helper._title='a_home'
-        return filter(page_helper.get_page_by_title,_pages)
+    page_helper._title=T('%s_home' % app_objects.tentative_app)
+    return filter(page_helper.get_page_by_title,_pages)
 
-def help_page(response, page_helper, _pages):
+def help_page(response, page_helper, _pages, request, T, app_objects):
     """Gets the help page, if one created
         See home_page
     """
-    if response.menu:
-        page_helper._title='a_help'
-        return filter(page_helper.get_page_by_title,_pages)
+    page_helper._title=T('%s_help' % app_objects.tentative_app)
+    return filter(page_helper.get_page_by_title,_pages)
+
+def home_page_link(response, page_helper, _links, request, T, app_objects):
+    """Same logic as above"""
+    return filter(lambda x:x[0]=='%s_home' % app_objects.tentative_app,_links)
+
+def help_page_link(response, page_helper, _links, request, T, app_objects):
+    """Same logic as above"""
+    return filter(lambda x:x[0]=='%s_help' % app_objects.tentative_app,_links)
 
 
 ###################################
 ## CONTROLLER INIT
 ###################################    
-def controller_init(request, response, session, cache, T, db, auth, app_config, app_details):
+def controller_init(request, response, session, cache, T, db, auth, app_objects):
+
+    app_details = app_objects.details
+    app_config = app_objects.config
+    log_wrapped = app_objects.log_wrapped
+    utilities = app_objects.utilities
+
+    # cache clear
+    if 'clear_cache' in request.vars and auth.user and auth.user.is_admin:
+        try: 
+            cache.ram.flush_all()
+            log_wrapped('cache.ram.flush_all()', 'done....')
+        except Exception, ex: pass
+    
+    if not response.auth_users:
+        response.auth_users=db().select(db.auth_user.ALL)
+    
     # This sets the session authorization values
-    auth_users=db().select(db.auth_user.ALL)
-    response.auth_users=auth_users
-    
-    init_app(request, response, session, cache, T, db, auth_users, app_details)
-    
     if (not auth.user is None and not session.user_authorization_done):
         user_authorization(request, response, session, cache, T, db, auth)
         session.user_authorization_done=True
@@ -127,49 +157,122 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
             display_name='anonymous@molhokwai.net'
         auth.user.display_name=display_name
     
+    response.name = app_details.name
     response.title = app_details.title
     response.keywords = app_details.keywords
     response.description = app_details.description
+
+    # All posts
+    response.posts = db().select(db.posts.ALL)
     
     # This dynamically adds the pages to the menu
-    _pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
-    items = []
+    _pages = []
+    try:
+        _pages = db((db.posts.post_type == 'page') &
+                    ((db.posts.application == app_objects.tentative_app) | 
+                    (db.posts.application == None))
+                    ).select(db.posts.ALL)
+    except Exception, ex:
+        _pages = db(db.posts.post_type == 'page').select(db.posts.ALL)
+
+    is_page_request = request.function in ['page', 'post']
+    pg_name = None
+    pg_id = None
+    pg_id_name=None if not len(request.args)>0 else request.args[0]
+    if pg_id_name and app_objects.a_convert.to_int(pg_id_name):
+        pg_id_name = pg_id = app_objects.a_convert.to_int(pg_id_name)
+
+    if is_page_request:
+        if type(pg_id_name) == IntType:
+            pg_name = filter(lambda x: x.id == pg_id_name, _pages)
+            if len(pg_name)>0:
+                pg_id = pg_name[0].id
+                pg_name = pg_name[0].post_title
+            else:
+                pg_name = db(db.posts.id == pg_id_name).select()
+                if pg_name:
+                    pg_id = pg_name[0].id
+                    pg_name = pg_name[0].post_title
+
+    items=[]
     menu_items = []
     for page in _pages:
-        item = [page.post_title, False, '/%(app)s/default/page/%(id)s' % {'app':request.application, 'id':page.id}]
+        item = [page.post_title, 
+                is_page_request and ((page.id == pg_id_name) or (page.post_title == pg_id_name)), # or (pg_id_name and pg_id_n_is_string and page.post_title.find(pg_id_name)==0)
+                '/%(app)s/default/page/%(pg_name)s' % {'app':app_objects.tentative_app, 'pg_name':page.post_title}]
         items.append(item)
         if page.show_in_menu and len(menu_items)<10:
           menu_items.append(item)
     response.pages = items
-    response.menu=menu_items
     
+    # Menu order, Menu items...
+    menu_order=[ T('Home'), T('Mission'), T('Vision'), T('Community'), T('Work') , T('Books') ]
+    
+    page_menu_items=[]
+    for i in range(len(menu_items)):
+        if i<len(menu_order):
+            _title=menu_order[i]
+            item=filter(lambda x: x[0].lower()==str(_title).lower(), menu_items)
+            if len(item)>0:
+                menu_items.remove(item[0])
+                page_menu_items.append(item[0])
+    response.menu=page_menu_items
+            
     # instance
     page_helper=PageHelper()
     post_helper=PageHelper()
     
     # home page
-    _home_page=home_page(response, page_helper, _pages)
+    _home_page=home_page(response, page_helper, _pages, request, T, app_objects)
     response.home_page=_home_page[0] if (_home_page and len(_home_page)>0) else None
 
     # help page
-    _help_page=help_page(response, page_helper, _pages)
+    _help_page=help_page(response, page_helper, _pages, request, T, app_objects)
     response.help_page=_help_page[0] if (_help_page and len(_help_page)>0) else None
         
     # This returns all the categories and their post count
     cats = db().select(db.categories.ALL)
     items = []
     for cat in cats:
-        count = len(db(
-                       (db.posts.post_type == 'post') & 
-                       (db.posts.post_category == cat.id)
-                       ).select(db.posts.ALL,orderby=~db.posts.post_time))
+        count = 0
+        try:
+            count = len(db(
+                           (db.posts.post_type == 'post') & 
+                           (db.posts.post_category == cat.id) &
+                           ((db.posts.application == app_objects.tentative_app) | 
+                           (db.posts.application == None))
+                           ).select(db.posts.ALL)) #,orderby=~db.posts.post_time
+        except Exception, ex:
+            count = len(db(
+                           (db.posts.post_type == 'post') & 
+                           (db.posts.post_category == cat.id)
+                           ).select(db.posts.ALL)) #,orderby=~db.posts.post_time
         if count > 0:
-            item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':request.application, 'name':cat.category_name}]
+            item = [cat.category_name, count, '/%(app)s/default/category/%(name)s' % {'app':app_objects.tentative_app, 'name':cat.category_name}]
             items.append(item)
     response.categories = items
-    
+
+    # This returns latest 5 posts
+    last_posts = sorted(response.posts, key=lambda x: x.post_time, reverse=True)
+    l_p_limit = 5
+    items = []
+    i=0
+    while i<l_p_limit and last_posts and i<len(last_posts):
+        post = last_posts[i]
+        #item = [post.post_title, post.post_time, '/%(app)s/default/post/%(id)s' % {'app':app_objects.tentative_app, 'id':post.id}]
+        item = [post.post_title, post.post_time, URL(r = request, f = 'post/%d' % post.id)]
+        items.append(item)
+        i+=1
+    response.last_posts = items
+        
     # This returns all the links
-    links = db().select(db.links.ALL)
+    links = []
+    try :
+        links = db(((db.links.application == app_objects.tentative_app) | 
+                    (db.links.application == None))
+                  ).select(db.links.ALL)
+    except:
+        links = db().select(db.links.ALL)
     items = []
     for link in links:
         item = [link.link_title, link.link_url, link.id]
@@ -177,16 +280,48 @@ def controller_init(request, response, session, cache, T, db, auth, app_config, 
     response.links = items
     
     # Theme
-    response.themes=['0', '1']
-    if request.vars.theme:
-        response.cookies['theme'] = request.vars.theme
-        response.cookies['theme']['expires'] = 365 * 24 * 3600
-        response.cookies['theme']['path'] = '/'
+    response.themes=utilities.get_themes_names(themes_list=app_details.themes_list)
     
     response.theme = '0'
+    if request.get('env')['http_host'].find('aisca')>=0:    
+        response.theme = 'aisca'
     if request.vars.theme:
-        response.theme = request.vars.theme
+        if request.vars.theme.find(app_details.theme_sep_token)>0: 
+            response.cookies['theme'] = utilities.get_from_theme('name', theme_sstruct=request.vars.theme)
+        else:
+            response.cookies['theme'] = request.vars.theme
+        response.cookies['theme']['expires'] = 365 * 24 * 3600
+        response.cookies['theme']['path'] = '/'
+        response.theme = response.cookies['theme'].value
+            
     elif request.cookies.has_key('theme'):
         response.theme = request.cookies['theme'].value
+
+    response.base_theme = None
+    response.child_theme = response.theme
+    response.theme_stylesheet = None    
+    base_theme = utilities.get_base_of_theme(response.theme)
+
+    if base_theme and base_theme != response.theme:
+        response.child_theme = response.theme
+        response.theme = base_theme
+        response.theme_stylesheet = utilities.get_from_theme('stylesheet', theme_name=response.child_theme)
+        response.theme_sidebar = utilities.get_from_theme('sidebar', theme_name=response.child_theme)
+    else:
+        response.theme_sidebar = utilities.get_from_theme('sidebar', theme_name=response.theme)
+
+    if request.vars.theme_sidebar:
+        response.theme_sidebar = request.vars.theme_sidebar
+
+    # Navigation & history
+    if not session.nav_history:
+        session.nav_history = []
+    if is_page_request and pg_name:
+        if len(session.nav_history)>2:
+            session.nav_history = session.nav_history[1:]
+        if pg_id:
+            pg_h = utilities.get_page_hierarchy(pg_id)
+            if not pg_h in session.nav_history:
+                session.nav_history.append(pg_h)
 
     return page_helper, post_helper

@@ -79,7 +79,6 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     # home page
     _home_page=app_objects.home_page_link(response, page_helper, response.links, request, T, app_objects)
     response.home_page=_home_page[0] if (_home_page and len(_home_page)>0) else None
-    log_wrapped('response.home_page', response.home_page)
 
     # help page
     _help_page=app_objects.help_page_link(response, page_helper, response.links, request, T, app_objects)

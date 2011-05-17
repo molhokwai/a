@@ -84,4 +84,18 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     _help_page=app_objects.help_page_link(response, page_helper, response.links, request, T, app_objects)
     response.help_page=_help_page[0] if (_help_page and len(_help_page)>0) else None
 
+    # theme (refactoring: same in common.py)
+    response.theme = 'aisca'
+    if request.vars.theme:
+        if request.vars.theme.find(app_details.theme_sep_token)>0: 
+            response.cookies['theme'] = utilities.get_from_theme('name', theme_sstruct=request.vars.theme)
+        else:
+            response.cookies['theme'] = request.vars.theme
+        response.cookies['theme']['expires'] = 365 * 24 * 3600
+        response.cookies['theme']['path'] = '/'
+        response.theme = response.cookies['theme'].value
+            
+    elif request.cookies.has_key('theme'):
+        response.theme = request.cookies['theme'].value
+        
     return page_helper, post_helper

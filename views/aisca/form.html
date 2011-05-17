@@ -23,7 +23,7 @@
                 email: "{{=T('A valid email is required')}}"
             },
             submitHandler : function(form){
-                $(form).ajaxForm({
+                $('#'+formId).ajaxSubmit({
                     'success' : function(data){
                         $('.form .message').html("{{=T('Your data are now saved. We are contacting you as soon as possible. Looking forward to it...')}}");
                         $('.form .form_row').hide();
@@ -35,7 +35,7 @@
                         $('.form .message').show('slow');
                     }
                 })
-            }            
+            }
         });
     });
 </script>      

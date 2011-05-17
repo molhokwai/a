@@ -70,9 +70,11 @@ def index():
                         labels = entities_labels, deletable=True, _class='edit')
         html = P(INPUT(_type="button", _onclick="window.location='%s';"%URL(r=request, args=['add']), 
                 _value=T('add another'), _class = 'submit'), _class='text-alignr')
+                
         db.entities_blocks.entity.default = record
         form2 = SQLFORM(db.entities_blocks, fields = ['block'], 
                         labels = entities_blocks_labels, formstyle="divs")
+                        
         entity_blocks = db(db.entities_blocks.entity == _id).select()
         for entity_block in entity_blocks:
             form2_list.append(SQLFORM(db.entities_blocks, entity_block, 
@@ -141,6 +143,40 @@ def entity():
             'message' : 'done',
             'result' : data
         })
+        
+    elif area in ['search', 'search.json', 'search.html']:
+        entities = db().select(db.entities.ALL)
+        results = filter(lambda x:(
+                    x.searchable_through 
+                    and 'site' in x.searchable_through 
+                    and x.data and x.data.lower().find(request.vars.partialStr.lower())>0), entities
+        )
+
+        if area in ['search.html']:
+            ## Page/Site Entity 'machine' for Html output
+            mainBlockLayoutMapping = get_block_layout_mapping('entry_summary')
+            _ids = map(lambda x:x.id, results)
+            results = []
+            for _id in _ids:
+                mainBlockQuery = db(db.entities.id==_id)
+                page = Page(
+                    [
+                        [
+                            EntityBlock(block=BlockBase(layoutMapping=mainBlockLayoutMapping), query=mainBlockQuery),
+                        ]
+                    ]
+                )
+                page.populateEntityBlocks()
+                results.append('<div id="#id">%i</div>' % unicode(page.blocks[0][0].layoutOutput()))
+        else:
+            results = map(lambda x:x.data, results)
+        return response.json({
+            'status' : 1,
+            'message' : 'done',
+            'result' : results
+        })
+        
+
 
 @auth.requires_login()
 def create():

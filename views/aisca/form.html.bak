@@ -23,7 +23,7 @@
                 email: "{{=T('A valid email is required')}}"
             },
             submitHandler : function(form){
-                $(form).ajaxForm({
+                $('#'+formId).ajaxSubmit({
                     'success' : function(data){
                         $('.form .message').html("{{=T('Your data are now saved. We are contacting you as soon as possible. Looking forward to it...')}}");
                         $('.form .form_row').hide();
@@ -42,7 +42,7 @@
 <div class="left_content">
     {{=XML(blocks[0][0].layoutOutput())}}
 
-    <div class="margt45pc">
+    <div class="margt47pc">
         {{=XML(blocks[0][1].layoutOutput())}}
     </div>
 </div>
