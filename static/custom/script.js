@@ -506,6 +506,9 @@ var entities = {
             if(sel==null){ sel='.display'; }
             
             $(sel).each(function(){
+                /* to format/correct the html for processing */
+                $(this).html($(this).html());
+                
                 var args = $(this).html().split('#:#');
                 var i=0;
                 var rm=true;
@@ -519,16 +522,20 @@ var entities = {
                         var f=args[1];
                         var text=args[2];
                         var l=parseInt(args[3]);
-                        if(text.length>l){
-                            /* cb_array not used */
-                            var cb_array=null;
-                            if(args.length>4){ cb_array=eval(args[4]); }
-                            switch(f){
-                                case 'truncate':
+                        /* callback_array not used */
+                        var cb_array=null;
+                        if(args.length>4){ cb_array=eval(args[4]); }
+                        switch(f){
+                            case 'truncate':
+                                if(text.length>l){
                                     $(this).html($(this).html().replace('#:#'+text, text.substring(0,l)+'...'));
-                                    break;
-                            }
+                                }
+                                else{
+                                    $(this).html($(this).html().replace('#:#'+text, text));
+                                }
+                                break;
                         }
+
                         for(var j=0;j<args.length;j++){
                             $(this).html($(this).html().replace('#:#'+args[j],''));
                         }

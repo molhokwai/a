@@ -68,10 +68,10 @@ class Page(Template):
 
 blocks_layout_mapping = {
     'entry': LayoutMapping(
-            container = DIV("%(content)s"),
+            container = DIV("%(content)s", _class="entry"),
             title = DIV(("%(text)s ", SPAN("%(name)s")), _class='title'),
             summary = P("#:#display#:#truncate#:#%s#:#200", _class="blue display"),
-            text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s")),
+            text = P((IMG(_src="%(imageUrl)s", _class="left_img"), "%(text)s"), _class="first"),
             listOrder = ['title','summary','text']
         ),
     'entry_summary': LayoutMapping(
@@ -80,7 +80,7 @@ blocks_layout_mapping = {
             summary = P("#:#display#:#truncate#:#%s#:#200", _class="blue display"),
             text = P((IMG(_src="%(imageUrl)s", _class="left_img"), 
                         "#:#display#:#truncate#:#%(text)s#:#350#:#['hide','.read_more']"),
-                        _class="display"),
+                        _class="display first"),
             links = DIV(A("%(text)s", _href="/a/aisca/read/%(name)s"), _class="read_more"),
             listOrder = ['title','summary','text','links']
         ),

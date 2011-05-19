@@ -392,6 +392,7 @@
 'the_options-entry': 'the options',
 'the_options-entry-next': 'the_options-entry-next',
 'the_system-boost_your_business': 'the_system-boost_your_business',
+'the_system-direct_benefits-entry': 'the_system-direct_benefits-entry',
 'the_system-entry': 'the system',
 'the_system-the_interface': 'the_system-the_interface',
 'the_technology-entry': 'the technology',
