@@ -159,7 +159,7 @@ height:27px;
 background:url(images/title_bg.gif) no-repeat left;
 }
 /*-------------caa : h3 span-------------*/
-h3 span, span.title span{
+h3 span, .title span{
 color: #91c742;
 }
 /*-------------caa : h3-------------*/

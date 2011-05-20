@@ -121,7 +121,7 @@ def entity():
 
     if area in ['create', 'create.json']:
         key = int(request.vars.key)
-        record = db(db.entities.id == key).select()[0]
+        record = db(db.entities.id == key).select()
         
         from gluon.contrib import simplejson
         data = simplejson.loads(record.data)
@@ -167,7 +167,7 @@ def entity():
                     ]
                 )
                 page.populateEntityBlocks()
-                results.append('<div id="#id">%i</div>' % unicode(page.blocks[0][0].layoutOutput()))
+                results.append('<div id="#id">%s</div>' % page.blocks[0][0].layoutOutput())
         else:
             results = map(lambda x:x.data, results)
         return response.json({
