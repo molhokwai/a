@@ -170,6 +170,7 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     try:
         _pages = db((db.posts.post_type == 'page') &
                     ((db.posts.application == app_objects.tentative_app) | 
+                    (db.posts.application == '') | 
                     (db.posts.application == None))
                     ).select(db.posts.ALL)
     except Exception, ex:
