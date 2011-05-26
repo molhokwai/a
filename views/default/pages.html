@@ -3,6 +3,6 @@
 <!-- h1>{{=manage_title}}</h1 -->
 ............................................................................................<br/>
 
-{{for _name,_active,_link in response.pages:}}
+{{for _name,_active,_link, application in pages:}}
     <a href="{{=_link}}">{{=_name}}</a>   
 {{pass}}

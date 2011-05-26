@@ -1,0 +1,36 @@
+1 frame per ~1.728.000  seconds
+1 frame per ~132.923,08 seconds
+1 frame per ~10224.85   seconds
+1 frame per ~786,53     seconds
+1 frame per ~60,50      seconds
+1 frame per ~4,65       seconds
+1 frame per ~0,36       seconds
+1 frame per ~0,028      seconds
+1 frame per ~0,00...    seconds
+
+
+Point of Reference:
+------------------
+    -   Universal Cycle:
+        -   Gregorian Calendar Point of Reference: start: 29th of March 2011 (or 10th February 2011, see what works best -for you-, nobody's right, nobody'w wrong...).
+    -   Number of Days: 20
+        -   => Creation Speed: ~5,79*10exp(-7)fps (frames per second)
+
+Mathematical formula:
+--------------------
+What we want is at a given point of (not in) time:
+    -   The Speed of Creation, in frames per second
+    -   Thus the length of Creation cycle in seconds
+!!!This is relative to the point(s) of reference we choose to be ours, which means that it works this way for those who have the same point(s) of reference
+
+So: 
+    -   Conversion of a Given point in time from Gregorian to Mayan (not used for calculation but essential)
+    -   Obtention of Number of seconds ahead or before reference point
+    -   Calculation*:
+        -   Calculation of _Number of Cycle Jumps_ from reference point in number of seconds
+        -   Calculation of Creation Speed in the Cycle
+        -   Calculation of Creation Mind Speed Differential
+
+*A --quantum train-- thing: just as there are quantum jumps, leaps, there are creation --jumps--, --leaps--, represented by the given break points (computation by 13 @the end of elapsed cycle time). So from this point of view, the progression is not linear.
+
+

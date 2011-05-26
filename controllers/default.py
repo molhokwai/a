@@ -26,9 +26,6 @@ def index():
             redirect(URL(r=request, c='aisca', f='index'))
         
     if len(request.args)==0:
-        ## for aisca: redirect for login and home page
-        redirect(URL(r=request, c='aisca', f='index'))
-        
         if response.home_page:
             redirect(URL(r=request, c='default', f='page', args=[response.home_page.id]))
         else:
@@ -110,7 +107,14 @@ def page():
 # The pages page
 # Shows links to all pages
 def pages():
-    return dict(manage_title=T("pages"))
+	area = 'a'
+	if len(request.args)>0:
+		area = request.args[0]
+
+	_pages = response.pages
+	if area != 'all':
+		_pages = filter(lambda x:x[3] == area, response.pages)
+	return dict(manage_title=T("pages"), pages=_pages)
 
 # The category page
 # Shows all the posts in the requested category
