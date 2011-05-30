@@ -1,0 +1,88 @@
+
+Literate Programming: Animation
+------------------------------
+
+The purpose is:
+--------------
+To be able to draw freehand, or import a freehand drawings (paper or digital) and make an animation.
+
+The logic is: 
+------------
+To enable a natural way of working:
+Commands when it is natural
+Visual when it is natural
+
+The description:
+--------------- 
+The order in which the system related commands appear is not necessarily strict.
+
+Description
+-----------
+-Into or out of the System: Create drawing
+Draw a character, freehand
+	Place drawing into scanner or save/copy file
+
+-Into the system: Manage drawing
+	Into Command Line:
+		Import drawing: System imports and displays drawing
+			Nice to have: system looks for latest file/action (file saved, doc in scanner)
+		Vectorize
+		Map to [reference drawing]: System looks/searches into its library of selected reference 
+		drawings for corresponding one or uses the path if path given and pattern matches 
+		the given drawing for proportions (length of the arms, size of the head...) 
+			Style like [select reference drawing]: Idem, for drawing style
+			Edition Commands:
+				[select area]: Increase/decrease size, modify color, modify style...
+				Nice to have:
+					Increase lips size: if system does not know what lip is, system asks, and 
+					increases its knowledge
+				Switch to Visual
+		Into Visual Interface:
+			Visual Edition:
+				[select area]: increase/decrease size, modify color, modify style...
+		Save
+
+	
+-Into the system: Animate Drawing
+	Into Command Line:
+		Animate: System displays frames/timeline
+		[Select character]
+			Walk left 10s: System fills in frames/timeline
+				Pattern matching/Learning: 
+					If system does not know what walk means, animation is provided 
+					for the system to learn and apply
+					If system does not know what left means: walk left & walk right 
+					animations are provided, for system to learn left & right
+			Frames zoom out: System zooms out of the frames/timeline, displaying 12 
+			frames per second, then 6, then 3, then 1
+				Nice to have: 
+					System selects the most relevant frame(s)
+		 	Time x to z: add speech [text]
+		Save
+		[Select other character]
+			Animate: System displays new set of frames/timeline
+			Walk left 10s: System fills in frames/timeline
+			Frames zoom out: …
+			Time w to y: add speech [text]
+		Save
+		Merge Timelines: System created a new timeline and merges timelines
+		Save
+		Time x to y: turn character 1 head to character 2
+			Pattern matching/Learning:
+				If system does not know what turn means, animation is provided for the 
+				system to learn and apply	
+				If system does not know what turn to mean: turn to & turn 
+				from animations are provided for system to learn and apply
+		Time w to z: turn character 2 head to character 1
+			Learning detail: The system is going to turn the head of character 2 to character 
+			1, which means that the head of character 2 should be directed at the center of 
+			character 1, and further adjustments needed to direct it to the head of character 
+			1 
+		Save
+		Switch to Visual
+
+	Into Visual Interface
+		Play
+
+
+
