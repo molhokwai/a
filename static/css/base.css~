@@ -27,6 +27,23 @@ body {
     text-decoration: overline;
 }
 
+h3, h4 {
+    margin-top: 2%;
+}
+h5, h6, h7 {
+    margin-top: 1%;
+}
+
+h4, h5 {
+    padding-left: 2%;
+}
+h4 {
+    font-size: 1.05em;
+}
+h5 {
+    font-size: 0.95em;
+    text-decoration: overline;
+}
 /* ELEMENTS */
 table {
     width: 100%;
@@ -64,6 +81,7 @@ user-menu {
 iframe {
     margin:auto;
     display:block;
+    padding: 0 5%;
 }
 
 a {
@@ -76,6 +94,7 @@ a:hover, a:active {
 img, input[type='image'] {
     margin: auto;
 }
+
 /* WEB2PY ELEMENTS */
 .flash {
     font-weight: bold;
@@ -95,4 +114,33 @@ img, input[type='image'] {
 
 iframe[name='photo_frame'] {
     overflow: hidden;
+}
+
+.button, .link {
+  border : none;
+  cursor : pointer;
+}
+.button {
+  font-size: 0.9em;
+  text-transform: lowercase;
+}
+.link {
+  font-size: 0.8em;
+}
+.button:hover, .link:hover {
+  font-style: italic;
+}
+.p {
+  display:block;
+  padding-right: 5%;
+}
+.p:first-letter, div.p:first-letter {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.grid tr td {
+  font-weight: bold;
+}
+.grid tr+tr td {
+  font-weight: normal;
 }

@@ -200,7 +200,8 @@ def controller_init(request, response, session, cache, T, db, auth, app_objects)
     for page in _pages:
         item = [page.post_title, 
                 is_page_request and ((page.id == pg_id_name) or (page.post_title == pg_id_name)), # or (pg_id_name and pg_id_n_is_string and page.post_title.find(pg_id_name)==0)
-                '/%(app)s/default/page/%(pg_name)s' % {'app':app_objects.tentative_app, 'pg_name':page.post_title}, page.application]
+                '/%(app)s/default/page/%(pg_name)s' % {'app':app_objects.tentative_app, 'pg_name':page.post_title}, 
+				page.application]
         items.append(item)
         if page.show_in_menu and len(menu_items)<10:
           menu_items.append(item)

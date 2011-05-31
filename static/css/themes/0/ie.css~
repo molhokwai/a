@@ -1,0 +1,16 @@
+body {
+    background: url("images/BG.png") repeat-x 0 0;
+}
+.color-transparent {
+    /*
+        Quircks:
+        -------
+    -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    filter: alpha(opacity=0) !important;
+    color: whitesmoke;
+    border-color: whitesmoke;
+    font-size: 0.01em !important;
+    */
+    display: none;
+}
+

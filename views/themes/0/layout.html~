@@ -188,7 +188,7 @@
              
              {{=A(T('pages'),_href=URL(r=request,c='default',f='pages'), _class='color-transparent')}}
              {{if response.pages:}}
-                 {{for _title,_is_current,_link,_app in response.pages:}}
+                 {{for _title,_false,_link in response.links:}}
                          {{=A(T(_title),_href=_link, _class='color-transparent')}}
                  {{pass}}
              {{pass}}

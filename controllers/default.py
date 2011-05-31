@@ -639,33 +639,46 @@ def download():
     import os
     return response.stream(open(os.path.join(request.folder,'uploads',request.args[0]),'rb'))
 
-@auth.requires_login()
 def do_stuff():
-    if auth.user.is_admin:
-        if request.args[0] in ['posts_app', 'links_app']:
-            instance=db.posts if request.args[0]=='posts_app' else db.links
-            _ids=request.args[1].split(',')
-            log_wrapped('_ids', _ids)
-            for i in range(len(_ids)):
-                try:
-                    db(instance.id == int(_ids[i])).update(application=request.application)
-                except Exception, ex:
-                    pass
-            session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
+	s = None
+	if auth.user and auth.user.is_admin:
+		if request.args[0] in ['posts_app', 'links_app']:
+			instance=db.posts if request.args[0]=='posts_app' else db.links
+			_ids=request.args[1].split(',')
+			log_wrapped('_ids', _ids)
+			for i in range(len(_ids)):
+				try:
+					db(instance.id == int(_ids[i])).update(application=request.application)
+				except Exception, ex:
+					pass
+			session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
 
-        elif request.args[0] in ['set_login_mechanism']:
-            db(db.app_config.id>0).update(
-                    APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
-                    RPX_API = ['b9727a23b1d6ab8d29d112eb0f95ed1368f29c1f' if i==0 else RPX_API[i] for i in range(len(RPX_API))])
-            session.flash=T('login mechanism updated.')
-
-        elif request.args[0] in ['update_searchable_entities']:
-            searchable_entities = request.vars.searchable_entities.split(',')
-            for i in searchable_entities:
-                db(db.entities.id==int(i)).update(
+		elif request.args[0] in ['update_searchable_entities']:
+			searchable_entities = request.vars.searchable_entities.split(',')
+			for i in searchable_entities:
+				db(db.entities.id==int(i)).update(
                     searchable_through=request.vars.searchable_through.split(','))                    
-            session.flash=T('update searchable entities done.')
-    else:
-        session.flash=T('not admin')
+			session.flash=T('update searchable entities done.')
+	
+	if request.args[0] in ['set_login_mechanism']:
+		"""
+			Sample Links:
+				http://molhokwai:8001/a/default/do_stuff/set_login_mechanism?APP_SECURITY_DETAILS=rpx&RPX_API=xxxxxxxxxxxxxxxxxxxx,websites.molhokwai
+				http://molhokwai:8001/a/default/do_stuff/set_login_mechanism?APP_SECURITY_DETAILS=usr_psw&RPX_API=xxxxxxxxxxxxxxxxxxxx,websites.molhokwai
+		"""
+		q = db(db.app_config.id>0)
+		s = q.select()
+		if ((auth.user and auth.user.is_admin) 
+			or (
+			s and s[0].APP_SECURITY_DETAILS 
+			and s[0].APP_SECURITY_DETAILS != db.app_config.APP_SECURITY_DETAILS.default
+		   )):
+			q.update(
+				APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
+				RPX_API = request.vars.RPX_API.split(',')
+			)
+			session.flash=T('login mechanism updated.')
+	else:
+		session.flash=T('not admin')
 
-    redirect(URL(r = request,f = 'index'))
+	redirect(URL(r = request,f = 'index'))

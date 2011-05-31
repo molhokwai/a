@@ -1,0 +1,9 @@
+body {
+    background: url("images/BG.png") repeat-x 0 0;
+}
+.color-transparent {
+    display: none;
+}
+input[type="submit"] {
+    display: block;
+}
