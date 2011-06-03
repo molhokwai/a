@@ -21,9 +21,9 @@
     {{if response.child_theme and response.theme_stylesheet:}}
         <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
     {{pass}}
-    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
-    <style type="text/css"></style>
+    <!--[if IE 6]>
+        <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/ie.css" type="text/css" media="screen" />
+    <![endif]-->
     
     {{include 'web2py_ajax.html'}}
 
@@ -44,7 +44,7 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
-	<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
@@ -188,7 +188,7 @@
              
              {{=A(T('pages'),_href=URL(r=request,c='default',f='pages'), _class='color-transparent')}}
              {{if response.pages:}}
-                 {{for _title,_false,_link in response.links:}}
+                 {{for _title,_is_current,_link,_app in response.pages:}}
                          {{=A(T(_title),_href=_link, _class='color-transparent')}}
                  {{pass}}
              {{pass}}

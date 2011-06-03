@@ -9,7 +9,7 @@ var onPageLoad = function(){
       var indTh = urlParams[i].indexOf('theme=');
       if(indTh!=1){
           newUrlParams.push(urlParams[i]);
-      }      
+      }
       else {
           doRedirect = true;
       }
@@ -69,391 +69,43 @@ rules={
     },
 
     /* JQUERY SIZING & STYLING */
-    jQs : {
-        /*  Execution, entry point
-            See regExpY for params details
-        */
-        _do : function(className){
-            var l=className.split(' ');
-            var result = [];
-            for(var i=0; i<l.length;i++){
-                var aP = rules.jQs.property.allParams();
-                for (kh in aP){
-                    for(var j=0;j<aP[kh].params.length;j++){
-                        aP[kh].params[j]['property'] = kh;
-                        aP[kh].params[j]['value'] = l[i];
-                        var r = rules.jQs.exec(aP[kh].params[j]);
-                        if(r && r.length>0 && r[0]!= ""){
-                            for(var n=0;n<r.length;n++){
-                                result.push(r[n]);
-                            }
-                        }                
-                    }
-                }
-            }
+	jQs : {
+		reg_o : [
+			/*1*/ [new RegExp("(width|w|large)([0-9].)(em|mm|px|pt|%)[^\s]"),'width'],
+			/*1*/ [new RegExp("(height|h|long)([0-9].)(em|mm|px|pt|%)[^\s]"),'height'],
+			/*1*/ [new RegExp("(margin-left|margin-l|marg-l|margl|ml|left,l)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-left'],
+			/*1*/ [new RegExp("(margin-right|margin-r|marg-r|margr|mr|right,r)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-right'],
+			/*1*/ [new RegExp("(margin-top|margin-top|marg-t|margt|mt|top,t)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-top'],
+			/*1*/ [new RegExp("(margin-bottom|margin-b|marg-b|margb|b|bottom,b)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-bottom'],
+			/*1*/ [new RegExp("(padding-left|padding-l|pad-l|padl|pleft|pl)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-left'],
+			/*1*/ [new RegExp("(padding-right|padding-r|pad-r|padr|pright|pr)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-right'],
+			/*1*/ [new RegExp("(padding-top|padding-t|padt|pad-t|ptop|pt)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-top'],
+			/*4*/ [new RegExp("(padding-bottom|padding-b|pad-b|padb|pbottom|pb)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-bottom'],
+			/*3 uses 4*/ [new RegExp("(font-size|font-s|f-s|fonts|fs)([0-9].)(em|mm|px|pt|%)[^\s]"),'font-size'],
+			/*2 uses 3*/ [new RegExp("(text-indent|text-i|texti|ti)([0-9].)(em|mm|px|pt|%)[^\s]"),'text-indent'],
+			/*1*/ [new RegExp("(float|f)\-{0,1}[left|right|none]([1-Za-z]{0,10})[^\s]"),'float'],
+			/*1*/ [new RegExp("(clear|cl)\-{0,1}[left|right|both|none]([1-Za-z]{0,10})[^\s]"),'clear'],
 
-            return result.join(" ");
-        },
-
-        /*  Execution.
-            See regExpY & _do for params details
-        */
-        exec : function(params){
-            var yielded = rules.jQs.regExpY(params);
-            if (yielded && yielded.length>0 && yielded[0] && yielded[0]!=""){
-                return rules.jQs.regExpYParse(yielded);
-            }
-        },
-
-        /*  Regexp OBj Get
-            [property choice regexp]
-            [hyphen 0 | 1]
-            [values choice regexp]
-            [(double point | equal)(0 | 1) regexp]
-            [number | color | name value regexp]
-            [unit value regexp]
-            [semicolon 0 | 1 regexp]
-        */
-        regExpGet : function(params){
-                var s = "^(pcrS)"
-                        +"[\\-]{0,1}"
-                        +"(pvcrS)"
-                        +"[:=]{0,1}"
-                        +"(ncnvrS)"
-                        +"(uvrS)"
-                        +"[;]{0,1}";
-                for(kp in params){
-                    if (typeof(params[kp])=='function'){
-                        var r = params[kp]();
-                        if(r && r!=""){
-                            s = s.replace(kp,r);
-                        }
-                        else {
-                            s = s.replace("("+kp+")", "([noval]{0})");
-                        }
-                    }
-                }
-                return new RegExp(s);
-        },
-
-        /*  RegExp Yield
-
-            @params (dictionary): {
-                "v" : value for regExp exec
-                 // See rexExpB for other params details
-            }
-        */
-        regExpY : function(params){
-            var r_j_p_x_p = rules.jQs.property[params.property].params;
-            var _regExp = rules.jQs.regExpGet(params);
-            return _regExp.exec(params.value);
-        },
-
-        /*  RegExp Yield Parse
-
-            @params (dictionary): {
-                "yielded" : Yielded RegExp Object
-                 // See rexExpB for other params details
-            }
-        */
-        regExpYParse : function(params) {
-            var yielded = {
-                'v' : params[0],
-                'pcrS' : params[1],
-                'pvcrS' : params[2],
-                'ncnvrS' : params[3],
-                'uvrS' : params[4]
-            };
-
-            /* property value ... */
-            switch(yielded.pcrS){
-                /* Complete expressions (empty cases) left in for clarity */
-                case 'm': case 'marg': yielded.pcrS='margin'; break;
-                case 'margin': break;
-                case 'p': case 'pad': yielded.pcrS='padding'; break;
-                case 'padding': break;
-                case 'f': yielded.pcrS='font'; break;
-                case 'font': break;
-                case 'fl': yielded.pcrS='float'; break;
-                case 'float': break;
-                case 't': yielded.pcrS='text'; break;
-                case 'text': break;
-                case 'b': case 'back': yielded.pcrS='background'; break;
-                case 'background':  break;
-                case 'mi': yielded.pcrS='min'; break;
-                case 'min': break;
-                case 'ma': yielded.pcrS='max'; break;
-                case 'max': break;
-
-                case 'default': break;            
-            }
-
-            this.formatVal = function(val){
-                /* property-value value... */
-                switch(val){
-                    /* Complete expressions (empty cases) left in for clarity */
-                    case 'l': val='left'; break;
-                    case 'left': break;
-                    case 'r': val='right'; break;
-                    case 'right': break;
-                    case 'bo': val='both'; break;
-                    case 'both': break;
-                    case 'b': val='bottom'; break;
-                    case 'bottom': break;
-                    case 't': val='top'; break;
-                    case 'top': break;
-                    case 's': val='size'; break;
-                    case 'size': break;
-                    case 'st': val='style'; break;
-                    case 'style': break;
-                    case 'i':  val='indent'; break;
-                    case 'indent': break;
-                    case 'd': val='decoration'; break;
-                    case 'decoration': break;
-                    case 'a': val='align'; break;
-                    case 'align': break;
-                    case 'it': val='italic'; break;
-                    case 'italic': break;
-                    case 'c': val='color'; break;
-                    case 'color': break;
-                    case 'h': val='height'; break;
-                    case 'height': break;
-                    case 'w': val='width'; break;
-                    case 'width': break;
-                    case 'ho': val='horizontal'; break;
-                    case 'horizontal': break;
-                    case 'v': val='vertical'; break;
-                    case 'vertical': break;
-                    case 'we': val='weight'; break;
-                    case 'weight': break;
-                    case 'tr': val='transform'; break;
-                    case 'transform': break;
-                    case 'ca': val='capitalize'; break;
-                    case 'capitalize': break;
-                    case 'lo': val='lowercase'; break;
-                    case 'lowercase': break;
-                    case 'u': val='underline'; break;
-                    case 'underline': break;
-                    case 'o': val='overline'; break;
-                    case 'overline': break;
-                    case 'up': val='uppercase'; break;
-                    case 'uppercase': break;
-                    case 'str': case 'li': val='line-through'; break;
-                    case 'line-through': break;
-    
-                    case 'default': break;
-                }
-                
-                return val;
-            }
-            
-            yielded.pvcrS = this.formatVal(yielded.pvcrS);
-            yielded.ncnvrS = this.formatVal(yielded.ncnvrS);
-            
-            var _result = [];
-            this.result = function(yielded){
-                var result = yielded.pcrS
-                            +(yielded.pvcrS && yielded.pvcrS!=''?'-'+yielded.pvcrS:'')
-                            +':'
-                            + (yielded.ncnvrS && yielded.ncnvrS!=''?yielded.ncnvrS:'')
-                            + (yielded.uvrS && yielded.uvrS!=''?yielded.uvrS:'')
-                            +';'
-                return result;
-            };
-            
-            if(yielded.pvcrS == 'horizontal'){
-                var l = ['left','right'];
-                for(var i=0;i<l.length;i++){
-                    yielded.pvcrS = l[i];       
-                    _result.push(this.result(yielded));
-                }
-            }
-            else if(yielded.pvcrS == 'vertical'){
-                var l = ['top','bottom'];
-                for(var i=0;i<l.length;i++){
-                    yielded.pvcrS = l[i];       
-                    _result.push(this.result(yielded));
-                }
-            }
-            else {
-                _result.push(this.result(yielded));
-            }                        
-                        
-            return _result;
-        },
-
-        property : {
-            allParams : function(){
-                var properties = {'width': null, 'height': null, 'margin': null, 'padding': null, 'font': null, 'text': null, 
-                        'float': null, 'clear': null, 'background': null, 'min': null, 'max': null};
-                for(k in properties){
-                    properties[k] = rules.jQs.property[k];
-                }
-                return properties;
-            },
-
-            width : {
-                /*  RegExp Yield Params
-                    See rexExpB for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "width|w|large"; },
-                    "pvcrS" : function(){ return ""; },
-                    "ncnvrS" : function(){ return "[0-9\,\.]{0,10}"; }, 
-                    "uvrS" : function(){ return "em|mm|px|pt|%"; }
-                }]
-            },
-            height : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "^[height|h|long]"; },
-                    "pvcrS" : function(){ return ""; },
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            },
-            margin : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "margin|marg|m"; },
-                    "pvcrS" : function(){ return "left|l|right|r|ho|horizontal|v|vertical"; },
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            },
-            padding : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "padding|pad|p"; },
-                    "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            },
-            font : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "font|f"; },
-                    "pvcrS" : function(){ return "style|st|weight|we"; },
-                    "ncnvrS" : function(){ return "[A-Za-z, ]{0,20}"; }, 
-                    "uvrS" : function(){ return ""; }
-                },{ 
-                    "pcrS" : function(){ return "font|f"; },
-                    "pvcrS" : function(){ return "size|s"; },
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            },
-            text : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "text|t"; },
-                    "pvcrS" : function(){ return "decoration|d|align|a|tranform|tr|o|overline|u|underline|up|uppercase|ca|capitalize"; },
-                    "ncnvrS" : function(){ return "[A-Za-z]{0,10}"; }, 
-                    "uvrS" : function(){ return ""; }
-                },{ 
-                    "pcrS" : function(){ return "text|t"; },
-                    "pvcrS" : function(){ return "indent|i"; },
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            },
-            float : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "float|fl"; },
-                    "pvcrS" : function(){ return ""; },
-                    "ncnvrS" : function(){ return "left|l|right|r"; },
-                    "uvrS" : function(){ return ""; }
-                }]
-            },
-            clear : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "clear|c"; },
-                    "pvcrS" : function(){ return ""; },
-                    "ncnvrS" : function(){ return "left|l|right|r|both|bo"; },
-                    "uvrS" : function(){ return ""; }
-                }]
-            },
-            background : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "background|b"; },
-                    "pvcrS" : function(){ return "color|c"; },
-                    /*eventually: ^[rgb|RGB]\\([0-255\, *]{3}\\)| */
-                    "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}|rgb{1}|RGB{1}\\([0-255\\,]{3}\\)"; }, 
-                    "uvrS" : function(){ return ""; }
-                }]
-            },
-            min : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "min|mi"; },
-                    "pvcrS" : function(){ return "width|w|height|h"; },
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            },
-            max : {
-                /*  RegExp Yield Params
-                    See property.width for params details
-                */
-                params : [{ 
-                    "pcrS" : function(){ return "max|ma"; },
-                    "pvcrS" : function(){ return rules.jQs.property.min.params[0].pvcrS(); }, 
-                    "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
-                    "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
-                }]
-            }
-        },
-
-        /*  For Documentation and reference only
-            Not used.
-        */
-        regExp_o : [
-            [new RegExp("(width|w|large)([0-9].)(em|mm|px|pt|%)[^\s]"),'width'],
-            [new RegExp("(height|h|long)([0-9].)(em|mm|px|pt|%)[^\s]"),'height'],
-            [new RegExp("(margin-left|margin-l|marg-l|margl|ml|left,l)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-left'],
-            [new RegExp("(margin-right|margin-r|marg-r|margr|mr|right,r)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-right'],
-            [new RegExp("(margin-top|margin-top|marg-t|margt|mt|top,t)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-top'],
-            [new RegExp("(margin-bottom|margin-b|marg-b|margb|b|bottom,b)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-bottom'],
-            [new RegExp("(padding-left|padding-l|pad-l|padl|pleft|pl)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-left'],
-            [new RegExp("(padding-right|padding-r|pad-r|padr|pright|pr)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-right'],
-            [new RegExp("(padding-top|padding-t|padt|pad-t|ptop|pt)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-top'],
-            [new RegExp("(padding-bottom|padding-b|pad-b|padb|pbottom|pb)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-bottom'],
-            [new RegExp("(font-size|font-s|f-s|fonts|fs)([0-9].)(em|mm|px|pt|%)[^\s]"),'font-size'],
-            [new RegExp("(text-indent|text-i|texti|ti)([0-9].)(em|mm|px|pt|%)[^\s]"),'text-indent'],
-            [new RegExp("(float|f)\-{0,1}[left|right|none]([1-Za-z]{0,10})[^\s]"),'float'],
-            [new RegExp("(clear|cl)\-{0,1}[left|right|both|none]([1-Za-z]{0,10})[^\s]"),'clear'],
-
-            [new RegExp("(bold|b)[^\s]"),'bold'],
-            [new RegExp("(italic|i)[^\s]"),'iitalic'],
-            [new RegExp("(text-decoration|text-d|t-d,td)([A-Za-z]{1,20})[^\s]"),'text-decoration'],
-            [new RegExp("(text-align|text-a|t-a|ta)([A-Za-z]{1,20})[^\s]"),'text-align'],
-            [new RegExp("(font-color|font-c|f-c|fc|color|c)(^\#[A-Za-z]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})[^\s]"),'font-color'],
-            [new RegExp("(background-color|background-c|b-c|bc)(^\#[A-Za-z]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})[^\s]"),'background-color']
-        ]
-    }
-};
+			/*1*/ [new RegExp("(bold|b)[^\s]"),'bold'],
+			/*1*/ [new RegExp("(italic|i)[^\s]"),'iitalic'],
+			/*3*/ [new RegExp("(text-decoration|text-d|t-d,td)([A-Za-z]{1,20})[^\s]"),'text-decoration'],
+			/*3*/ [new RegExp("(text-align|text-a|t-a|ta)([A-Za-z]{1,20})[^\s]"),'text-align'],
+			/*3*/ [new RegExp("(font-color|font-c|f-c|fc|color|c)(^\#[A-Za-z]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})[^\s]"),'font-color'],
+			/*3*/  [new RegExp("(background-color|background-c|b-c|bc)(^\#[A-Za-z]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})[^\s]"),'background-color']
+		],
+		/* @key: n yielded */
+		reg_b : {
+			1 : 
+				{'[property choice regexp]' : [new RegExp("(%s0)$[ ]"),'%s']},
+			/*2 : {'[property choice regexp][hyphen 0 | 1][values choice regexp]' : 
+													[new RegExp("(%s0)[\-]{0,1}(%s1)$[ ]"),'%s0']},*/
+			3 : {'[property choice regexp][hyphen 0 | 1][values choice regexp][color value regexp]' :  
+													[new RegExp("(%s0)[\-]{0,1}(%s1)(^[\# ][A-Fa-f0-9]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})$[ ]"),'%s0']},
+			4  : {'[property choice regexp][hyphen 0 | 1][values choice regexp][number value regexp][unit value regexp]' :  
+													[new RegExp("(%s0)[\-]{0,1}(%s1)([%s2].)(%s3)$[ ]"),'%s0']}
+		},
+	}
+}
 
 /* ... */
 var markup_textareas=function(selector){
@@ -708,12 +360,22 @@ $(document).ready(function(){
 
     /* JQUERY SIZING & STYLING */
     $('.jQs').each(function(){
+        var l = [[new RegExp("(width|w|large)([0-9].)(em|mm|px|pt|%)[^\s]"),'width']
         /* 
           Further mapping required:
           '[new RegExp("([0-9].)(em|mm|px|pt|%)(width|w|large)[^\s]"),'width'] 
         */
-        var s = rules.jQs._do($(this)[0].className);
-        $(this).attr({'style' : s});
+        ];
+        for(i in l){
+            var m = l[i][0].exec($(this)[0].className);
+            if(m && m.length>0){
+                var s = $(this).attr('style');
+                if(!s){
+                    s = '';
+                }
+                $(this).attr({'style' : s + l[i][1]+':'+m[2]+m[3]+';'});
+            }
+        }
     });
     
 });

@@ -174,8 +174,6 @@ rules={
                 case 'padding': break;
                 case 'f': yielded.pcrS='font'; break;
                 case 'font': break;
-                case 'fl': yielded.pcrS='float'; break;
-                case 'float': break;
                 case 't': yielded.pcrS='text'; break;
                 case 'text': break;
                 case 'b': case 'back': yielded.pcrS='background'; break;
@@ -196,8 +194,6 @@ rules={
                     case 'left': break;
                     case 'r': val='right'; break;
                     case 'right': break;
-                    case 'bo': val='both'; break;
-                    case 'both': break;
                     case 'b': val='bottom'; break;
                     case 'bottom': break;
                     case 't': val='top'; break;
@@ -373,7 +369,7 @@ rules={
                     See property.width for params details
                 */
                 params : [{ 
-                    "pcrS" : function(){ return "float|fl"; },
+                    "pcrS" : function(){ return "float|f"; },
                     "pvcrS" : function(){ return ""; },
                     "ncnvrS" : function(){ return "left|l|right|r"; },
                     "uvrS" : function(){ return ""; }
@@ -386,7 +382,7 @@ rules={
                 params : [{ 
                     "pcrS" : function(){ return "clear|c"; },
                     "pvcrS" : function(){ return ""; },
-                    "ncnvrS" : function(){ return "left|l|right|r|both|bo"; },
+                    "ncnvrS" : function(){ return "left|l|right|r|both|b"; },
                     "uvrS" : function(){ return ""; }
                 }]
             },
@@ -397,8 +393,7 @@ rules={
                 params : [{ 
                     "pcrS" : function(){ return "background|b"; },
                     "pvcrS" : function(){ return "color|c"; },
-                    /*eventually: ^[rgb|RGB]\\([0-255\, *]{3}\\)| */
-                    "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}|rgb{1}|RGB{1}\\([0-255\\,]{3}\\)"; }, 
+                    "ncnvrS" : function(){ return "^\#[A-Za-z0-9]{6}|^[rgb|RGB]\\([0-255\, *]{3}\\)|[A-Za-z]{1,20}"; }, 
                     "uvrS" : function(){ return ""; }
                 }]
             },

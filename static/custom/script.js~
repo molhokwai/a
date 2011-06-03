@@ -1,31 +1,33 @@
-/* html form */
-/*      <form onsubmit="return false;">
-            <input type="text" id="_cmd" name="_cmd" class="width30pc"/>
-            <font id="_cmd_msg" class="flash small">
-                {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
-                {{if session.flash:}}{{=session.flash}}{{pass}}
-            </font>
-            <input type="hidden" id="_cmd_history_cur" value="-1"/>
-        </form>
-*/
+/* method executed on page load, through:
+    .../components/net.molhokwai/molhokwai.common.js */
+var onPageLoad = function(){
+  /* theme first display fix */
+  var doRedirect = false;
+  var urlParams = window.location.search.split('&');
+  var newUrlParams = [];
+  for(var i=0;i<urlParams.length;i++){
+      var indTh = urlParams[i].indexOf('theme=');
+      if(indTh!=1){
+          newUrlParams.push(urlParams[i]);
+      }
+      else {
+          doRedirect = true;
+      }
+  }
+  if (doRedirect){
+      var url = window.location.pathname;
+      for(var i=0;i<newUrlParams.length;i++){
+          if (i==0){ url+='?'; }
+          else{ url+='&'; }
+          url += newUrlParams[i];
+      }
+      window.location = url;
+  }
+}
 
 /* configuration & settings */
 settings={
-       markItUp:{
-            onShiftEnter:   {keepDefault:false, replaceWith:'<br />\n'},
-            onCtrlEnter:    {keepDefault:false, openWith:'\n<p>', closeWith:'</p>'},
-            onTab:          {keepDefault:false, replaceWith:'    '},
-            markupSet:  [   
-                {name:'Bold', key:'B', openWith:'(!(<strong>|!|<b>)!)', closeWith:'(!(</strong>|!|</b>)!)' },
-                {name:'Italic', key:'I', openWith:'(!(<em>|!|<i>)!)', closeWith:'(!(</em>|!|</i>)!)'  },
-                {name:'Stroke through', key:'S', openWith:'<del>', closeWith:'</del>' },
-                {separator:'---------------' },
-                {name:'Picture', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
-                {name:'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
-                {separator:'---------------' },
-                {name:'Clean', className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } },       
-                {name:'Preview', className:'preview',  call:'preview'}
-            ]
+       wymeditor:{
        },
        google: {
            search : {
@@ -64,12 +66,332 @@ rules={
                     }
             }
         }
-    }
-}
+    },
+
+
+    /* JQUERY SIZING & STYLING */
+	jQs : {
+		/*	Execution, entry point
+		  	See regExpY for params details
+		*/
+        do : function(className){
+			var l=className.split(' ');
+			var result = [];
+			for(var i=0; i<l.length;i++){
+				var aP = rules.jQs.property.allParams();
+				for (k in aP){
+					var r = rules.jQs.regExpYParse(rules.jQs.regExpY(aP[k].params));
+					if(r && r!= ""){
+            			result.push(r);
+					}
+				}
+			}
+
+			return result.join(" ");
+        },
+
+		/*	Execution.
+		  	See regExpY for params details
+		*/
+        exec : function(params){
+            return rules.jQs.regExpYParse(rules.jQs.regExpY(params));
+        },
+
+		/*	Regexp Base
+			[property choice regexp]
+			[hyphen 0 | 1]
+			[values choice regexp]
+			[(double point | equal)(0 | 1) regexp]
+			[number | color value regexp]
+			[unit value regexp]
+			[semicolon 0 | 1 regexp]
+		*/
+		regExpGet : function(params){
+                var s = "(pcrS)"
+                        +"[\-]{0,1}"
+						+"(pvcrS)"
+						+"[:=]{0,1}"
+						+"([ncvcrS]{1,10})"
+						+"(uvrS)"
+						+"[;]{0,1}*";
+			    for(k in params){
+				    _s = _s.replace(k,params[k]());
+			    }
+                return new RegExp(s);
+		},
+
+		/*	RegExp Yield
+
+			@params (dictionary): {
+				"v" : value for regExp exec
+                 // See rexExpB for other params details
+			}
+		*/
+		regExpY : function(params){
+            var r_j_p_x_p = rules['jQs']['properties'][params.property]['params'];
+			var _regExp = rules.jQs.regExpGet(params);
+            return new _regExp.exec(params.value);
+		},
+
+		/*	RegExp Yield Parse
+
+			@params (dictionary): {
+				"yielded" : Yielded RegExp Object
+                 // See rexExpB for other params details
+			}
+		*/
+		regExpYParse : function(params) {
+            var yielded = {
+                'v' : params[0],
+                'pcrS' : params[1],
+                'pvcrS' : params[2],
+                'ncvcrS' : params[3],
+                'uvrS' : params[4]
+            };
+
+            /* property value ... */
+            switch(yielded.pcrS){
+                /* Complete expressions (empty cases) left in for clarity */
+                case 'm': yielded.pcrS='margin'; break;
+                case 'margin': break;
+                case 'p': yielded.pcrS='padding'; break;
+                case 'padding': break;
+                case 'f': yielded.pcrS='font'; break;
+                case 'font': break;
+                case 't': yielded.pcrS='text'; break;
+                case 'text': break;
+                case 'b': yielded.pcrS='background'; break;
+                case 'background': break;
+                case 'mi': yielded.pcrS='min'; break;
+                case 'min': break;
+                case 'ma': yielded.pcrS='max'; break;
+                case 'max': break;
+
+                case 'default': break;            
+            }
+
+            /* property-value value... */
+            switch(yielded.pvcrS){
+                /* Complete expressions (empty cases) left in for clarity */
+                case 'l': yielded.pvcrS='left'; break;
+                case 'left': break;
+                case 'r': yielded.pvcrS='right'; break;
+                case 'right': break;
+                case 'b': yielded.pvcrS='bottom'; break;
+                case 'bottom': break;
+                case 't': yielded.pvcrS='top'; break;
+                case 'top': break;
+                case 's': yielded.pvcrS='size'; break;
+                case 'size': break;
+                case 'i':  yielded.pvcrS='indent'; break;
+                case 'indent': break;
+                case 'd': yielded.pvcrS='decoration'; break;
+                case 'decoration': break;
+                case 'a': yielded.pvcrS='align'; break;
+                case 'align': break;
+                case 'it': yielded.pvcrS='italic'; break;
+                case 'italic': break;
+                case 'c': yielded.pvcrS='color'; break;
+                case 'color': break;
+
+                case 'default': break;
+            }
+
+			return yielded.pcrS+(yielded.pvcrS && yielded.pvcrS!=''?'-'+yielded.pvcrS:'') +':'+ yielded.ncvcrS+yielded.uvrS +';';
+		},
+
+		property : {
+			allParams : function(){
+				var properties = {'width': null, 'height': null, 'margin': null, 'padding': null, 'font': null, 'text': null, 
+						'float': null, 'clear': null, 'bold': null, 'italic': null, 'background': null, 'min': null, 'max': null};
+				for(k in properties){
+					properties[k] = rules.jQs.property[k];
+				}
+				return properties;
+			},
+
+			width : {
+				/*	RegExp Yield Params
+					See rexExpB for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return "(width|w|large)"; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return "[0-9,]{0,10}"; }, 
+					"uvrS" : function(){ return "em|mm|px|pt|%"; }
+				}
+			},
+			height : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return "height|h|long"; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return rules.jQs.property.width.params.ncvrS; }, 
+					"uvrS" : function(){ return rules.jQs.property.width.params.uvrS; }
+				}
+			},
+			margin : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return "margin|marg|m"; },
+					"pvcrS" : function(){ return "left|l|right|r"; },
+					"ncvrS" : function(){ return rules.jQs.property.width.params.ncvrS; }, 
+					"uvrS" : function(){ return rules.jQs.property.width.params.uvrS; }
+				}
+			},
+			padding : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return "padding|pad|p"; },
+					"pvcrS" : function(){ return "left|l|right|r"; },
+					"ncvrS" : function(){ return rules.jQs.property.width.params.ncvrS; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			font : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			text : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			float : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			clear : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			bold : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			italic : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			background : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			min : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			},
+			max : {
+				/*	RegExp Yield Params
+					See property.width for params details
+				*/
+				params : { 
+					"pcrS" : function(){ return ""; },
+					"pvcrS" : function(){ return ""; },
+					"ncvrS" : function(){ return ""; }, 
+					"uvrS" : function(){ return ""; }
+				}
+			}
+		},
+
+		/* 	For Documentation and reference only
+			Not used.
+		*/
+		regExp_o : [
+			[new RegExp("(width|w|large)([0-9].)(em|mm|px|pt|%)[^\s]"),'width'],
+			[new RegExp("(height|h|long)([0-9].)(em|mm|px|pt|%)[^\s]"),'height'],
+			[new RegExp("(margin-left|margin-l|marg-l|margl|ml|left,l)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-left'],
+			[new RegExp("(margin-right|margin-r|marg-r|margr|mr|right,r)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-right'],
+			[new RegExp("(margin-top|margin-top|marg-t|margt|mt|top,t)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-top'],
+			[new RegExp("(margin-bottom|margin-b|marg-b|margb|b|bottom,b)([0-9].)(em|mm|px|pt|%)[^\s]"),'margin-bottom'],
+			[new RegExp("(padding-left|padding-l|pad-l|padl|pleft|pl)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-left'],
+			[new RegExp("(padding-right|padding-r|pad-r|padr|pright|pr)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-right'],
+			[new RegExp("(padding-top|padding-t|padt|pad-t|ptop|pt)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-top'],
+			[new RegExp("(padding-bottom|padding-b|pad-b|padb|pbottom|pb)([0-9].)(em|mm|px|pt|%)[^\s]"),'padding-bottom'],
+			[new RegExp("(font-size|font-s|f-s|fonts|fs)([0-9].)(em|mm|px|pt|%)[^\s]"),'font-size'],
+			[new RegExp("(text-indent|text-i|texti|ti)([0-9].)(em|mm|px|pt|%)[^\s]"),'text-indent'],
+			[new RegExp("(float|f)\-{0,1}[left|right|none]([1-Za-z]{0,10})[^\s]"),'float'],
+			[new RegExp("(clear|cl)\-{0,1}[left|right|both|none]([1-Za-z]{0,10})[^\s]"),'clear'],
+
+			[new RegExp("(bold|b)[^\s]"),'bold'],
+			[new RegExp("(italic|i)[^\s]"),'iitalic'],
+			[new RegExp("(text-decoration|text-d|t-d,td)([A-Za-z]{1,20})[^\s]"),'text-decoration'],
+			[new RegExp("(text-align|text-a|t-a|ta)([A-Za-z]{1,20})[^\s]"),'text-align'],
+			[new RegExp("(font-color|font-c|f-c|fc|color|c)(^\#[A-Za-z]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})[^\s]"),'font-color'],
+			[new RegExp("(background-color|background-c|b-c|bc)(^\#[A-Za-z]{6}|^[rgb|RGB]\([0-255\,]{3}\)[A-Za-z]{1,20})[^\s]"),'background-color']
+		]
+	}
+};
 
 /* ... */
-var markup_textareas=function(){
-    $('textarea').markItUp(settings.markItUp);
+var markup_textareas=function(selector){
+    if(selector){
+        $(selector).wymeditor();
+    }
+    else{
+        $('textarea').wymeditor();
+    }
 };
 
 
@@ -269,6 +591,7 @@ var walk_cmd_history=function(walk){
 
 /* on document ready... */
 $(document).ready(function(){
+    /* CLI WEB */
     /* cli web dbl ctrl shortcut... */
     $('body').keyup(function(event){
       if (event.keyCode==17){
@@ -295,10 +618,14 @@ $(document).ready(function(){
 
     focus('form');
 
+    /* GOOGLE TOOLS */
+    /* search */
     if (settings.google.search.load){
         settings.google.search.loaded=google_search_load();
     }
     
+    /* SERVER ATTRIBUTE */
+    /* pages */
     $.getJSON(
         '/'+server.request.application+'/default/json/pages',
         function(json){
@@ -307,6 +634,16 @@ $(document).ready(function(){
             }
         }
     );
+
+    /* JQUERY SIZING & STYLING */
+    $('.jQs').each(function(){
+        /* 
+          Further mapping required:
+          '[new RegExp("([0-9].)(em|mm|px|pt|%)(width|w|large)[^\s]"),'width'] 
+        */
+       	var s = rules.jQs.do($(this)[0].className);
+        $(this).attr({'style' : s});
+    });
     
 });
 
@@ -340,10 +677,25 @@ var on_cli_web_submit=function(){
     /* history */
     set_cmd_history($('#_cmd').val());
     var cmd_msg = '';
-
+    var output = '';
+    var rv = false;
+    
+    /* >>(command) for direct server call */
+    if ($('#_cmd').val().substring(0,2)=='>>'){
+        $.getJSON(
+            $('#_cmd').val().replace(' ','/'),
+            function(json){
+                var status = json.status;
+                output = json.output
+                cmd_msg = json.message + ' ('+json.result+')';
+                rv = true;            
+            }
+        );
+    }
+    
     /* >(command) for direct server call */
     if ($('#_cmd').val().substring(0,1)=='>'){
-        return true;
+        /* nothing yet */
     }
     
     /* quick fix */
@@ -352,7 +704,7 @@ var on_cli_web_submit=function(){
     /* FIRST: RAW EVAL ATTEMPT */
     try {
         /* raw eval */
-        var rv=caught_eval($('#_cmd').val());
+        rv=caught_eval($('#_cmd').val());
         
         /* added 'punctuation' eval */
         if (rv==cec_rv){
@@ -377,7 +729,7 @@ var on_cli_web_submit=function(){
                 if (!rv) rv = cec_rv;
                 else {
                     if ($('#_cmd_msg').html().indexOf('-with google translate-')<0){
-                        cmd_msg = ' -with google translate-';
+                        cmd_msg += ' -with google translate-';
                     }
                 }
             }
@@ -475,6 +827,111 @@ var on_cli_web_submit=function(){
         }
         return false;
     }
+};
+
+
+var entities = {
+    'display' : {
+        '_do' : function(sel){
+            if(sel==null){ sel='.display'; }
+            
+            $(sel).each(function(){
+                /* to format/correct the html for processing */
+                $(this).html($(this).html());
+                
+                var args = $(this).html().split('#:#');
+                var i=0;
+                var rm=true;
+                while(i<args.length){
+                    if(rm){
+                        args = args.splice(i);
+                        if(args[0]=='display'){ rm=false};
+                        i++;
+                    }
+                    else{
+                        var f=args[1];
+                        var text=args[2];
+                        var l=parseInt(args[3]);
+                        /* callback_array not used */
+                        var cb_array=null;
+                        if(args.length>4){ cb_array=eval(args[4]); }
+                        switch(f){
+                            case 'truncate':
+                                if(text.length>l){
+                                    $(this).html($(this).html().replace('#:#'+text, text.substring(0,l)+'...'));
+                                }
+                                else{
+                                    $(this).html($(this).html().replace('#:#'+text, text));
+                                }
+                                break;
+                        }
+
+                        for(var j=0;j<args.length;j++){
+                            $(this).html($(this).html().replace('#:#'+args[j],''));
+                        }
+                        i=args.length;
+                    }
+                }
+            });
+        }
+    }
+};
+
+
+
+/*************
+  context : 
+  lie search
+**************/
+/* thanks to: http://web2pyslices.com/main/slices/take_slice/51 */
+var liveSearch = {
+    'containerSelector' : {
+        'results' : '#ajaxresults',
+        'clearPanel' : '.left_content'
+    },
+    'results' : [],
+    'clearPanelHtml' : '',
+    'getData' : function(url, value){
+        if(value != ""){
+            $(liveSearch.containerSelector.results).show();
+            $.getJSON(url,{'partialStr':value},function(json){
+                if (liveSearch.results.length==0){
+                    if(liveSearch.containerSelector.clearPanel){
+                        liveSearch.clearPanelHtml = $(liveSearch.containerSelector.clearPanel).html();
+                        $(liveSearch.containerSelector.clearPanel).html('');
+                        
+                        var div=document.createElement('div');
+                        div.id='ajaxresults';
+                        $(liveSearch.containerSelector.clearPanel).append(div);
+                    }
+                }
+                
+                var rmIndexes = [];
+                for(i in json.result){
+                    for(j in liveSearch.results){
+                        if(json.result[i]==liveSearch.results[j]){
+                            rmIndexes.push(i);
+                            break;
+                        }
+                    }
+                }
+                
+                for(i in rmIndexes){
+                    json.result.splice(rmIndexes[i],rmIndexes[i]);
+                }                
+                
+                var html='';
+                var l=liveSearch.results.length;
+                for(i in json.result){
+                    var _id='liveSearch_results'+(l+i);
+                    json.result[i]=json.result[i].replace('#id', _id)
+                    liveSearch.results.push(json.result[i]);
+                    $(liveSearch.containerSelector.results)[0].innerHTML+=json.result[i];
+                    entities.display._do('#'+_id)
+                }
+            });
+        }
+    }   
 };
 
 

@@ -507,6 +507,9 @@ minh0 {
 .margt45pc {
     margin-top: 45% !important;
 }
+.margt47pc {
+    margin-top: 47% !important;
+}
 
 /*bottom*/
 .margb1pc {

@@ -3,8 +3,8 @@
 /* BODY, BODY ELEMENTS */
 body {
     background-color: rgb(0, 0, 10);
-    background-image: url("images/BG.png");
-    background-image: gradient(linear, left top, left bottom, color-stop(0, rgb(245,245,245)), color-stop(1, rgb(255,255,255)));
+    background-image: url("images/BG.png") repeat-x 0 0;
+    background-image: gradient(linear, left top, left bottom, color-stop(0, rgb(0,0,10)), color-stop(1, rgb(100,110,100)));
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(0,0,10)), color-stop(1, rgb(100,110,100)));
     background-image: -moz-linear-gradient(top, rgb(0,0,10), rgb(100,110,100));
     filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=rgb(0,0,10),endColorstr=rgb(100,110,100));        
