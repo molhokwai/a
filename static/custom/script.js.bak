@@ -397,8 +397,8 @@ rules={
                 params : [{ 
                     "pcrS" : function(){ return "background|b"; },
                     "pvcrS" : function(){ return "color|c"; },
-                    /*eventually: ^[rgb|RGB]\\([0-255\, *]{3}\\)| */
-                    "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}|rgb{1}|RGB{1}\\([0-255\\,]{3}\\)"; }, 
+                    /*eventually: |RGB{1}\\([0-255\\,]{3}\\) */
+                    "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}|rgb{1}"; }, 
                     "uvrS" : function(){ return ""; }
                 }]
             },

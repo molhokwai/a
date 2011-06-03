@@ -308,7 +308,7 @@ rules={
                     See property.width for params details
                 */
                 params : [{ 
-                    "pcrS" : function(){ return "^[height|h|long]"; },
+                    "pcrS" : function(){ return "height|h|long"; },
                     "pvcrS" : function(){ return ""; },
                     "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
                     "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
@@ -320,7 +320,7 @@ rules={
                 */
                 params : [{ 
                     "pcrS" : function(){ return "margin|marg|m"; },
-                    "pvcrS" : function(){ return "left|l|right|r|ho|horizontal|v|vertical"; },
+                    "pvcrS" : function(){ return "left|l|right|r|top|t|bottom|b|ho|horizontal|v|vertical"; },
                     "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
                     "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
                 }]
