@@ -95,33 +95,6 @@ page['index'] = {
 					    'innerHTML' : 'A Vegan Macadamia Nu Brittle Ice...'
 				    }
 			    }},
-			    {'p' : {
-				    'attributes' : {
-					    'innerHTML' : 'Your Need:'
-				    }
-			    }},
-			    {'textarea' : {}},
-			    {'p' : {
-				    'attributes' : {
-					    'innerHTML' : 'Nice to have:'
-				    }
-			    }},
-			    {'textarea' : {}},
-			    {'p' : {
-				    'attributes' : {
-					    'class' : 'jQs tar w70% margl35%'
-				    },
-				    'children' : [
-					    {'input' : {
-						    'attributes' : {
-							    'type' : 'button',
-							    'value' : 'Submit: click to submit, or double tap the Ctrl key and type submit',
-							    'onclick' : 'onSubmit();',
-							    'class' : 'display-block jQs padv0.5% bcotransparent co#FFFCFA' 
-						    }
-					    }}
-				    ]
-			    }}
 		    ]
 	    }}
     ]

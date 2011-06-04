@@ -46,6 +46,7 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQs.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
     <script type="text/javascript">
@@ -112,7 +113,7 @@
           <!-- end #google_translate_element-->          
       </div>
     
-      <div id="content" class="padl3pc left margt5pc width100pc">
+      <div id="content" class="padl3pc padb5pc left margt5pc width100pc">
         <div id="searchcontrol"></div>
         {{include}}
       </div>
@@ -188,7 +189,7 @@
              
              {{=A(T('pages'),_href=URL(r=request,c='default',f='pages'), _class='color-transparent')}}
              {{if response.pages:}}
-                 {{for _title,_false,_link in response.links:}}
+                 {{for _title,_is_current,_link,_app in response.pages:}}
                          {{=A(T(_title),_href=_link, _class='color-transparent')}}
                  {{pass}}
              {{pass}}

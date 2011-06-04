@@ -1,4 +1,8 @@
 var elements = {
+	attributesMap : {
+		'class' : 'className'
+	},
+
     generateTree : function(tree){
         var element = null;
 		for(el in tree){
@@ -6,7 +10,11 @@ var elements = {
 			element = document.createElement(el);
 			if('attributes' in obj){
 				for(a in obj['attributes']){
-					eval("element."+a+"='"+obj["attributes"][a]+"';");
+					var attr = a;
+					if(attr in elements.attributesMap){
+						attr = elements.attributesMap[attr];
+					}
+					eval("element."+attr+"='"+obj["attributes"][a]+"';");
 				}
 			}
 			if('children' in obj){
