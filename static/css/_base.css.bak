@@ -577,10 +577,19 @@ minh0 {
     padding-right:2%;
 }
 
+/* bottom*/
+.padb5pc {
+    padding-bottom:5%;
+}
+
 /*top bottom*/
 .padtb1pc {
     padding-top:1%;
     padding-bottom:1%;
+}
+.padtb5pc {
+    padding-top:5%;
+    padding-bottom:5%;
 }
 
 

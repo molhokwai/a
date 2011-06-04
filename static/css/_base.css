@@ -318,7 +318,7 @@ minh0 {
 
 /* POSITION, DISPLAY*/
 .display-block, .display, .show {
-    display: block;
+    display: block !important;
 }
 .display-none, .no-display, .hide {
     display: none;

@@ -167,79 +167,55 @@ rules={
 
             /* property value ... */
             switch(yielded.pcrS){
-                /* Complete expressions (empty cases) left in for clarity */
+                case 'w': case 'la': case 'large': 
+                    yielded.pcrS='width'; break;
+                case 'h': case 'tl': case 'tall': 
+                    yielded.pcrS='height'; break;
                 case 'm': case 'marg': yielded.pcrS='margin'; break;
-                case 'margin': break;
                 case 'p': case 'pad': yielded.pcrS='padding'; break;
-                case 'padding': break;
                 case 'f': yielded.pcrS='font'; break;
-                case 'font': break;
                 case 'fl': yielded.pcrS='float'; break;
-                case 'float': break;
                 case 't': yielded.pcrS='text'; break;
-                case 'text': break;
                 case 'b': case 'back': yielded.pcrS='background'; break;
-                case 'background':  break;
                 case 'mi': yielded.pcrS='min'; break;
-                case 'min': break;
                 case 'ma': yielded.pcrS='max'; break;
-                case 'max': break;
-
+                case 'bor' : case 'bord': yielded.pcrS='border'; 
+                case 'co' : yielded.pcrS='color'; 
                 case 'default': break;            
             }
 
             this.formatVal = function(val){
                 /* property-value value... */
                 switch(val){
-                    /* Complete expressions (empty cases) left in for clarity */
                     case 'l': val='left'; break;
-                    case 'left': break;
                     case 'r': val='right'; break;
-                    case 'right': break;
+                    case 'c': val='center'; break;
                     case 'bo': val='both'; break;
-                    case 'both': break;
                     case 'b': val='bottom'; break;
-                    case 'bottom': break;
                     case 't': val='top'; break;
-                    case 'top': break;
                     case 's': val='size'; break;
-                    case 'size': break;
                     case 'st': val='style'; break;
-                    case 'style': break;
                     case 'i':  val='indent'; break;
-                    case 'indent': break;
                     case 'd': val='decoration'; break;
-                    case 'decoration': break;
                     case 'a': val='align'; break;
-                    case 'align': break;
                     case 'it': val='italic'; break;
-                    case 'italic': break;
-                    case 'c': val='color'; break;
-                    case 'color': break;
+                    case 'co': val='color'; break;
                     case 'h': val='height'; break;
-                    case 'height': break;
                     case 'w': val='width'; break;
-                    case 'width': break;
                     case 'ho': val='horizontal'; break;
-                    case 'horizontal': break;
                     case 'v': val='vertical'; break;
-                    case 'vertical': break;
                     case 'we': val='weight'; break;
-                    case 'weight': break;
                     case 'tr': val='transform'; break;
-                    case 'transform': break;
                     case 'ca': val='capitalize'; break;
-                    case 'capitalize': break;
                     case 'lo': val='lowercase'; break;
-                    case 'lowercase': break;
                     case 'u': val='underline'; break;
-                    case 'underline': break;
+                    case 'bl': val='bold'; break;
                     case 'o': val='overline'; break;
-                    case 'overline': break;
                     case 'up': val='uppercase'; break;
-                    case 'uppercase': break;
-                    case 'str': case 'li': val='line-through'; break;
-                    case 'line-through': break;
+                    case 'strike-through': case 'str': case 'li': 
+                        val='line-through'; break;
+                    case 'fa': val='face'; break;
+                    case 'fam': val='family'; break;
     
                     case 'default': break;
                 }
@@ -282,12 +258,20 @@ rules={
             return _result;
         },
 
+        /* Css Property Objects 
+            @rules:
+                -    Each one of the 'object' types is a css property equivalent
+        */
         property : {
             allParams : function(){
-                var properties = {'width': null, 'height': null, 'margin': null, 'padding': null, 'font': null, 'text': null, 
-                        'float': null, 'clear': null, 'background': null, 'min': null, 'max': null};
-                for(k in properties){
-                    properties[k] = rules.jQs.property[k];
+                /*var properties = {'width': null, 'height': null, 'margin': null, 'padding': null, 'font': null, 'text': null, 
+                        'float': null, 'clear': null, 'background': null, 'color': null, 'min': null, 'max': null};*/
+                var properties = {};
+                var r_j_p = rules.jQs.property;
+                for(k in r_j_p){
+                    if(typeof(r_j_p[k])=='object'){
+                        properties[k] = rules.jQs.property[k];
+                    }
                 }
                 return properties;
             },
@@ -297,7 +281,7 @@ rules={
                     See rexExpB for params details
                 */
                 params : [{ 
-                    "pcrS" : function(){ return "width|w|large"; },
+                    "pcrS" : function(){ return "width|w|large|la"; },
                     "pvcrS" : function(){ return ""; },
                     "ncnvrS" : function(){ return "[0-9\,\.]{0,10}"; }, 
                     "uvrS" : function(){ return "em|mm|px|pt|%"; }
@@ -308,7 +292,7 @@ rules={
                     See property.width for params details
                 */
                 params : [{ 
-                    "pcrS" : function(){ return "^[height|h|long]"; },
+                    "pcrS" : function(){ return "height|h|tall|tl"; },
                     "pvcrS" : function(){ return ""; },
                     "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
                     "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
@@ -320,7 +304,7 @@ rules={
                 */
                 params : [{ 
                     "pcrS" : function(){ return "margin|marg|m"; },
-                    "pvcrS" : function(){ return "left|l|right|r|ho|horizontal|v|vertical"; },
+                    "pvcrS" : function(){ return "left|l|right|r|top|t|bottom|b|horizontal|ho|vertical|v"; },
                     "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
                     "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
                 }]
@@ -358,7 +342,7 @@ rules={
                 */
                 params : [{ 
                     "pcrS" : function(){ return "text|t"; },
-                    "pvcrS" : function(){ return "decoration|d|align|a|tranform|tr|o|overline|u|underline|up|uppercase|ca|capitalize"; },
+                    "pvcrS" : function(){ return "decoration|d|align|a|tranform|tr|overline|o|underline|u|uppercase|up|capitalize|ca"; },
                     "ncnvrS" : function(){ return "[A-Za-z]{0,10}"; }, 
                     "uvrS" : function(){ return ""; }
                 },{ 
@@ -396,9 +380,21 @@ rules={
                 */
                 params : [{ 
                     "pcrS" : function(){ return "background|b"; },
-                    "pvcrS" : function(){ return "color|c"; },
+                    "pvcrS" : function(){ return "color|co"; },
                     /*eventually: |RGB{1}\\([0-255\\,]{3}\\) */
                     "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}|rgb{1}"; }, 
+                    "uvrS" : function(){ return ""; }
+                }]
+            },
+            color : {
+                /*  RegExp Yield Params
+                    See property.width for params details
+                */
+                params : [{ 
+                    "pcrS" : function(){ return "color|co"; },
+                    "pvcrS" : function(){ return ""; },
+                    /*eventually: |RGB{1}\\([0-255\\,]{3}\\) */
+                    "ncnvrS" : function(){ return rules.jQs.property.background.params[0].ncnvrS(); }, 
                     "uvrS" : function(){ return ""; }
                 }]
             },
@@ -713,6 +709,9 @@ $(document).ready(function(){
           '[new RegExp("([0-9].)(em|mm|px|pt|%)(width|w|large)[^\s]"),'width'] 
         */
         var s = rules.jQs._do($(this)[0].className);
+        if($(this).attr('style')){
+            s = $(this).attr('style') +' '+ s;
+        }
         $(this).attr({'style' : s});
     });
     
