@@ -87,14 +87,30 @@ page['index'] = {
 		    'children' : [
 			    {'p' : {
 				    'attributes' : {
-					    'innerHTML' : 'Your want:'
+					    'innerHTML' : 'Your request/command:'
 				    }
 			    }},
 			    {'textarea' : {
 				    'attributes' : {
+					    'class' : 'border-std jQs bcotransparent',
 					    'innerHTML' : 'A Vegan Macadamia Nu Brittle Ice...'
 				    }
 			    }},
+			    {'p' : {
+				    'attributes' : {
+					    'class' : 'jQs tar w70% margl35%'
+				    },
+				    'children' : [
+					    {'input' : {
+						    'attributes' : {
+							    'type' : 'button',
+							    'value' : 'Submit: click to submit, or double tap the Ctrl key and type submit',
+							    'onclick' : 'onSubmit();',
+							    'class' : 'display-block jQs padv0.5% bcotransparent co#FFFCFA' 
+						    }
+					    }}
+				    ]
+			    }}
 		    ]
 	    }}
     ]

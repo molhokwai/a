@@ -239,7 +239,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "width|w|large|la"; },
                 "pvcrS" : function(){ return ""; },
-                "ncnvrS" : function(){ return "[\-\+]{0,1}[0-9\,\.]{0,10}"; }, 
+                "ncnvrS" : function(){ return "[\-\+]{0,1}[0-9\,\.]{0,10}|none|no"; }, 
                 "uvrS" : function(){ return "em|mm|px|pt|%"; }
             }]
         },
@@ -432,3 +432,4 @@ rules['jQs'] = {
 $(document).ready(function(){
     rules.jQs.onDocumentReady();    
 });
+

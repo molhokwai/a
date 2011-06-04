@@ -130,6 +130,7 @@ input[type="submit"], input[type="button"]  {
 input[type="submit"], input[type="button"] {
   background-color: transparent;
   border:1px solid #FFFCFA !important;
+  font-size: 1em;
 }
 .button:first-letter, .errordialog:first-letter, 
 input[type="submit"]:first-letter,

@@ -12,6 +12,8 @@
 * {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+    -moz-outline-radius: 4px;
+    -webkit-outline-radius: 4px;
     margin: auto;
     border-color:#FFFAFA;
 }
@@ -98,6 +100,16 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
 }
 .border-none, .border-no {
     border: none;
+}
+
+/* OUTILNE */
+/* standard */
+.outline-std, .out-std, .outl-std {
+    outline: 1px solid #FFFAFA;
+}
+/* grey */
+.outline-grey, .out-grey, .outl-grey {
+    outline: 1px solid #666161;
 }
 
 /* undo round */
@@ -318,7 +330,7 @@ minh0 {
 
 /* POSITION, DISPLAY*/
 .display-block, .display, .show {
-    display: block;
+    display: block !important;
 }
 .display-none, .no-display, .hide {
     display: none;

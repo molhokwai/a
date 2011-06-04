@@ -93,7 +93,7 @@ page['index'] = {
                 {'textarea' : {
                     'attributes' : {
                         'class' : 'out-grey jQs bcotransparent co#AAA5A5',
-                        'innerHTML' : 'Want a Vegan Macadamia Nu Brittle Ice...'
+                        'innerHTML' : 'A Vegan Macadamia Nu Brittle Ice...'
                     }
                 }},
                 {'p' : {
