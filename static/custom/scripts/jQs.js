@@ -115,19 +115,21 @@ rules['jQs'] = {
         switch(yielded.pcrS){
             case 'w': case 'la': case 'large': 
                 yielded.pcrS='width'; break;
-            case 'h': case 'tl': case 'tall': 
-                yielded.pcrS='height'; break;
-            case 'm': case 'marg': yielded.pcrS='margin'; break;
-            case 'p': case 'pad': yielded.pcrS='padding'; break;
-            case 'f': yielded.pcrS='font'; break;
-            case 'fl': yielded.pcrS='float'; break;
             case 't': yielded.pcrS='text'; break;
-            case 'b': case 'back': yielded.pcrS='background'; break;
+            case 'p': case 'pad': yielded.pcrS='padding'; break;
             case 'mi': yielded.pcrS='min'; break;
             case 'ma': yielded.pcrS='max'; break;
-            case 'bor' : case 'bord': yielded.pcrS='border';  break;
-            case 'co' : yielded.pcrS='color';  break;            
+            case 'm': case 'marg': yielded.pcrS='margin'; break;
+            case 'h': case 'tl': case 'tall': 
+                yielded.pcrS='height'; break;
+            case 'fl': yielded.pcrS='float'; break;
+            case 'f': yielded.pcrS='font'; break;
             case 'disp' : case 'di' : yielded.pcrS='display';  break;
+            case 'co' : yielded.pcrS='color';  break;            
+            case 'bor' : case 'bord': yielded.pcrS='border';  break;
+            case 'b': case 'back': yielded.pcrS='background'; break;
+            case 'ou' : case 'out': yielded.pcrS='outline';  break;
+            
             case 'default': break;
         }
 
@@ -166,6 +168,7 @@ rules['jQs'] = {
                     val='line-through'; break;
                 case 'fa': val='face'; break;
                 case 'fam': val='family'; break;
+                case 'no': val='none'; break;
 
                 case 'default': break;
             }
@@ -268,6 +271,28 @@ rules['jQs'] = {
                 "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
                 "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
                 "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
+            }]
+        },
+        border : {
+            /*  RegExp Yield Params
+                See property.width for params details
+            */
+            params : [{ 
+                "pcrS" : function(){ return "border|bord|bor"; },
+                "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
+                "ncnvrS" : function(){ return "none|no"; }, 
+                "uvrS" : function(){ return ""; }
+            }]
+        },
+        outline : {
+            /*  RegExp Yield Params
+                See property.width for params details
+            */
+            params : [{ 
+                "pcrS" : function(){ return "outline|out|ou"; },
+                "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
+                "ncnvrS" : function(){ return rules.jQs.property.border.params[0].ncnvrS(); }, 
+                "uvrS" : function(){ return ""; }
             }]
         },
         font : {

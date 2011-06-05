@@ -34,22 +34,43 @@ molhokwai["flow"] = {
     },
 
     /* Container selector */
-	container : '#elements',
+	header : '#_header',
+	container : '#container',
+	footer : '#_footer',
 
     /* Utilites */
 	utilities : {
-    	addElements : function(_elements){
-            $(molhokwai.flow.container).each(function(){
-        		for(i in _elements){
-					$(this).append(_elements[i]);
-        		}
-			});
+    	addElements : function(params){
+			if(!params.selector){
+            	$(molhokwai.flow.container).each(function(){
+        			for(i in params.elements){
+						$(this).append(params.elements[i]);
+        			}
+				});
+			}
+			else{
+            	$(params.selector).each(function(){
+        			for(i in params.elements){
+						$(this).append(params.elements[i]);
+        			}
+				});
+			}
 		},
-    	getElementsHtml : function(){
-            return $(molhokwai.flow.container).html();
+    	getElementsHtml : function(params){
+			if(!params || !params.selector){
+            	return $(molhokwai.flow.container).html();
+			}
+			else{
+            	return $(params.selector).html();
+			}
 		},
-    	clearElements : function(){
-            $(molhokwai.flow.container).html("");
+    	clearElements : function(params){
+			if(!params || !params.selector){
+            	$(molhokwai.flow.container).html("");
+			}
+			else{
+            	$(params.selector).html("");
+			}
 		}
     },
 
@@ -58,9 +79,10 @@ molhokwai["flow"] = {
 
     /* State */
     State : {
-			page : {
+		page : {
         	common : {
-            	header : null
+            	'header' : null,
+            	'footer' : null
         	},
         	elements : null
     	}
@@ -74,12 +96,20 @@ molhokwai["flow"] = {
         var flow = m_flow.flow = new m_flow.Flow(params);
 		var State = m_flow.State;
 
-        if(!State.page.common.header){
-            State.page.common.header = flow.page.headerElements;
-           	m_flow.utilities.addElements(State.page.common.header);
-        }
+		for(el in flow.page.commonElements){
+        	if(!State.page.common[el]){
+            	State.page.common[el] = flow.page.commonElements[el];
+           		m_flow.utilities.addElements(
+					{elements: State.page.common[el],
+				 	selector: molhokwai.flow[el]}
+				);
+        	}
+		}
         State.page.elements = flow.page.elements;
-        m_flow.utilities.addElements(State.page.elements);
+        m_flow.utilities.addElements(
+				{elements: State.page.elements,
+				 selector: molhokwai.flow.container}
+		);
 
         rules.jQs.onDocumentReady();
     },
@@ -108,6 +138,9 @@ molhokwai["flow"] = {
 		this.params = params;
 
 		var Page = function(params){
+			var m_flow = molhokwai.flow;
+			var State = m_flow.State;
+
 			this.params = params;
 
 			var Elements = function(params){
@@ -119,10 +152,12 @@ molhokwai["flow"] = {
 				return _elements;
 			};
 
-			var m_flow = molhokwai.flow;
 			if(this.params){
 				this.elements = new Elements({ elements : m_flow.page[this.params.page].elements });
-				this.headerElements = new Elements({ elements : m_flow.page.common.header.elements });
+				this.commonElements = {}; 
+				for(el in m_flow.page.common){
+            		this.commonElements[el] =  new Elements({ elements : m_flow.page.common[el].elements });
+				}
 			}
 		};
 		if(this.params){
@@ -140,7 +175,18 @@ molhokwai["flow"] = {
 			this.form = new Form(this.params);
 		}
 
-		this.to = this.dbg;
+		this.to = function(params){
+			var m_flow = molhokwai.flow;
+
+			m_flow.History.push({
+				html:m_flow.utilities.getElementsHtml(),
+				State:m_flow.State
+			});
+			m_flow.utilities.clearElements(
+				{selector:m_flow.container}
+			);
+			m_flow.onDocumentReady({page:params.page});
+		};
 
 		/*	Flow process according to given parameters 
 			& configuration sequences
@@ -176,14 +222,9 @@ molhokwai["flow"] = {
 			}
 			for(e in seq){
 				if(seq[e]=='page'){
-					m_flow.History.push(
-						{flow:m_flow, html:m_flow.utilities.getElementsHtml()}
-					);
-        			m_flow.utilities.clearElements();
-
-        			m_flow.onDocumentReady({page:e});
+					m_flow.flow.to({page:e});
 				}
-				if(typeof(seq[e])=='function'){
+				else if(typeof(seq[e])=='function'){
 					seq[e](params);
 				}
 			}
