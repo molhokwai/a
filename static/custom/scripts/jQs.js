@@ -1,13 +1,18 @@
 /* brake them, change them, until there are none anymore */
 rules['jQs'] = {
     /* JQUERY SIZING & STYLING */
+    done : [],
     onDocumentReady : function(){
         $('.jQs').each(function(){
-            var s = rules.jQs._do($(this)[0].className);
-            if($(this).attr('style')){
-                s = $(this).attr('style') +' '+ s;
+            if(!(this in rules.jQs.done)){
+                var s = rules.jQs._do($(this)[0].className);
+                if($(this).attr('style')){
+                    s = $(this).attr('style') +' '+ s;
+                }
+                $(this).attr({'style' : s});
+                
+                rules.jQs.done.push(this);
             }
-            $(this).attr({'style' : s});
         });
     },
 
@@ -120,9 +125,10 @@ rules['jQs'] = {
             case 'b': case 'back': yielded.pcrS='background'; break;
             case 'mi': yielded.pcrS='min'; break;
             case 'ma': yielded.pcrS='max'; break;
-            case 'bor' : case 'bord': yielded.pcrS='border'; 
-            case 'co' : yielded.pcrS='color'; 
-            case 'default': break;            
+            case 'bor' : case 'bord': yielded.pcrS='border';  break;
+            case 'co' : yielded.pcrS='color';  break;            
+            case 'disp' : case 'di' : yielded.pcrS='display';  break;
+            case 'default': break;
         }
 
         this.formatVal = function(val){
@@ -131,6 +137,9 @@ rules['jQs'] = {
                 case 'l': val='left'; break;
                 case 'r': val='right'; break;
                 case 'c': val='center'; break;
+                case 'inl': val='inline'; break;
+                case 'blo': val='block'; break;
+                case 'j': val='justify'; break;
                 case 'bo': val='both'; break;
                 case 'b': val='bottom'; break;
                 case 't': val='top'; break;
@@ -322,8 +331,8 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "background|b"; },
                 "pvcrS" : function(){ return "color|co"; },
-                /*eventually: |RGB{1}\\([0-255\\,]{3}\\) */
-                "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}|rgb{1}"; }, 
+                /* eventually (needs correction): |RGB{1}\\([0-255\\,]{3}\\) */
+                "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}"; }, 
                 "uvrS" : function(){ return ""; }
             }]
         },
@@ -334,8 +343,18 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "color|co"; },
                 "pvcrS" : function(){ return ""; },
-                /*eventually: |RGB{1}\\([0-255\\,]{3}\\) */
                 "ncnvrS" : function(){ return rules.jQs.property.background.params[0].ncnvrS(); }, 
+                "uvrS" : function(){ return ""; }
+            }]
+        },
+        display : {
+            /*  RegExp Yield Params
+                See property.width for params details
+            */
+            params : [{ 
+                "pcrS" : function(){ return "display|disp|di"; },
+                "pvcrS" : function(){ return ""; },
+                "ncnvrS" : function(){ return "inline|inl|block|blo|none|no"; }, 
                 "uvrS" : function(){ return ""; }
             }]
         },

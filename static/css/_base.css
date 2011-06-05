@@ -713,6 +713,11 @@ p:first-letter, ul li:first-letter {
     text-decoration: line-through !important;
 }
 
+/* LIST STYLES & EFFECTS */
+.no-bullets {
+    list-style-type: none;
+}
+
 /* ELEMENTS */
 table th, table tbody th {
     text-align: left;

@@ -1,13 +1,18 @@
 /* brake them, change them, until there are none anymore */
 rules['jQs'] = {
     /* JQUERY SIZING & STYLING */
+    done : [],
     onDocumentReady : function(){
         $('.jQs').each(function(){
-            var s = rules.jQs._do($(this)[0].className);
-            if($(this).attr('style')){
-                s = $(this).attr('style') +' '+ s;
+            if(!(this in rules.jQs.done)){
+                var s = rules.jQs._do($(this)[0].className);
+                if($(this).attr('style')){
+                    s = $(this).attr('style') +' '+ s;
+                }
+                $(this).attr({'style' : s});
+                
+                rules.jQs.done.push(this);
             }
-            $(this).attr({'style' : s});
         });
     },
 
@@ -53,7 +58,6 @@ rules['jQs'] = {
         [(double point | equal)(0 | 1) regexp]
         [number | color | name value regexp]
         [unit value regexp]
-        [modifier 0 | 1]
         [semicolon 0 | 1 regexp]
     */
     regExpGet : function(params){
@@ -63,7 +67,6 @@ rules['jQs'] = {
                     +"[:=]{0,1}"
                     +"(ncnvrS)"
                     +"(uvrS)"
-                    +"(\!{0,1}[A-Za-z0-9]{3,20})"
                     +"[;]{0,1}";
             for(kp in params){
                 if (typeof(params[kp])=='function'){
@@ -105,8 +108,7 @@ rules['jQs'] = {
             'pcrS' : params[1],
             'pvcrS' : params[2],
             'ncnvrS' : params[3],
-            'uvrS' : params[4],
-            'mod' : params[5]
+            'uvrS' : params[4]
         };
 
         /* property value ... */
@@ -123,24 +125,21 @@ rules['jQs'] = {
             case 'b': case 'back': yielded.pcrS='background'; break;
             case 'mi': yielded.pcrS='min'; break;
             case 'ma': yielded.pcrS='max'; break;
-            case 'bor' : case 'bord': yielded.pcrS='border'; break;
-            case 'co' : yielded.pcrS='color'; break;
-            case 'ou' : case 'out' : yielded.pcrS='outline'; break;
-            case 'default': break;
+            case 'bor' : case 'bord': yielded.pcrS='border'; 
+            case 'co' : yielded.pcrS='color'; 
+            case 'disp' : case 'di' : yielded.pcrS='display'; 
+            case 'default': break;            
         }
 
         this.formatVal = function(val){
-            if (val){
-                while(val.indexOf('_')>=0){
-                    val = val.replace('_', '');
-                }
-            }
-            
             /* property-value value... */
             switch(val){
                 case 'l': val='left'; break;
                 case 'r': val='right'; break;
                 case 'c': val='center'; break;
+                case 'inl': val='inline'; break;
+                case 'blo': val='block'; break;
+                case 'j': val='justify'; break;
                 case 'bo': val='both'; break;
                 case 'b': val='bottom'; break;
                 case 't': val='top'; break;
@@ -167,9 +166,6 @@ rules['jQs'] = {
                     val='line-through'; break;
                 case 'fa': val='face'; break;
                 case 'fam': val='family'; break;
-                case 'no': val='none'; break;
-                case '!imp': val='!important'; break;
-                case '!inh': val='!inherit'; break;
 
                 case 'default': break;
             }
@@ -179,7 +175,6 @@ rules['jQs'] = {
         
         yielded.pvcrS = this.formatVal(yielded.pvcrS);
         yielded.ncnvrS = this.formatVal(yielded.ncnvrS);
-        yielded.mod = this.formatVal(yielded.mod);
         
         var _result = [];
         this.result = function(yielded){
@@ -188,7 +183,6 @@ rules['jQs'] = {
                         +':'
                         + (yielded.ncnvrS && yielded.ncnvrS!=''?yielded.ncnvrS:'')
                         + (yielded.uvrS && yielded.uvrS!=''?yielded.uvrS:'')
-                        + (yielded.mod && yielded.mod!=''?yielded.mod:'')
                         +';'
             return result;
         };
@@ -315,7 +309,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "float|fl"; },
                 "pvcrS" : function(){ return ""; },
-                "ncnvrS" : function(){ return "left|l|right|r|none|no"; },
+                "ncnvrS" : function(){ return "left|l|right|r"; },
                 "uvrS" : function(){ return ""; }
             }]
         },
@@ -326,7 +320,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "clear|c"; },
                 "pvcrS" : function(){ return ""; },
-                "ncnvrS" : function(){ return "left|l|right|r|both|bo|none|no"; },
+                "ncnvrS" : function(){ return "left|l|right|r|both|bo"; },
                 "uvrS" : function(){ return ""; }
             }]
         },
@@ -338,7 +332,7 @@ rules['jQs'] = {
                 "pcrS" : function(){ return "background|b"; },
                 "pvcrS" : function(){ return "color|co"; },
                 /*eventually: |RGB{1}\\([0-255\\,]{3}\\) */
-                "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9\,\. #]{1,50}"; }, 
+                "ncnvrS" : function(){ return "#[A-Fa-f0-9]{6}|[A-Za-z0-9]{1,20}"; }, 
                 "uvrS" : function(){ return ""; }
             }]
         },
@@ -354,25 +348,14 @@ rules['jQs'] = {
                 "uvrS" : function(){ return ""; }
             }]
         },
-        border : {
+        display : {
             /*  RegExp Yield Params
                 See property.width for params details
             */
             params : [{ 
-                "pcrS" : function(){ return "border|bord|bor"; },
-                "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
-                "ncnvrS" : function(){ return "[A-Za-z0-9\,\.\_#]{1,50}|none|no"; }, 
-                "uvrS" : function(){ return ""; }
-            }]
-        },
-        outline : {
-            /*  RegExp Yield Params
-                See property.width for params details
-            */
-            params : [{ 
-                "pcrS" : function(){ return "outline|out"; },
-                "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
-                "ncnvrS" : function(){ return rules.jQs.property.border.params[0].ncnvrS(); },
+                "pcrS" : function(){ return "display|disp|di"; },
+                "pvcrS" : function(){ return ""; },
+                "ncnvrS" : function(){ return "inline|inl|block|blo|none|no"; }, 
                 "uvrS" : function(){ return ""; }
             }]
         },

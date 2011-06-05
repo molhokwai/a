@@ -1,23 +1,11 @@
 var elements = {
 	attributesMap : {
 		'class' : 'className',
-		'bind' : function(params){
-			if(params.name.substring(0,2)=='on'){
-				params.name = params.name.substring(2);
-			}
+		'onclick' : function(params){
 			$(params.element).bind(params.name, params.value);
 		},
-		'click' : function(params){
-			return elements.attributesMap.bind(params);
-		},
-		'onclick' : function(params){
-			return elements.attributesMap.bind(params);
-		},
-		'change' : function(){ 
-			return elements.attributesMap.bind(params);
-		},
 		'onchange' : function(){ 
-			return elements.attributesMap.bind(params);
+			return elements.attributesMap.onclick;
 		}
 	},
 
@@ -36,7 +24,7 @@ var elements = {
 							eval("element."+attr+"='"+obj["attributes"][a]+"';");
 						}
 						else if(typeof(eaM[attr])=='function'){
-							eaM[attr]({"element":element, "name":a, "value":obj["attributes"][a]});
+							eval("element."+eaM[attr]({"name":a, "value":obj["attributes"][a]})+";");
 						}
 					}
 					else{

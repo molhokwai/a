@@ -101,6 +101,11 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
 .border-none, .border-no {
     border: none;
 }
+/* grey */
+.border-grey, .bor-grey, .bord-grey {
+    border: 1px solid #666161;
+}
+
 
 /* OUTILNE */
 /* standard */
