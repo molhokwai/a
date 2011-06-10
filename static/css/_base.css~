@@ -12,6 +12,8 @@
 * {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+    -moz-outline-radius: 4px;
+    -webkit-outline-radius: 4px;
     margin: auto;
     border-color:#FFFAFA;
 }
@@ -98,6 +100,21 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
 }
 .border-none, .border-no {
     border: none;
+}
+/* grey */
+.border-grey, .bor-grey, .bord-grey {
+    border: 1px solid #666161;
+}
+
+
+/* OUTILNE */
+/* standard */
+.outline-std, .out-std, .outl-std {
+    outline: 1px solid #FFFAFA;
+}
+/* grey */
+.outline-grey, .out-grey, .outl-grey {
+    outline: 1px solid #666161;
 }
 
 /* undo round */
@@ -318,7 +335,7 @@ minh0 {
 
 /* POSITION, DISPLAY*/
 .display-block, .display, .show {
-    display: block;
+    display: block !important;
 }
 .display-none, .no-display, .hide {
     display: none;
@@ -334,6 +351,9 @@ minh0 {
   position: absolute;
 }
 
+.overflow-hidden, .scroll-none {
+  overflow: hidden;
+}
 .background-posy10pc {
  background-position: 0 10% !important;
 }
@@ -492,6 +512,21 @@ minh0 {
 .margt10pc {
     margin-top: 10% !important;
 }
+.margt20pc {
+    margin-top: 20% !important;
+}
+.margt30pc {
+    margin-top: 30% !important;
+}
+.margt40pc {
+    margin-top: 40% !important;
+}
+.margt45pc {
+    margin-top: 45% !important;
+}
+.margt47pc {
+    margin-top: 47% !important;
+}
 
 /*bottom*/
 .margb1pc {
@@ -559,10 +594,19 @@ minh0 {
     padding-right:2%;
 }
 
+/* bottom*/
+.padb5pc {
+    padding-bottom:5%;
+}
+
 /*top bottom*/
 .padtb1pc {
     padding-top:1%;
     padding-bottom:1%;
+}
+.padtb5pc {
+    padding-top:5%;
+    padding-bottom:5%;
 }
 
 
@@ -642,19 +686,36 @@ minh0 {
 .font-size16em, .font-s16em {
     font-size: 1.6em;
 }
+.font-size18em, .font-s18em {
+    font-size: 1.8em;
+}
+.font-size2em, .font-s2em {
+    font-size: 2em;
+}
 
 .fontf-helvetica {
     font-family: "Helvetica";
+}
+.font-strike {
+    /*see text styles & effects*/
 }
 p:first-letter, ul li:first-letter {
     font-weight: bold;
     font-size: 1.2em;
 }
 
-
 /* TEXT STYLES & EFFECTS */
 .text-transu {
     text-transform:uppercase;
+}
+.strike-through, .strike, .strike-font, .font-strike, .fstrike, .f-strike, .line-through, .l-through,
+.strike-text, .text-strike, .tstrike, .t-strike {
+    text-decoration: line-through !important;
+}
+
+/* LIST STYLES & EFFECTS */
+.no-bullets {
+    list-style-type: none;
 }
 
 /* ELEMENTS */

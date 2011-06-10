@@ -79,6 +79,16 @@ var markup_textareas=function(selector){
     }
 };
 
+/* ... */
+var vi_textarea=function(selector){
+    if(selector){
+       editor($(selector)[0]);
+    }
+    else{
+       editor($('textarea')[0]);
+    }
+};
+
 
 /*************
   context : page.cli_web

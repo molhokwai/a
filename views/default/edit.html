@@ -1,7 +1,13 @@
 {{extend 'themes/%s/layout.html' % response.theme}}
 
+{{if response.theme in ['0', '1']:}}
+    <link rel="stylesheet" href="/{{=this_app}}/static/components/vi/vi.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="/{{=this_app}}/static/components/vi/vi.js"></script>
+{{pass}}
+
 <!-- h2>{{=edit_title}}</h2 -->
 ............................................................................................<br/>
 {{=edit_form}}
 
 {{=A(T('markup textareas'), _href='javascript:markup_textareas();', _class='color-transparent')}}
+{{=A(T('vi textarea'), _href='javascript:vi_textarea();', _class='color-transparent')}}

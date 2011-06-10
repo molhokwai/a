@@ -118,7 +118,7 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
 }
 
 /* undo round */
-.round-borders {
+.unround-borders, no-round, no-round-borders {
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
 }

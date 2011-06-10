@@ -1,0 +1,66 @@
+               <div class="jQs padr2% w200% margl-52.5%">
+                  <div class="left border-std jQs w30% padho2% padv2% margb1%">
+                      <h3>Creating a Site element: Pseudo code</h3>
+
+                      <pre>
+                      <code language="javascript" class="jQs margt3%">
+/* Client side */
+
+/* Singletons */
+var sites = ajax.flow.sites.get({ what:'list' })
+var tplSite = ajax.flow.sites.get({ what:'template' });
+
+jsonToForm('form').generate(
+	tplSite,
+	/* { callback : { method : { method parameters } } } */
+	{ onSave : {ajax.flow.sites.update: { what:list } } }
+);
+                      </code>
+                      </pre>
+
+                      <p class="jQs margt3%">...
+                      </p>
+
+                  </div>
+
+                  <div class="right border-std jQs w30% padho2% padv2% margb1%">
+                      <h3>Creating a Page element: Pseudo code</h3>
+
+                      <pre>
+                      <code language="javascript" class="jQs margt3%">
+/* Client side */
+
+/* ... */
+                      </code>
+                      </pre>
+                  </div>
+
+                  <div class="right border-std jQs w30% padho2% padv2% margb1% margr5%">
+                      <h3>Creating a Sequence: Pseudo code</h3>
+
+                      <pre>
+                      <code language="javascript" class="jQs margt3%">
+/* Client side */
+
+/* ... */
+                      </code>
+                      </pre>
+                  </div>
+
+                  <div class="clear"></div>
+
+                  <div class="left border-std jQs w30% padho2% padv2% margb1%">
+                      <h3>...</h3>
+
+                      <pre>
+                      <code language="javascript" class="jQs margt3%">
+/* Client side */
+
+/* ... */
+                      </code>
+                      </pre>
+                  </div>
+
+               </div>
+               <div class="clear"></div>
+
