@@ -50,7 +50,8 @@ def post():
     
     if post: 
         if post.auth_requires_login and not auth.user:
-            redirect(URL(r = request, f = 'user', args = ['login']))
+            redirect(URL(r = request, f = 'user', args = ['login'], 
+						vars=dict(_next=URL(r=request, args=request.args, vars=request.vars))))
             
         post.post_text = utilities.replace_serverside_output_values(post.post_text)
 
@@ -88,7 +89,8 @@ def page():
                 
             if post:
                 if post.auth_requires_login and not auth.user:
-                    redirect(URL(r = request, f = 'user', args = ['login']))
+            		redirect(URL(r = request, f = 'user', args = ['login'], 
+								vars=dict(_next=URL(r=request, args=request.args, vars=request.vars))))
             
                 nake=(request.args[len(request.args)-1]=='nake'
                      or post.post_text.find('<!-- nake page -->')>=0)
@@ -175,7 +177,7 @@ def add():
         elif area == "page":
             db.posts.post_type.default = 'page'
             page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application',
-                                                    'post_parent', 'show_in_menu', 'is_translated'], 
+                                                    'post_parent', 'show_in_menu', 'is_translated', 'auth_requires_login'], 
                                                     labels = post_labels)
             page_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                     _id='post_attributes_content_is_original', value=''))
@@ -251,7 +253,7 @@ def edit():
     elif area == 'page':
         this_item = db(db.posts.id == id).select()[0]
         edit_form = SQLFORM(db.posts, this_item, fields = ['post_title', 'post_text', 'application', 'post_text_TCode', 
-                                                            'post_parent', 'is_translated', 'show_in_menu'], 
+                                                            'post_parent', 'is_translated', 'show_in_menu', 'auth_requires_login'], 
                                                             deletable=True, labels = post_labels)
         edit_form.append(INPUT(_type='checkbox', _name='post_attributes_content_is_original', 
                                                  _id='post_attributes_content_is_original', value=p_a_c_i_o_val))

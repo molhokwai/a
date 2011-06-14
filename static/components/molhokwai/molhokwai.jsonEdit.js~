@@ -221,7 +221,6 @@ var mKjs = function(a, l, index, p, eps){
     return v;
 };
 
-
 /* Update json object 
     jquery event handling function
 */
@@ -290,6 +289,10 @@ var LId = function(s){
     });
 };
 
+/* Json Object to string
+   @params
+       jsO : the jsO object
+*/
 var jsOtoS = function(jsO){
     return walk(jsO, 
         [mKjs], 
@@ -300,6 +303,12 @@ var jsOtoS = function(jsO){
             'jrv' : ''
         }
     );
+};
+
+/* Update Json Source 
+*/
+var ujsS = function(){
+    jsS.val(jsOtoS(jsO));
 };
 
 var RLf = [];
@@ -318,7 +327,12 @@ var jsTb = function(si, di){
         jsS = $('#'+si);
         jsS.bind('change', onjsSChange);
     }
-    jsO = eval('('+jsS.val()+')');
+    try{
+        jsO = eval('('+jsS.val()+')');
+    }
+    catch(e){
+        jsO = $.parseJSON(jsS.val());
+    }
         
     var eL = walk(
         jsO, 
@@ -327,6 +341,7 @@ var jsTb = function(si, di){
             'mAe_ebs' : [['change', ujsO]]
         }]
     );
+    RLf = [];
     fRL(eL, RLf);
     
     if(!jsT){
@@ -340,7 +355,7 @@ var jsTb = function(si, di){
         jsT = $('#'+di);
     }
     else{
-        jsT.html('');
+        jsT.html('...');
     }
 
     for(i in RLf){

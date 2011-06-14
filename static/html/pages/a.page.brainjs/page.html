@@ -5,8 +5,10 @@
     #jsonTree span.k-level {
         display: block;
     }
-    #jsonTree span.l_2, #jsonTree input  {
+    #jsonTree span.l_0, #jsonTree span.l_2, #jsonTree input  {
         float:left !important;
+    }
+    #jsonTree span.l_2, #jsonTree input  {
         max-width: 5% !important;
         margin-right: 2%;
     }
@@ -33,17 +35,42 @@
 <script type="text/javascript" src="/<aservero>this_app</aservero>/static/components/jquery/jquery-validation-1.8.0/jquery.validate.min.js"></script>
 <script type="text/javascript">
     var formId = 'mainForm';
+    var submitTo = null;
     var submit = function(){
-        $('#'+formId).submit();
+		/* update jSOn source to have valid format for all languages */
+        var _jsOL = false;
+        if (jsO){
+            for(k in jsO){
+                _jsOL = true;
+                break;
+            }
+        }
+        if (!_jsOL){
+            jsTb('data', 'jsonTree');
+        }
+	    ujsS();
+        if (!submitTo){
+            $('#'+formId).submit();
+            submitTo = setTimeout('submitTo = null;', 3000);
+        }
+    };
+
+    var sampleSet = function(el){
+        // radio button val: thanks to https://groups.google.com/forum/#!topic/jquery-en/4tx4POrGjQw
+        $('#name').val($('#sampleNNname').val());
+        $('#data').val($('#'+el.id.replace('Set', '')).val());              
+        $($('#'+el.id.replace('SampleSet', '')).click());
     };
             
     $(document).ready(function() {
         // validate form on keyup and submit
         $("#"+formId).validate({
             rules: {
+                name: 'required',
                 data: 'required'
             },
             messages: {
+                name: 'Name is required',
                 data: 'Data is required'
             },
             submitHandler : function(form){
@@ -63,34 +90,45 @@
         });
     });
 </script>
-<form id="mainForm" name="mainForm" action="/<aservero>this_app</aservero>/relay" />
-    <input type="hidden" id="urlPlh" name="url" value="http://www.brainjs.dotcloud.com/%sBrain"/>
+<form id="mainForm" name="mainForm" action="/<aservero>this_app</aservero>/relay"/>
+    <input type="hidden" id="urlPlh" name="urlPlh" value="http://www.brainjs.dotcloud.com/%sBrain"/>
     <input type="hidden" id="url" name="url" value=""/>
     <input type="hidden" id="output" name="output" value="text/plain"/>
     <input type="hidden" id="json_p_n" name="json_p_n" value="data"/>
-    <p class="message">Enter json training or run data, check the corresponding button, and type in <strong>submit</strong> in the <em>command line</em> to execute... (Dbl ctrl to access the it)... optionally: type in <strong>parse</strong> to view and modify the json from/in a tree</p>
+    <p class="message">Enter json training or run data, check the corresponding button, and type in <strong>submit</strong> in the <em>command line</em> to execute... (Dbl ctrl to access it)... optionally: type in <strong>parse</strong> to view and modify the json from/in a tree</p>
     <fieldset>
         <p>
-            <input type="radio" name="dataPurpose" id="train" value="on" checked="true"/>training  
-            <input type="radio" name="dataPurpose" id="run"/>run        
+            Neural network name :  <input type="text" name="name" id="name" class="no-border jQs maw50%"/>
+        </p>
+        <p>
+            <input type="radio" name="dataPurpose" id="train" value="on" checked="true" class="no-border jQs maw5%"/>train  
+            <input type="radio" name="dataPurpose" id="run" class="no-border jQs maw5%"/>run        
         </p>
         <p>
             <label for="data">data</label> 
-            <textarea id="data" name="data" rows="5"/>
-[
-    {input: {r:0.29, g:0, b:0.51},  output: {indigo: 1}},
-    {input: {r:1, g:0.89, b:0},  output: {gold: 1}},
-    {input: {r:1, g:0, b:0}, output: {red: 1}},
-    {input: {r:0, g:0, b:1},  output: {blue: 1}} 
-]
-            </textarea>
+            <textarea id="data" name="data" rows="5"/></textarea>
         </p>
         <p>
-            <input type="button" class="border-none color-transparent"  onclick="jsTb('data', 'jsonTree');" value="parse">
-            <input type="submit" value="Submit"/>
+            <a class="border-none color-transparent" href="javascript:jsTb('data','jsonTree');">Parse</a>
+            <a class="border-none color-transparent" href="javascript:submit();">Submit</a>
         </p>
     </fieldset>
 </form>
+<p>
+    <input type="radio" name="sampleSet" id="trainSampleSet"    class="no-border jQs maw5%" onclick="sampleSet(this);"/>train sample 
+    <input type="radio" name="sampleSet" id="runSampleSet"      class="no-border jQs maw5%" onclick="sampleSet(this);"/>run  sample
+    <input type="hidden" id="sampleNNname" name="sampleNNname" value="color" />
+    <input type="hidden" id="trainSample" name="trainSample" value="
+[
+{input: {r:0.29, g:0, b:0.51},  output: {indigo: 1}},
+{input: {r:1, g:0.89, b:0},  output: {gold: 1}},
+{input: {r:1, g:0, b:0}, output: {red: 1}},
+{input: {r:0, g:0, b:1},  output: {blue: 1}} 
+]
+"
+    />
+    <input type="hidden" id="runSample" name="runSample" value="{r:0.29, g:0, b:0.51}" />
+</p>
 
 
-  
+
