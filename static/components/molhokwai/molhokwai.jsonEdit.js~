@@ -1,12 +1,16 @@
 /*#########################################################################################
 ## JSON EDITOR
-##  -   Builds json tree and outputs it to after given element
+##  -   Builds json tree and outputs it to before given element
 ##  -   Updates json data on change the fly
 ##  -   Updates given element on change the fly
 ##  
 ##  TO EVENTUALLY DO:
 ##  -   In net.molhokwai.js architecture
 #########################################################################################*/
+
+/*  ###################################
+    PROCESS 
+    ###################################*/
 
 /* Make object out of atom passed 
    @params
@@ -129,25 +133,34 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
 */
 var mAe = function(a, l, index, p, eps){
     var t=null;
-    if(typeof(a)=='string' && a.length<50 | (typeof(a)=='number')){
+    if(typeof(a)=='string' && a.length<50 || (typeof(a)=='number')){
         var t=document.createElement('input');
         t.type='text';
+        t.className='';
     }
     else if(typeof(a)=='string' && a.length>=50){
         var t=document.createElement('textarea');
+        t.className='wymeditor ';
     }
     
-    if (p){
-        t.id = p.join('#:#');
-    }
-    $(t).val(a);
-    t.className='a-level '+l +' '+ 'a-index '+index;
-    if (eps){
-        for(k in eps){
-            if(k=='mAe_ebs'){
-                var ebs=eps[k];
-                for(i in ebs){
-                    $(t).bind(ebs[i][0], ebs[i][1]);
+    if(t){
+        if (p){
+            t.id = p.join('#:#');
+        }
+
+        $(t).val(a);
+        if (t.type=='textarea'){
+            $(t).html(a);
+        }
+
+        t.className+='a-level '+'l_'+l +' '+ 'a-index '+'i_'+index;
+        if (eps){
+            for(k in eps){
+                if(k=='mAe_ebs'){
+                    var ebs=eps[k];
+                    for(i in ebs){
+                        $(t).bind(ebs[i][0], ebs[i][1]);
+                    }
                 }
             }
         }
@@ -160,7 +173,9 @@ var mAe = function(a, l, index, p, eps){
 var mAjs = function(a, l, index, p, eps){
     var ol=(eps && eps.l && eps.l[l] ? eps.l[l].ol : null);
 
-    var q=typeof(a)=='number'?'':'"';
+    var t=typeof(a);
+    a=(t=='string'?fs(a):a);
+    var q=(t=='number'?'':'"');
     var v=q+a+q;
 
     if(ol && ol>1 && index>0){ v=','+v; }
@@ -184,7 +199,7 @@ var mKe = function(k, l, index, p, eps){
         s.id = p.join('#:#');
     }
     $(s).html(k);
-    s.className='k-level '+l +' '+ 'k-index '+index;
+    s.className='k-level '+'l_'+l +' '+ 'k-index '+'i_'+index;
     if (eps){
         for(k in eps){
             if(k=='mKe_ebs'){
@@ -214,9 +229,35 @@ var ujsO = function(){
     var p = '["' + $(this)[0].id.split('#:#').join('"]["') +'"]';
     var q = '"';
     if(typeof(v)=='number'){ q=''; }
-    var v = q+$(this).val()+q;
+    var v = q+fs($(this).val())+q;
     eval('jsO'+p+'='+v);
-    $('#entities_data').val(jsOtoS(jsO));
+    jsS.val(jsOtoS(jsO));
+};
+
+/*  ###################################
+    UTILITITES
+    ###################################*/
+
+/* Format string for eval 
+       s : the string 
+*/
+var fs = function(s){
+    while(s.indexOf('\n')>=0){
+        s=s.replace('\n','    ');
+    }
+    var n=-1;
+    var ip=0; 
+    while(s.indexOf('\n')>=0){
+        s=s.replace('\n','');
+    }
+    while(s.indexOf('\r')>=0){
+        s=s.replace('\r','');
+    }
+    while(s.indexOf('"', ip)>=0){
+        s=s.substring(0,ip)+s.substring(ip,s.length-1).replace('"','\\"');
+        ip=s.indexOf('"',ip)+2;
+    }
+    return s;
 };
 
 /* Flush recursive list
@@ -261,9 +302,24 @@ var jsOtoS = function(jsO){
     );
 };
 
+var RLf = [];
+var jsO = {};
+var jsS = null;
+var jsT = null;
+
+var onjsSChange = function(e){
+    jsTb();
+};
 var jsTb = function(si, di){
-    var el = $('#'+si);
-    jsO = $.parseJSON(el.html());        
+    if(!jsS){
+        if (!si || !di){
+            throw "source id (si) and destination id (di) required for function jsTb  call";
+        }
+        jsS = $('#'+si);
+        jsS.bind('change', onjsSChange);
+    }
+    jsO = eval('('+jsS.val()+')');
+        
     var eL = walk(
         jsO, 
         [mKe, {}], 
@@ -273,16 +329,23 @@ var jsTb = function(si, di){
     );
     fRL(eL, RLf);
     
-    var jsonTree = document.createElement('div');
-    jsonTree.id = di;
-    jsonTree.className = 'width100pc';
-    $('#'+si).before(jsonTree);
+    if(!jsT){
+        if (!si || !di){
+            throw "source id (si) and destination id (di) required for function jsTb  call";
+        }
+        jsT = document.createElement('div');
+        jsT.id = di;
+        jsT.className = 'width100pc';
+        $('#'+si).before(jsT);
+        jsT = $('#'+di);
+    }
+    else{
+        jsT.html('');
+    }
 
     for(i in RLf){
-        $('#'+di).append(RLf[i]);
+        jsT.append(RLf[i]);
     }
     LId('#'+di);
 }    
-var RLf = [];
-var jsO = {};
 

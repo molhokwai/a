@@ -659,6 +659,8 @@ def do_stuff():
 				db(db.entities.id==int(i)).update(
                     searchable_through=request.vars.searchable_through.split(','))                    
 			session.flash=T('update searchable entities done.')
+	else:
+		session.flash=T('not admin')
 	
 	if request.args[0] in ['set_login_mechanism']:
 		"""
@@ -678,7 +680,8 @@ def do_stuff():
 				RPX_API = request.vars.RPX_API.split(',')
 			)
 			session.flash=T('login mechanism updated.')
-	else:
-		session.flash=T('not admin')
+
+		else:
+			session.flash=T('not admin or..')
 
 	redirect(URL(r = request,f = 'index'))

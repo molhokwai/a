@@ -2,8 +2,8 @@
 
 /* BODY, BODY ELEMENTS */
 body {
+    background: url("images/BG.png") repeat-x 0 0;
     background-color: rgb(0, 0, 10);
-    background-image: url("images/BG.png") repeat-x 0 0;
     background-image: gradient(linear, left top, left bottom, color-stop(0, rgb(0,0,10)), color-stop(1, rgb(100,110,100)));
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(0,0,10)), color-stop(1, rgb(100,110,100)));
     background-image: -moz-linear-gradient(top, rgb(0,0,10), rgb(100,110,100));
@@ -120,14 +120,25 @@ iframe[name='photo_frame'] {
     border-top: 1px dotted #010000;
     margin: 2% 0;
 }
-
-.button, .link, .p, .grid, .errordialog {
+.button, .link, .p, .grid, .errordialog, 
+input[type="submit"], input[type="button"]  {
   /* .errordialog: gwt */
-  color: #FFFAFA
+  color: #FFFAFA;
+  font-family: "Courier";
 }
-.button, .link {
+.button, .link,
+input[type="submit"], input[type="button"] {
   background-color: transparent;
+  border:1px solid #666666 !important;
+  font-size: 1em;
 }
+.button:first-letter, .errordialog:first-letter, 
+input[type="submit"]:first-letter,
+input[type="button"]:first-letter {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
 .select {
   max-width: 60%;
 }

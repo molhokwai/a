@@ -74,9 +74,11 @@
                     {{pass}}
 
                     <div class="search_box">
-                        <input type="text" id="search" name="search" class="search" value="search"/>
-                        <input type="image" src="{{=style_base_url}}/images/go.gif" class="search_bt" 
-                                onclick="liveSearch.getData('{{=URL(r=request,c='data',f='entities',args=['search.html'])}}', $('#search').val())"/>
+                    	{{if auth.user:}}	
+                        	<input type="text" id="search" name="search" class="search" value="search"/>
+                        	<input type="image" src="{{=style_base_url}}/images/go.gif" class="search_bt" 
+                                onclick="liveSearch.getData('{{=URL(r=request,c='data',f='entity',args=['search.html'])}}', $('#search').val())"/>
+                    	{{pass}}	
                     </div>
                 </div>
                 <!-- end #menu -->

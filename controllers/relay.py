@@ -1,19 +1,23 @@
 # coding: utf8
-# try something like
 
 def index():
-    import urllib, urlib2, base64
-    import gluon.contrib.simplejson as sj
-    
-    json_p_n=request.vars.json_p_n
-    url=request.vars.url
-    exec('json_o = sj.loads(request.vars.%s)'%json_p_n)
-    
-    args= urllib.urlencode([
-            (json_p_n,json_o),
-            ('output',request.vars.output)
-    ])
-    headers={}
+	import urllib, base64
+	exec('from applications.%s.modules import urllib2' % this_app)
+	import gluon.contrib.simplejson as sj
 
-    rq = urllib2.Request(url, args, headers)
-    return sj.loads(urllib2.urlopen(rq).read())
+	url=request.vars.url
+	params = []
+	for k in request.vars:
+		if k=='json_p_n':
+			json_p_n=request.vars.json_p_n
+			exec('json_o = sj.loads(request.vars.%s)'%json_p_n)
+			params.append((json_p_n, json_o))
+		else:
+			params.append((k, request.vars[k]))
+
+	args= urllib.urlencode(params)
+	headers={}
+
+	rq = urllib2.Request(url, args, headers)
+	return response.json(sj.loads(urllib2.urlopen(rq).read()))
+

@@ -1,0 +1,68 @@
+<!-- NOT COMPLETE, NOT FINISHED. EVENTUALLY... -->
+<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery.form.js"></script>      
+<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-validation-1.8.0/jquery.validate.min.js"></script>      
+<script type="text/javascript">
+    var formId = '{{=request.args[0]}}';
+    var submit = function(){
+        $('#'+formId).submit();
+    };
+    
+	var fields = [];
+	var addField = function(){
+		var p = document.createElement('p');
+		var labelI = document.createElement('label');
+		var labelO = document.createElement('label');
+		var inputs = [];
+
+		labelI.innerHTML = 'input';
+		labelO.innerHTML = 'output';
+		for(var i=0;<parseInt($('#nr').val());i++){
+			var input = document.createElement('input');
+			input.className = "jQs 20%";
+			input.id = fields.length.toString() +'_'+ i.toString();
+			input.name = input.id; 
+			inputs.push(input);
+		}
+
+		
+	};
+
+    $(document).ready(function() {
+        // validate signup form on keyup and submit
+        $("#"+formId).validate({
+            rules: {
+                name: "required",
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                name: "{{=T('Name is required')}}",
+                email: "{{=T('A valid email is required')}}"
+            },
+            submitHandler : function(form){
+                $('#'+formId).ajaxSubmit({
+                    'success' : function(data){
+                        $('.form .message').html("{{=T('Your data are now saved. We are contacting you as soon as possible. Looking forward to it...')}}");
+                        $('.form .form_row').hide();
+                        $('.form .send').hide();
+                        $('.form .message').show('slow');
+                    },
+                    'error' : function(data){
+                        $('.form .message').html("{{=T('An error has occured. You can retry, or directly send us an email...')}}");
+                        $('.form .message').show('slow');
+                    }
+                })
+            }
+        });
+    });
+</script>      
+<form id="mainForm" name="mainForm" action="/{{=this_app}}/relay" />
+	<input type="hidden" name="url" value="http://www.brainjs.dotcloud.com/"/>
+	<input type="hidden" name="output" value="text/plain"/>
+	<fieldset>
+		<p>Nr of inputs: <input type="text" id="nr" name="nr" class="jQs w20%" value="3"/><a onclick="onNrOfInputsApply()">apply</a></p>
+	</fieldset>
+</form>
+

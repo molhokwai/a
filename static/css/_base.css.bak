@@ -118,7 +118,7 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
 }
 
 /* undo round */
-.round-borders {
+.unround-borders, no-round, no-round-borders {
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
 }
@@ -711,6 +711,11 @@ p:first-letter, ul li:first-letter {
 .strike-through, .strike, .strike-font, .font-strike, .fstrike, .f-strike, .line-through, .l-through,
 .strike-text, .text-strike, .tstrike, .t-strike {
     text-decoration: line-through !important;
+}
+
+/* LIST STYLES & EFFECTS */
+.no-bullets {
+    list-style-type: none;
 }
 
 /* ELEMENTS */

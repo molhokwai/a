@@ -1,0 +1,72 @@
+<style type="text/css">
+    #jsonTree span.k-level {
+        display: block;
+        padding-left: 2%;
+    }
+</style>
+<script type="text/javascript" src="/<aservero>this_app</aservero>/static/components/js/json2.js"></script>
+<script type="text/javascript" src="/<aservero>this_app</aservero>/static/components/molhokwai/molhokwai.jsonEdit.js"></script>
+<script type="text/javascript" src="/<aservero>this_app</aservero>/static/components/jquery/jquery.form.js"></script>      
+<script type="text/javascript" src="/<aservero>this_app</aservero>/static/components/jquery/jquery-validation-1.8.0/jquery.validate.min.js"></script>      
+<script type="text/javascript">
+    var formId = 'mainForm';
+    var submit = function(){
+        $('#'+formId).submit();
+    };
+			
+    $(document).ready(function() {
+        // validate form on keyup and submit
+        $("#"+formId).validate({
+            rules: {
+                data: 'required'
+            },
+            messages: {
+                data: 'Data is required'
+            },
+            submitHandler : function(form){
+				// radio button val: thanks to https://groups.google.com/forum/#!topic/jquery-en/4tx4POrGjQw
+				$('#url').val($('#urlPlh').val().replace('%s', $('input[name="dataPurpose"]:checked')[0].id));				
+                $('#'+formId).ajaxSubmit({
+                    'success' : function(data){
+                        $('#'+formId+' .message').html('Success... <br/>Result: '+JSON.stringify(data));
+                        $('#'+formId+' .message').show('slow');
+                    },
+                    'error' : function(data){
+                        $('#'+formId+' .message').html('An error has occured. You can retry, or contact us...');
+                        $('#'+formId+' .message').show('slow');
+                    }
+                })
+            }
+        });
+    });
+</script>      
+<form id="mainForm" name="mainForm" action="/<aservero>this_app</aservero>/relay" />
+	<input type="hidden" id="urlPlh" name="url" value="http://www.brainjs.dotcloud.com/%sBrain"/>
+	<input type="hidden" id="url" name="url" value=""/>
+	<input type="hidden" id="output" name="output" value="text/plain"/>
+	<input type="hidden" id="json_p_n" name="json_p_n" value="data"/>
+	<p class="message">Enter json training or run data, check the corresponding button, and type in <strong>submit</strong> in the <em>command line</em> to execute... (Dbl ctrl to access the it)... optionally: type in <strong>parse</strong> to view and modify the json from/in a tree</p>
+	<fieldset>
+		<p>
+			<input type="radio" name="dataPurpose" id="train" value="on" checked="true"/>training  
+			<input type="radio" name="dataPurpose" id="run"/>run 
+		</p>
+		<p>
+			<label for="data">data</label> 
+			<textarea id="data" name="data" rows="5"/>
+[
+	{input: {r:0.29, g:0, b:0.51},  output: {indigo: 1}},
+	{input: {r:1, g:0.89, b:0},  output: {gold: 1}},
+	{input: {r:1, g:0, b:0}, output: {red: 1}},
+	{input: {r:0, g:0, b:1},  output: {blue: 1}}
+]
+			</textarea>
+		</p>
+		<p>
+			<input type="button" class="no-border color-transparent jQs h1px"  onclick="jsTb('data', 'jsonTree');" value="parse">
+			<input type="submit" value="Submit"/>
+		</p>
+	</fieldset>
+</form>
+
+

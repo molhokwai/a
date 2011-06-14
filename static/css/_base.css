@@ -76,7 +76,7 @@ a.transparent:link , a.transparent:hover , a.transparent:active, a.transparent:v
 .color-transparent,
 a.color-transparent:link , a.color-transparent:hover , a.color-transparent:active, a.color-transparent:visited
 {
-    color: transparent;
+    color: transparent !important;
     text-decoration: none;
     border-color: transparent;
 }
@@ -99,7 +99,7 @@ a.color-transparent:link , a.color-transparent:hover , a.color-transparent:activ
     border-bottom: 1px solid #FFFAFA;
 }
 .border-none, .border-no {
-    border: none;
+    border: none !important;
 }
 /* grey */
 .border-grey, .bor-grey, .bord-grey {

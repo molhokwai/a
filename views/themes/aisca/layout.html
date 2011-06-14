@@ -42,8 +42,6 @@
               pages : []
           };
         </script>
-        <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
-        <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
         <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
@@ -74,11 +72,11 @@
                     {{pass}}
 
                     <div class="search_box">
-                    	{{if auth.user:}}	
-                        	<input type="text" id="search" name="search" class="search" value="search"/>
-                        	<input type="image" src="{{=style_base_url}}/images/go.gif" class="search_bt" 
+                        {{if auth.user:}}   
+                            <input type="text" id="search" name="search" class="search" value="search"/>
+                            <input type="image" src="{{=style_base_url}}/images/go.gif" class="search_bt" 
                                 onclick="liveSearch.getData('{{=URL(r=request,c='data',f='entity',args=['search.html'])}}', $('#search').val())"/>
-                    	{{pass}}	
+                        {{pass}}    
                     </div>
                 </div>
                 <!-- end #menu -->
@@ -110,11 +108,15 @@
         
                 <div class="footer_links width45pc">
                     {{if auth.user:}}
+                        {{try:}}
                         {{=XML(' / '.join(   map(
                                       lambda p_h_l: ':'.join( 
                                               map(lambda x: A(T(x).replace('_', ' '), _href="%s" % (x)).xml(), p_h_l)  
                                       ) ,session.nav_history)
                                 ))}}
+                        {{except Exception, ex:}}
+                        {{app_objects.log_wrapped('Err in aisca/layout.html', ex)}}
+                        {{pass}}
                     {{pass}}
                 </div>
         
