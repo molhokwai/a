@@ -107,3 +107,7 @@ iframe[name='photo_frame'] {
     border-top: 1px dotted #010000;
     margin: 2% 0;
 }
+
+.border-std {
+    border-color: #000606;
+}

@@ -62,6 +62,8 @@
               $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
           }
           $('#google_translate_element').hide();
+    
+		  wrapperWidth();
       });
     </script>
 
@@ -83,7 +85,7 @@
       <!-- end #user-menu -->
 
       <div id="cli_web" class="left margt2pc  width100pc">
-        <form onsubmit="return false;">
+        <form onsubmit="return false;" class="autonome">
             <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>
             <font id="_cmd_msg" class="flash small">
                 {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}

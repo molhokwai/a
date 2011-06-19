@@ -19,7 +19,7 @@
 }
 
 #wrapper, wrapper {
-    min-width: 350px;
+    min-width: 100px;
 }
 
 footer, #footer {

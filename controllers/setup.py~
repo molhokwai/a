@@ -15,6 +15,8 @@ except Exception, ex:
 
 @auth.requires_login()
 def index():
+    form = None
+    form1 = None
     if auth.user.email in administrators_emails:
         auth.user.is_admin=True
         for _email in administrators_emails:
@@ -24,7 +26,7 @@ def index():
         form1=FORM(
             SPAN(T('save/load from json data file upload')),
             INPUT(_type='file', _name='file', _value='(upload json data file)'),
-            INPUT(_type='submit', _value=T('save/load default values')),
+            INPUT(_type='submit', _value=T('upload, save/load')),
             _class='margb2pc'
         )
 
@@ -72,4 +74,5 @@ def index():
             redirect(URL(r=request, c='default'))
     else:
         form=FORM(DIV(T('Your email is not in the administrators\' list.')))
+
     return dict(form = form, form1 = form1)

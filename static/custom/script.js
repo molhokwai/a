@@ -89,6 +89,20 @@ var vi_textarea=function(selector){
     }
 };
 
+var wrapperWidth=function(e){
+	var winW = $(window).width();
+	var wrapW = '60%';
+	if(winW<1680 && winW>=1200){
+		wrapW = '70%';
+	} else if(winW<1200 && winW>=1024){
+		wrapW = '80%';
+	} else if(winW<1024){
+		wrapW = '80%';
+	}
+	if($('#wrapper').width()>winW){
+		$('#wrapper').width(winW - 50);
+	}
+}
 
 /*************
   context : page.cli_web
@@ -311,7 +325,25 @@ $(document).ready(function(){
         }
     });
 
+    /* FORM */
+    /* focus */
     focus('form');
+
+    /* submit on Enter */
+	$('form').each(function(){
+		if($(this)[0].className.toLowerCase().indexOf('autonome')<0){
+        	var f = $(this);
+			$(this).children().each(function(){
+				if($(this)[0].type in {'text':'','password':''}){
+					$(this).bind('keyup', function(e){
+						if((e.keyCode ? e.keyCode : e.which) == 13) {
+							f.submit();
+						}
+					});
+				}
+			});
+		}
+	});
 
     /* GOOGLE TOOLS */
     /* search */
@@ -342,7 +374,13 @@ $(document).ready(function(){
         }
         $(this).attr({'style' : s});
     });
-    
+
+
+    /* WRAPPER WIDTH
+		Depending on themes, uncomment
+	wrapperWidth(); 
+	*/
+	$(window).resize(wrapperWidth);
 });
 
 /* caught eval to more or less brutally evaluate the given command,

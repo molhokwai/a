@@ -15,6 +15,8 @@ except Exception, ex:
 
 @auth.requires_login()
 def index():
+    form = ''
+    form1 = ''
     if auth.user.email in administrators_emails:
         auth.user.is_admin=True
         for _email in administrators_emails:
@@ -72,4 +74,6 @@ def index():
             redirect(URL(r=request, c='default'))
     else:
         form=FORM(DIV(T('Your email is not in the administrators\' list.')))
+        form1 = ''
+
     return dict(form = form, form1 = form1)

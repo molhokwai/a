@@ -2,7 +2,9 @@
 
 /*BODY, GENERAL */
 body {
+    background: url("images/BG.png") repeat-x 0 0;
     background-color: rgb(255, 255, 255);
+    background-image: gradient(linear, left top, left bottom, color-stop(0, rgb(245,245,245)), color-stop(1, rgb(255,255,255)));
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(245,245,245)), color-stop(1, rgb(255,255,255)));
     background-image: -moz-linear-gradient(top, rgb(245,245,245), rgb(255,255,255));
     filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=rgb(245,245,245),endColorstr=rgb(255,255,255));        
@@ -104,4 +106,8 @@ iframe[name='photo_frame'] {
     font-style: italic;
     border-top: 1px dotted #010000;
     margin: 2% 0;
+}
+
+.border-std {
+    border-color: 1px solid #000606;
 }

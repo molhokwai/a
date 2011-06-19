@@ -51,9 +51,9 @@ app_modules_config = {
     }
 }
 db.define_table('app_config',
-    SQLField('APP_DETAILS',             'list:string', required=True,    default=['<molhokwai.net-a>', '<v001>'],     
+    SQLField('APP_DETAILS',             'list:string', required=True,    default=['molhokwai.net-a', 'v001'],     
             label=T('App details (name, version)')),
-    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['usr_psw'],     
+    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
             label=T('App security details (login mechanism)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
@@ -79,6 +79,7 @@ db.define_table('app_config',
             label=T('App modules details (request_handling proxy, ...)'))
 )
 
+app_name = db.app_config.APP_DETAILS.default[0]
 app_themes_list = app_themes_base_list
 
 app_config=db(db.app_config.id>0).select()
@@ -86,6 +87,8 @@ if len(app_config)>0:
     app_config=app_config[0]
     if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:
         app_themes_list = app_config.APP_THEMES
+    if app_config.APP_DETAILS and len(app_config.APP_DETAILS)>0:
+        app_name = app_config.APP_DETAILS[0]
 else:
     app_config = None
 
@@ -131,7 +134,6 @@ elif not tentative_app:
     tentative_app = this_app
 
 
-
 #########################################################################
 ## Authentication / Authorization
 #########################################################################
@@ -148,11 +150,11 @@ if app_config and app_config.MAIL_SETTINGS:
 else:
     if request.env.web2py_runtime_gae:            # if running on Google App Engine
         mail.settings.server='gae'     # your SMTP server
+        mail.settings.sender='molhokwai@gmail.com'    # your email
         mail.settings.login=None       # your credentials or None
     else:   
         mail.settings.server='smtp.gmail.com:587'     # your SMTP server
         mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'             # your credentials or None
-        mail.settings.sender='molhokwai@gmail.com'    # your email
 
 auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
@@ -204,26 +206,26 @@ templates = {
     'verify_email' : """
         --------------------------------------------------------------------------------------------------------------------------------
         Dear, 
-        You received this email from aisca.com for verification of your email address. Click on the link below or copy and paste it 
+        You received this email from %(app_name)s for verification of your email address. Click on the link below or copy and paste it 
         in your browserto verify your email.
         Or please ignore this message if you did not register on the site.
         Link : %(link_url)s
-        ----------------------------------------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------------------------------------------
         
-        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        -Copyright Herve Mayou, 2011 . All Rights Reserved
         %(host)s
         _______________________________________________________
     """,
     'reset_password' : """
         --------------------------------------------------------------------------------------------------------------------------------
         Dear,
-        You received this email from aisca.net for a reset of your password request. Click on the link below or copy and paste it in
+        You received this email from %(app_name)s for a reset of your password request. Click on the link below or copy and paste it in
         your browser to reset your password.
         Or please ignore this message if you did not submit that request.
         Link : %(link_url)s
-        ----------------------------------------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------------------------------------------
         
-        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        -Copyright Herve Mayou, 2011 . All Rights Reserved
         %(host)s
         _______________________________________________________
     """
@@ -240,14 +242,17 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
     ## auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
     ## auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
     auth.messages.verify_email = get_email_content('verify_email', templates,
+                                        app_name = app_name,
                                         host = '%s://%s' % (protocol,request.env.http_host),
                                         link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['verify_email']))
                                  )
     ec = get_email_content('reset_password', templates,
+                                        app_name = app_name,
                                         host = '%s://%s' % (protocol,request.env.http_host),
                                         link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['reset_password']))
                                  )
     auth.messages.reset_password = get_email_content('reset_password', templates,
+                                        app_name = app_name,
                                         host = '%s://%s' % (protocol,request.env.http_host),
                                         link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['reset_password']))
                                  )
