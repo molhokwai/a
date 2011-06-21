@@ -51,7 +51,7 @@ def post():
     if post: 
         if post.auth_requires_login and not auth.user:
             redirect(URL(r = request, f = 'user', args = ['login'], 
-						vars=dict(_next=URL(r=request, args=request.args, vars=request.vars))))
+                        vars=dict(_next=URL(r=request, args=request.args, vars=request.vars))))
             
         post.post_text = utilities.replace_serverside_output_values(post.post_text)
 
@@ -89,8 +89,8 @@ def page():
                 
             if post:
                 if post.auth_requires_login and not auth.user:
-            		redirect(URL(r = request, f = 'user', args = ['login'], 
-								vars=dict(_next=URL(r=request, args=request.args, vars=request.vars))))
+                    redirect(URL(r = request, f = 'user', args = ['login'], 
+                                vars=dict(_next=URL(r=request, args=request.args, vars=request.vars))))
             
                 nake=(request.args[len(request.args)-1]=='nake'
                      or post.post_text.find('<!-- nake page -->')>=0)
@@ -102,6 +102,7 @@ def page():
             redirect(URL(r = request,f = 'index'))
             
     except Exception, ex: 
+        raise(ex)
         log_wrapped('Error', str(ex))
         session.flash=T("(Caught) Error occured: %(err)s ", dict(err=str(ex)))
         redirect(URL(r = request,f = 'index'))
@@ -109,14 +110,14 @@ def page():
 # The pages page
 # Shows links to all pages
 def pages():
-	area = 'a'
-	if len(request.args)>0:
-		area = request.args[0]
+    area = 'a'
+    if len(request.args)>0:
+        area = request.args[0]
 
-	_pages = response.pages
-	if area != 'all':
-		_pages = filter(lambda x:x[3] == area, response.pages)
-	return dict(manage_title=T("pages"), pages=_pages)
+    _pages = response.pages
+    if area != 'all':
+        _pages = filter(lambda x:x[3] == area, response.pages)
+    return dict(manage_title=T("pages"), pages=_pages)
 
 # The category page
 # Shows all the posts in the requested category
@@ -163,9 +164,11 @@ def add():
             
             if page_form.accepts(request.vars, session):
                 tcode="post_id_"+str(page_form.vars.id)
-                from gluon.contrib import simplejson
-                _json=simplejson.loads(request.vars.post_attributes_json)
-                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                _json = {}
+                if request.vars.post_attributes_json and request.vars.post_attributes_json!='':
+                    from gluon.contrib import simplejson
+                    _json=simplejson.loads(request.vars.post_attributes_json)
+                    _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
                 pg=db(db.posts.id==page_form.vars.id).update(
                                                 post_text_TCode=tcode,
                                                 post_attributes_json=simplejson.dumps(_json))
@@ -185,9 +188,11 @@ def add():
             
             if page_form.accepts(request.vars, session):
                 tcode="page_id_"+str(page_form.vars.id)
-                from gluon.contrib import simplejson
-                _json=simplejson.loads(request.vars.post_attributes_json)
-                _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                _json = {}
+                if request.vars.post_attributes_json and request.vars.post_attributes_json!='':
+                    from gluon.contrib import simplejson
+                    _json=simplejson.loads(request.vars.post_attributes_json)
+                    _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
                 pg=db(db.posts.id==page_form.vars.id).update(
                                                 post_text_TCode=tcode,
                                                 post_attributes_json=simplejson.dumps(_json)
@@ -244,11 +249,12 @@ def edit():
                 session.flash = T("Post deleted.")
                 redirect(URL(r = request,f = 'index/posts'))
             else:    
-                from gluon.contrib import simplejson
-                _json=simplejson.loads(request.vars.post_attributes_json)
-                db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
-                session.flash = T("Post updated.")
-                redirect(URL(r = request,f = 'post/%s' %id))
+                if request.vars.post_attributes_json and request.vars.post_attributes_json!='':
+                    from gluon.contrib import simplejson
+                    _json=simplejson.loads(request.vars.post_attributes_json)
+                    db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
+                    session.flash = T("Post updated. (%(view_link)s)" % dict(view_link=A(T('view'), _href=URL(r = request, f='post', args=[id]))))
+                redirect(URL(r = request, f='edit', args=['post', id]))
 
     elif area == 'page':
         this_item = db(db.posts.id == id).select()[0]
@@ -266,14 +272,15 @@ def edit():
             else:
                 try:
                     from gluon.contrib import simplejson
-                    _json=simplejson.loads(request.vars.post_attributes_json)
-                    _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
-                    db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
-                    session.flash = T("Page updated.")
+                    if request.vars.post_attributes_json and request.vars.post_attributes_json!='':
+                        _json=simplejson.loads(request.vars.post_attributes_json)
+                        _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
+                        db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
+                    session.flash = T("Page updated. (%(view_link)s)" % dict(view_link=A(T('view'), _href=URL(r = request, f='page', args=[id]))))
                 except Exception, ex:
                     session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))
                 finally:
-                    redirect(URL(r = request,f = 'page/%s' %id))
+                    redirect(URL(r = request, f='edit', args=['page', id]))
                         
     else:
         redirect(URL(r = request,f = 'index'))
@@ -642,48 +649,48 @@ def download():
     return response.stream(open(os.path.join(request.folder,'uploads',request.args[0]),'rb'))
 
 def do_stuff():
-	s = None
-	if auth.user and auth.user.is_admin:
-		if request.args[0] in ['posts_app', 'links_app']:
-			instance=db.posts if request.args[0]=='posts_app' else db.links
-			_ids=request.args[1].split(',')
-			log_wrapped('_ids', _ids)
-			for i in range(len(_ids)):
-				try:
-					db(instance.id == int(_ids[i])).update(application=request.application)
-				except Exception, ex:
-					pass
-			session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
+    s = None
+    if auth.user and auth.user.is_admin:
+        if request.args[0] in ['posts_app', 'links_app']:
+            instance=db.posts if request.args[0]=='posts_app' else db.links
+            _ids=request.args[1].split(',')
+            log_wrapped('_ids', _ids)
+            for i in range(len(_ids)):
+                try:
+                    db(instance.id == int(_ids[i])).update(application=request.application)
+                except Exception, ex:
+                    pass
+            session.flash=T('%(inst)s application updated.', dict(inst=str(instance)))
 
-		elif request.args[0] in ['update_searchable_entities']:
-			searchable_entities = request.vars.searchable_entities.split(',')
-			for i in searchable_entities:
-				db(db.entities.id==int(i)).update(
+        elif request.args[0] in ['update_searchable_entities']:
+            searchable_entities = request.vars.searchable_entities.split(',')
+            for i in searchable_entities:
+                db(db.entities.id==int(i)).update(
                     searchable_through=request.vars.searchable_through.split(','))                    
-			session.flash=T('update searchable entities done.')
-	else:
-		session.flash=T('not admin')
-	
-	if request.args[0] in ['set_login_mechanism']:
-		"""
-			Sample Links:
-				http://molhokwai:8001/a/default/do_stuff/set_login_mechanism?APP_SECURITY_DETAILS=rpx&RPX_API=xxxxxxxxxxxxxxxxxxxx,websites.molhokwai
-				http://molhokwai:8001/a/default/do_stuff/set_login_mechanism?APP_SECURITY_DETAILS=usr_psw&RPX_API=xxxxxxxxxxxxxxxxxxxx,websites.molhokwai
-		"""
-		q = db(db.app_config.id>0)
-		s = q.select()
-		if ((auth.user and auth.user.is_admin) 
-			or (
-			s and s[0].APP_SECURITY_DETAILS 
-			and s[0].APP_SECURITY_DETAILS != db.app_config.APP_SECURITY_DETAILS.default
-		   )):
-			q.update(
-				APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
-				RPX_API = request.vars.RPX_API.split(',')
-			)
-			session.flash=T('login mechanism updated.')
+            session.flash=T('update searchable entities done.')
+    else:
+        session.flash=T('not admin')
+    
+    if request.args[0] in ['set_login_mechanism']:
+        """
+            Sample Links:
+                http://molhokwai:8001/a/default/do_stuff/set_login_mechanism?APP_SECURITY_DETAILS=rpx&RPX_API=xxxxxxxxxxxxxxxxxxxx,websites.molhokwai
+                http://molhokwai:8001/a/default/do_stuff/set_login_mechanism?APP_SECURITY_DETAILS=usr_psw&RPX_API=xxxxxxxxxxxxxxxxxxxx,websites.molhokwai
+        """
+        q = db(db.app_config.id>0)
+        s = q.select()
+        if ((auth.user and auth.user.is_admin) 
+            or (
+            s and s[0].APP_SECURITY_DETAILS 
+            and s[0].APP_SECURITY_DETAILS != db.app_config.APP_SECURITY_DETAILS.default
+           )):
+            q.update(
+                APP_SECURITY_DETAILS = request.vars.APP_SECURITY_DETAILS.split(','),
+                RPX_API = request.vars.RPX_API.split(',')
+            )
+            session.flash=T('login mechanism updated.')
 
-		else:
-			session.flash=T('not admin or..')
+        else:
+            session.flash=T('not admin or..')
 
-	redirect(URL(r = request,f = 'index'))
+    redirect(URL(r = request,f = 'index'))
