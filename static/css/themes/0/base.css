@@ -39,10 +39,6 @@ content input, content textarea, content select,
     border-left: 1px solid rgb(0,40,40);
 }
 
-h2 {
-  margin-top: 2%;
-}
-
 p {
     margin-top: 1%;
     margin-bottom: 1%;
@@ -149,4 +145,8 @@ input[type="button"]:first-letter {
 .data .list form {
   padding:2%;
   float:left;
+}
+
+.color-subtle-blue {
+    color: #DDEDFF;
 }

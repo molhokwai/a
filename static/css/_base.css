@@ -659,6 +659,18 @@ minh0 {
 .bold {
     font-weight: bold;
 }
+
+/* || <!-- thanks to http://csscreator.com/node/732 --> */
+.superscript{
+     font-size:xx-small; 
+     vertical-align:top;
+} 
+.subscript{
+    font-size:xx-small;
+    vertical-align:bottom;
+} 
+/* end || */
+
 .font-size05em, .font-s05em {
     font-size: 0.5em;
 }

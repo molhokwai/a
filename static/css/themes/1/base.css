@@ -111,3 +111,7 @@ iframe[name='photo_frame'] {
 .border-std {
     border-color: #000606;
 }
+
+.color-subtle-blue {
+    color: #223244;
+}

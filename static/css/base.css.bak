@@ -27,11 +27,11 @@ body {
     text-decoration: overline;
 }
 
-h3, h4, h5, h6, h7 {
+h3, h4 {
     margin-top: 2%;
 }
-h4, h5, h6, h7 {
-    margin-top: 2%;
+h5, h6, h7 {
+    margin-top: 1%;
 }
 
 h4, h5 {
