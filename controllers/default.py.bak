@@ -84,6 +84,10 @@ def page():
                       # fix for _ replacing space in url
                       pg = filter(lambda x: x[0].lower().find(request.args[0].replace('_', ' ').lower())>=0, response.pages)
                     if pg and len(pg)>0: pg = pg[0]
+                    else:
+                        redirect(URL(r=request, f='add', args=['page', request.args[0]))
+                        return
+
                     post = db(db.posts.id == int(pg[2].replace('/%s/default/page/' % this_app, ''))).select()
                 if post: post = post[0]
                 
@@ -102,6 +106,7 @@ def page():
             redirect(URL(r = request,f = 'index'))
             
     except Exception, ex: 
+        raise(ex)
         log_wrapped('Error', str(ex))
         session.flash=T("(Caught) Error occured: %(err)s ", dict(err=str(ex)))
         redirect(URL(r = request,f = 'index'))
@@ -178,6 +183,9 @@ def add():
         
         elif area == "page":
             db.posts.post_type.default = 'page'
+            if len(request.args)>1:
+                db.posts.post_title.default = request.args[1]
+
             page_form = SQLFORM(db.posts, fields = ['post_title', 'post_text', 'application',
                                                     'post_parent', 'show_in_menu', 'is_translated', 'auth_requires_login'], 
                                                     labels = post_labels)
@@ -252,7 +260,10 @@ def edit():
                     from gluon.contrib import simplejson
                     _json=simplejson.loads(request.vars.post_attributes_json)
                     db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
-                    session.flash = T("Post updated. (%(view_link)s)" % dict(view_link=A(T('view'), _href=URL(r = request, f='post', args=[id]))))
+                    session.flash = T("Post updated. (%(view_link)s)" % 
+									dict(view_link=A(T('view'), _href='javascript:window.open("%s", "%s");' % 
+										(XML(URL(r = request, f='post', args=[id])),
+									 	'%s_view_%s' % (host.replace(':', '-'), request.vars.post_title)))))
                 redirect(URL(r = request, f='edit', args=['post', id]))
 
     elif area == 'page':
@@ -275,7 +286,12 @@ def edit():
                         _json=simplejson.loads(request.vars.post_attributes_json)
                         _json['content_is']['original']=request.vars.post_attributes_content_is_original=='on'
                         db(db.posts.id==id).update(post_attributes_json=simplejson.dumps(_json))
-                    session.flash = T("Page updated. (%(view_link)s)" % dict(view_link=A(T('view'), _href=URL(r = request, f='page', args=[id]))))
+                    _target = '%s_view_%s' % (host.replace(':', '-'), request.vars.post_title)
+                    session.flash = T("Page updated. (%(view_link)s)" % 
+									dict(view_link=A(T('view'), _href='javascript:window.open("%s", "%s");' % 
+										(XML(URL(r = request, f='page', args=[id])), _target), _target=_target)))
+                    """				dict(view_link=A(T('view'), _href=URL(r = request, f='page', args=[id]),
+									 _target='%s_view_%s' % (host.replace(':', '-'), request.vars.post_title))))"""
                 except Exception, ex:
                     session.flash=T("(Minor) Error occured: %(err)s ", dict(err=str(ex)))
                 finally:

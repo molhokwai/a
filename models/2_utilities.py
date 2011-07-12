@@ -297,9 +297,21 @@ class Utilities():
 
     ## SERVER SIDE OUTPUT
     def replace_serverside_output_values(self, _text, tag_re='\</*aservero\>'):
+        """
+		WARNING: Mixed Up Logic (compared to original below)
+
         b = re.findall(re.compile('<aservero>\w*?</aservero>'), _text)
         for c in b:
             _text = _text.replace(c, eval(re.sub('\</*aservero\>', '', c)))
+        return _text
+        """
+        for tag in ['aservero','aso']:
+            b = re.findall(re.compile('<%(tag)s>\w*?</%(tag)s>' % dict(tag=tag)), _text)
+            _tag_re = tag_re
+            if _tag_re.find(tag)<0:
+                _tag_re = '</*%(tag)s>' % dict(tag=tag)
+                for c in b:
+                    _text = _text.replace(c, eval(re.sub(_tag_re, '', c)))
         return _text
 
     def posts_replace_serverside_output_values(self, _posts, tag_re='\</*aservero\>'):

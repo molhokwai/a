@@ -107,11 +107,18 @@ db.app_themes.theme_base.requires = IS_IN_SET(app_themes_list)
 #########################################################################
 refresh_page = False
 
+# protocol
 protocol = 'http'
 if request.get('env')['server_protocol'][:5] == 'HTTPS': protocol='https'
-global_site_url = '%s://%s' % (protocol,request.get('env')['http_host'])
+# host
+host = http_host = request.get('env')['http_host']
+# site url 
+site_url = global_site_url = '%s://%s' % (protocol, http_host)
+# path_info
 path_info = request.get('env')['path_info']
+# full url
 full_url = '%s%s' % (global_site_url, path_info)
+# http_referer
 http_referer = None
 
 this_app = path_info.split('/')[1]
