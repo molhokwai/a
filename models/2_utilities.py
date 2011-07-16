@@ -310,8 +310,8 @@ class Utilities():
             _tag_re = tag_re
             if _tag_re.find(tag)<0:
                 _tag_re = '</*%(tag)s>' % dict(tag=tag)
-                for c in b:
-                    _text = _text.replace(c, eval(re.sub(_tag_re, '', c)))
+            for c in b:
+                _text = _text.replace(c, eval(re.sub(_tag_re, '', c)))
         return _text
 
     def posts_replace_serverside_output_values(self, _posts, tag_re='\</*aservero\>'):
