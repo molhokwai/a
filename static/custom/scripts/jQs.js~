@@ -75,10 +75,10 @@ rules['jQs'] = {
     regExpGet : function(params){
             var s = "^(pcrS)"
                     +"[\\-]{0,1}"
-                    +"(pvcrS)"
+                    +"(pvcrS){0,15}"
                     +"[:=]{0,1}"
                     +"(ncnvrS)"
-                    +"(uvrS)"
+                    +"(uvrS){0,2}"
                     +"[;]{0,1}";
             for(kp in params){
                 if (typeof(params[kp])=='function'){
@@ -151,6 +151,7 @@ rules['jQs'] = {
                 case 'l': val='left'; break;
                 case 'r': val='right'; break;
                 case 'c': val='center'; break;
+                case 'all': val=''; break;
                 case 'inl': val='inline'; break;
                 case 'blo': val='block'; break;
                 case 'j': val='justify'; break;
@@ -180,7 +181,8 @@ rules['jQs'] = {
                     val='line-through'; break;
                 case 'fa': val='face'; break;
                 case 'fam': val='family'; break;
-                case 'no': val='none'; break;
+                case 'aut': val='auto'; break;
+                case 'inh': val='inherit'; break;
 
                 case 'default': break;
             }
@@ -248,7 +250,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "width|w|large|la"; },
                 "pvcrS" : function(){ return ""; },
-                "ncnvrS" : function(){ return "[\-\+]{0,1}[0-9\,\.]{0,10}"; }, 
+                "ncnvrS" : function(){ return "auto|aut|inherit|inh|[\-\+]{0,1}[0-9\,\.]{0,10}"; }, 
                 "uvrS" : function(){ return "em|mm|px|pt|%"; }
             }]
         },
@@ -269,7 +271,7 @@ rules['jQs'] = {
             */
             params : [{ 
                 "pcrS" : function(){ return "margin|marg|m"; },
-                "pvcrS" : function(){ return "left|l|right|r|top|t|bottom|b|horizontal|ho|vertical|v"; },
+                "pvcrS" : function(){ return "left|l|right|r|top|t|bottom|b|horizontal|ho|vertical|v|all"; },
                 "ncnvrS" : function(){ return rules.jQs.property.width.params[0].ncnvrS(); }, 
                 "uvrS" : function(){ return rules.jQs.property.width.params[0].uvrS(); }
             }]
@@ -292,7 +294,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "border|bord|bor"; },
                 "pvcrS" : function(){ return rules.jQs.property.margin.params[0].pvcrS(); }, 
-                "ncnvrS" : function(){ return "none|no"; }, 
+                "ncnvrS" : function(){ return "none|no|auto|aut|inherit|inh"; }, 
                 "uvrS" : function(){ return ""; }
             }]
         },
@@ -313,7 +315,7 @@ rules['jQs'] = {
             */
             params : [{ 
                 "pcrS" : function(){ return "font|f"; },
-                "pvcrS" : function(){ return "style|st|weight|we"; },
+                "pvcrS" : function(){ return "style|st|weight|we|family|fam|face|fa"; },
                 "ncnvrS" : function(){ return "[A-Za-z, ]{0,20}"; }, 
                 "uvrS" : function(){ return ""; }
             },{ 
@@ -329,8 +331,8 @@ rules['jQs'] = {
             */
             params : [{ 
                 "pcrS" : function(){ return "text|t"; },
-                "pvcrS" : function(){ return "decoration|d|align|a|tranform|tr|overline|o|underline|u|uppercase|up|capitalize|ca"; },
-                "ncnvrS" : function(){ return "[A-Za-z]{0,10}"; }, 
+                "pvcrS" : function(){ return "decoration|d|align|a|tranform|tr|"; },
+                "ncnvrS" : function(){ return "[A-Za-z]{0,10}"; }, //"overline|o|underline|u|uppercase|up|capitalize|ca|left|l|right|r|center|c|justify|j"; } 
                 "uvrS" : function(){ return ""; }
             },{ 
                 "pcrS" : function(){ return "text|t"; },
@@ -346,7 +348,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "float|fl"; },
                 "pvcrS" : function(){ return ""; },
-                "ncnvrS" : function(){ return "left|l|right|r"; },
+                "ncnvrS" : function(){ return "left|l|right|r|none|no"; },
                 "uvrS" : function(){ return ""; }
             }]
         },
@@ -357,7 +359,7 @@ rules['jQs'] = {
             params : [{ 
                 "pcrS" : function(){ return "clear|c"; },
                 "pvcrS" : function(){ return ""; },
-                "ncnvrS" : function(){ return "left|l|right|r|both|bo"; },
+                "ncnvrS" : function(){ return "left|l|right|r|both|bo|none|no"; },
                 "uvrS" : function(){ return ""; }
             }]
         },
