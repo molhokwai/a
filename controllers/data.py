@@ -191,10 +191,52 @@ def create():
             
 
 @auth.requires_login()
+def save():
+    try:
+        q = db(db.json.name == request.vars.name)
+        if len(q.select()):
+            _id = q.update(
+                name = request.vars.name,
+                data = request.vars.data
+            )
+            return response.json({
+                            'status' : 1,
+                            'message' : 'update done',
+                            'result' : _id
+            })
+        else:
+            _id = db.json.insert(
+                name = request.vars.name,
+                data = request.vars.data
+            )
+            return response.json({
+                            'status' : 1,
+                            'message' : 'insert done',
+                            'result' : _id
+            })
+    except Exception, ex:
+        return response.json({
+                            'status' : 0,
+                            'message' : 'error',
+                            'result' : str(ex)
+        })
+
+
+@auth.requires_login()
 def read():
     try:
         _json = db(db.json.name == request.vars.name).select()[0].data
-        return dict(_json = _json)
+        return response.json({
+                        'status' : 1,
+                        'message' : 'read done',
+                        'result' : simplejson.loads(_json)
+        })
+    except Exception, ex:
+        return response.json({
+                        'status' : 0,
+                        'message' : 'error',
+                        'result' : str(ex)
+        })
     except Exception, ex:
         return str(ex)
 
