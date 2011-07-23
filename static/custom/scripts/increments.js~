@@ -7,7 +7,8 @@ var callParams = function(_total){
   _total = _total ? _total : total();
   var rv = '?name=increments_white_woman_with_black_guy_flv'
           +'&data={'
-          +'"'+_is.elBaseName+'":'+_total.toString()
+          +'"'+_is.elBaseName+'":'+_total.toString()+','
+          +'"u_last":'+new Date()
           +'}';
   return rv
 };
@@ -21,6 +22,7 @@ var ajaxRead = function(){
           success : function(data){
               var json = eval('('+data+')');
               $('#'+_is.elBaseName+'').html(json.result.nr.toString());
+              $('#'+_is.elBaseName+'_u_last').html(json.result.u_last.toString());
               $('#'+_is.elBaseName+'_msg').html('read done');
           },
           error : function(data){

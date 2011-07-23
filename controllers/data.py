@@ -202,7 +202,7 @@ def save():
             return response.json({
                             'status' : 1,
                             'message' : 'update done',
-                            'result' : _id
+                            'result' : simplejson.loads(q.select()[0].data)
             })
         else:
             _id = db.json.insert(
@@ -212,7 +212,7 @@ def save():
             return response.json({
                             'status' : 1,
                             'message' : 'insert done',
-                            'result' : _id
+                            'result' : simplejson.loads(q.select()[0].data)
             })
     except Exception, ex:
         return response.json({
