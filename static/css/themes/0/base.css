@@ -150,3 +150,30 @@ input[type="button"]:first-letter {
 .color-subtle-blue {
     color: #DDEDFF;
 }
+
+div.notes {
+    width: 95%;
+    margin-left: 2%;
+    margin-top: 2%;
+    border-top: 1px solid snow; 
+}
+div.notes p {
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.background-std {
+    background-color: rgb(100,110,100);
+    background-image: gradient(linear, left top, left bottom, color-stop(0, rgb(0,0,10)), color-stop(1, rgb(100,110,100)));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(0,0,10)), color-stop(1, rgb(100,110,100)));
+    background-image: -moz-linear-gradient(top, rgb(0,0,10), rgb(100,110,100));
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=rgb(0,0,10),endColorstr=rgb(100,110,100));        
+}
+
+div.background-std, div.background {
+    background-color: #111111 !important;
+}
+
+.close-hover:hover {
+    cursor: url('/a/static/images/themes/0/x_15x15.png'),auto;
+}

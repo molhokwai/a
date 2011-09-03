@@ -33,6 +33,9 @@
               application : '{{=this_app}}'
           },
           pages : [],
+          themes : {
+              current : '{{=response.theme}}'
+          }
       };
       var utilities = {
           google_translate : {
@@ -43,6 +46,7 @@
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQs.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQCli.js"></script>
@@ -66,7 +70,7 @@
           }
           $('#google_translate_element').hide();
     
-		  wrapperWidth();
+          wrapperWidth();
       });
     </script>
 
@@ -95,6 +99,7 @@
                 {{flash = session.flash if session.flash else response.flash}}
                 {{if flash:}}{{=XML(flash)}}{{pass}}
             </font>
+            <font id="_cmd_result_msg" class="flash small"></font>
             <input type="hidden" id="_cmd_history_cur" value="-1"/>
         </form>
       </div>
@@ -138,6 +143,7 @@
           {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
           {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
           {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}}
+          {{=A(T('why this site as it is'), _href=URL(r=request, c='default', f='page', args=['clarity_why_this_site_so']))}}
       </div>
         
     </div>

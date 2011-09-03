@@ -262,6 +262,21 @@ var on_cli_web_submit=function(){
             rv=caught_eval($('#_cmd').val().replace(' ', '.')+'()');
         }
 
+        /* added 'underscore' & method, with last item as parameter eval */
+        if (rv==cec_rv){
+			var mp = $('#_cmd').val().split(' ');
+			var l = mp.length;
+			var e_s = '';
+			for(i in mp){
+				e_s += mp[i];
+				if (i<l-2){ e_s += '_'; }
+				else if (i==l-1){ e_s = '("'+e_s+'")'; }
+			}
+			alert(e_s);
+        	rv=caught_eval(e_s);
+        }
+		
+
         /* THEN: REGISTERED FUNCTIONS ASSUMPTIONS */
         if (rv==cec_rv){
             if (cli_web_registered.length>0){

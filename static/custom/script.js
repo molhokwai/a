@@ -187,6 +187,29 @@ var liveSearch = {
     }   
 };
 
+/*************
+  context : 
+  search in pages
+**************/
+var search = find_in_pages = search_in_pages = in_pages = function(text){
+   molhokwai.util.object.walk(
+	   server.pages, 
+	   null, 
+	   [function(v, p){
+		   if (v.post_text.toLowerCase().indexOf(p.text.toString().toLowerCase())>0){
+			   var a = document.createElement('a');
+			   a.href = '/'+server.request.application+'/default/page/'+v.id;
+			   a.target = '_blank';
+			   a.innerHTML = v.post_title + ' ';
+			   $("#_cmd_result_msg").append(a);
+		   }
+	   },
+	   {'text':text}
+	   ]
+   );
+   return true
+};
+
 
 /*************
   context : browser

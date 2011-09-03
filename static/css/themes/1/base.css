@@ -115,3 +115,19 @@ iframe[name='photo_frame'] {
 .color-subtle-blue {
     color: #223244;
 }
+
+.background-std { {
+    background-color: rgb(255, 255, 255);
+    background-image: gradient(linear, left top, left bottom, color-stop(0, rgb(245,245,245)), color-stop(1, rgb(255,255,255)));
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(245,245,245)), color-stop(1, rgb(255,255,255)));
+    background-image: -moz-linear-gradient(top, rgb(245,245,245), rgb(255,255,255));
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType =3, startColorstr=rgb(245,245,245),endColorstr=rgb(255,255,255));        
+}
+
+div.background-std, div.background {
+    background-color: #EEEEEE !important;
+}
+
+.close-hover:hover {
+    cursor: url('/a/static/images/themes/1/x_15x15.png'),auto;
+}

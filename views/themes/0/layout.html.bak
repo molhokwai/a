@@ -40,12 +40,15 @@
           }
       };
     </script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.common.js"></script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/net.molhokwai/molhokwai.util.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQs.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQCli.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQEntities.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQonDocumentReady.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
     <script type="text/javascript">
@@ -63,6 +66,8 @@
               $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
           }
           $('#google_translate_element').hide();
+    
+		  wrapperWidth();
       });
     </script>
 
@@ -84,13 +89,14 @@
       <!-- end #user-menu -->
 
       <div id="cli_web" class="left margt2pc  width100pc">
-        <form onsubmit="return false;">
+        <form onsubmit="return false;" class="autonome">
             <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>
             <font id="_cmd_msg" class="flash small">
                 {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
                 {{flash = session.flash if session.flash else response.flash}}
                 {{if flash:}}{{=XML(flash)}}{{pass}}
             </font>
+            <font id="_cmd_result_msg" class="flash small"></font>
             <input type="hidden" id="_cmd_history_cur" value="-1"/>
         </form>
       </div>
@@ -112,7 +118,7 @@
           <!-- end #google_translate_element-->          
       </div>
     
-      <div id="content" class="padl3pc left margt5pc width100pc">
+      <div id="content" class="padl3pc padb5pc left margt5pc width100pc">
         <div id="searchcontrol"></div>
         {{include}}
       </div>

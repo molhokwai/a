@@ -1,0 +1,80 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        /* absolute box toggling 
+            Known *feature*:
+                clicking on a link closes the box, but also
+                redirects or execute the link action                             
+        */
+        var _colors = {
+            dB : '#FEFEFE',
+            dBc : '#111111'
+        };
+        if (server.themes.current == '0'){
+            _colors.dB = '#111111';
+            _colors.dBc = '#EFEFEF';
+        };
+        $('.background').css({ backgroundColor: _colors.dB, color: _colors.dBc });
+    });
+</script>
+<div class="jQs fs0.95em">
+    <h1 class="jQs tac mb2%">Dashboard</h1>
+
+    <div class="border-std jQs mt1% padv1% padho2%">
+        <h2 class="jQs tac mb2%" onclick="$('#dashboard_summary').toggle();"><a>Summary</a></h2>
+        <div id="dashboard_summary" class="border-std background jQs mt-1.5% maw50% posabs posabs dinone close-hover"
+            onclick="$('#dashboard_summary').toggle();">
+            <p class="jQs pho2% pt1% pb6%">At all times, this is the dashboard of the project. Everything about the project fits in this page, with no history required. All information about the project directly accessible from here. If/when more needed, more done.</p>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="border-std jQs fll w45% mt3% padv1% padho2%">
+        <h2 class="jQs tac mb2%" onclick="$('#dashboard_status').toggle();"><a>Status</a></h2>
+        <div id="dashboard_status" class="border-std background jQs mt-1% posabs dinone close-hover"
+            onclick="$('#dashboard_status').toggle();">
+            <p class="jQs pho2% pt1% pb6%">In inception, putting down the basis, the building blocks, brain storming and crystallizing the outputs.</p>
+        </div>
+    </div>
+
+    <div class="border-std jQs flr w45% mt3% padv1% padl1% padr2%">
+        <h2 class="jQs tac mb2%" onclick="$('#dashboard_documents').toggle();"><a>Documents</a></h2>
+        <div id="dashboard_documents" class="border-std background jQs mt-1.5% posabs dinone close-hover"
+            onclick="$('#dashboard_documents').toggle();">
+            <ul class="jQs fs0.85em pho2% pt1% pb2% bullet-none">
+                <li><a href="https://docs.google.com/document/d/1HU9axR4CkBbCZcfJEDtyfXyAbUBj4wtrYwnesBdCHmM">System &amp; Intention: The System, The Purpose, The Intention</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="border-std jQs fll w45% mt3% padv1% padho2%">
+        <h2 class="jQs tac mb2%" onclick="$('#dashboard_media').toggle();"><a>Media</a></h2>
+        <div id="dashboard_media" class="border-std background jQs posabs minw35% mt-1% pho2% dinone close-hover"
+            onclick="$('#dashboard_media').toggle();">
+            <p>...</p>
+        </div>
+    </div>
+
+    <div class="border-std jQs flr w45% mt3% pad0.5%">
+        <h2 class="jQs tac mb2%">People</h2>
+        <div class="jQs left fs0.85em padv1% padl4% padr2%">
+            <h2 onclick="$('#people_mayou_nkensa').toggle();"><a>mayou nkensa -hervé</a></h2>
+            <div id="people_mayou_nkensa" class="border-std background jQs posabs pv0.4% maw35% dinone close-hover"
+                onclick="$('#people_mayou_nkensa').toggle();">
+                <ul>
+                    <li>On: -The document -Gathering the general principles -Gathering the core technical principles, pieces &amp; fundamentals</li>
+                    <li>Feeling: -At this moment: Not good: the tension due to the Transition I am in</li>
+                    <li>State of Being: -Ill out of Tension -Forward-Looking, Looking forward to the actualization of the Transition</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="border-std jQs flr w90% mt3% pad0.5%">
+        <h2 class="jQs tac mb2%">Links</h2>        
+    </div>
+</div>

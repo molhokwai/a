@@ -27,7 +27,7 @@ body {
     text-decoration: overline;
 }
 
-h3, h4 {
+h2, h3, h4 {
     margin-top: 2%;
 }
 h5, h6, h7 {
@@ -44,6 +44,12 @@ h5 {
     font-size: 0.95em;
     text-decoration: overline;
 }
+
+h2 a, h3 a, h4 a, h5 a {
+  cursor : pointer;
+}
+
+
 /* ELEMENTS */
 table {
     width: 100%;
@@ -143,4 +149,7 @@ iframe[name='photo_frame'] {
 }
 .grid tr+tr td {
   font-weight: normal;
+}
+.close-hover:hover {
+    cursor: url('/a/static/images/x_15x15.png'),auto;
 }
