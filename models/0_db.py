@@ -53,7 +53,7 @@ app_modules_config = {
 db.define_table('app_config',
     SQLField('APP_DETAILS',             'list:string', required=True,    default=['molhokwai.net-a', 'v001'],     
             label=T('App details (name, version)')),
-    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
+    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['usr_psw'],     
             label=T('App security details (login mechanism)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
