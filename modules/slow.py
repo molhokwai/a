@@ -173,11 +173,21 @@ class Functions:
         pass
 
     def find_and_replace(subj, obj):
-        for(k in obj):
+        for k in obj:
             while(subj.find(k)>=0):
                 subj = subj.replace(k, obj[k])
         return subj
 
+    def convert_to_timezone():
+        """From: http://www.computerhope.com/jargon/t/time.htm
+            Getting html page body
+            Parsing corr. table to key, values
+            Converting & returning
+            
+            => Extracting (programming) Pattern to be used
+                in similar processes
+        """
+        pass
         
 class Sequence:
     """Attributes

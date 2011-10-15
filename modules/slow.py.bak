@@ -14,6 +14,7 @@ from gluon.sqlhtml import *
 ##
 #########################################################################
 
+
 class Function:
     _name = ''
     _ref = None
@@ -158,7 +159,7 @@ class Functions:
 
         return self.execute_sequence(self.find_sequence(_input, request), _input)
 
-    def find_functinos(self):
+    def find_functions(self):
         """
             Wide purpose function to look for new functions
             'everywhere' possible and add them
@@ -170,6 +171,23 @@ class Functions:
         pass
 
     def x(self, c, d, e):
+        pass
+
+    def find_and_replace(subj, obj):
+        for k in obj:
+            while(subj.find(k)>=0):
+                subj = subj.replace(k, obj[k])
+        return subj
+
+    def convert_to_timezone():
+        """From: http://www.computerhope.com/jargon/t/time.htm
+            Getting html page body
+            Parsing corr. table to key, values
+            Converting & returning
+            
+            => Extracting (programming) Pattern to be used
+                in similar processes
+        """
         pass
         
 class Sequence:
