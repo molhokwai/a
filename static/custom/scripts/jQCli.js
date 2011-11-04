@@ -343,7 +343,10 @@ var on_cli_web_submit=function(){
             rv = !rv ? pages_match(p_m_vals[i]) : rv;
             i++;
         }
-        if (rv) window.location = rv;
+        if (rv) {
+            window.location = rv;
+            return
+        }
         
         /* FINALLY: LAST CHANCE... */
         /* last chance function... */
