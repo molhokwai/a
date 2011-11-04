@@ -298,7 +298,7 @@ class Utilities():
     ## SERVER SIDE OUTPUT
     def replace_serverside_output_values(self, _text, tag_re='\</*aservero\>'):
         """
-		WARNING: Mixed Up Logic (compared to original below)
+        WARNING: Mixed Up Logic (compared to original below)
 
         b = re.findall(re.compile('<aservero>\w*?</aservero>'), _text)
         for c in b:

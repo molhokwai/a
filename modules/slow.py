@@ -82,6 +82,7 @@ class Functions:
             functions = self.functions()
 
         # Generate a random number between 1 and len(functions)
+		# <?Optimization?>: upper limit for random number
         nr_of_functions = 10
 
         # Generate a random list of [nr_of_functions] functions

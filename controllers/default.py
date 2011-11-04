@@ -1,6 +1,7 @@
 ###################################
 ## CONTROLLER INITIALIZATION
 ###################################
+import datetime
 
 try:
     exec('from applications.%s.modules import common' % (this_app if this_app else 'a'))
@@ -566,7 +567,34 @@ def json():
         'message' : 'done',
         'result' : get_app_objects(area)
     })
-    
+
+@auth.requires_login()
+def server_eval():
+    if auth.user.is_admin:
+        area = request.args[0]
+        
+        if area == 'eFc':
+            if request.args[1] == 'at':
+                session.eFc_at = datetime.datetime.now()
+                rv = { 'at': session.eFc_at, 'end' : None, 'lapse' : None }
+            elif request.args[1] == 'end':
+                rv = { 'at' : session.eFc_at, 'end' : datetime.datetime.now(), 'lapse' : None }
+                rv['lapse'] = (rv['end'] - rv['at']).seconds
+                if rv['lapse']>60: 
+                    session.sc = {
+                        _ : "..........."
+                    }
+                else: 
+                    session.sc = {
+                        _ : "False: No."
+                    }
+                
+            return response.json({
+                'status' : 1,
+                'message' : 'done',
+                'result' : rv
+            })
+        
 @service.jsonrpc
 def get_app_objects(what):
     return {
