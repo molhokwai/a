@@ -1,1 +1,1 @@
-/home/herve/development/workspaces/libraries/jquery/jquery.dump.js
+/home/mayou-nkensa/development/workspaces/libraries/jquery/jquery.dump.js

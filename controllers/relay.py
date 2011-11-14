@@ -23,5 +23,3 @@ def index():
         return dict(xml=urllib2.urlopen(rq).read())
     else:
         return response.json(sj.loads(urllib2.urlopen(rq).read()))
-
-

@@ -1,1 +1,1 @@
-/home/herve/development/workspaces/libraries/jquery/jquery.humanMsg.js
+/home/mayou-nkensa/development/workspaces/libraries/jquery/jquery.humanMsg.js

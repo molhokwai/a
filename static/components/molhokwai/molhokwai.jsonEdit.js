@@ -1,1 +1,1 @@
-/home/herve/development/workspaces/libraries/net.molhokwai/js/molhokwai.jsonEdit.js
+/home/mayou-nkensa/development/workspaces/libraries/net.molhokwai/js/molhokwai.jsonEdit.js

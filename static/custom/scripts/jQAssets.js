@@ -1,1 +1,1 @@
-/home/herve/development/workspaces/libraries/jquery/custom/jQAssets.js
+/home/mayou-nkensa/development/workspaces/libraries/jquery/custom/jQAssets.js

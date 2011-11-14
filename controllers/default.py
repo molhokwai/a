@@ -711,6 +711,25 @@ def do_stuff():
                 db(db.entities.id==int(i)).update(
                     searchable_through=request.vars.searchable_through.split(','))                    
             session.flash=T('update searchable entities done.')
+
+        elif request.args[0] in ['replace_in_titles']:
+            keys_vals = {}
+            for v in request.vars.keys_vals.split(','):
+                k_v = v.split('=')
+                keys_vals[k_v[0]] = k_v[1]
+            
+            special_chars = {'space' : ' ', 'backslash': '/', 'ampersand' : '&'}
+            _posts = db().select(db.posts.ALL)
+            for k in keys_vals:
+                _k = k
+                if k in special_chars:
+                    _k = special_chars[k]
+                v = keys_vals[k]
+                for _p in _posts:
+                    if _p.post_title.find(_k)>=0:
+                        db(db.posts.id == _p.id).update(post_title = _p.post_title.replace(_k, v))
+            session.flash=T('Replace in titles done')
+            
     else:
         session.flash=T('not admin')
     
@@ -735,5 +754,5 @@ def do_stuff():
 
         else:
             session.flash=T('not admin or..')
-
+        
     redirect(URL(r = request,f = 'index'))

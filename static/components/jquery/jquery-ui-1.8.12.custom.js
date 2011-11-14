@@ -1,1 +1,1 @@
-/home/herve/development/workspaces/libraries/jquery/jquery-ui-1.8.12.custom.js
+/home/mayou-nkensa/development/workspaces/libraries/jquery/jquery-ui-1.8.12.custom.js
