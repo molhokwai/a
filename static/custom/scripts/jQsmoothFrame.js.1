@@ -1,0 +1,120 @@
+var smoothFrame = {
+    shortcuts : {
+        sF: function() { return smoothFrame; },
+        sFo: function() { return  sF().options; },
+        sFosE: function() { return sFo().sourceElement; },
+        sFofE: function() { return sFo().frameElement; }
+    },
+    options : {
+        css : 'body { overflow: hidden }',
+        sourceElement: { 
+            selector:  '#blogs',
+            trigger: {
+                selector : 'a'
+            },
+            effect: {
+                toggle : true
+            },
+            htmlSetup : null
+        },
+        frameElement: { 
+            containerSelector:  '.iframe-box',
+            selector: function() { 
+                with(sourceFrame.shortcuts){
+                     return .sFofE().containerSelector + ' iframe';
+                }
+            },
+            doAnimation: true,
+            /* optional target url with placeholder */
+            targetUrlwPlh: null 
+        }
+    },
+    setup : function(){
+        with(smoothFrame.shortcuts){
+            /* css setup */
+            var script = document.createElement('script');
+            script.type = 'text/css';
+            script.innerHTML = .sFo().css;
+            document.getElementsByTagName('head')[0].appendChild(script);
+
+            /* source element html setup */
+            if (.sFosE().htmlSetup){
+                .sFosE().htmlSetup();
+            }
+
+            /* source element links binding */
+            $(.sFosE().selector() + ' ' 
+                + sFosE().trigger.selector
+            ).bind('click', openFrame)
+
+            /* Elements */
+            /* a close */
+            var aClose = document.createElement('a');
+            aClose.className = 'close position-absolute display-block width60pc text-alignr bold';
+            aClose.innerHTML = 'close';
+            $(aClose).bind('click', closeFrame);
+            /* iframe */
+            var iframe = document.createElement('iframe');
+            iframe.id = 'iframe';
+            iframe.name = 'iframe';
+            iframe.className = "position-absolute width60pc margin-auto";
+            $(iframe).top('20%'); 
+            /* append */
+            $(.sFofE().containerSelector).append(aClose);
+            $(.sFofE().containerSelector).append(iframe);
+
+            /* show/hide element links */
+            var aOPen = document.createElement('a');
+            var aHide = document.createElement('a');
+            aShow.href = 'javascript:$("'+sFofE().selector+'").show("slow");';
+            aHide.href = 'javascript:$("'+sFofE().selector+'").hide();';
+            $(aShow).addClass("color-transparent");
+            $(aHide).addClass("color-transparent");
+            $(aShow).html('show');
+            $(aHide).html('hide');
+
+            $(.sFofE().containerSelector).after(aHide);
+            $(.sFofE().containerSelector).after(aShow);
+        }   
+    },
+    openFrame : function(e){
+        with(smoothFrame.shortcuts){
+            if (.sFosE().effect.toggle){
+                $(.sFosE()).animate({opacity:0.2});
+            }
+
+            if (sFofE().targetUrlwPlh){
+                $(.sFofE().selector())[0].src =
+                    sFofE().replace(
+                        sFofE().targetUrlwPlh,
+                        e.srcElement.href.replace('#','')
+                    );
+            }
+            else {
+                $(.sFofE().selector())[0].src = e.srcElement.href;
+            }
+            $(.sFofE().containerSelector).show();
+            if (.sFofE().doAnimation){
+                $(.sFofE().containerSelector +' a.close').animate({width:'+=40%', left:'0', top:'0'});
+                $(.sFofE().selector()).animate(
+                    {height:'+=62em', width:'+=42%', left:'0', top:'2%'},
+                    1000,
+                    function(){
+                    // pass
+                    }
+                );
+                .sFofE().doAnimation = false;
+            }
+        }
+        e.preventDefault();
+    },
+    closeFrame: function(e){
+        with(smoothFrame.shortcuts){
+            if (.sFosE().effect.toggle){
+                $(.sFosE()).animate({opacity:1}, 1000);
+            }
+            $(.sFofE().selector())[0].src='';
+            $(.sFofE().containerSelector).hide();
+        }
+    };
+}

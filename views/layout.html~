@@ -9,23 +9,57 @@
     <meta name="keywords" content="{{=response.keywords}}" />
     <meta name="description" content="{{=response.description}}" />
     <meta name="google-site-verification" content="r0Pfq2q9SK7Pk9gkh1NnbsV28-mQoD8LoIGOeUhfer8" />
-
+    {{if response.refresh:}}{{=XML(response.refresh)}}{{pass}}
+    
     <link rel="stylesheet" href="/{{=this_app}}/static/css/_base.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/{{=this_app}}/static/css/base.css" type="text/css" media="screen" />
+    <!-- -VIEWS/LAYOUT.HTML  -VIEWS/THEMES/0/LAYOUT.HTML -VIEWS/THEMES/1/LAYOUT.HTML -->
+    <!-- THEME: {{=response.theme}} -->
+    <!-- CHILD THEME: {{if response.child_theme:}}{{=response.child_theme}}{{else:}}None{{pass}} -->
+    <!-- THEME STYLESHEET: {{if response.theme_stylesheet:}}{{=response.theme_theme_stylesheet}}{{else:}}None{{pass}} -->
     <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/base.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/{{=this_app}}/static/components/markitup/sets/default/style.css" type="text/css" media="screen" />
-    <style type="text/css"></style>
+    {{if response.child_theme and response.theme_stylesheet:}}
+        <link rel="stylesheet" href="{{=response.theme_stylesheet}}" media="screen" />
+    {{pass}}
+    <!--[if IE 6]>
+        <link rel="stylesheet" href="/{{=this_app}}/static/css/themes/{{=response.theme}}/ie.css" type="text/css" media="screen" />
+    <![endif]-->
     
     {{include 'web2py_ajax.html'}}
-    
-    <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
+
+    <script type="text/javascript">
+      var server={
+          request : {
+              application : '{{=this_app}}'
+          },
+          pages : [],
+          themes : {
+              current : '{{=response.theme}}'
+          }
+      };
+      var utilities = {
+          google_translate : {
+              languages : []
+          }
+      };
+    </script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/js/shortcuts.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="/{{=this_app}}/static/components/markitup/jquery.markitup.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/add-ons.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/jquery/wymeditor/jquery.wymeditor.min.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/namespace.js"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/custom/script.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQs.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQCli.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQEntities.js"></script>
+    <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/jQonDocumentReady.js"></script>
     <script src="http://www.google.com/jsapi?key=ABQIAAAAhDaHyndn3TRHW8aVVgNfsBTPFwiohxerrbIfi_L7lDZ1YENwhRROxgxsy_RTT4IRmc8SWIpWu3KrsQ" type="text/javascript"></script>
     <script type="text/javascript" src="/{{=this_app}}/static/components/google/search_init.js"></script>
     <script type="text/javascript">
+      if ({{=str(refresh_page).lower()}}){
+          window.location.reload();
+      }
+            
       $(document).ready(function(){
           var browser_not=true;
           try { 
@@ -35,14 +69,16 @@
           if (browser_not){
               $('#content').append('<div class="text-alignc margt5pc"><em>{{=T("(Graphical design not tested (corrected) on this browser...)")}}</em></div>');
           }
-      });      
+          $('#google_translate_element').hide();
+    
+          wrapperWidth();
+      });
     </script>
 
   </head>
 
   <body>
-
-    <div id="content" class="margt2pc  width60pc">
+    <div id="wrapper" class="margt2pc  width60pc">
 
       <div id="user-menu" class="right">
          {{ if 'auth' in globals():}}
@@ -57,29 +93,62 @@
       <!-- end #user-menu -->
 
       <div id="cli_web" class="left margt2pc  width100pc">
-        <form onsubmit="return false;">
+        <form onsubmit="return false;" class="autonome">
             <input type="text" id="_cmd" name="_cmd" class="width30pc transparent"/>
             <font id="_cmd_msg" class="flash small">
                 {{if session.cli_web_flash:}}{{=session.cli_web_flash}}{{ session.cli_web_flash=False }}{{pass}}
-                {{if session.flash:}}{{=session.flash}}{{pass}}
+                {{flash = session.flash if session.flash else response.flash}}
+                {{if flash:}}{{=XML(flash)}}{{pass}}
             </font>
+            <font id="_cmd_result_msg" class="flash small"></font>
             <input type="hidden" id="_cmd_history_cur" value="-1"/>
         </form>
       </div>
       <!-- end #cli_web -->
+
+      <div class="clear"></div>
+      
+      <div id="utilities">
+          <div id="google_translate_element"></div>
+          <script>
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: '{{=current_language[:2]}}'
+              }, 'google_translate_element');
+            }
+          </script><script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+          {{=A(T('translate'), _href="javascript:return false;", _onclick="$('#google_translate_element').toggle();", _class="color-transparent", _target='_blank')}}
+          <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/add-ons/google_translate.js"></script>
+          <!-- end #google_translate_element-->          
+      </div>
     
-      <div id="text" class="padl3pc left margt5pc width100pc">
+      <div id="content" class="padl3pc padb5pc left margt5pc width100pc">
         <div id="searchcontrol"></div>
         {{include}}
       </div>
-      <!-- end #text -->
+      <!-- end #content -->
 
-      <div id="utility" class="clear">&nbsp;</div>
+      <div id="sidebar" class="right width30pc text-alignr">
+        <div id="sidebar-content" class="display-none">
+          <!-- #sidebar menu deactivated. See cms theme foreventual reactivation -->
+          {{include "sidebars/%s.html"%(response.theme_sidebar)}}
+        </div>
+        <!-- end #sidebar-content -->
+      </div>
+      <!-- end #sidebar -->
 
-      <div id="footer">{{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}</div>
+      <div class="clear"></div>
+
+      <div id="footer">
+          {{=A(T('acknowledgements'), _href=URL( r=request, c='default', f='page', args=['acknowledgements']))}}
+          {{=A(T('sidebar'), _href='javascript:return false;',  _onclick='$("#sidebar-content").toggle();')}}
+          {{=A(T('themes'), _href=URL(r=request, c='default', f='page', args=['themes']))}}
+          {{if session.authorized:}}{{=A(T('clear cache'), _href=URL(r=request, vars=dict(clear_cache=1)))}}{{pass}}
+          {{=A(T('why this site as it is'), _href=URL(r=request, c='default', f='page', args=['clarity_why_this_site_so']))}}
+      </div>
         
     </div>
-    <!-- end #content -->
+    <!-- end #wrapper -->
 
     <div id="tracking">
         <script type="text/javascript" id="tracking_src">
@@ -93,7 +162,7 @@
                 pageTracker._trackPageview();
             }
             catch(e) {
-                if (console) try{console.log(e);}catch(e){}
+                try{if(console)console.log(e);}catch(e){}
             }
         </script>
     </div>    
@@ -101,11 +170,12 @@
 
     <div id="links">
              {{=A(T('add page/post'),_href=URL(r=request,c='default',f='add/page'), _class='color-transparent')}}
-             {{
-                 _post=None
-                 try: _post=post
-                 except Exception, ex: pass
-             }}
+             {{_post=None}}
+             {{try:}}
+                 {{_post=post}}
+             {{except:}}
+                 <!-- post is None -->
+             {{pass}}
              {{if _post:}}
                  {{if _post.post_type=='page':}}
                      {{=A(T('edit page/post ?'),_href=URL(r=request,c='default',f='edit/page/%i' % _post.id), _class='color-transparent')}}
@@ -129,11 +199,12 @@
              
              {{=A(T('pages'),_href=URL(r=request,c='default',f='pages'), _class='color-transparent')}}
              {{if response.pages:}}
-                 {{for _title,_false,_link in response.links:}}
+                 {{for _title,_is_current,_link,_app in response.pages:}}
                          {{=A(T(_title),_href=_link, _class='color-transparent')}}
                  {{pass}}
              {{pass}}
     </div>
+    <!-- end #links -->
   
   </body>
 </html>

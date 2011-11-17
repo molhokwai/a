@@ -1,0 +1,1 @@
+/home/mayou-nkensa/development/workspaces/libraries/js/shortcut.js

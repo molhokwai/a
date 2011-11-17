@@ -1,0 +1,152 @@
+var responseData = null;
+var defaultTranslLanguages = ['fr'];
+var translateParams = null;
+var previousLanguage = null;
+var currentLanguage = null;
+var params = null;
+var detectLanguageCallback = function(response) {
+	currentLanguage = response.data.detections[0][0].language;
+
+	/* supported languages call */
+	params['urlActionAppend'] = '/languages';
+	params['sourceLanguage'] = currentLanguage;
+	params['callback'] = 'supportedLanguagesCallback';
+	//setTimeout('setScriptSrc();', 1000);
+}
+var supportedLanguagesCallback = function(response){
+/* set Languages: assumption to be verified @stack-inspection time */
+var supportedLanguages = response.data.translations.supported;
+	for(i in supportedLanguages){
+		if (previousLanguage!=currentLanguage 
+			|| !$('.vcs-post fieldset div.languages div.'+translateParams.targetLanguage+' input').length>0){
+			var div = document.createElement('div');
+			var label = document.createElement('label');
+			var input = document.createElement('input');
+			label.html(supportedLanguages[i]);
+			input.type = 'checkbox';
+			input.value = supportedLanguages[i];
+			$(input).bind('click', function(){
+				if (targetLanguages.length<maxTargetLanguages){
+					setTargetLanguages();
+				}
+				else {
+					$(this)[0].checked = false;
+				}
+			});
+			$(div).appendClass(supportedLanguages[i]);
+
+			$(div).append(input);
+			$(div).append(label);
+			$(div).append(' | ');
+			$('.vcs-post fieldset div.languages').append(div);
+		}
+	}
+	previousLanguage = currentLanguage;
+
+	/* translation call */
+	params['urlActionAppend'] = '';
+	params['sourceLanguage'] = currentLanguage;
+	params['callback'] = 'translateCallback';
+	//setTimeout('setScriptSrc();', 1000);
+};
+var translateCallback = function(response){
+	/* language fields singleton set  */
+	if(!$('.vcs-post fieldset .translations div.'+translateParams.targetLanguage+' textarea').length>0){
+		var div = document.createElement('div');
+		var label = document.createElement('label');
+		var textarea = document.createElement('textarea');
+		label.html(translateParams.targetLanguage);
+		textarea.rows = 3;
+		$(div).appendClass(translateParams.targetLanguage);
+
+		$(div).append(label);
+		$(div).append(textarea);
+		$('.vcs-post fieldset .translations').append(div);
+	}
+
+	/* language textarea value set  */
+	$('.vcs-post fieldset .translations div.'+translateParams.targetLanguage+' textarea').html(
+		responseData.translations[0].translatedText
+	);
+};
+
+var script = null;
+var setScriptSrc = function(){
+	script.src = 'https://www.googleapis.com/language/translate/v2'
+				+ (params && params.urlActionAppend ? params.urlActionAppend : '')
+				+ '?key=' + params.key
+				+ '&callback=' + params.callback 
+				+ '&q=' + params.sourceText
+				+ (params && params.sourceLanguage ? '&source=' + params.sourceLanguage : '')
+				+ '&target=' + params.targetLanguage;
+};
+/* original from: http://code.google.com/apis/language/translate/v2/getting_started.html */
+var execSingletonTranslScript = function(){
+	if (!script){
+		script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.id = 'google_translate_detect';
+		document.getElementsByTagName('head')[0].appendChild(script);    
+	}
+	/* detect language call */
+	params['urlActionAppend'] = '/detect';
+	params['callback'] = 'detectLanguageCallback';
+	setScriptSrc(); 
+};
+
+
+var targetLanguages = null;
+var setTargetLanguages = function(){
+	targetLanguages = []; 
+	$.each('.vcs-post fieldset div.languages div input', function(){
+		if ($(this)[0].checked){
+			targetLanguages.push($(this)[0].val());
+		}
+	});
+};
+
+var maxTargetLanguages = 2;
+var doTranslate = function(e){
+	setTargetLanguages();
+	if (!targetLanguages.length){
+		targetLanguages = defaultTranslLanguages; 
+	}
+
+	for(i in targetLanguages){
+		params = { 
+			key : 'AIzaSyDGeSz7vrDX2AmOqGLaKsCal17eX_vmW_E',
+			targetLanguage: targetLanguages[i],
+			sourceText: $('.vcs-post fieldset div.message textarea').val()
+		};
+		execSingletonTranslScript();
+	}
+};
+
+var html = '    <h3>Facebook&reg;</h3>'
+	+'    <p>Authentication on Facebook&reg; required. If not authenticated on Facebook&reg;, it will ask You to</p>'
+	+'	<form class="vcs-post">'
+	+'        <fieldset>'
+	+'            <div class="credential">'
+	+'                <label>Your username</label><input type="text" id="username" name="username"/>'
+	+'            </div>'
+	+'            <div class="message">'
+	+'                <label>Your message</label><textarea id="message" name="message" rows="3"></textarea>'
+	+'            </div>'
+	+'            <div class="languages">'
+	+'                <label>Translate to Languages</label>'
+	+'            </div>'
+	+'			<div class="translations" class="jQs dinone">'
+	+'			</div>'
+	+'            <div class="jQs tar">'
+	+'                <label></label><a class="button submit jQs pho1% pv0.5% mt1%">Submit</a>'
+	+'            </div>'
+	+'        </fieldset>'
+	+'	</form>'
+
+
+$(document).ready(function(){
+	$('.vcs-post fieldset div.message textarea').bind('change', doTranslate)
+	$('.vcs-post fieldset div a.submit').bind('click', doTranslate)
+	$('#post_to_div').html(html)
+});
+

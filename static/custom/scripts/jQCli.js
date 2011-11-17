@@ -218,6 +218,16 @@ var cli_web_register = function(_fct){
     cli_web_registered.push(_fct);
 };
 
+/* Ctrl+S event: cli web submit */
+shortcut.add("Ctrl+S",function() {
+    $('#_cmd').val('submit');
+    on_cli_web_submit();
+},{
+    'type':'keydown',
+    'propagate':false,
+    'target':document
+});
+
 /* on_cli web submit event handler */
 var on_cli_web_submit=function(){
     /* history */

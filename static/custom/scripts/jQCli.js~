@@ -48,7 +48,7 @@ var select_elements=function(selector, params){
       case ':button':
       case ':submit':
           _function=function() {
-              return ($(this).value().toLowerCase().indexOf(params[0].toLowerCase())>=0)
+              return ($(this).val().toLowerCase().indexOf(params[0].toLowerCase())>=0)
           };
           break;
       case ':checkbox':
@@ -218,6 +218,12 @@ var cli_web_register = function(_fct){
     cli_web_registered.push(_fct);
 };
 
+/* Ctrl+S event: cli web submit */
+shortcut.add("Ctrl+S",function() {
+    $('#_cmd').val('submit');
+    on_cli_web_submit();
+});
+
 /* on_cli web submit event handler */
 var on_cli_web_submit=function(){
     /* history */
@@ -262,6 +268,20 @@ var on_cli_web_submit=function(){
             rv=caught_eval($('#_cmd').val().replace(' ', '.')+'()');
         }
 
+        /* added 'underscore' & method, with last item as parameter eval */
+        if (rv==cec_rv){
+            var mp = $('#_cmd').val().split(' ');
+            var l = mp.length;
+            var e_s = '';
+            for(i in mp){
+                e_s += mp[i];
+                if (i<l-2){ e_s += '_'; }
+                else if (i==l-1){ e_s = '("'+e_s+'")'; }
+            }
+            rv=caught_eval(e_s);
+        }
+        
+
         /* THEN: REGISTERED FUNCTIONS ASSUMPTIONS */
         if (rv==cec_rv){
             if (cli_web_registered.length>0){
@@ -295,30 +315,43 @@ var on_cli_web_submit=function(){
                 rv=click($('#_cmd').val());
             }
         }
-
-        /* THEN: APPLICATION/SYSTEM CONTENT BASED ASSUMPTIONS */
-        /* page title match */
-        var pages_match={};
-        for(_id in server.pages){
-            var s_p_i_p_t=server.pages[_id].post_title;
-            var index=s_p_i_p_t.toLowerCase().indexOf($('#_cmd').val().toLowerCase());
-            if (index>=0){
-                pages_match[s_p_i_p_t.toLowerCase()]=index;
-            }
-        }
-        var p_match=null;
-        var i_match=-1;
-        for(p_t in pages_match){
-            if(pages_match[p_t]>=0){
-                if(i_match<0 || (pages_match[p_t]<i_match)){
-                    i_match=pages_match[p_t];
-                    p_match=p_t;
+        var pages_match = function(val){
+            /* THEN: APPLICATION/SYSTEM CONTENT BASED ASSUMPTIONS */
+            /* page title match */
+            var _pages_match={};
+            for(_id in server.pages){
+                var s_p_i_p_t=server.pages[_id].post_title;
+                var index=s_p_i_p_t.toLowerCase().indexOf(val);
+                if (index>=0){
+                    _pages_match[s_p_i_p_t.toLowerCase()]=index;
                 }
             }
+            var p_match=null;
+            var i_match=-1;
+            for(p_t in _pages_match){
+                if(_pages_match[p_t]>=i_match){
+                    i_match=_pages_match[p_t];
+                        p_match=p_t;
+                }
+            }
+            if(i_match>=0 && p_match){
+                return '/'+server.request.application+'/default/page/'+p_match;
+            }
+            else {
+                return null;
+            }
+        };
+        var p_m_val = $('#_cmd').val().toLowerCase();
+        rv = pages_match(p_m_val);        
+        rv = !rv ? pages_match(p_m_val.replace(' ', '_')) : rv;
+        var p_m_vals = p_m_val.split(' '); var i = 0;
+        while(!rv && i<p_m_vals.length){
+            rv = !rv ? pages_match(p_m_vals[i]) : rv;
+            i++;
         }
-        if(i_match>=0 && p_match){
-            rv=true;
-            window.location='/'+server.request.application+'/default/page/'+p_match;
+        if (rv) {
+            window.location = rv;
+            return
         }
         
         /* FINALLY: LAST CHANCE... */
@@ -374,4 +407,3 @@ var on_cli_web_submit=function(){
         return false;
     }
 };
-
