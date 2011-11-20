@@ -1,3 +1,7 @@
+/*
+FLOW DEVELOPMENT: 
+----------------
+*/
 /* THE SYSTEM, A PERFECT ONE: 
        FUNCTIONAL/TECHNICAL DETAILS
    --------------------------------  
@@ -12,66 +16,66 @@
    : *PyJs*
 */
 try{
-	if(molhokwai){
-		// just checking for existence
-	}
-	else {
-		// 'blind' condition 
-		var molhokwai = {};
-	}
+    if(molhokwai){
+        // just checking for existence
+    }
+    else {
+        // 'blind' condition 
+        var molhokwai = {};
+    }
 }
 catch(e){
-	var molhokwai = {};
+    var molhokwai = {};
 }
 
 molhokwai["flow"] = {
     /* Handlers */
-	handlers : {
-    	onSubmit : function(e){
-        	molhokwai.flow.flow.form.submit(molhokwai.flow.flow.form.params);
-        	return false;
-		}
+    handlers : {
+        onSubmit : function(e){
+            molhokwai.flow.flow.form.submit(molhokwai.flow.flow.form.params);
+            return false;
+        }
     },
 
     /* Container selector */
-	header : '#_header',
-	container : '#container',
-	footer : '#_footer',
+    header : '#_header',
+    container : '#container',
+    footer : '#_footer',
 
     /* Utilites */
-	utilities : {
-    	addElements : function(params){
-			if(!params.selector){
-            	$(molhokwai.flow.container).each(function(){
-        			for(i in params.elements){
-						$(this).append(params.elements[i]);
-        			}
-				});
-			}
-			else{
-            	$(params.selector).each(function(){
-        			for(i in params.elements){
-						$(this).append(params.elements[i]);
-        			}
-				});
-			}
-		},
-    	getElementsHtml : function(params){
-			if(!params || !params.selector){
-            	return $(molhokwai.flow.container).html();
-			}
-			else{
-            	return $(params.selector).html();
-			}
-		},
-    	clearElements : function(params){
-			if(!params || !params.selector){
-            	$(molhokwai.flow.container).html("");
-			}
-			else{
-            	$(params.selector).html("");
-			}
-		}
+    utilities : {
+        addElements : function(params){
+            if(!params.selector){
+                $(molhokwai.flow.container).each(function(){
+                    for(i in params.elements){
+                        $(this).append(params.elements[i]);
+                    }
+                });
+            }
+            else{
+                $(params.selector).each(function(){
+                    for(i in params.elements){
+                        $(this).append(params.elements[i]);
+                    }
+                });
+            }
+        },
+        getElementsHtml : function(params){
+            if(!params || !params.selector){
+                return $(molhokwai.flow.container).html();
+            }
+            else{
+                return $(params.selector).html();
+            }
+        },
+        clearElements : function(params){
+            if(!params || !params.selector){
+                $(molhokwai.flow.container).html("");
+            }
+            else{
+                $(params.selector).html("");
+            }
+        }
     },
 
     /* Flow class instance */
@@ -79,157 +83,155 @@ molhokwai["flow"] = {
 
     /* State */
     State : {
-		page : {
-        	common : {
-            	'header' : null,
-            	'footer' : null
-        	},
-        	elements : null
-    	}
-	},
+        page : {
+            common : {
+                'header' : null,
+                'footer' : null
+            },
+            elements : null
+        }
+    },
 
-	History : [
-	],
+    History : [
+    ],
 
-	onDocumentReady : function(params){
-		var m_flow = molhokwai.flow;
+    onDocumentReady : function(params){
+        var m_flow = molhokwai.flow;
         var flow = m_flow.flow = new m_flow.Flow(params);
-		var State = m_flow.State;
+        var State = m_flow.State;
 
-		for(el in flow.page.commonElements){
-        	if(!State.page.common[el]){
-            	State.page.common[el] = flow.page.commonElements[el];
-           		m_flow.utilities.addElements(
-					{elements: State.page.common[el],
-				 	selector: molhokwai.flow[el]}
-				);
-        	}
-		}
+        for(el in flow.page.commonElements){
+            if(!State.page.common[el]){
+                State.page.common[el] = flow.page.commonElements[el];
+                m_flow.utilities.addElements(
+                    {elements: State.page.common[el],
+                    selector: molhokwai.flow[el]}
+                );
+            }
+        }
         State.page.elements = flow.page.elements;
         m_flow.utilities.addElements(
-				{elements: State.page.elements,
-				 selector: molhokwai.flow.container}
-		);
+                {elements: State.page.elements,
+                 selector: molhokwai.flow.container}
+        );
 
         rules.jQs.onDocumentReady();
     },
 
 
-	/*  Flow class
-    	@type class
-    	@params (dictionary): {
-        	which : [name of an implemented flow, default flow, if empty]
-    	}              
-	*/
-	Flow : function(params){
-		this.dbg = function(params){
-		   var s='flow.[] params:\n';
-		   var i=0;
-		   for(k in params){
-			   if(i>0){ 
-				   s+='\n';
-			   }
-			   s+='\t'+ k +':'+ params[k];
-			   i++;
-		   }
-		   window.alert(s);
-		};
+    /*  Flow class
+        @type class
+        @params (dictionary): {
+            which : [name of an implemented flow, default flow, if empty]
+        }              
+    */
+    Flow : function(params){
+        this.dbg = function(params){
+           var s='flow.[] params:\n';
+           var i=0;
+           for(k in params){
+               if(i>0){ 
+                   s+='\n';
+               }
+               s+='\t'+ k +':'+ params[k];
+               i++;
+           }
+           window.alert(s);
+        };
 
-		this.params = params;
+        this.params = params;
 
-		var Page = function(params){
-			var m_flow = molhokwai.flow;
-			var State = m_flow.State;
+        var Page = function(params){
+            var m_flow = molhokwai.flow;
+            var State = m_flow.State;
 
-			this.params = params;
+            this.params = params;
 
-			var Elements = function(params){
-				var elementTrees = params.elements;
-				var _elements = [];
-				for(i in elementTrees){
-					_elements.push(elements.generateTree(elementTrees[i]));
-				}
-				return _elements;
-			};
+            var Elements = function(params){
+                var elementTrees = params.elements;
+                var _elements = [];
+                for(i in elementTrees){
+                    _elements.push(elements.generateTree(elementTrees[i]));
+                }
+                return _elements;
+            };
 
-			if(this.params){
-				this.elements = new Elements({ elements : m_flow.page[this.params.page].elements });
-				this.commonElements = {}; 
-				for(el in m_flow.page.common){
-            		this.commonElements[el] =  new Elements({ elements : m_flow.page.common[el].elements });
-				}
-			}
-		};
-		if(this.params){
-			this.page = new Page(this.params);
-		}
+            if(this.params){
+                this.elements = new Elements({ elements : m_flow.page[this.params.page].elements });
+                this.commonElements = {}; 
+                for(el in m_flow.page.common){
+                    this.commonElements[el] =  new Elements({ elements : m_flow.page.common[el].elements });
+                }
+            }
+        };
+        if(this.params){
+            this.page = new Page(this.params);
+        }
 
-		var Form = function(params){
-			this.params = params;
+        var Form = function(params){
+            this.params = params;
 
-			this.submit = function(params){
-				molhokwai.flow.flow.flow(params);
-			};
-		};
-		if(this.params){
-			this.form = new Form(this.params);
-		}
+            this.submit = function(params){
+                molhokwai.flow.flow.flow(params);
+            };
+        };
+        if(this.params){
+            this.form = new Form(this.params);
+        }
 
-		this.to = function(params){
-			var m_flow = molhokwai.flow;
+        this.to = function(params){
+            var m_flow = molhokwai.flow;
 
-			m_flow.History.push({
-				html:m_flow.utilities.getElementsHtml(),
-				State:m_flow.State
-			});
-			m_flow.utilities.clearElements(
-				{selector:m_flow.container}
-			);
-			m_flow.onDocumentReady({page:params.page});
-		};
+            m_flow.History.push({
+                html:m_flow.utilities.getElementsHtml(),
+                State:m_flow.State
+            });
+            m_flow.utilities.clearElements(
+                {selector:m_flow.container}
+            );
+            m_flow.onDocumentReady({page:params.page});
+        };
 
-		/*	Flow process according to given parameters 
-			& configuration sequences
-		
-			@params:
-				Parsing: into a dict list, in this order:
-				[element l0, element l1, element l2] (l: level)
-				Constraint: Keys expected in params: 
-					-	page
-					-	form
-					-	others are grouped into 'element'
-		*/
-		this.flow = function(params){
-			var m_flow = molhokwai.flow;
-			var l = ['', '', ''];
-			for(k in params){ 
-				switch(k){
-					case 'page': l[0] = params[k]; break;
-					case 'form': l[1] = params[k]; break;
-					default: l[2] = params[k]; break;
-				}
-			}
+        /*  Flow process according to given parameters 
+            & configuration sequences
+        
+            @params:
+                Parsing: into a dict list, in this order:
+                [element l0, element l1, element l2] (l: level)
+                Constraint: Keys expected in params: 
+                    -   page
+                    -   form
+                    -   others are grouped into 'element'
+        */
+        this.flow = function(params){
+            var m_flow = molhokwai.flow;
+            var l = ['', '', ''];
+            for(k in params){ 
+                switch(k){
+                    case 'page': l[0] = params[k]; break;
+                    case 'form': l[1] = params[k]; break;
+                    default: l[2] = params[k]; break;
+                }
+            }
 
-			var sequences = molhokwai.flow.sequences;
-			var seq = null;
-			for(k in sequences){
-				if(k==l[0]){
-					seq = sequences[k];
-					for(var i=1;i<l.length;l++){
-						seq = seq[l[i]];
-					}
-				}
-			}
-			for(e in seq){
-				if(seq[e]=='page'){
-					m_flow.flow.to({page:e});
-				}
-				else if(typeof(seq[e])=='function'){
-					seq[e](params);
-				}
-			}
-		};
-	}
+            var sequences = molhokwai.flow.sequences;
+            var seq = null;
+            for(k in sequences){
+                if(k==l[0]){
+                    seq = sequences[k];
+                    for(var i=1;i<l.length;l++){
+                        seq = seq[l[i]];
+                    }
+                }
+            }
+            for(e in seq){
+                if(seq[e]=='page'){
+                    m_flow.flow.to({page:e});
+                }
+                else if(typeof(seq[e])=='function'){
+                    seq[e](params);
+                }
+            }
+        };
+    }
 };
-
-

@@ -218,9 +218,36 @@ var cli_web_register = function(_fct){
     cli_web_registered.push(_fct);
 };
 
-/* Ctrl+S event: cli web submit */
+/* Ctrl+S event: 'submit' and cli web submit */
 shortcut.add("Ctrl+S",function() {
     $('#_cmd').val('submit');
+    on_cli_web_submit();
+},{
+    'type':'keydown',
+    'propagate':false,
+    'target':document
+});
+
+/* Ctrl+E event: 'edit' and cli web submit */
+shortcut.add("Ctrl+E",function() {
+    $('#_cmd').val('edit');
+    on_cli_web_submit();
+},{
+    'type':'keydown',
+    'propagate':false,
+    'target':document
+});
+
+/* Ctrl+O event: 'view' and cli web submit */
+shortcut.add("Ctrl+O",function() {
+	if ($('#_cmd_msg a').length>0 
+		&& $('#_cmd_msg a').html().indexOf('view')>0){
+    	$('#_cmd').val('view');
+	}
+	else if ($('#posts_post_title').length>0 
+		&& $('#posts_post_title').val().length>0){
+    	$('#_cmd').val($('#posts_post_title').val());
+	}
     on_cli_web_submit();
 },{
     'type':'keydown',

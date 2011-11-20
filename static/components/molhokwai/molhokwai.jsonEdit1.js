@@ -31,14 +31,7 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
     if (index==null){ index=0; }
     if (p==null){ p=[]; }
 
-	var o = null;
-	if (eps && eps.HTML){
-    	// oass, o set 1 time in obj making
-	}
-	else {
-		o = [];
-	}
-	
+    var o = [];      
     if (typeof(obj) in {'number':'', 'string':''}){
         if (l+1<p.length){
             p.splice(l+1);
@@ -55,12 +48,7 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
                 }
                 else { eps = ep; }
             }
-			if (eps.HTML && eps['o'+l]){
-				$(eps['o'+l]).append(oAe[0](obj, l, index, p, eps));
-			}
-			else {
-            	o.push(oAe[0](obj, l, index, p, eps));
-			}
+            o.push(oAe[0](obj, l, index, p, eps));
         }
         else{
             o.push(obj);
@@ -78,12 +66,7 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
             for(i in obj){
                 if(l in p){ p[l]=i; }
                 else { p.push(i); }
-				if (eps.HTML && eps['o'+l-1]){
-					$(eps['o'+l-1]).append(walk(obj[i], oKe, oAe, l, i, p, eps));
-				}
-				else if(o) {
-                	o.push(walk(obj[i], oKe, oAe, l, i, p, eps));
-				}
+                o.push(walk(obj[i], oKe, oAe, l, i, p, eps));
             }
         }
         else if (typeof(obj) in {'object':''}){
@@ -122,16 +105,11 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
                     );
                 }
 				else if (eps && eps.HTML){
-					eps['o'+l] = oKe[0](k, l, i, p, eps);
-					if (eps['o'+l].className.indexOf('l_0')>=0){
-						/* singleton */
-						if (eps.diS){
-							$(eps.diS).append(eps['o'+l]);	
-						}
-					}
-					$(eps['o'+l]).append(
+					var _o = oKe[0](k, l, i, p, eps);
+					_o.appendChild(
 						walk(obj[k], oKe, oAe, l, i, p, eps)
 					);
+					o.push(_o);
 				}
                 else {
                     o.push(oKe[0](k, l, i, p, eps));
@@ -142,18 +120,13 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
         }
     }
     
-	if (eps && eps.HTML){
-		return
-	}
-	else {
-		var jrv = eps && eps.jrv;
-		if(jrv!=null){
-			return o.join(jrv);
-		}
-		else {
-			return o;
-		}
-	}
+    var jrv = eps && eps.jrv;
+    if(jrv!=null){
+        return o.join(jrv);
+    }
+    else {
+        return o;
+    }
 };
 
 /* Handled HTML tags */
@@ -229,12 +202,12 @@ var mAjs = function(a, l, index, p, eps){
             - ['ebs'] : event bindings tuples list ([['jquery event bind name', function]])
 */
 var mKe = function(k, l, index, p, eps){
-    var el = '';
+    var s = '';
 
     /* isHTMLTag: only closing and ending tag to set as eps.odl (object delimiter)
         for HTML tags generation */
     var isHTMLTag = false;
-	if (eps && eps.HTML){
+	if (!eps || !eps.HTML){
 		for(i in hHTMLTagsRegExps){
 			if (k.toString().match(hHTMLTagsRegExps[i])){
 				isHTMLTag = true;
@@ -243,31 +216,37 @@ var mKe = function(k, l, index, p, eps){
 		}
 	}
 
-    if(!isHTMLTag){
-        el = document.createElement('span');
-    }
-	else {
-        el = document.createElement(k.toString());
-	}
-
-    el.id = k+'-'+l+'-'+index;
+    var _id = k+'-'+l+'-'+index; 
     if (p){
-       	el.id = p.join('#:#');
+        _id = p.join('#:#');
     }
-    $(el).html(k);
-    el.className =  'k-level '+'l_'+l +' '+ 'k-index '+'i_'+index;
+    var _className = 'k-level '+'l_'+l +' '+ 'k-index '+'i_'+index; 
+
+    if(!isHTMLTag){
+        s = document.createElement('span');
+        s.id = _id;
+        $(s).html(k);
+        s.className = _className;
+    }
+    else {
+        if (!eps){
+            eps = {};
+        }
+        eps.odl = ['<'+k+' id="'+_id+'" class="'+_className+'">', 
+                   '', '', '</'+k+'>'];
+    }
     
     if (eps){
         for(k in eps){
             if(k=='mKe_ebs'){
                 var ebs=eps[k];
                 for(i in ebs){
-                    $(el).bind(ebs[i][0], ebs[i][1]);
+                    $(s).bind(ebs[i][0], ebs[i][1]);
                 }
             }
         }
     }
-    return el;
+    return s;
 };
 /* Make js string out of atom (key) passed 
     +(see previous method for comments)
@@ -406,6 +385,16 @@ var jsTb = function(si, di, options){
     catch(e){
         jsO = $.parseJSON(jsS.val());
     }
+        
+    var eL = walk(
+        jsO, 
+        [(options && options.makeKeyEntity ? options.makeKeyEntity : mKe), {}], 
+        [(options && options.makeAtomEntity ? options.makeAtomEntity : mAe), {
+            'mAe_ebs' : [['change', ujsO]]
+        }]
+    );
+    RLf = [];
+    fRL(eL, RLf);
     
     if(!jsT){
         if (!si || !di){
@@ -421,40 +410,8 @@ var jsTb = function(si, di, options){
         jsT.html('...');
     }
 
-    var eL = null;
-	if (options && options.HTML) {
-		/* destination id Selector */
-		options['diS'] = '#'+di;
-    	walk(
-        	jsO, 
-        	[(options && options.makeKeyEntity ? options.makeKeyEntity : mKe), {}], 
-        	[(options && options.makeAtomEntity ? options.makeAtomEntity : mAe), {
-            	'mAe_ebs' : [['change', ujsO]]
-        	}],
-			null, null, null,
-			options
-    	);
-	}
-	else {
-    	eL = walk(
-        	jsO, 
-        	[(options && options.makeKeyEntity ? options.makeKeyEntity : mKe), {}], 
-        	[(options && options.makeAtomEntity ? options.makeAtomEntity : mAe), {
-            	'mAe_ebs' : [['change', ujsO]]
-        	}],
-			null, null, null,
-			options
-    	);
-		RLf = [];
-		fRL(eL, RLf);
-	}
-
-	if (!options.HTML){
-    	for(i in RLf){
-        	jsT.append(RLf[i]);
-    	}
-	}
+    for(i in RLf){
+        jsT.append(RLf[i]);
+    }
     LId('#'+di);
 }
-
-

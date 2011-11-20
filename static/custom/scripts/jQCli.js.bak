@@ -218,7 +218,7 @@ var cli_web_register = function(_fct){
     cli_web_registered.push(_fct);
 };
 
-/* Ctrl+S event: cli web submit */
+/* Ctrl+S event: 'submit' and cli web submit */
 shortcut.add("Ctrl+S",function() {
     $('#_cmd').val('submit');
     on_cli_web_submit();
@@ -227,6 +227,26 @@ shortcut.add("Ctrl+S",function() {
     'propagate':false,
     'target':document
 });
+
+/* Ctrl+O event: 'view' and cli web submit */
+shortcut.add("Ctrl+O",function() {
+    $('#_cmd').val('view');
+    on_cli_web_submit();
+},{
+    'type':'keydown',
+    'propagate':false,
+    'target':document
+});
+
+/* on_cli web submit event handler */
+var on_cli_web_submit=function(){
+    /* history */
+    set_cmd_history($('#_cmd').val());
+    var cmd_msg = '';
+    var output = '';
+    var rv = false;
+    
+    /* >>(command) for direct server call */
 
 /* on_cli web submit event handler */
 var on_cli_web_submit=function(){

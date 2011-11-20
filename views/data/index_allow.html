@@ -1,0 +1,52 @@
+{{extend 'themes/%s/layout.html' % response.theme}}
+<!--
+    """
+        TODO: Refactoring
+        View 'contains' index view
+    """
+-->
+<style type="text/css">
+    #jsonTree span.k-level {
+        display: block;
+        padding-left: 2%;
+    }
+</style>
+<script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/molhokwai.jsonEdit.js"></script>
+<script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/slow.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        jsTb('entities_data', 'jsonTree', { HTML:true});
+    });
+</script>
+
+<h2>{{=edit_title}}</h2>
+
+<div class="data">
+    {{=form}}
+    {{if html:}}
+        {{=html}}
+    {{pass}}
+    
+    
+    {{if form2:}}
+        {{=form2_title}}
+        {{=form2}}
+    {{pass}}
+
+    <div class='list'>    
+        {{=form2_list_title}}
+        {{for f in form2_list:}}
+            {{=f}}
+        {{pass}}
+
+        <div class="clear"></div>
+    
+        {{=form3_list_title}}
+        {{for f in form3_list:}}
+            {{=f}}
+        {{pass}}
+    </div>
+    <div class="clear"></div>
+</div>
+
+{{=A(T('markup textareas'), _href='javascript:markup_textareas();', _class='color-transparent')}}

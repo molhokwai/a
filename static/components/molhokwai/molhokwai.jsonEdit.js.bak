@@ -24,7 +24,7 @@
        l : level, depth, within the object
        p : the path to the current element
        index : the index of the atom to add (eventual) items delimiter if >0
-       eps : extra parameters dictionary
+       eps : extra parameters dictionary (see jsOtoS function for sample usage)
 */
 var walk = function(obj, oKe, oAe, l, index, p, eps){
     if (l==null){ l=-1; }
@@ -122,6 +122,8 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
     }
 };
 
+/* Handled HTML tags */
+var hHTMLTagsRegExps = [/a/, /blockquote/, /div/, /h\d/, /li/, /ol/, /p/, /span/, /ul/];
 /* Make object out of atom passed 
    @params
        a : atom (string, number)
@@ -133,7 +135,7 @@ var walk = function(obj, oKe, oAe, l, index, p, eps){
 */
 var mAe = function(a, l, index, p, eps){
     var t=null;
-    if(typeof(a)=='string' && a.length<50 | (typeof(a)=='number')){
+    if(typeof(a)=='string' && a.length<50 || (typeof(a)=='number')){
         var t=document.createElement('input');
         t.type='text';
         t.className='';
@@ -153,7 +155,7 @@ var mAe = function(a, l, index, p, eps){
             $(t).html(a);
         }
 
-        t.className+='a-level '+l +' '+ 'a-index '+index;
+        t.className+='a-level '+'l_'+l +' '+ 'a-index '+'i_'+index;
         if (eps){
             for(k in eps){
                 if(k=='mAe_ebs'){
@@ -193,13 +195,38 @@ var mAjs = function(a, l, index, p, eps){
             - ['ebs'] : event bindings tuples list ([['jquery event bind name', function]])
 */
 var mKe = function(k, l, index, p, eps){
-    var s=document.createElement('span');
-    s.id = k+'-'+l+'-'+index;
-    if (p){
-        s.id = p.join('#:#');
+    var s = '';
+
+    /* isHTMLTag: only closing and ending tag to set as eps.odl (object delimiter)
+        for HTML tags generation */
+    var isHTMLTag = false;
+    for(i in hHTMLTagsRegExps){
+        if (k.toString().match(hHTMLTagsRegExps[i])){
+            isHTMLTag = true;
+            break;
+        }
     }
-    $(s).html(k);
-    s.className='k-level '+l +' '+ 'k-index '+index;
+
+    var _id = k+'-'+l+'-'+index; 
+    if (p){
+        _id = p.join('#:#');
+    }
+    var _className = 'k-level '+'l_'+l +' '+ 'k-index '+'i_'+index; 
+
+    if(!isHTMLTag){
+        s = document.createElement('span');
+        s.id = _id;
+        $(s).html(k);
+        s.className = _className;
+    }
+    else {
+        if (!eps){
+            eps = {};
+        }
+        eps.odl = ['<'+k+' id="'+_id+'" class="'+_className+'">', 
+                   '', '', '</'+k+'>'];
+    }
+    
     if (eps){
         for(k in eps){
             if(k=='mKe_ebs'){
@@ -221,7 +248,6 @@ var mKjs = function(a, l, index, p, eps){
     return v;
 };
 
-
 /* Update json object 
     jquery event handling function
 */
@@ -231,7 +257,7 @@ var ujsO = function(){
     if(typeof(v)=='number'){ q=''; }
     var v = q+fs($(this).val())+q;
     eval('jsO'+p+'='+v);
-    $('#entities_data').val(jsOtoS(jsO));
+    jsS.val(jsOtoS(jsO));
 };
 
 /*  ###################################
@@ -290,6 +316,10 @@ var LId = function(s){
     });
 };
 
+/* Json Object to string
+   @params
+       jsO : the jsO object
+*/
 var jsOtoS = function(jsO){
     return walk(jsO, 
         [mKjs], 
@@ -302,27 +332,61 @@ var jsOtoS = function(jsO){
     );
 };
 
-var jsTb = function(si, di){
-    var el = $('#'+si);
-    jsO = $.parseJSON(el.val());        
+/* Update Json Source 
+*/
+var ujsS = function(){
+    jsS.val(jsOtoS(jsO));
+};
+
+var RLf = [];
+var jsO = {};
+var jsS = null;
+var jsT = null;
+
+var onjsSChange = function(e){
+    jsTb();
+};
+var jsTb = function(si, di, options){
+    if(!jsS){
+        if (!si || !di){
+            throw "source id (si) and destination id (di) required for function jsTb  call";
+        }
+        jsS = $('#'+si);
+        jsS.bind('change', onjsSChange);
+    }
+    try{
+        jsO = eval('('+jsS.val()+')');
+    }
+    catch(e){
+        jsO = $.parseJSON(jsS.val());
+    }
+        
     var eL = walk(
         jsO, 
-        [mKe, {}], 
-        [mAe, {
+        [(options && options.makeKeyEntity ? options.makeKeyEntity : mKe), {}], 
+        [(options && options.makeAtomEntity ? options.makeAtomEntity : mAe), {
             'mAe_ebs' : [['change', ujsO]]
         }]
     );
+    RLf = [];
     fRL(eL, RLf);
     
-    var jsonTree = document.createElement('div');
-    jsonTree.id = di;
-    jsonTree.className = 'width100pc';
-    $('#'+si).before(jsonTree);
+    if(!jsT){
+        if (!si || !di){
+            throw "source id (si) and destination id (di) required for function jsTb  call";
+        }
+        jsT = document.createElement('div');
+        jsT.id = di;
+        jsT.className = 'width100pc';
+        $('#'+si).before(jsT);
+        jsT = $('#'+di);
+    }
+    else{
+        jsT.html('...');
+    }
 
     for(i in RLf){
-        $('#'+di).append(RLf[i]);
+        jsT.append(RLf[i]);
     }
     LId('#'+di);
-}    
-var RLf = [];
-var jsO = {};
+}
