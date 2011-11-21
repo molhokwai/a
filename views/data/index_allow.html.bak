@@ -13,8 +13,19 @@
 </style>
 <script type="text/javascript" src="/{{=this_app}}/static/components/molhokwai/molhokwai.jsonEdit.js"></script>
 <script type="text/javascript" src="/{{=this_app}}/static/custom/scripts/slow.js"></script>
+<script type="text/javascript" src="/{{=this_app}}/static/components/jquery/jquery.json2xml.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        var json = {
+            div : {
+                h1 : "h1 totme",
+                h2 : "h2 titme",
+                p : "paragraph...",
+                div : "paragraph..."
+            }
+        };
+        var xml = $.json2xml(json, { formatOutput: true });
+        window.alert(xml);
         jsTb('entities_data', 'jsonTree', { HTML:true});
     });
 </script>
