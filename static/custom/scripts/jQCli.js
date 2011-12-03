@@ -314,7 +314,7 @@ var on_cli_web_submit=function(){
         
 
         /* THEN: REGISTERED FUNCTIONS ASSUMPTIONS */
-        if (rv==cec_rv){
+        if (rv==cec_rv || rv == $('#_cmd').val()){
             if (cli_web_registered.length>0){
                 var i=0;
                 rv = false;

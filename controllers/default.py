@@ -100,9 +100,27 @@ def page():
                 nake=(request.args[len(request.args)-1]=='nake'
                      or post.post_text.find('<!-- nake page -->')>=0)
             
-                post.post_text = utilities.replace_serverside_output_values(post.post_text)
-        
-            return dict(post = post, nake  = nake)
+                post.post_text = utilities.replace_serverside_output_values(post.post_text)                
+                
+            is_home = post and post.post_title.find('home')>=0
+            is_asked = 'asked' in request.args
+            page_form = None
+            if is_home and not is_asked:
+                db.posts.post_title.default = 'asked god'
+                db.posts.post_type.default = 'post'
+                category = db(db.categories.category_name == 'asked_god').select()
+                if not category:
+                    category = db.categories.insert(category_name = 'asked_god')
+                db.posts.post_category.default = category
+                db.posts.post_parent.default = post.id
+                page_form = SQLFORM(db.posts, fields = ['post_text'], labels = post_labels)
+                if page_form.accepts(request.vars, session):
+                    mail.send(to=['molhokwai@gmail.com'], subject='Asked god', 
+                            message=request.vars.post_text)
+                    redirect(URL(r = request, f = 'page', args=request.args+['asked']))
+            
+            return dict(post = post, nake = nake, is_home = is_home, 
+                        is_asked = is_asked, page_form = page_form)
         else:
             redirect(URL(r = request,f = 'index'))
             

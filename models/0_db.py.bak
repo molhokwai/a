@@ -51,9 +51,9 @@ app_modules_config = {
     }
 }
 db.define_table('app_config',
-    SQLField('APP_DETAILS',             'list:string', required=True,    default=['<molhokwai.net-a>', '<v001>'],     
+    SQLField('APP_DETAILS',             'list:string', required=True,    default=['molhokwai.net-a', 'v001'],     
             label=T('App details (name, version)')),
-    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['rpx'],     
+    SQLField('APP_SECURITY_DETAILS',             'list:string', required=True,    default=['usr_psw'],     
             label=T('App security details (login mechanism)')),
     SQLField('RPX_API',                 'list:string', required=True,    default=['<XXXXXXXXXXXXX>', '<websites.molhokwai>'],    
             label=T('Rpx api (key, sub-domain)')),
@@ -79,6 +79,7 @@ db.define_table('app_config',
             label=T('App modules details (request_handling proxy, ...)'))
 )
 
+app_name = db.app_config.APP_DETAILS.default[0]
 app_themes_list = app_themes_base_list
 
 app_config=db(db.app_config.id>0).select()
@@ -86,6 +87,8 @@ if len(app_config)>0:
     app_config=app_config[0]
     if app_config.APP_THEMES and len(app_config.APP_THEMES)>0:
         app_themes_list = app_config.APP_THEMES
+    if app_config.APP_DETAILS and len(app_config.APP_DETAILS)>0:
+        app_name = app_config.APP_DETAILS[0]
 else:
     app_config = None
 
@@ -104,11 +107,18 @@ db.app_themes.theme_base.requires = IS_IN_SET(app_themes_list)
 #########################################################################
 refresh_page = False
 
+# protocol
 protocol = 'http'
 if request.get('env')['server_protocol'][:5] == 'HTTPS': protocol='https'
-global_site_url = '%s://%s' % (protocol,request.get('env')['http_host'])
+# host
+host = http_host = request.get('env')['http_host']
+# site url 
+site_url = global_site_url = '%s://%s' % (protocol, http_host)
+# path_info
 path_info = request.get('env')['path_info']
+# full url
 full_url = '%s%s' % (global_site_url, path_info)
+# http_referer
 http_referer = None
 
 this_app = path_info.split('/')[1]
@@ -131,7 +141,6 @@ elif not tentative_app:
     tentative_app = this_app
 
 
-
 #########################################################################
 ## Authentication / Authorization
 #########################################################################
@@ -148,11 +157,11 @@ if app_config and app_config.MAIL_SETTINGS:
 else:
     if request.env.web2py_runtime_gae:            # if running on Google App Engine
         mail.settings.server='gae'     # your SMTP server
+        mail.settings.sender='molhokwai@gmail.com'    # your email
         mail.settings.login=None       # your credentials or None
     else:   
-        mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-        mail.settings.login='molhokwai@gmail.com:jamiroquai8'             # your credentials or None
-        mail.settings.sender='molhokwai@gmail.com'    # your email
+        mail.settings.server='smtp.gmail.com:587'       # your SMTP server
+        mail.settings.login='you@gmail.com:password'    # your credentials or None
 
 auth.settings.hmac_key='sha512:83f40f07-e0b6-41c2-8549-c29c9a591d9b'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
@@ -204,26 +213,26 @@ templates = {
     'verify_email' : """
         --------------------------------------------------------------------------------------------------------------------------------
         Dear, 
-        You received this email from aisca.com for verification of your email address. Click on the link below or copy and paste it 
+        You received this email from %(app_name)s for verification of your email address. Click on the link below or copy and paste it 
         in your browserto verify your email.
         Or please ignore this message if you did not register on the site.
         Link : %(link_url)s
-        ----------------------------------------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------------------------------------------
         
-        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        -Copyright Herve Mayou, 2011 . All Rights Reserved
         %(host)s
         _______________________________________________________
     """,
     'reset_password' : """
         --------------------------------------------------------------------------------------------------------------------------------
         Dear,
-        You received this email from aisca.net for a reset of your password request. Click on the link below or copy and paste it in
+        You received this email from %(app_name)s for a reset of your password request. Click on the link below or copy and paste it in
         your browser to reset your password.
         Or please ignore this message if you did not submit that request.
         Link : %(link_url)s
-        ----------------------------------------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------------------------------------------
         
-        -Copyright Hervé Mayou, 2011 . All Rights Reserved
+        -Copyright Herve Mayou, 2011 . All Rights Reserved
         %(host)s
         _______________________________________________________
     """
@@ -240,14 +249,17 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
     ## auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
     ## auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
     auth.messages.verify_email = get_email_content('verify_email', templates,
+                                        app_name = app_name,
                                         host = '%s://%s' % (protocol,request.env.http_host),
                                         link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['verify_email']))
                                  )
     ec = get_email_content('reset_password', templates,
+                                        app_name = app_name,
                                         host = '%s://%s' % (protocol,request.env.http_host),
                                         link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['reset_password']))
                                  )
     auth.messages.reset_password = get_email_content('reset_password', templates,
+                                        app_name = app_name,
                                         host = '%s://%s' % (protocol,request.env.http_host),
                                         link_url = '%s://%s%s/-(key)s' % (protocol,request.env.http_host, URL(r=request,c='default',f='user',args=['reset_password']))
                                  )
@@ -271,7 +283,7 @@ if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DE
             domain=app_config.RPX_API[1],
             url = "%s/default/user/login" % this_app_url)
     else:
-        auth.settings.login_form = RPXAccount(request, api_key='52e8b75eee0472b2f4ba410767bcbd1f7bee502b',
+        auth.settings.login_form = RPXAccount(request, api_key='d7d1807503bd8d2cf3b3476bf5a066fb8c7e305e',
             domain='websites-molhokwai',
             url = "%s/default/user/login" % this_app_url)
 
@@ -325,7 +337,7 @@ db.define_table('posts',
     SQLField('post_parent', required=False, default=-1),
     SQLField('show_in_menu',  'boolean', required=True, default=False),
     SQLField('is_translated', 'boolean', required=True, default=False),
-    SQLField('application', 'string', default=request.application),
+    SQLField('application', 'string'),
     SQLField('post_posts', 'list:string'),
     SQLField('auth_requires_login', 'boolean'),
     SQLField('post_attributes_json', 'text', required=True, 

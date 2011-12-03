@@ -1,9 +1,36 @@
 {{if not nake:}}
     {{extend 'themes/%s/layout.html' % response.theme}}
 {{ pass }}
+{{is_lcb_included = False}}
 <div class="page">
+    {{if is_home:}}
+        {{include "utilities/language_choice_bar.html"}}
+        {{is_lcb_included = True}}
+        <style type="text/css">
+            input[type="submit"], a.submit {
+                display: block;
+                font-size: 1.4em;
+                font-weight: bold;
+            }
+        </style>
+        {{if not is_asked:}}
+            <h1>{{=XML(T('Ask God for Help'))}}</h1>
+            <div class="border-std jQs pho4% pv2%">
+                {{=page_form}}
+            </div>
+        {{else:}}
+            <div class="border-std jQs pho4% pv2%">
+                <p>{{=XML(T('Your question/request has been submitted. For the answer, come back to this page later.'))}}</p>
+                <span class="jQs diblo tar">{{=XML(T('Blessings.'))}}</span>
+            </div>
+        {{pass}}
+        <div class="jQs mb10%"></div>
+    {{pass}}
+
+
+
     {{if post:}}
-        {{if post.is_translated:}}
+        {{if post.is_translated and not is_lcb_included:}}
             {{include "utilities/language_choice_bar.html"}}
         {{pass}}
         <h2 class="nav"><em>{{=T("you are here")}}:</em> {{=post.post_title}}</h2>

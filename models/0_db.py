@@ -160,8 +160,8 @@ else:
         mail.settings.sender='molhokwai@gmail.com'    # your email
         mail.settings.login=None       # your credentials or None
     else:   
-        mail.settings.server='smtp.gmail.com:587'     # your SMTP server
-        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'             # your credentials or None
+        mail.settings.server='smtp.gmail.com:587'       # your SMTP server
+        mail.settings.login='xxxxxxxxxxxxxxxxxxxxxxxx'    # your credentials or None
 
 auth.settings.hmac_key='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 if app_config and app_config.APP_SECURITY_DETAILS and app_config.APP_SECURITY_DETAILS[0].lower() == 'rpx':
